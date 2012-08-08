@@ -4,3 +4,9 @@
 *.jar
 *.war
 *.ear
+gwt-test-utils-csv/target
+gwt-test-utils-csv/.classpath
+gwt-test-utils-gxt2/target
+gwt-test-utils-gxt2/.classpath
+gwt-test-utils/target
+gwt-test-utils/.classpath
