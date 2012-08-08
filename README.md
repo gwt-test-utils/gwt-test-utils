@@ -3,8 +3,9 @@
 If you want to write **fast** tests which will still deal with your GWT view layout and simulate browser events on your widgets easily, you really should considere this framework. 
 The [Getting Started](http://code.google.com/p/gwt-test-utils/wiki/GettingStarted) page would be a good way to start ;-) 
 
-Features
-========
+[![Build Status](https://buildhive.cloudbees.com/job/Gael/job/gwt-test-utils/badge/icon)](https://buildhive.cloudbees.com/job/Gael/job/gwt-test-utils/)
+
+## Features ##
 
  * GWT code unit testing with small execution time (no hosted mode / browser launched in the background)
  * Simulation for browser's events (click, blur, change, ...)
@@ -17,8 +18,7 @@ Features
  * Complexe use-case testing using CSV-based scenarios
  * Extensibility through the use of custom patchers
 
-Documentation
-=============
+## Documentation ##
 
 Whether you want to...
  * Use gwt-test-utils to test your GWT application
@@ -26,8 +26,7 @@ Whether you want to...
 
 ... you'll find everything you need in the [User Guide](http://code.google.com/p/gwt-test-utils/wiki/UserGuide).
 
-Roadmap
-=======
+## Roadmap ##
 
 Here is the next features we are working on, ordered by priority (which is not frozen) :
 
@@ -41,8 +40,7 @@ Here is the next features we are working on, ordered by priority (which is not f
 
 In addition, we are daily improving **gwt-test-utils** existing features. To perfect it, we need your feedback !
 
-Community
-=========
+## Community ##
 
 For any question, feedback or contribution, please contact use through the [user group](http://groups.google.com/group/gwt-test-utils-users).
 
