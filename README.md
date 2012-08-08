@@ -33,7 +33,7 @@ Here is the next features we are working on, ordered by priority (which is not f
 
  * **COMING IN 0.40:** Nice support for [GWT overlay types](http://code.google.com/p/google-web-toolkit/wiki/OverlayTypes)
  * **COMING IN 0.40:** Support for [Editors](http://code.google.com/p/google-web-toolkit/wiki/Editors) 
- * **COMING IN 0.40:**Support for [AutoBean framework](http://code.google.com/p/google-web-toolkit/wiki/AutoBean)
+ * **COMING IN 0.40:** Support for [AutoBean framework](http://code.google.com/p/google-web-toolkit/wiki/AutoBean)
  * Support for [GXT 3.0](http://www.sencha.com/products/gxt/)
  * Support for [RequestFactory](http://code.google.com/intl/fr-FR/webtoolkit/doc/latest/DevGuideRequestFactory.html)
  * Support for [PowerMock](http://code.google.com/p/powermock/)
