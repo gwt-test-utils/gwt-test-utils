@@ -46,7 +46,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
@@ -178,8 +177,11 @@ public class BrowserTest extends GwtTestTest {
    @Test
    public void click_ComplexPanel() {
       // Arrange
-      final Anchor a = new Anchor();
-      final ComplexPanel panel = new StackPanel() {
+      final Anchor a0 = new Anchor();
+      a0.setText("a0");
+      final Anchor a1 = new Anchor();
+      a1.setText("a1");
+      final StackPanel panel = new StackPanel() {
 
          @Override
          public void onBrowserEvent(com.google.gwt.user.client.Event event) {
@@ -190,17 +192,19 @@ public class BrowserTest extends GwtTestTest {
                assertNull(event.getRelatedEventTarget());
             }
 
-            assertEquals(a.getElement(), event.getEventTarget());
+            assertEquals(a1.getElement(), event.getEventTarget());
          };
       };
 
-      panel.add(a);
+      panel.add(a0);
+      panel.insert(a1, 1);
 
       // Act
-      Browser.click(panel, 0);
+      Browser.click(panel, 1);
 
       // Assert
-      assertTrue("onClick event was not triggered", tested);
+      assertThat(tested).isTrue();
+      assertThat(panel.getSelectedIndex()).isEqualTo(1);
    }
 
    @Test
