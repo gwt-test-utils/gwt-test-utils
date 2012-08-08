@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.3.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.3.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to='gwt_test_utils_module'>
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+	<inherits name="com.google.web.bindery.autobean.AutoBean"/>
+	
+	<entry-point class='com.googlecode.gwt.test.client.GwtTestEntryPoint'/>
+
+	<servlet path="/myService" class="com.googlecode.gwt.test.rpc.MyServiceImpl" />
+
+	<!-- Specify the paths for translatable code -->
+	<source path='client' />
+	<source path='shared'>
+		<exclude name="Test1.java" />
+	</source>
+	<source path='integration.client' />
+	<source path='autobean' />
+	<source path='deferred' />
+	<source path='dom' />
+	<source path='editors' />
+	<source path='jso' />
+	<source path='json' />
+	<source path='i18n' />
+	<source path='resources' />
+	<source path='template' />
+	<source path='uibinder' />
+	
+
+	<!-- Fall through to this rule is the browser isn't IE or Mozilla -->
+	<replace-with class="com.googlecode.gwt.test.deferred.ReplaceWithDefault">
+		<when-type-is class="com.googlecode.gwt.test.deferred.IReplaceWith" />
+	</replace-with>
+
+	<!-- Mozilla -->
+	<replace-with class="com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithMozilla">
+		<when-type-is class="com.googlecode.gwt.test.deferred.IReplaceWith" />
+		<any>
+			<when-property-is name="user.agent" value="gecko" />
+			<when-property-is name="user.agent" value="gecko1_8" />
+		</any>
+	</replace-with>
+
+	<!-- IE -->
+	<replace-with class="com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithIE">
+		<when-type-is class="com.googlecode.gwt.test.deferred.IReplaceWith" />
+		<when-property-is name="user.agent" value="ie6" />
+	</replace-with>
+
+	<generate-with
+		class="com.googlecode.gwt.test.deferred.MyGenerator">
+		<when-type-assignable class="com.googlecode.gwt.test.deferred.IGenerateWith" />
+	</generate-with>
+
+</module>

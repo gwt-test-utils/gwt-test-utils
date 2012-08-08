@@ -1,0 +1,21 @@
+@def testConstant constant-value
+
+.testStyle {
+	margin-top: 2px;
+	color: green;
+}
+
+.testStyleWithHover:HOVER {
+	margin-top: 3px;
+	color: red;
+}
+
+label .testStyleOnSpecificElement {
+	margin-top: 5px;
+	color: black;
+}
+
+.gwt-DisclosurePanel-closed .testStyleOnSpecificStyle {
+	margin-top: 6px;
+	color: blue;
+}

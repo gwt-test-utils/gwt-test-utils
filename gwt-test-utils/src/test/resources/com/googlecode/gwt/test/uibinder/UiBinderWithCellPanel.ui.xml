@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:HorizontalPanel>
+		<g:cell width='5em' horizontalAlignment='ALIGN_RIGHT'>
+			<g:Label ui:field='leftSide'>Left</g:Label>
+		</g:cell>
+		<g:cell width='15em' horizontalAlignment='ALIGN_LEFT'>
+			<g:Label ui:field='rightSide'>Right</g:Label>
+		</g:cell>
+	</g:HorizontalPanel>
+</ui:UiBinder>

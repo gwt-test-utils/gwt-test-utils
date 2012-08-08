@@ -1,0 +1,74 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.uibinder'>
+
+	<ui:with field='res' type='com.googlecode.gwt.test.resources.MyClientBundle' />
+	<ui:image field="img" src="img.jpg"></ui:image>
+	<ui:data field="data" src="../i18n/MyChildConstants.properties"></ui:data>
+
+	<ui:style type='com.googlecode.gwt.test.uibinder.UiBinderWithWidgets.MyStyle'>
+		.redBox {
+			background-color: pink;
+			border: 1px solid red;
+		}
+		
+		.enabled {
+			color: black;
+		}
+		
+		.disabled {
+			color: gray;
+		}
+	</ui:style>
+
+	<ui:style field='otherStyle'>
+		.pretty {
+			background-color: Orange;
+		}
+	</ui:style>
+
+	<g:HTMLPanel>
+		Hello,
+		<g:ListBox ui:field='listBox' visibleItemCount='1' />
+		<g:Label>Keep your ducks</g:Label>
+		
+		<g:TextBox ui:field='textBox' textAlignment="justify"></g:TextBox>
+		.
+		<g:Label ui:field='msgLabel'>
+			<ui:msg description="Greeting">We strongly urge you to reconsider.</ui:msg>
+		</g:Label>
+		
+		<g:FlowPanel>
+			<g:RadioButton ui:field="radioButton1" name="MyRadioGroup" checked="true" >Test radio 1</g:RadioButton>
+			<g:RadioButton ui:field="radioButton2" name="MyRadioGroup" checked="false" >Test radio 2</g:RadioButton>
+		</g:FlowPanel>
+
+		<ui:msg>
+			Meeting starts at
+			<g:Label ui:field="msgInnerWidget">9'00</g:Label>
+		</ui:msg>
+
+		<span id="mySpan" class=" {otherStyle.pretty}  ">some span for testing</span>
+
+		<g:Button ui:field='button' styleName='{res.cssResource.testStyle}'>My button</g:Button>
+
+		<g:PushButton ui:field='pushButton'
+			addStyleNames='{res.cssResource.testStyle} {otherStyle.pretty}'>Push my hot button!</g:PushButton>
+
+		<g:Image ui:field='image' resource='{res.cellTableLoading}' altText="Loading..." styleName="{otherStyle.pretty}" />
+		<g:Image ui:field="imageWithUrl" url="http://slazzer.com/image.jpg"></g:Image>
+
+		<g:VerticalPanel ui:field='verticalPanel' horizontalAlignment="ALIGN_LEFT"
+			verticalAlignment="ALIGN_MIDDLE">
+			<test:ProvidedLabel customText="custom text setup in ui.xml">my provided label</test:ProvidedLabel>
+			<test:UiFactoryLabel ui:field="uiFactoryLabel" customText="custom text setup in ui.xml">my UiFactory label</test:UiFactoryLabel>
+			<test:UiConstructorLabel ui:field="uiConstructorLabel" uiConstructorLabel="uiConstructor property" customText="custom text setup in ui.xml">my UiConstructor label</test:UiConstructorLabel>
+		</g:VerticalPanel>
+		
+		<g:Label ui:field="noCorrespondingUiFieldInJavaClass">No Corresponding @UiField in java class</g:Label>
+
+		<test:IsWidgetLabel ui:field="isWidgetLabel"></test:IsWidgetLabel>
+		
+	</g:HTMLPanel>
+
+</ui:UiBinder>

@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.uibinder'>
+	<g:MenuBar>
+		<g:MenuItem ui:field="menuItem1">
+			Higgledy
+			<g:MenuBar vertical="true" ui:field="menu1">
+				<g:MenuItem ui:field="subMenuItem1">able</g:MenuItem>
+				<g:MenuItem>baker</g:MenuItem>
+				<g:MenuItem>charlie</g:MenuItem>
+			</g:MenuBar>
+		</g:MenuItem>
+		<g:MenuItem  ui:field="menuItem2">
+			Piggledy
+			<g:MenuBar vertical="true" ui:field="menu2">
+				<g:MenuItem >foo</g:MenuItem>
+				<g:MenuItem ui:field="subMenuItem2">bar</g:MenuItem>
+				<g:MenuItem>baz</g:MenuItem>
+			</g:MenuBar>
+		</g:MenuItem>
+		<g:MenuItem ui:field="menuItem3">
+			<b>Pop!</b>
+			<g:MenuBar vertical="true" ui:field="menu3">
+				<g:MenuItem>uno</g:MenuItem>
+				<g:MenuItem>dos</g:MenuItem>
+				<g:MenuItem ui:field="subMenuItem3">tres</g:MenuItem>
+			</g:MenuBar>
+		</g:MenuItem>
+	</g:MenuBar>
+</ui:UiBinder>

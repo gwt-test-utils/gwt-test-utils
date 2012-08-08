@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="demo">
+	<inherits name='com.extjs.gxt.ui.GXT'/>
+	<entry-point class='com.googlecode.gxt.test.uibinder.UiBinderApp'/>
+	<inherits name="com.jhickman.web.gwt.gxtuibinder.GxtUiBinder"/>
+	<source path=""/>
+</module>

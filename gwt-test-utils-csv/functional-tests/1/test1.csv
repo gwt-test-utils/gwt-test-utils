@@ -1,0 +1,19 @@
+start
+initApp
+assertExact;init;/root/widget(0)/widget(2)/text
+assertExact;init;/app/l/text
+assertNumberExact;11;/root/widget(0)/widgetCount
+assertContains;nit;/app/l/text
+assertExact;Button1's HTML;button-1/HTML
+click;button-1
+assertExact;click on b1;/app/l/text
+click;/app/b2
+assertExact;click on b2;/app/l/text
+runmacro;appendStatic
+append;End of 1st test
+
+detachWidget;button-1
+isNotVisible;button-1
+
+setId;button-1;/app/b2
+isVisible;button-1

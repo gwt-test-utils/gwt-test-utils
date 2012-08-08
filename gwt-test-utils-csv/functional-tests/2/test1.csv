@@ -1,0 +1,10 @@
+start
+** init application
+initApp
+runmacro;appendStatic1;toto
+runmacro;appendStatic1;titi
+runmacro;appendStatic2;toto;tata
+runmacro;appendStatic3;t0;t1;t2
+runmacro;appendStatic4;t0;t1;t2;t3
+runmacro;appendStatic5;t0;t1;t2;t3;t4
+append;End of 1st test

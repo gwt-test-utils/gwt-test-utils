@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:StackLayoutPanel unit='PX'>
+		<g:stack>
+			<g:header size='3'>
+				<b>HTML</b> header
+			</g:header>
+			<g:Label ui:field="first">able</g:Label>
+		</g:stack>
+		<g:stack>
+			<g:customHeader size='3'>
+				<g:Label ui:field="customHeader">Custom header</g:Label>
+			</g:customHeader>
+			<g:Label ui:field="second">baker</g:Label>
+		</g:stack>
+	</g:StackLayoutPanel>
+</ui:UiBinder>

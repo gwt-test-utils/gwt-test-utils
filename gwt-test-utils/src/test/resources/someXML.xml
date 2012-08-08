@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<!-- target bean to be referenced by name -->
+	<bean id="testBean" class="org.springframework.beans.TestBean"
+		scope="prototype">
+		<property name="age"><![CDATA[<10>]]></property>
+		<property name="spouse">
+			<bean class="org.springframework.beans.TestBean">
+				<property name="age" value="11" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- will result in 10, which is the value of property 'age' of bean 'testBean' -->
+	<util:property-path id="name" path="testBean.age" />
+</beans>

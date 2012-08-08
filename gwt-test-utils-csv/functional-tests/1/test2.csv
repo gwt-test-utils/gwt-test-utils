@@ -1,0 +1,7 @@
+start
+initApp
+assertExact;init;/app/l
+click;/app/b3
+assertExact;init_suffix;/app/l
+click;/app/b3
+assertExact;error;/app/l

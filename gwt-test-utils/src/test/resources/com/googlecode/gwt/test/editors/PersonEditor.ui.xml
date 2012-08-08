@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.editors'>
+
+	<g:HTMLPanel>		
+		<g:TextBox ui:field='firstName'></g:TextBox>
+		<g:TextBox ui:field='lastName'></g:TextBox>
+		<test:AddressEditor ui:field='address'>
+		</test:AddressEditor>
+	</g:HTMLPanel>
+
+</ui:UiBinder>

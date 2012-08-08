@@ -1,0 +1,10 @@
+start
+initApp
+fillTextBox;testT;/app/t
+assertExact;testT;/app/t
+assertExact;t was filled with value "testT";/app/historyLabel
+fillInvisibleTextBox;testINVISIBLE;/app/invisibleTB
+assertExact;invisibleTB was filled with value "testINVISIBLE";/app/historyLabel
+selectInListBox;1;/app/lb
+
+

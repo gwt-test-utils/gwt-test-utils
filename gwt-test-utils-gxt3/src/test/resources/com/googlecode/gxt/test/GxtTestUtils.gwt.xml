@@ -1,0 +1,3 @@
+<module>
+   <inherits name='com.sencha.gxt.ui.GXT' />
+</module>

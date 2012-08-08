@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.uibinder'>
+
+	<g:HTMLPanel>
+		<g:DisclosurePanel ui:field="disclosurePanelWithTextHeader">
+			<g:header>Some header text</g:header>
+			<g:Label>Body label 1</g:Label>
+		</g:DisclosurePanel>
+		<g:DisclosurePanel ui:field="disclosurePanelWithCustomHeader">
+			<g:customHeader>
+				<g:Label>Header label</g:Label>
+			</g:customHeader>
+			<g:Label>Body label 2</g:Label>
+		</g:DisclosurePanel>
+	</g:HTMLPanel>
+
+</ui:UiBinder>

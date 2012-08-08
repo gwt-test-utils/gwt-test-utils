@@ -1,0 +1,40 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.uibinder'>
+
+	<ui:import field='com.googlecode.gwt.test.uibinder.Constants.CONST_FOO'>
+		Tests the static import of a single constant
+		into the local namespace.
+	</ui:import>
+
+	<ui:import field='com.googlecode.gwt.test.uibinder.Constants.Inner.*'>
+		Tests the static import of multiple
+		constants into the local namespace.
+	</ui:import>
+
+	<ui:import field='com.googlecode.gwt.test.uibinder.Constants.MyEnum.*'>
+		Tests the static import of an enum into the
+		local namespace.
+	</ui:import>
+
+	<ui:import field='com.googlecode.gwt.test.uibinder.Constants.MY_DATE_FORMAT'>
+		Tests a DateTimeFormat using for the
+		DateTimeLabel.
+	</ui:import>
+	<ui:import
+		field='com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat.ISO_8601'>
+		Tests a reference to a PredefinedFormat for the DateTimeLabel.
+	</ui:import>
+
+	<g:HTMLPanel>
+		<g:Label ui:field="singleConstantImport" text="single import value : {CONST_FOO}" />
+		<g:Label ui:field="multipleConstantsImport"
+			text="first contant : {CONST_BAR}, second constant : {CONST_BAZ}" />
+		<g:Label ui:field="enumImport"
+			text="first enum value : {ENUM_1.name}, second enum value : {ENUM_2.name}" />
+		<g:DateLabel ui:field='myDateLabel' predefinedFormat='DATE_FULL' />
+		<g:DateLabel ui:field='myDateLabel2' format='{MY_DATE_FORMAT}' />
+		<g:DateLabel ui:field='myDateLabel3' customFormat='EEE dd MMM' />
+	</g:HTMLPanel>
+
+</ui:UiBinder>
