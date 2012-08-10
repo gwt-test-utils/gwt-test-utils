@@ -1,6 +1,8 @@
 package com.googlecode.gwt.test.csv;
 
+import static com.googlecode.gwt.test.assertions.GwtAssertions.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -113,20 +115,16 @@ public abstract class GwtCsvTest extends GwtTest {
 
    @CsvMethod
    public void assertBiggerThan(String value, String... params) {
-      Integer i = getObject(Integer.class, false, params);
-      if (i != null) {
-         int currentValue = i.intValue();
-         int intValue = Integer.parseInt(value);
-         assertThat(currentValue).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + "Current value <" + currentValue
-                           + "> is not bigger than <" + value + ">").isGreaterThan(intValue);
+      Integer actualInt = getObject(Integer.class, false, params);
+      if (actualInt != null) {
+         int expected = Integer.parseInt(value);
+         assertThat(actualInt).as(csvRunner.getAssertionErrorMessagePrefix()).isGreaterThan(
+                  expected);
       } else {
-         Long l = getObject(Long.class, params);
-         long currentValue = l.longValue();
-         long longValue = Long.parseLong(value);
-         assertThat(currentValue).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + "Current value <" + currentValue
-                           + "> is not bigger than <" + value + ">").isGreaterThan(longValue);
+         Long actualLong = getObject(Long.class, params);
+         long exptected = Long.parseLong(value);
+         assertThat(actualLong).as(csvRunner.getAssertionErrorMessagePrefix()).isGreaterThan(
+                  exptected);
       }
    }
 
@@ -139,10 +137,7 @@ public abstract class GwtCsvTest extends GwtTest {
    public void assertContains(String containedValue, String... params) {
       containedValue = GwtStringUtils.resolveBackSlash(containedValue);
       String actual = getString(params);
-
-      assertThat(actual).as(
-               csvRunner.getAssertionErrorMessagePrefix() + " not containing string '"
-                        + containedValue + "'").contains(containedValue);
+      assertThat(actual).as(csvRunner.getAssertionErrorMessagePrefix()).contains(containedValue);
    }
 
    @CsvMethod
@@ -152,22 +147,19 @@ public abstract class GwtCsvTest extends GwtTest {
 
    /**
     * 
-    * @param value
+    * @param expected
     * @param params
     */
    @CsvMethod
-   public void assertExact(String value, String... params) {
-      value = GwtStringUtils.resolveBackSlash(value);
+   public void assertExact(String expected, String... params) {
+      expected = GwtStringUtils.resolveBackSlash(expected);
 
-      String actualValue = getString(params);
+      String actual = getString(params);
 
-      if (value == null) {
-         assertThat(actualValue).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + "Null was expected, but '"
-                           + actualValue + "' has been find").isNotNull();
+      if (expected == null) {
+         assertThat(actual).as(csvRunner.getAssertionErrorMessagePrefix()).isNull();
       } else {
-         assertThat(value).as(csvRunner.getAssertionErrorMessagePrefix() + "Wrong string").isEqualTo(
-                  actualValue);
+         assertThat(actual).as(csvRunner.getAssertionErrorMessagePrefix()).isEqualTo(expected);
       }
 
    }
@@ -175,24 +167,20 @@ public abstract class GwtCsvTest extends GwtTest {
    @CsvMethod
    public void assertFalse(String... params) {
       Boolean b = getObject(Boolean.class, false, params);
-      assertThat(b).as(csvRunner.getAssertionErrorMessagePrefix() + "null Boolean").isNotNull();
-      assertThat(b).as(csvRunner.getAssertionErrorMessagePrefix() + "FALSE expected").isFalse();
+      assertThat(b).as(csvRunner.getAssertionErrorMessagePrefix()).isNotNull();
+      assertThat(b).as(csvRunner.getAssertionErrorMessagePrefix()).isFalse();
    }
 
    @CsvMethod
    public void assertHTML(String html, String... params) {
-      Object o = getObject(Object.class, params);
-      if (HasHTML.class.isInstance(o)) {
-         assertThat(((HasHTML) o).getHTML()).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + o.getClass().getSimpleName()
-                           + ".getHTML()").isEqualTo(html);
-      } else if (UIObject.class.isInstance(o)) {
-         assertThat(((UIObject) o).getElement().getInnerHTML()).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + o.getClass().getSimpleName()
-                           + ".getElement().getInnerHTML()").isEqualTo(html);
+      Object actual = getObject(Object.class, params);
+      if (actual == null) {
+         fail(csvRunner.getAssertionErrorMessagePrefix() + "targeted object is null");
+      } else if (actual instanceof UIObject) {
+         assertThat((UIObject) actual).htmlEquals(html);
       } else {
-         Fail.fail(csvRunner.getAssertionErrorMessagePrefix()
-                  + "Cannot retrieve HTML from object of type " + o.getClass().getName());
+         fail(csvRunner.getAssertionErrorMessagePrefix()
+                  + "Cannot retrieve HTML from object of type " + actual.getClass().getName());
       }
    }
 
@@ -200,14 +188,10 @@ public abstract class GwtCsvTest extends GwtTest {
    public void assertInstanceOf(String className, String... params) {
       try {
          Class<?> clazz = GwtReflectionUtils.getClass(className);
-         Object o = getObject(Object.class, params);
-         assertThat(o).as(
-                  csvRunner.getAssertionErrorMessagePrefix()
-                           + "Target object is not an instance of [" + className
-                           + "] but an instance of [" + o.getClass().getCanonicalName() + "]").isInstanceOf(
-                  clazz);
+         Object actual = getObject(Object.class, params);
+         assertThat(actual).as(csvRunner.getAssertionErrorMessagePrefix()).isInstanceOf(clazz);
       } catch (ClassNotFoundException e) {
-         Fail.fail(csvRunner.getAssertionErrorMessagePrefix() + "Cannot assert instance of ["
+         fail(csvRunner.getAssertionErrorMessagePrefix() + "Cannot assert instance of ["
                   + className + "] because the class cannot be found");
       }
    }
@@ -218,7 +202,7 @@ public abstract class GwtCsvTest extends GwtTest {
       String[] content = commaSeparatedContent.split("\\s*,\\s*");
       if (!WidgetUtils.assertListBoxDataMatch(listBox, content)) {
          String lbContent = WidgetUtils.getListBoxContentToString(listBox);
-         Fail.fail(csvRunner.getAssertionErrorMessagePrefix()
+         fail(csvRunner.getAssertionErrorMessagePrefix()
                   + "Content is not equal to listBox content : " + lbContent);
       }
    }
@@ -227,76 +211,59 @@ public abstract class GwtCsvTest extends GwtTest {
    public void assertListBoxSelectedValueIs(String value, String... params) {
       ListBox listBox = getObject(ListBox.class, params);
       String selectedValue = listBox.getItemText(listBox.getSelectedIndex());
-      assertThat(selectedValue).as(
-               csvRunner.getAssertionErrorMessagePrefix() + "Wrong ListBox selected value").isEqualTo(
-               value);
+      assertThat(selectedValue).as(csvRunner.getAssertionErrorMessagePrefix()).isEqualTo(value);
    }
 
    @CsvMethod
    public void assertNotExist(String... params) {
-      Object o = getObject(Object.class, false, params);
-      assertThat(o).as(csvRunner.getAssertionErrorMessagePrefix() + "Object exists : " + o).isNull();
+      Object actual = getObject(Object.class, false, params);
+      assertThat(actual).as(csvRunner.getAssertionErrorMessagePrefix()).isNull();
    }
 
-   /**
-    * 
-    * @param value
-    * @param params
-    */
    @CsvMethod
    public void assertNumberExact(String value, String... params) {
-      Integer i = getObject(Integer.class, false, params);
-      if (i != null) {
-         assertThat(i.intValue()).as(csvRunner.getAssertionErrorMessagePrefix() + "Wrong number").isEqualTo(
+      Integer actualInteger = getObject(Integer.class, false, params);
+      if (actualInteger != null) {
+         assertThat(actualInteger).as(csvRunner.getAssertionErrorMessagePrefix()).isEqualTo(
                   Integer.parseInt(value));
       } else {
-         Long l = getObject(Long.class, params);
-         assertThat(l.longValue()).as(csvRunner.getAssertionErrorMessagePrefix() + "Wrong number").isEqualTo(
+         Long actualLong = getObject(Long.class, params);
+         assertThat(actualLong).as(csvRunner.getAssertionErrorMessagePrefix()).isEqualTo(
                   Long.parseLong(value));
       }
    }
 
    @CsvMethod
    public void assertSmallerThan(String value, String... params) {
-      Integer i = getObject(Integer.class, false, params);
-      if (i != null) {
-         int currentValue = i.intValue();
-         int intValue = Integer.parseInt(value);
-         assertThat(currentValue).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + "Current value <" + currentValue
-                           + "> is not smaller than <" + value + ">").isLessThan(intValue);
+      Integer actualInt = getObject(Integer.class, false, params);
+      if (actualInt != null) {
+         int expected = Integer.parseInt(value);
+         assertThat(actualInt).as(csvRunner.getAssertionErrorMessagePrefix()).isLessThan(expected);
       } else {
-         Long l = getObject(Long.class, params);
-         long currentValue = l.longValue();
-         long longValue = Long.parseLong(value);
-         assertThat(currentValue).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + "Current value <" + currentValue
-                           + "> is not smaller than <" + value + ">").isLessThan(longValue);
+         Long actualLong = getObject(Long.class, params);
+         long expected = Long.parseLong(value);
+         assertThat(actualLong).as(csvRunner.getAssertionErrorMessagePrefix()).isLessThan(expected);
       }
    }
 
    @CsvMethod
-   public void assertText(String html, String... params) {
-      Object o = getObject(Object.class, params);
-      if (HasText.class.isInstance(o)) {
-         assertThat(((HasText) o).getText()).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + o.getClass().getSimpleName()
-                           + ".getText()").isEqualTo(html);
-      } else if (UIObject.class.isInstance(o)) {
-         assertThat(((UIObject) o).getElement().getInnerText()).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + o.getClass().getSimpleName()
-                           + ".getElement().getInnerText()").isEqualTo(html);
+   public void assertText(String text, String... params) {
+      Object actual = getObject(Object.class, params);
+      if (actual == null) {
+         fail(csvRunner.getAssertionErrorMessagePrefix() + "targeted object is null");
+      } else if (actual instanceof UIObject) {
+         assertThat((UIObject) actual).textEquals(text);
       } else {
-         Fail.fail(csvRunner.getAssertionErrorMessagePrefix()
-                  + "Cannot retrieve text from object of type " + o.getClass().getName());
+         fail(csvRunner.getAssertionErrorMessagePrefix()
+                  + "Cannot retrieve HTML from object of type " + actual.getClass().getName());
       }
    }
 
    @CsvMethod
    public void assertTrue(String... params) {
-      Boolean b = getObject(Boolean.class, false, params);
-      assertThat(b).as(csvRunner.getAssertionErrorMessagePrefix() + "null Boolean").isNotNull();
-      assertThat(b).as(csvRunner.getAssertionErrorMessagePrefix() + "TRUE expected").isTrue();
+      Boolean actual = getObject(Boolean.class, false, params);
+      assertThat(actual).as(csvRunner.getAssertionErrorMessagePrefix()).isNotNull();
+      assertThat(actual).as(csvRunner.getAssertionErrorMessagePrefix()).isTrue();
    }
 
    @CsvMethod
@@ -466,24 +433,19 @@ public abstract class GwtCsvTest extends GwtTest {
    @CsvMethod
    public void isEnabled(String... params) {
       FocusWidget target = getFocusWidget(params);
-      assertThat(target.isEnabled()).as(
-               csvRunner.getAssertionErrorMessagePrefix() + "targeted "
-                        + target.getClass().getSimpleName() + " is not enabled").isTrue();
+      assertThat(target).withPrefix(csvRunner.getAssertionErrorMessagePrefix()).isEnabled();
    }
 
    @CsvMethod
    public void isNotChecked(String... params) {
       CheckBox checkBox = getObject(CheckBox.class, params);
-      assertThat(checkBox.getValue()).as(
-               csvRunner.getAssertionErrorMessagePrefix() + "Checkbox checked").isFalse();
+      assertThat(checkBox.getValue()).as(csvRunner.getAssertionErrorMessagePrefix()).isFalse();
    }
 
    @CsvMethod
    public void isNotEnabled(String... params) {
       FocusWidget target = getFocusWidget(params);
-      assertThat(target.isEnabled()).as(
-               csvRunner.getAssertionErrorMessagePrefix() + "targeted "
-                        + target.getClass().getSimpleName() + " is enabled").isFalse();
+      assertThat(target).withPrefix(csvRunner.getAssertionErrorMessagePrefix()).isNotEnabled();
    }
 
    @CsvMethod
@@ -497,9 +459,8 @@ public abstract class GwtCsvTest extends GwtTest {
             Widget w = (Widget) object;
             visible = w.isAttached();
          }
-         assertThat(visible).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + "targeted "
-                           + object.getClass().getSimpleName() + " is visible").isFalse();
+         assertThat(visible).as(csvRunner.getAssertionErrorMessagePrefix()).overridingErrorMessage(
+                  "targeted " + object.getClass().getSimpleName() + " is visible").isFalse();
       }
    }
 
@@ -508,15 +469,13 @@ public abstract class GwtCsvTest extends GwtTest {
       UIObject object = getObject(UIObject.class, params);
 
       assertThat(WidgetUtils.isWidgetVisible(object)).as(
-               csvRunner.getAssertionErrorMessagePrefix() + "targeted "
-                        + object.getClass().getSimpleName() + " is not visible").isTrue();
+               csvRunner.getAssertionErrorMessagePrefix() + "targeted ").isTrue();
 
       if (!GwtConfig.get().getModuleRunner().canDispatchDomEventOnDetachedWidget()
                && Widget.class.isInstance(object)) {
 
-         assertThat(((Widget) object).isAttached()).as(
-                  csvRunner.getAssertionErrorMessagePrefix() + "targeted "
-                           + object.getClass().getSimpleName() + " is not attached to the DOM").isTrue();
+         assertThat(((Widget) object).isAttached()).as(csvRunner.getAssertionErrorMessagePrefix()).overridingErrorMessage(
+                  "targeted " + object.getClass().getSimpleName() + " is not attached to the DOM").isTrue();
       }
    }
 
