@@ -1,6 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 	<groupId>com.googlecode.gwt-test-utils</groupId>
 	<artifactId>gwt-test-utils-parent</artifactId>
 	<packaging>pom</packaging>
@@ -39,15 +44,14 @@
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<connection>scm:svn:http://gwt-test-utils.googlecode.com/svn/src/framework/trunk</connection>
-		<developerConnection>scm:svn:https://gwt-test-utils.googlecode.com/svn/src/framework/trunk</developerConnection>
-		<url>http://gwt-test-utils.googlecode.com/svn/src/framework/trunk</url>
+		<connection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</connection>
+		<developerConnection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</developerConnection>
+		<url>https://github.com/gwt-test-utils/gwt-test-utils</url>
 	</scm>
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
+	<ciManagement>
+		<system>buildhive</system>
+		<url>https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/</url>
+	</ciManagement>
 	<modules>
 		<module>gwt-test-utils</module>
 		<module>gwt-test-utils-csv</module>

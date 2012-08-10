@@ -3,7 +3,7 @@
 If you want to write **fast** tests which will still deal with your GWT view layout and simulate browser events on your widgets easily, you really should considere this framework. 
 The [Getting Started](http://code.google.com/p/gwt-test-utils/wiki/GettingStarted) page would be a good way to start ;-) 
 
-[![Build Status](https://buildhive.cloudbees.com/job/Gael/job/gwt-test-utils/badge/icon)](https://buildhive.cloudbees.com/job/Gael/job/gwt-test-utils/)
+[![Build Status](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/badge/icon)](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/)
 
 ## Features ##
 
