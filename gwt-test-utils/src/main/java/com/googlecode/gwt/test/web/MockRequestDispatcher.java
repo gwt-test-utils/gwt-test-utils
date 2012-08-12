@@ -14,7 +14,7 @@
 
 package com.googlecode.gwt.test.web;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;

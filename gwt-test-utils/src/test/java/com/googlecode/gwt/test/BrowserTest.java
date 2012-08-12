@@ -1,7 +1,8 @@
 package com.googlecode.gwt.test;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Fail.fail;
+import static org.fest.assertions.api.Fail.failBecauseExceptionWasNotThrown;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -762,7 +763,7 @@ public class BrowserTest extends GwtTestTest {
       // Act
       try {
          Browser.fillText(tb, "");
-         fail();
+         failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
       } catch (Exception e) {
          assertEquals(IllegalArgumentException.class, e.getClass());
          assertEquals(
@@ -780,7 +781,7 @@ public class BrowserTest extends GwtTestTest {
       // Act
       try {
          Browser.fillText(tb, null);
-         fail();
+         failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
       } catch (Exception e) {
          assertEquals(IllegalArgumentException.class, e.getClass());
          assertEquals(

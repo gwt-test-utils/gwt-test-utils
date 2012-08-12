@@ -39,7 +39,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.easytesting</groupId>
-			<artifactId>fest-assert</artifactId>
+			<artifactId>fest-assert-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.thoughtworks.paranamer</groupId>

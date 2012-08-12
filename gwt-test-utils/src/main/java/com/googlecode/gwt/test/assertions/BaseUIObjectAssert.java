@@ -18,16 +18,17 @@ import com.googlecode.gwt.test.utils.WidgetUtils;
  *           implementation</a>.&quot;
  * @param <A> the type the "actual" value.
  */
-public abstract class BaseUIObjectAssert<S, A extends UIObject> extends GwtGenericAssert<S, A> {
+public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A extends UIObject>
+         extends GwtGenericAssert<S, A> {
 
    /**
     * Creates a new <code>{@link BaseUIObjectAssert}</code>.
     * 
-    * @param selfType the "self type."
     * @param actual the actual value to verify.
+    * @param selfType the "self type."
     */
-   protected BaseUIObjectAssert(Class<S> selfType, A actual) {
-      super(selfType, actual);
+   protected BaseUIObjectAssert(A actual, Class<S> selfType) {
+      super(actual, selfType);
    }
 
    /**

@@ -16,7 +16,7 @@ public class WidgetAssert extends BaseWidgetAssert<WidgetAssert, Widget> {
     * @param actual the actual value to verify.
     */
    protected WidgetAssert(Widget actual) {
-      super(WidgetAssert.class, actual);
+      super(actual, WidgetAssert.class);
    }
 
 }

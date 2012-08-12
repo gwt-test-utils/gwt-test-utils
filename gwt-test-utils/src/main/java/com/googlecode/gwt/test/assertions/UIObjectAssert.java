@@ -16,7 +16,7 @@ public class UIObjectAssert extends BaseUIObjectAssert<UIObjectAssert, UIObject>
     * @param actual the actual value to verify.
     */
    protected UIObjectAssert(UIObject actual) {
-      super(UIObjectAssert.class, actual);
+      super(actual, UIObjectAssert.class);
    }
 
 }

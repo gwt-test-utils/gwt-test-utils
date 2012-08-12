@@ -1,11 +1,13 @@
 package com.googlecode.gwt.test.assertions;
 
-import static org.fest.assertions.ComparisonFailureFactory.comparisonFailure;
-import static org.fest.assertions.Formatting.format;
+import static org.fest.assertions.error.ShouldBeEqual.shouldBeEqual;
 
-import org.fest.assertions.Description;
-import org.fest.assertions.Fail;
-import org.fest.assertions.GenericAssert;
+import org.fest.assertions.api.AbstractAssert;
+import org.fest.assertions.description.Description;
+import org.fest.assertions.error.BasicErrorMessageFactory;
+import org.fest.assertions.internal.Failures;
+
+import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 /**
  * Template for all gwt-test-utils assertions.
@@ -19,18 +21,25 @@ import org.fest.assertions.GenericAssert;
  * @author Gael Lazzari
  * 
  */
-public abstract class GwtGenericAssert<S, A> extends GenericAssert<S, A> {
+public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> extends
+         AbstractAssert<S, A> {
 
-   private String prefix;
+   protected final GwtWritableAssertionInfo gwtInfo;
+
+   private final Failures failures = Failures.instance();
 
    /**
     * Creates a new <code>{@link GwtGenericAssert}</code>.
     * 
-    * @param selfType the "self type."
     * @param actual the actual value to verify.
+    * @param selfType the "self type."
     */
-   protected GwtGenericAssert(Class<S> selfType, A actual) {
-      super(selfType, actual);
+   protected GwtGenericAssert(A actual, Class<S> selfType) {
+      super(actual, selfType);
+
+      // hack because fest-assert "info" is not configurable..
+      gwtInfo = new GwtWritableAssertionInfo();
+      GwtReflectionUtils.setPrivateFieldValue(this, "info", gwtInfo);
    }
 
    /**
@@ -40,7 +49,7 @@ public abstract class GwtGenericAssert<S, A> extends GenericAssert<S, A> {
     * @return
     */
    public S withPrefix(String prefix) {
-      this.prefix = prefix;
+      this.gwtInfo.prefix(prefix);
       return myself;
    }
 
@@ -50,30 +59,22 @@ public abstract class GwtGenericAssert<S, A> extends GenericAssert<S, A> {
     * not applied. In both case, the resulting description would be prefixed by the message
     * eventually supplied through {@link GwtGenericAssert#withPrefix(String)}.
     * 
-    * @param message The error message
+    * @param format the format string.
+    * @param arguments arguments referenced by the format specifiers in the format string.
+    * 
     * @return a {@code AssertionError} describing the assertion failure based on the supplied
     *         message.
     */
-   protected AssertionError failWithMessage(String message) {
+   protected AssertionError failWithMessage(String format, Object... arguments) {
+      GwtWritableAssertionInfo info = new GwtWritableAssertionInfo();
+      info.prefix(gwtInfo.prefix());
+      info.overridingErrorMessage(gwtInfo.overridingErrorMessage());
 
-      if (customErrorMessage() != null) {
-         return failure(customErrorMessage());
-      }
+      Description d = gwtInfo.superDescription();
+      String newDescription = d != null ? d.value() : this.actual.getClass().getSimpleName();
+      info.description(newDescription);
 
-      Description d = rawDescription();
-      String as = d != null ? d.value() : this.actual.getClass().getSimpleName();
-
-      return Fail.failure(format(getPrefix() + as) + message);
-   }
-
-   /**
-    * If set through {@link GwtGenericAssert#withPrefix(String)}, returns the trimed prefix where a
-    * space character is appended, returns an empty string otherwise.
-    * 
-    * @return The computed prefix value
-    */
-   protected final String getPrefix() {
-      return (prefix != null) ? prefix.trim() + " " : "";
+      return failures.failure(info, new BasicErrorMessageFactory(format, arguments));
    }
 
    /**
@@ -89,21 +90,17 @@ public abstract class GwtGenericAssert<S, A> extends GenericAssert<S, A> {
     */
    protected AssertionError propertyComparisonFailed(String propertyName, Object actual,
             Object expected) {
+      GwtWritableAssertionInfo info = new GwtWritableAssertionInfo();
+      info.prefix(gwtInfo.prefix());
+      info.overridingErrorMessage(gwtInfo.overridingErrorMessage());
 
-      if (customErrorMessage() != null) {
-         return failure(customErrorMessage());
-      }
-
-      Description d = rawDescription();
-      String message = d != null ? d.value() + " " + propertyName
+      Description d = gwtInfo.superDescription();
+      String newDescription = d != null ? d.value() + " " + propertyName
                : this.actual.getClass().getSimpleName() + "'s " + propertyName;
-      AssertionError comparisonFailure = comparisonFailure(getPrefix() + message, expected, actual);
+      info.description(newDescription);
 
-      if (comparisonFailure != null)
-         return comparisonFailure;
+      return failures.failure(info, shouldBeEqual(actual, expected));
 
-      return Fail.failure("[" + getPrefix()
-               + format("%s] expected:<%s> but was:<%s>", message, expected, actual));
    }
 
 }

@@ -1,7 +1,7 @@
 package com.googlecode.gwt.test.csv.runner;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Fail.fail;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

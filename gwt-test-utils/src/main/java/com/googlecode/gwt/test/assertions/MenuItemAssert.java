@@ -17,7 +17,7 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
     * @param actual the actual value to verify.
     */
    protected MenuItemAssert(MenuItem actual) {
-      super(MenuItemAssert.class, actual);
+      super(actual, MenuItemAssert.class);
    }
 
    /**

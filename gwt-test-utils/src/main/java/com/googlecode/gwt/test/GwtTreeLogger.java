@@ -15,11 +15,11 @@ import com.google.gwt.dev.util.log.AbstractTreeLogger;
  */
 public class GwtTreeLogger extends AbstractTreeLogger {
 
-   private static final GwtTreeLogger INSTANCE = new GwtTreeLogger("");
+   private static final TreeLogger INSTANCE = new GwtTreeLogger("");
 
    private static final Logger LOGGER = LoggerFactory.getLogger(GwtTreeLogger.class);
 
-   public static GwtTreeLogger get() {
+   public static TreeLogger get() {
       return INSTANCE;
    }
 

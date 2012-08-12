@@ -187,9 +187,8 @@ public class GeneratorCreateHandler implements GwtCreateHandler {
    private ModuleSpaceHost createModuleSpaceHost(CompilationState compilationState,
             ModuleDef moduleDef) {
       try {
-         ModuleSpaceHost moduleSpaceHost = new GwtTestModuleSpaceHost(
-                  GwtTreeLogger.get(), compilationState, moduleDef, null, null,
-                  REBIND_CACHE);
+         ModuleSpaceHost moduleSpaceHost = new GwtTestModuleSpaceHost(GwtTreeLogger.get(),
+                  compilationState, moduleDef, null, null, REBIND_CACHE);
          ModuleSpace moduleSpace = createModuleSpace(moduleSpaceHost);
          moduleSpaceHost.onModuleReady(moduleSpace);
 

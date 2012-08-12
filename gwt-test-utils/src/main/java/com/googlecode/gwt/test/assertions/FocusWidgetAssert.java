@@ -16,7 +16,7 @@ public class FocusWidgetAssert extends BaseFocusWidgetAssert<FocusWidgetAssert, 
     * @param actual the actual value to verify.
     */
    protected FocusWidgetAssert(FocusWidget actual) {
-      super(FocusWidgetAssert.class, actual);
+      super(actual, FocusWidgetAssert.class);
    }
 
 }

@@ -1,8 +1,8 @@
 package com.googlecode.gwt.test.csv;
 
 import static com.googlecode.gwt.test.assertions.GwtAssertions.assertThat;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Fail.fail;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.fest.assertions.Fail;
+import org.fest.assertions.api.Fail;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

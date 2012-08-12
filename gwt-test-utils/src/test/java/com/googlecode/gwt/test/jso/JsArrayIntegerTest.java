@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test.jso;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;

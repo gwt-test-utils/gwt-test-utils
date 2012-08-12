@@ -14,16 +14,17 @@ import com.google.gwt.user.client.ui.Widget;
  *           implementation</a>.&quot;
  * @param <A> the type the "actual" value.
  */
-public abstract class BaseWidgetAssert<S, A extends Widget> extends BaseUIObjectAssert<S, A> {
+public abstract class BaseWidgetAssert<S extends BaseWidgetAssert<S, A>, A extends Widget> extends
+         BaseUIObjectAssert<S, A> {
 
    /**
     * Creates a new <code>{@link BaseWidgetAssert}</code>.
     * 
-    * @param selfType the "self type."
     * @param actual the actual value to verify.
+    * @param selfType the "self type."
     */
-   protected BaseWidgetAssert(Class<S> selfType, A actual) {
-      super(selfType, actual);
+   protected BaseWidgetAssert(A actual, Class<S> selfType) {
+      super(actual, selfType);
    }
 
    /**

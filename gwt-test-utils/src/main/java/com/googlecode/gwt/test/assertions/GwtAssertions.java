@@ -26,6 +26,16 @@ public class GwtAssertions {
    }
 
    /**
+    * Creates a new instance of <code>{@link WidgetAssert}</code>.
+    * 
+    * @param actual the generic widget to be the target of the assertions methods.
+    * @return the created assertion object.
+    */
+   public static GwtInstanceAssert assertThat(GwtInstance actual) {
+      return new GwtInstanceAssert(actual);
+   }
+
+   /**
     * Creates a new instance of <code>{@link MenuItemAssert}</code>.
     * 
     * @param actual the menu item to be the target of the assertions methods.
@@ -63,6 +73,10 @@ public class GwtAssertions {
     */
    public static WidgetAssert assertThat(Widget actual) {
       return new WidgetAssert(actual);
+   }
+
+   public static GwtInstance uiObject(String... identifier) {
+      return new GwtInstance(identifier);
    }
 
 }

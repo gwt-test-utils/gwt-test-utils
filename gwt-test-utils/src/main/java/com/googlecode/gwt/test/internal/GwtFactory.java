@@ -137,7 +137,7 @@ public class GwtFactory {
             target = new File(".");
          }
          CompilationStateBuilder.init(treeLogger, target);
-         return moduleDef.getCompilationState(GwtTreeLogger.get());
+         return moduleDef.getCompilationState(treeLogger);
       } catch (UnableToCompleteException e) {
          throw new GwtTestConfigurationException("Error while creating global CompilationState :",
                   e);

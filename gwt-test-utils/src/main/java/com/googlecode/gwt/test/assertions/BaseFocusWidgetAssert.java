@@ -13,10 +13,17 @@ import com.google.gwt.user.client.ui.FocusWidget;
  *           implementation</a>.&quot;
  * @param <A> the type the "actual" value.
  */
-public class BaseFocusWidgetAssert<S, A extends FocusWidget> extends BaseWidgetAssert<S, A> {
+public class BaseFocusWidgetAssert<S extends BaseFocusWidgetAssert<S, A>, A extends FocusWidget>
+         extends BaseWidgetAssert<S, A> {
 
-   protected BaseFocusWidgetAssert(Class<S> selfType, A actual) {
-      super(selfType, actual);
+   /**
+    * Creates a new <code>{@link BaseFocusWidgetAssert}</code>.
+    * 
+    * @param actual the actual value to verify.
+    * @param selfType the "self type."
+    */
+   protected BaseFocusWidgetAssert(A actual, Class<S> selfType) {
+      super(actual, selfType);
    }
 
    /**

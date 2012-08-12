@@ -16,7 +16,7 @@ public class TreeItemAssert extends BaseUIObjectAssert<TreeItemAssert, TreeItem>
     * @param actual the actual value to verify.
     */
    protected TreeItemAssert(TreeItem actual) {
-      super(TreeItemAssert.class, actual);
+      super(actual, TreeItemAssert.class);
    }
 
    /**
