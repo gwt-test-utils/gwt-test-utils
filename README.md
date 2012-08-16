@@ -14,6 +14,7 @@ The [Getting Started](http://code.google.com/p/gwt-test-utils/wiki/GettingStarte
  * Support for GWT + [Spring](http://www.springsource.org/) application testing
  * Support for GWT + [Guice](http://code.google.com/p/google-guice/) application testing
  * Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing
+ * Support for [JUnitParams](http://code.google.com/p/junitparams/)
  * Support for [GXT](http://www.sencha.com/products/gxt/) library (currently only version 2.x, version 3.x is coming !)
  * Complexe use-case testing using CSV-based scenarios
  * Extensibility through the use of custom patchers
