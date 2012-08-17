@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.csv.runner;
 
+import static com.googlecode.gwt.test.finder.GwtFinder.object;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Fail.fail;
 
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +23,7 @@ import com.googlecode.gwt.test.csv.CsvMethod;
 import com.googlecode.gwt.test.csv.GwtCsvTest;
 import com.googlecode.gwt.test.csv.GwtTestCsvException;
 import com.googlecode.gwt.test.finder.GwtFinder;
+import com.googlecode.gwt.test.finder.GwtInstance;
 import com.googlecode.gwt.test.finder.Node;
 import com.googlecode.gwt.test.finder.ObjectFinder;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
@@ -66,7 +67,7 @@ public class CsvRunner {
             if (clazz.isArray()) {
                argList.add(new String[]{});
             } else {
-               Assert.fail(getAssertionErrorMessagePrefix() + "Too few args for @"
+               fail(getAssertionErrorMessagePrefix() + "Too few args for @"
                         + CsvMethod.class.getSimpleName() + " '" + methodName + "'");
             }
          } else {
@@ -200,26 +201,40 @@ public class CsvRunner {
       return (T) current;
    }
 
+   /**
+    * 
+    * @param clazz
+    * @param failOnError
+    * @param params
+    * @return
+    * 
+    * @deprecated use {@link GwtFinder#object(String...)} instead
+    */
+   @Deprecated
    @SuppressWarnings("unchecked")
    public <T> T getObject(Class<T> clazz, boolean failOnError, String... params) {
-      Object o = GwtFinder.find(params);
-      if (clazz.isInstance(o)) {
-         return (T) o;
-      }
-      if (!failOnError) {
-         return null;
-      }
 
-      if (o == null) {
-         Assert.fail(getAssertionErrorMessagePrefix() + "Targeted object " + paramsToString(params)
-                  + " is null");
+      if (failOnError) {
+         return object(params).ofType(clazz);
+      } else {
+         GwtInstance gwtInstance = object(params);
+         if (clazz.isInstance(gwtInstance.getRaw())) {
+            return (T) gwtInstance.getRaw();
+         } else {
+            return null;
+         }
       }
-
-      Assert.fail(getAssertionErrorMessagePrefix() + "Wrong object type, not a "
-               + clazz.getCanonicalName() + " : " + o.getClass().getCanonicalName());
-      return null;
    }
 
+   /**
+    * 
+    * @param clazz
+    * @param params
+    * @return
+    * 
+    * @deprecated use {@link GwtFinder#object(String...)} instead
+    */
+   @Deprecated
    public <T> T getObject(Class<T> clazz, String... params) {
       return getObject(clazz, true, params);
    }
@@ -414,15 +429,6 @@ public class CsvRunner {
       } catch (InvocationTargetException e) {
          return null;
       }
-   }
-
-   private String paramsToString(String... params) {
-      StringBuilder sb = new StringBuilder();
-      for (String param : params) {
-         sb.append("'").append(param).append("', ");
-      }
-
-      return sb.substring(0, sb.length() - 2);
    }
 
    private Object proccessMap(Object current, String map) {

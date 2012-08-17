@@ -1,5 +1,7 @@
 package com.googlecode.gwt.test.csv;
 
+import static com.googlecode.gwt.test.finder.GwtFinder.object;
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -27,8 +29,7 @@ public abstract class MyGwtShell extends GwtCsvTest {
 
    @CsvMethod
    public void detachWidget(String... params) {
-      Widget w = getObject(Widget.class, params);
-      w.removeFromParent();
+      object(params).ofType(Widget.class).removeFromParent();
    }
 
    @CsvMethod
@@ -39,8 +40,7 @@ public abstract class MyGwtShell extends GwtCsvTest {
 
    @CsvMethod
    public void setId(String newId, String... params) {
-      Widget w = getObject(Widget.class, params);
-      w.getElement().setId(newId);
+      object(params).ofType(Widget.class).getElement().setId(newId);
    }
 
    @Before

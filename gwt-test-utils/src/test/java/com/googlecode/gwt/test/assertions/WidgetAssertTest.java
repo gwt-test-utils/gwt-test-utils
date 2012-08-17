@@ -13,6 +13,39 @@ import com.googlecode.gwt.test.GwtTestTest;
 public class WidgetAssertTest extends GwtTestTest {
 
    @Test
+   public void hasStyle() {
+      // Arrange
+      Anchor a = new Anchor();
+      a.setStyleName("first-style");
+      a.addStyleName("second-style");
+      a.addStyleName("third-style");
+
+      // Act
+      try {
+         assertThat(a).hasStyle("first-style", "second-style", "third-style");
+      } catch (AssertionError e) {
+         fail("assertion should pass but failed with message : " + e.getMessage());
+      }
+   }
+
+   @Test
+   public void hasStyleAssertionErrorMessage() {
+      // Arrange
+      Anchor a = new Anchor();
+      a.setStyleName("first-style");
+      a.addStyleName("second-style");
+      a.addStyleName("third-style");
+
+      // Act
+      try {
+         assertThat(a).hasStyle("first-style", "second-style", "thrid-style", "fourth-style");
+         fail("AssertionError should be thrown");
+      } catch (AssertionError e) {
+         assertThat(e.getMessage()).isEqualTo("[Anchor] should have style 'thrid-style'");
+      }
+   }
+
+   @Test
    public void htmlEquals() {
       // Arrange
       Anchor a = new Anchor();

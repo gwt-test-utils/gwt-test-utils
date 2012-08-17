@@ -16,7 +16,7 @@ import com.googlecode.gwt.test.utils.WidgetUtils;
  *           "http://passion.forco.de/content/emulating-self-types-using-java-generics-simplify-fluent-api-implementation"
  *           target="_blank">Emulating 'self types' using Java Generics to simplify fluent API
  *           implementation</a>.&quot;
- * @param <A> the type the "actual" value.
+ * @param <A> the type of the "actual" value.
  */
 public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A extends UIObject>
          extends GwtGenericAssert<S, A> {
@@ -29,6 +29,41 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     */
    protected BaseUIObjectAssert(A actual, Class<S> selfType) {
       super(actual, selfType);
+   }
+
+   /**
+    * Verifies that the actual <code>{@link UIObject}</code> styleName does not have the supplied
+    * one(s).
+    * 
+    * @param notExpected the given styleName(s) to check.
+    * @return this assertion object.
+    * @throws AssertionError if the actual styleName value is not equal to the given one.
+    */
+   public S doesNotHaveStyle(String... notExpected) {
+      for (String styleName : notExpected) {
+         if (WidgetUtils.hasStyle(actual, styleName)) {
+            throw failWithMessage("should not have style %s", styleName);
+         }
+      }
+
+      return myself;
+   }
+
+   /**
+    * Verifies that the actual <code>{@link UIObject}</code> styleName has the supplied one(s).
+    * 
+    * @param expected the given styleName(s) to check.
+    * @return this assertion object.
+    * @throws AssertionError if the actual styleName value is not equal to the given one.
+    */
+   public S hasStyle(String... expected) {
+      for (String styleName : expected) {
+         if (!WidgetUtils.hasStyle(actual, styleName)) {
+            throw failWithMessage("should have style %s", styleName);
+         }
+      }
+
+      return myself;
    }
 
    /**

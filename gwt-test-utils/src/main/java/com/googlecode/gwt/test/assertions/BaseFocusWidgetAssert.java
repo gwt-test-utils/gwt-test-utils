@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.FocusWidget;
  *           "http://passion.forco.de/content/emulating-self-types-using-java-generics-simplify-fluent-api-implementation"
  *           target="_blank">Emulating 'self types' using Java Generics to simplify fluent API
  *           implementation</a>.&quot;
- * @param <A> the type the "actual" value.
+ * @param <A> the type of the "actual" value.
  */
 public class BaseFocusWidgetAssert<S extends BaseFocusWidgetAssert<S, A>, A extends FocusWidget>
          extends BaseWidgetAssert<S, A> {
@@ -31,6 +31,8 @@ public class BaseFocusWidgetAssert<S extends BaseFocusWidgetAssert<S, A>, A exte
     * 
     * @return this assertion object.
     * @throws AssertionError if the actual {@link FocusWidget} is not enabled.
+    * 
+    * @see FocusWidget#isEnabled()
     */
    public S isEnabled() {
       if (actual.isEnabled())
@@ -44,6 +46,8 @@ public class BaseFocusWidgetAssert<S extends BaseFocusWidgetAssert<S, A>, A exte
     * 
     * @return this assertion object.
     * @throws AssertionError if the actual {@link FocusWidget} is enabled.
+    * 
+    * @see FocusWidget#isEnabled()
     */
    public S isNotEnabled() {
       if (!actual.isEnabled())

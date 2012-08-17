@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.assertions;
 
+import static java.lang.String.format;
 import static org.fest.assertions.error.ShouldBeEqual.shouldBeEqual;
 
 import org.fest.assertions.api.AbstractAssert;
@@ -16,7 +17,7 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
  *           "http://passion.forco.de/content/emulating-self-types-using-java-generics-simplify-fluent-api-implementation"
  *           target="_blank">Emulating 'self types' using Java Generics to simplify fluent API
  *           implementation</a>.&quot;
- * @param <A> the type the "actual" value.
+ * @param <A> the type of the "actual" value.
  * 
  * @author Gael Lazzari
  * 
@@ -40,6 +41,19 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
       // hack because fest-assert "info" is not configurable..
       gwtInfo = new GwtWritableAssertionInfo();
       GwtReflectionUtils.setPrivateFieldValue(this, "info", gwtInfo);
+   }
+
+   /**
+    * Sets the description of this object.
+    * 
+    * @param description the new description to set.
+    * @param args the args used to fill description as in {@link String#format(String, Object...)}.
+    * @return {@code this} object.
+    * @throws NullPointerException if the description is {@code null}.
+    * @see #describedAs(String)
+    */
+   public S as(String description, Object... args) {
+      return describedAs(format(description, args));
    }
 
    /**

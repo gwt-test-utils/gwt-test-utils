@@ -337,11 +337,29 @@ public class JsoUtils {
       return text;
    }
 
+   public static void onSetHTML(JavaScriptObject jso, String newHTML, String oldHTML) {
+      EventListener listener = DOM.getEventListener(jso.<com.google.gwt.user.client.Element> cast());
+
+      if (UIObject.class.isInstance(listener)) {
+         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetHTML", listener, newHTML,
+                  oldHTML);
+      }
+   }
+
    public static void onSetId(JavaScriptObject jso, String newId, String oldId) {
       EventListener listener = DOM.getEventListener(jso.<com.google.gwt.user.client.Element> cast());
 
       if (UIObject.class.isInstance(listener)) {
          GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetId", listener, newId, oldId);
+      }
+   }
+
+   public static void onSetText(JavaScriptObject jso, String newText, String oldText) {
+      EventListener listener = DOM.getEventListener(jso.<com.google.gwt.user.client.Element> cast());
+
+      if (UIObject.class.isInstance(listener)) {
+         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetText", listener, newText,
+                  oldText);
       }
    }
 

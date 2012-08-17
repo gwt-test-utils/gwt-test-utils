@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
  *           "http://passion.forco.de/content/emulating-self-types-using-java-generics-simplify-fluent-api-implementation"
  *           target="_blank">Emulating 'self types' using Java Generics to simplify fluent API
  *           implementation</a>.&quot;
- * @param <A> the type the "actual" value.
+ * @param <A> the type of the "actual" value.
  */
 public abstract class BaseWidgetAssert<S extends BaseWidgetAssert<S, A>, A extends Widget> extends
          BaseUIObjectAssert<S, A> {

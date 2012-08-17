@@ -5,9 +5,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHTML;
@@ -15,7 +17,6 @@ import com.google.gwt.user.client.ui.HasName;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.test.internal.AfterTestCallback;
 import com.googlecode.gwt.test.internal.AfterTestCallbackManager;
@@ -82,10 +83,16 @@ public class GwtFinder implements AfterTestCallback {
     */
    private static class IndexedObjectFinder implements ObjectFinder {
 
-      private final Map<String, Object> repository;
+      private final Map<String, Set<Object>> mapByHTML;
+      private final Map<String, Object> mapById;
+      private final Map<String, Set<Object>> mapByName;
+      private final Map<String, Set<Object>> mapByText;
 
       IndexedObjectFinder() {
-         this.repository = new HashMap<String, Object>();
+         this.mapByHTML = new HashMap<String, Set<Object>>();
+         this.mapById = new HashMap<String, Object>();
+         this.mapByName = new HashMap<String, Set<Object>>();
+         this.mapByText = new HashMap<String, Set<Object>>();
       }
 
       public boolean accept(String... params) {
@@ -95,7 +102,7 @@ public class GwtFinder implements AfterTestCallback {
       public Object find(String... params) {
 
          String alias = params[0];
-         Object result = repository.get(alias);
+         Object result = findByAlias(alias);
 
          if (result != null) {
             return result;
@@ -110,13 +117,58 @@ public class GwtFinder implements AfterTestCallback {
          introspectionPath = alias.substring(flag);
          alias = alias.substring(0, flag);
 
-         result = repository.get(alias);
+         result = findByAlias(alias);
 
          if (result == null) {
             return null;
          }
 
          return GwtFinder.find(result, Node.parse(introspectionPath));
+      }
+
+      private Object findByAlias(String alias) {
+         Object result = mapById.get(alias);
+         if (result != null) {
+            return result;
+         }
+
+         Set<Object> byHTML = mapByHTML.get(alias);
+         if (byHTML != null && byHTML.size() > 0) {
+            if (byHTML.size() == 1) {
+               return byHTML.iterator().next();
+            } else {
+               throw new GwtFinderException("There are " + byHTML.size()
+                        + " attached Widgets matching HTML filter [" + alias
+                        + "]. You should use an unique identifier instead");
+
+            }
+         }
+
+         Set<Object> byText = mapByText.get(alias);
+         if (byText != null && byText.size() > 0) {
+            if (byText.size() == 1) {
+               return byText.iterator().next();
+            } else {
+               throw new GwtFinderException("There are " + byText.size()
+                        + " attached Widgets matching text filter [" + alias
+                        + "]. You should use an unique identifier instead");
+
+            }
+         }
+
+         Set<Object> byName = mapByText.get(alias);
+         if (byName != null && byName.size() > 0) {
+            if (byName.size() == 1) {
+               return byName.iterator().next();
+            } else {
+               throw new GwtFinderException("There are " + byName.size()
+                        + " attached Widgets matching name filter [" + alias
+                        + "]. You should use an unique identifier instead");
+
+            }
+         }
+
+         return null;
       }
 
    }
@@ -137,17 +189,17 @@ public class GwtFinder implements AfterTestCallback {
    }
 
    /**
-    * Find an attached widget or a property of an attached widget in the DOM which matchs the given
-    * params.
+    * Create a new instance of <code>{@link GwtInstance}</code> which wraps an
+    * <strong>attached</strong> Widget or a property of an <strong>attached</strong> widget matching
+    * the given identifier. The wrapped value would be null if nothing matched.
     * 
-    * @param params An array of params, which could be either an introspection path, a DOM id, a
-    *           random text (for {@link HasText} widgets), a random html (for {@link HasHTML}
-    *           widget) or a name attribute (for {@link HasName} widget).
-    * @return The corresponding widget (or one of its properties), or null if nothing was found.
+    * @param identifier An array of identifier parameters, which could be either an introspection
+    *           path, a DOM id, a random text (for {@link HasText} widgets), a random html (for
+    *           {@link HasHTML} widget) or a name attribute (for {@link HasName} widget).
+    * @return the created <code>GwtInstance</code> to make assertion on.
     */
-   @SuppressWarnings("unchecked")
-   public static <T> T find(String... params) {
-      return (T) INSTANCE.findInternal(params);
+   public static GwtInstance object(String... identifier) {
+      return new GwtInstance(INSTANCE.findInternal(identifier), identifier);
    }
 
    /**
@@ -187,21 +239,21 @@ public class GwtFinder implements AfterTestCallback {
       }
 
       if (HasHTML.class.isInstance(widget)) {
-         INSTANCE.indexedObjectFinder.repository.put(((HasHTML) widget).getHTML(), widget);
+         onSetIndex(widget, ((HasHTML) widget).getHTML(), INSTANCE.indexedObjectFinder.mapByHTML);
       }
 
       if (HasText.class.isInstance(widget)) {
-         INSTANCE.indexedObjectFinder.repository.put(((HasText) widget).getText(), widget);
+         onSetIndex(widget, ((HasText) widget).getText(), INSTANCE.indexedObjectFinder.mapByText);
       }
 
       if (HasName.class.isInstance(widget)) {
-         INSTANCE.indexedObjectFinder.repository.put(((HasName) widget).getName(), widget);
+         onSetIndex(widget, ((HasName) widget).getName(), INSTANCE.indexedObjectFinder.mapByName);
       }
 
       if (widget.getElement() != null) {
          String id = widget.getElement().getId();
          if (id != null && id.length() > 0) {
-            INSTANCE.indexedObjectFinder.repository.put(id, widget);
+            INSTANCE.indexedObjectFinder.mapById.put(id, widget);
          }
       }
    }
@@ -220,19 +272,28 @@ public class GwtFinder implements AfterTestCallback {
       }
 
       if (HasHTML.class.isInstance(widget)) {
-         INSTANCE.indexedObjectFinder.repository.remove(((HasHTML) widget).getHTML());
+         Set<Object> byHTML = INSTANCE.indexedObjectFinder.mapByHTML.get(((HasHTML) widget).getHTML());
+         if (byHTML != null) {
+            byHTML.remove(widget);
+         }
       }
 
       if (HasText.class.isInstance(widget)) {
-         INSTANCE.indexedObjectFinder.repository.remove(((HasText) widget).getText());
+         Set<Object> byText = INSTANCE.indexedObjectFinder.mapByText.get(((HasText) widget).getText());
+         if (byText != null) {
+            byText.remove(widget);
+         }
       }
 
       if (HasName.class.isInstance(widget)) {
-         INSTANCE.indexedObjectFinder.repository.remove(((HasName) widget).getName());
+         Set<Object> byName = INSTANCE.indexedObjectFinder.mapByName.get(((HasName) widget).getName());
+         if (byName != null) {
+            byName.remove(widget);
+         }
       }
 
       if (widget.getElement() != null) {
-         INSTANCE.indexedObjectFinder.repository.remove(widget.getElement().getId());
+         INSTANCE.indexedObjectFinder.mapById.remove(widget.getElement().getId());
       }
    }
 
@@ -240,10 +301,9 @@ public class GwtFinder implements AfterTestCallback {
     * Callback method which is made public by GwtFinderPatcher to be called by others internal
     * patchers
     */
-   protected static void onSetHTML(HasHTML hasHTML, String newHTML, String oldHTML) {
+   protected static void onSetHTML(Object hasHTML, String newHTML, String oldHTML) {
       if (!(hasHTML instanceof Widget) || ((Widget) hasHTML).isAttached()) {
-         INSTANCE.indexedObjectFinder.repository.remove(oldHTML);
-         INSTANCE.indexedObjectFinder.repository.put(newHTML, hasHTML);
+         onSetIndex(hasHTML, newHTML, oldHTML, INSTANCE.indexedObjectFinder.mapByHTML);
       }
    }
 
@@ -251,10 +311,10 @@ public class GwtFinder implements AfterTestCallback {
     * Callback method which is made public by GwtFinderPatcher to be called by others internal
     * patchers
     */
-   protected static void onSetId(UIObject o, String newId, String oldId) {
+   protected static void onSetId(Object o, String newId, String oldId) {
       if (!(o instanceof Widget) || ((Widget) o).isAttached()) {
-         INSTANCE.indexedObjectFinder.repository.remove(oldId);
-         INSTANCE.indexedObjectFinder.repository.put(newId, o);
+         INSTANCE.indexedObjectFinder.mapById.remove(oldId);
+         INSTANCE.indexedObjectFinder.mapById.put(newId, o);
       }
    }
 
@@ -262,10 +322,9 @@ public class GwtFinder implements AfterTestCallback {
     * Callback method which is made public by GwtFinderPatcher to be called by others internal
     * patchers
     */
-   protected static void onSetName(HasName hasName, String newName, String oldName) {
+   protected static void onSetName(Object hasName, String newName, String oldName) {
       if (!(hasName instanceof Widget) || ((Widget) hasName).isAttached()) {
-         INSTANCE.indexedObjectFinder.repository.remove(oldName);
-         INSTANCE.indexedObjectFinder.repository.put(newName, hasName);
+         onSetIndex(hasName, newName, oldName, INSTANCE.indexedObjectFinder.mapByName);
       }
    }
 
@@ -273,15 +332,38 @@ public class GwtFinder implements AfterTestCallback {
     * Callback method which is made public by GwtFinderPatcher to be called by others internal
     * patchers
     */
-   protected static void onSetText(HasText hasText, String newText, String oldText) {
+   protected static void onSetText(Object hasText, String newText, String oldText) {
       if (!(hasText instanceof Widget) || ((Widget) hasText).isAttached()) {
-         INSTANCE.indexedObjectFinder.repository.remove(oldText);
-         INSTANCE.indexedObjectFinder.repository.put(newText, hasText);
+         onSetIndex(hasText, newText, oldText, INSTANCE.indexedObjectFinder.mapByText);
       }
    }
 
    private static Widget getCompositeWidget(Widget composite) {
       return GwtReflectionUtils.callPrivateMethod(composite, "getWidget");
+   }
+
+   private static void onSetIndex(Object object, String index, Map<String, Set<Object>> cache) {
+
+      Set<Object> newSet = cache.get(index);
+      if (newSet == null) {
+         newSet = new HashSet<Object>();
+         cache.put(index, newSet);
+      }
+      newSet.add(object);
+   }
+
+   private static void onSetIndex(Object object, String newIndex, String oldIndex,
+            Map<String, Set<Object>> cache) {
+      Set<Object> oldSet = cache.get(oldIndex);
+      if (oldSet != null) {
+         if (oldSet.size() == 1 && oldSet.contains(object)) {
+            cache.remove(object);
+         } else {
+            oldSet.remove(object);
+         }
+
+      }
+      onSetIndex(object, newIndex, cache);
    }
 
    private final List<ObjectFinder> customObjectFinders;
@@ -301,7 +383,10 @@ public class GwtFinder implements AfterTestCallback {
    public void afterTest() {
       customObjectFinders.clear();
       defaultObjectFinder.nodeObjectFinders.clear();
-      indexedObjectFinder.repository.clear();
+      indexedObjectFinder.mapById.clear();
+      indexedObjectFinder.mapByHTML.clear();
+      indexedObjectFinder.mapByText.clear();
+      indexedObjectFinder.mapByName.clear();
    }
 
    private boolean checkCondition(Object n, Node before, String after) {

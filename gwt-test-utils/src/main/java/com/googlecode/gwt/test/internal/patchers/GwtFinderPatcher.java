@@ -15,7 +15,6 @@ class GwtFinderPatcher {
 
    @InitMethod
    static void initClass(CtClass c) throws Exception {
-
       makeMethodPublicStatic(c, "onAttach");
       makeMethodPublicStatic(c, "onDetach");
       makeMethodPublicStatic(c, "onSetHTML");
