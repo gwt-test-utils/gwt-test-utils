@@ -29,7 +29,6 @@ import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
  * @author Gael Lazzari
  * 
  */
-@ContextConfiguration(loader = GwtTestContextLoader.class)
 @RunWith(GwtSpringRunner.class)
 public abstract class GwtSpringTest extends GwtTest implements ApplicationContextAware {
 
