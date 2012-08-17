@@ -3,6 +3,7 @@ package com.googlecode.gwt.test.internal.patchers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.impl.HistoryImpl;
@@ -115,6 +116,10 @@ class HistoryImplPatcher {
    }
 
    static GwtBrowserHistory BROWSER_HISTORY = new GwtBrowserHistory();
+
+   @PatchMethod static String encodeFragment(HistoryImpl impl, String fragment) {
+     return URL.encodeQueryString(fragment).replace("#", "%23");
+   }
 
    @PatchMethod
    static String getToken() {
