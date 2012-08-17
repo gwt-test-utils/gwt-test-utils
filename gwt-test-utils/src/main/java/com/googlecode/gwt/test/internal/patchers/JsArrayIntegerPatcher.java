@@ -3,6 +3,7 @@ package com.googlecode.gwt.test.internal.patchers;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
+import com.googlecode.gwt.test.utils.JavaScriptObjects;
 
 @PatchClass(JsArrayInteger.class)
 class JsArrayIntegerPatcher {
@@ -46,5 +47,9 @@ class JsArrayIntegerPatcher {
    static void unshift(JsArrayInteger jsArray, int value) {
       JsArrayHelper.unshift(jsArray, value);
    }
+
+    public static JsArrayInteger createJsArrayInteger() {
+        return ((JsArrayInteger)JavaScriptObjectPatcher.createArray());
+    }
 
 }

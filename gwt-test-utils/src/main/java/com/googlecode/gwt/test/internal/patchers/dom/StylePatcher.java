@@ -27,6 +27,7 @@ class StylePatcher {
    private static final String STYLE_BORDER_LEFT_WIDTH = "border-left-width";
    private static final String STYLE_BORDER_RIGHT_WIDTH = "border-right-width";
    private static final String STYLE_BORDER_TOP_WIDTH = "border-top-width";
+   private static final String STYLE_Z_INDEX = "zIndex";
 
    @PatchMethod
    static void clearBorderWidth(Style style) {
@@ -80,4 +81,8 @@ class StylePatcher {
       GwtStyleUtils.setProperty(style, propertyName, propertyValue);
    }
 
+   @PatchMethod
+   static String getZIndex(Style style) {
+     return getPropertyImpl(style, STYLE_Z_INDEX);
+   }
 }

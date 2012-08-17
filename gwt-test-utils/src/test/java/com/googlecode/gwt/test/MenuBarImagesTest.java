@@ -36,7 +36,7 @@ public class MenuBarImagesTest extends GwtTestTest {
       // Assert
       assertEquals("IMG", element.getTagName());
       assertEquals(
-               "<img onload=\"this.__gwtLastUnhandledEvent=\"load\";\" src=\"http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif\" style=\"width: 0px; height: 0px; background:-url(http://127.0.0.1: 8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px; \" border=\"0\"></img>",
+               "<img onload=\"this.__gwtLastUnhandledEvent=\"load\";\" src=\"http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif\" style=\"width: 0px; height: 0px; background:url(http://127.0.0.1: 8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px; \" border=\"0\"></img>",
                element.toString());
    }
 
@@ -63,7 +63,7 @@ public class MenuBarImagesTest extends GwtTestTest {
 
       // Assert
       assertEquals(
-               "<img onload='this.__gwtLastUnhandledEvent=\"load\";' src='http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif' style='width: 0px; height: 0px; background: url(http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px;' border='0'>",
+               "<img onload='this.__gwtLastUnhandledEvent=\"load\";' src='http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif' style='width:0.0px;height:0.0px;background:url(http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px;' border='0'>",
                html);
    }
 
