@@ -14,6 +14,7 @@ The [Getting Started](http://code.google.com/p/gwt-test-utils/wiki/GettingStarte
  * Support for GWT + [Spring](http://www.springsource.org/) application testing
  * Support for GWT + [Guice](http://code.google.com/p/google-guice/) application testing
  * Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing
+ * Support for [JUnitParams](http://code.google.com/p/junitparams/)
  * Support for [GXT](http://www.sencha.com/products/gxt/) library (currently only version 2.x, version 3.x is coming !)
  * Complexe use-case testing using CSV-based scenarios
  * Extensibility through the use of custom patchers
@@ -33,6 +34,7 @@ Here is the next features we are working on, ordered by priority (which is not f
  * **COMING IN 0.40:** Nice support for [GWT overlay types](http://code.google.com/p/google-web-toolkit/wiki/OverlayTypes)
  * **COMING IN 0.40:** Support for [Editors](http://code.google.com/p/google-web-toolkit/wiki/Editors) 
  * **COMING IN 0.40:** Support for [AutoBean framework](http://code.google.com/p/google-web-toolkit/wiki/AutoBean)
+ * Support for GWT 2.5.0-rc1
  * Support for [GXT 3.0](http://www.sencha.com/products/gxt/)
  * Support for [RequestFactory](http://code.google.com/intl/fr-FR/webtoolkit/doc/latest/DevGuideRequestFactory.html)
  * Support for [PowerMock](http://code.google.com/p/powermock/)
