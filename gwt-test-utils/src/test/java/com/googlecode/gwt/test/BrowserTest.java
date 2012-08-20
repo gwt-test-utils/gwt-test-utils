@@ -45,6 +45,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -206,6 +208,34 @@ public class BrowserTest extends GwtTestTest {
       // Assert
       assertThat(tested).isTrue();
       assertThat(panel.getSelectedIndex()).isEqualTo(1);
+   }
+
+   @Test
+   public void click_firesNativePreviewHandler() {
+      // Arrange
+      Button b = new Button();
+      FocusPanel focusPanel = new FocusPanel();
+      focusPanel.add(b);
+      RootPanel.get().add(focusPanel);
+
+      final StringBuilder sb = new StringBuilder();
+
+      Event.addNativePreviewHandler(new NativePreviewHandler() {
+
+         public void onPreviewNativeEvent(NativePreviewEvent event) {
+            Event nativeEvent = Event.as(event.getNativeEvent());
+            int eventType = DOM.eventGetType(nativeEvent);
+            if (eventType == Event.ONCLICK) {
+               sb.append("click!");
+            }
+         }
+      });
+
+      // Act
+      Browser.click(b);
+
+      // Assert
+      assertThat(sb.toString()).isEqualTo("click!");
    }
 
    @Test
