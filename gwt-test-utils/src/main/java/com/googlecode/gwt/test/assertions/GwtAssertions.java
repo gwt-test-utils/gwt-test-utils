@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -112,6 +113,16 @@ public class GwtAssertions {
     */
    public static MenuItemAssert assertThat(MenuItem actual) {
       return new MenuItemAssert(actual);
+   }
+
+   /**
+    * Creates a new instance of <code>{@link SuggestBoxAssert}</code>.
+    * 
+    * @param actual the suggestBox to be the target of the assertions methods.
+    * @return the created assertion object.
+    */
+   public static SuggestBoxAssert assertThat(SuggestBox actual) {
+      return new SuggestBoxAssert(actual);
    }
 
    /**
