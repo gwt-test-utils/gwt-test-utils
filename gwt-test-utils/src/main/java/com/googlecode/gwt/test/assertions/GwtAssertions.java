@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -113,6 +114,16 @@ public class GwtAssertions {
     */
    public static MenuItemAssert assertThat(MenuItem actual) {
       return new MenuItemAssert(actual);
+   }
+
+   /**
+    * Creates a new instance of <code>{@link PopupPanelAssert}</code>.
+    * 
+    * @param actual the popupPanel to be the target of the assertions methods.
+    * @return the created assertion object.
+    */
+   public static PopupPanelAssert assertThat(PopupPanel actual) {
+      return new PopupPanelAssert(actual);
    }
 
    /**
