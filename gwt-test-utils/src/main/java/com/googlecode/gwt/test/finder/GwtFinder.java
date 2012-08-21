@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHTML;
 import com.google.gwt.user.client.ui.HasName;
 import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -138,7 +139,7 @@ public class GwtFinder implements AfterTestCallback {
                return byHTML.iterator().next();
             } else {
                throw new GwtFinderException("There are " + byHTML.size()
-                        + " attached Widgets matching HTML filter [" + alias
+                        + " Widgets matching HTML filter [" + alias
                         + "]. You should use an unique identifier instead");
 
             }
@@ -150,7 +151,7 @@ public class GwtFinder implements AfterTestCallback {
                return byText.iterator().next();
             } else {
                throw new GwtFinderException("There are " + byText.size()
-                        + " attached Widgets matching text filter [" + alias
+                        + " Widgets matching text filter [" + alias
                         + "]. You should use an unique identifier instead");
 
             }
@@ -162,7 +163,7 @@ public class GwtFinder implements AfterTestCallback {
                return byName.iterator().next();
             } else {
                throw new GwtFinderException("There are " + byName.size()
-                        + " attached Widgets matching name filter [" + alias
+                        + " Widgets matching name filter [" + alias
                         + "]. You should use an unique identifier instead");
 
             }
@@ -192,6 +193,11 @@ public class GwtFinder implements AfterTestCallback {
     * Create a new instance of <code>{@link GwtInstance}</code> which wraps an
     * <strong>attached</strong> Widget or a property of an <strong>attached</strong> widget matching
     * the given identifier. The wrapped value would be null if nothing matched.
+    * 
+    * <p>
+    * Note there is one exception for {@link PopupPanel} instances, which can be found even if not
+    * currently attached to the DOM.
+    * </p>
     * 
     * @param identifier An array of identifier parameters, which could be either an introspection
     *           path, a DOM id, a random text (for {@link HasText} widgets), a random html (for
@@ -302,7 +308,8 @@ public class GwtFinder implements AfterTestCallback {
     * patchers
     */
    protected static void onSetHTML(Object hasHTML, String newHTML, String oldHTML) {
-      if (!(hasHTML instanceof Widget) || ((Widget) hasHTML).isAttached()) {
+      if (!(hasHTML instanceof Widget) || ((Widget) hasHTML).isAttached()
+               || (hasHTML instanceof PopupPanel)) {
          onSetIndex(hasHTML, newHTML, oldHTML, INSTANCE.indexedObjectFinder.mapByHTML);
       }
    }
@@ -312,7 +319,7 @@ public class GwtFinder implements AfterTestCallback {
     * patchers
     */
    protected static void onSetId(Object o, String newId, String oldId) {
-      if (!(o instanceof Widget) || ((Widget) o).isAttached()) {
+      if (!(o instanceof Widget) || ((Widget) o).isAttached() || (o instanceof PopupPanel)) {
          INSTANCE.indexedObjectFinder.mapById.remove(oldId);
          INSTANCE.indexedObjectFinder.mapById.put(newId, o);
       }
@@ -323,7 +330,8 @@ public class GwtFinder implements AfterTestCallback {
     * patchers
     */
    protected static void onSetName(Object hasName, String newName, String oldName) {
-      if (!(hasName instanceof Widget) || ((Widget) hasName).isAttached()) {
+      if (!(hasName instanceof Widget) || ((Widget) hasName).isAttached()
+               || (hasName instanceof PopupPanel)) {
          onSetIndex(hasName, newName, oldName, INSTANCE.indexedObjectFinder.mapByName);
       }
    }
@@ -333,7 +341,8 @@ public class GwtFinder implements AfterTestCallback {
     * patchers
     */
    protected static void onSetText(Object hasText, String newText, String oldText) {
-      if (!(hasText instanceof Widget) || ((Widget) hasText).isAttached()) {
+      if (!(hasText instanceof Widget) || ((Widget) hasText).isAttached()
+               || (hasText instanceof PopupPanel)) {
          onSetIndex(hasText, newText, oldText, INSTANCE.indexedObjectFinder.mapByText);
       }
    }
