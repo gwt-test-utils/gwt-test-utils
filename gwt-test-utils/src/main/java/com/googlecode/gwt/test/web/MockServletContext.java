@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * @author Juergen Hoeller
  * @author Gael Lazzari
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings("restriction")
 public class MockServletContext implements ServletContext {
 
    /**
@@ -54,7 +54,6 @@ public class MockServletContext implements ServletContext {
     */
    private static class MimeTypeResolver {
 
-      @SuppressWarnings("restriction")
       public static String getMimeType(String filePath) {
          return FileTypeMap.getDefaultFileTypeMap().getContentType(filePath);
       }
@@ -77,6 +76,8 @@ public class MockServletContext implements ServletContext {
    private final Logger logger = LoggerFactory.getLogger(getClass());
 
    private int minorVersion = 5;
+
+   private String serverInfo = "MockServerInfo";
 
    private String servletContextName = "MockServletContext";
 
@@ -160,7 +161,7 @@ public class MockServletContext implements ServletContext {
    }
 
    public String getServerInfo() {
-      return "MockServletContext";
+      return serverInfo;
    }
 
    public Servlet getServlet(String name) {
@@ -219,6 +220,10 @@ public class MockServletContext implements ServletContext {
                   "Only Servlet minor versions between 3 and 5 are supported");
       }
       this.minorVersion = minorVersion;
+   }
+
+   public void setServerInfo(String serverInfo) {
+      this.serverInfo = serverInfo;
    }
 
    public void setServletContextName(String servletContextName) {

@@ -35,7 +35,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.util.LinkedCaseInsensitiveMap;
+import com.googlecode.gwt.test.internal.utils.LinkedCaseInsensitiveMap;
 
 /**
  * Mock implementation of the {@link javax.servlet.http.HttpServletResponse} interface. Supports the
