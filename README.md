@@ -1,4 +1,4 @@
-**gwt-test-utils** is a Java testing framework for [GWT](http://code.google.com/intl/fr-FR/webtoolkit/) applications. It provides a simple way to test your GWT User Interfaces **without GWTTestCase** or any servlet container instance ! This means you are able to use any Java tool without restriction : JUnit, reflection, Easymock, Mockito, etc.
+**gwt-test-utils** is a Java testing framework for [GWT](http://code.google.com/intl/fr-FR/webtoolkit/) applications. It provides a simple way to test your GWT client code **without GWTTestCase** or any servlet container instance ! This means you are able to use any Java tool without restriction : JUnit, reflection, Easymock, Mockito, etc.
 
 If you want to write **fast** tests which will still deal with your GWT view layout and simulate browser events on your widgets easily, you really should considere this framework. 
 The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Getting-started) page would be a good way to start ;-) 
