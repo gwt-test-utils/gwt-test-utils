@@ -1,11 +1,29 @@
+[![Build Status](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/badge/icon)](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/)
+
 **gwt-test-utils** is a Java testing framework for [GWT](http://code.google.com/intl/fr-FR/webtoolkit/) applications. It provides a simple way to test your GWT client code **without GWTTestCase** or any servlet container instance ! This means you are able to use any Java tool without restriction : JUnit, reflection, Easymock, Mockito, etc.
 
 If you want to write **fast** tests which will still deal with your GWT view layout and simulate browser events on your widgets easily, you really should considere this framework. 
 The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Getting-started) page would be a good way to start ;-) 
 
-[![Build Status](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/badge/icon)](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/)
+Writing tests looks like:
 
-## Features ##
+```java
+@Test
+public void clickOnButtonShouldDisplayMessageInLabel() {
+  // Arrange
+  SampleView view = new SampleView();
+  // ensure the label is visible and empty at init
+  assertThat(view.label).isVisible().textEquals("");
+  
+  // Act : simule the click event
+  Browser.click(view.button);
+  
+  // Assert: label should be visible and filled
+  assertThat(view.label).isVisible().textEquals("The button was clicked !");
+}
+````
+
+## Features
 
  * GWT code unit testing with small execution time (no hosted mode / browser launched in the background)
  * Simulation for browser's events (click, blur, change, ...)
@@ -20,7 +38,7 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
  * Complexe use-case testing using CSV-based scenarios
  * Extensibility through the use of custom patchers
 
-## Documentation ##
+## Documentation
 
 Whether you want to...
  * Use gwt-test-utils to test your GWT application
@@ -28,7 +46,7 @@ Whether you want to...
 
 ... you'll find everything you need in the [wiki](https://github.com/gwt-test-utils/gwt-test-utils/wiki).
 
-## Roadmap ##
+## Roadmap
 
 Here is the next features we are working on, ordered by priority (which is not frozen) :
 
@@ -43,7 +61,7 @@ Here is the next features we are working on, ordered by priority (which is not f
 
 In addition, we are daily improving **gwt-test-utils** existing features. To perfect it, we need your feedback !
 
-## Community ##
+## Community
 
 For any question, feedback or contribution, please contact use through the [user group](http://groups.google.com/group/gwt-test-utils-users).
 
