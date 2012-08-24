@@ -71,7 +71,7 @@ public interface GwtModuleRunner {
     * 
     * @see Widget#isAttached()
     */
-   boolean canDispatchDomEventOnDetachedWidget();
+   boolean canDispatchEventsOnDetachedWidgets();
 
    /**
     * Specifies if the module runner is allowed the setup of debug id.

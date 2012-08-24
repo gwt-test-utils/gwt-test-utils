@@ -817,7 +817,7 @@ public class Browser {
    private static boolean canApplyEvent(Widget target, Event event) {
 
       if (!target.isAttached()
-               && !GwtConfig.get().getModuleRunner().canDispatchDomEventOnDetachedWidget()) {
+               && !GwtConfig.get().getModuleRunner().canDispatchEventsOnDetachedWidgets()) {
          GwtConfig.get().getModuleRunner().getBrowserErrorHandler().onError(
                   "Cannot dispatch '" + event.getType()
                            + "' event : the targeted widget is not attached to the DOM");

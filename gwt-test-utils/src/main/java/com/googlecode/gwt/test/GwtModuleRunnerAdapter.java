@@ -63,7 +63,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    private static final String MAVEN_DEFAULT_WEB_DIR = "src/main/webapp/";
 
    private final BrowserErrorHandlerDelegate browserErrorHandlerDelegate;
-   private boolean canDispatchDomEventOnDetachedWidget;
+   private boolean canDispatchEventsOnDetachedWidgets;
    private final Map<String, String> clientProperties;
    private Locale locale;
    private GwtLogHandler logHandler;
@@ -133,10 +133,10 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    /*
     * (non-Javadoc)
     * 
-    * @see com.googlecode.gwt.test.GwtModuleRunner#canDispatchDomEventOnDetachedWidget ()
+    * @see com.googlecode.gwt.test.GwtModuleRunner#canDispatchDomEventsOnDetachedWidgets ()
     */
-   public final boolean canDispatchDomEventOnDetachedWidget() {
-      return canDispatchDomEventOnDetachedWidget;
+   public final boolean canDispatchEventsOnDetachedWidgets() {
+      return canDispatchEventsOnDetachedWidgets;
    }
 
    /*
@@ -272,14 +272,14 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    /**
     * Specifies if The {@link Browser} helper methods can target not attached widgets or not.
     * 
-    * @param canDispatchDomEventOnDetachedWidget True if {@link DomEvent} can be dispatched on
+    * @param canDispatchEventsOnDetachedWidgets True if {@link DomEvent} can be dispatched on
     *           detached widgets, false otherwise.
     * 
     * @see Widget#isAttached()
     */
-   protected final void setCanDispatchDomEventOnDetachedWidget(
-            boolean canDispatchDomEventOnDetachedWidget) {
-      this.canDispatchDomEventOnDetachedWidget = canDispatchDomEventOnDetachedWidget;
+   protected final void setCanDispatchEventsOnDetachedWidgets(
+            boolean canDispatchEventsOnDetachedWidgets) {
+      this.canDispatchEventsOnDetachedWidgets = canDispatchEventsOnDetachedWidgets;
    }
 
    /**

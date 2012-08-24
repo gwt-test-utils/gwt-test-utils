@@ -66,7 +66,7 @@ public abstract class GwtTest extends GwtModuleRunnerAdapter {
    }
 
    public GwtTest() {
-      this.setCanDispatchDomEventOnDetachedWidget(true);
+      this.setCanDispatchEventsOnDetachedWidgets(true);
    }
 
    @Before

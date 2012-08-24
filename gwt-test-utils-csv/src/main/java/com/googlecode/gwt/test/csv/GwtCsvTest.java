@@ -112,7 +112,7 @@ public abstract class GwtCsvTest extends GwtTest {
    };
 
    public GwtCsvTest() {
-      setCanDispatchDomEventOnDetachedWidget(false);
+      setCanDispatchEventsOnDetachedWidgets(false);
    }
 
    @CsvMethod
@@ -454,7 +454,7 @@ public abstract class GwtCsvTest extends GwtTest {
 
       assertThat(uiObject).withPrefix(prefix()).isVisible();
 
-      if (!GwtConfig.get().getModuleRunner().canDispatchDomEventOnDetachedWidget()
+      if (!GwtConfig.get().getModuleRunner().canDispatchEventsOnDetachedWidgets()
                && Widget.class.isInstance(uiObject)) {
 
          assertThat((Widget) uiObject).withPrefix(prefix()).isAttached();
