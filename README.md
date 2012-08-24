@@ -12,7 +12,7 @@ public void clickOnButtonShouldDisplayMessageInLabel() {
   // ensure the label is visible and empty at init
   assertThat(view.label).isVisible().textEquals("");
   
-  // Act : simulate the click event
+  // Act : simulate a click event
   Browser.click(view.button);
   
   // Assert: label should be visible and filled
