@@ -42,7 +42,7 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
 
 Whether you want to...
  * Use gwt-test-utils to test your GWT application
- * Get your custom widget library working on a standard JVM to make it compatible with the framework
+ * Make your custom widgets testable with the framework
 
 ... you'll find everything you need in the [wiki](https://github.com/gwt-test-utils/gwt-test-utils/wiki).
 
