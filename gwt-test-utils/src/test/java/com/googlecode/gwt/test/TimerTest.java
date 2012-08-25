@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test;
 
-import static org.junit.Assert.assertTrue;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 import org.junit.Test;
 
@@ -26,13 +26,19 @@ public class TimerTest extends GwtTestTest {
       // Act
       timer.schedule(500);
 
+      // Assert 1
+      assertThat(bool).overridingErrorMessage("The Timer fired too soon").isFalse();
+
+      Thread.sleep(700);
+
       // Assert
-      assertTrue("The token was not set after Timer has run", bool);
+      assertThat(bool).overridingErrorMessage("The token was not set after Timer has run").isTrue();
    }
 
    @Test
    public void scheduleRepeating() throws Exception {
       // Arrange
+      final int TIMES = 5;
       i = 0;
       Timer timer = new Timer() {
 
@@ -43,9 +49,16 @@ public class TimerTest extends GwtTestTest {
       };
 
       // Act
-      timer.scheduleRepeating(500);
+      timer.scheduleRepeating(200);
 
       // Assert
-      assertTrue("timer should be run more than once", i > 1);
+      Thread.sleep(100);
+      for (int count = 0; count <= TIMES; count++) {
+         // tests at instant 100, 300, 500, 700, 900, 1100
+         assertThat(count).overridingErrorMessage(
+                  "Timer didn't fire correctly, expected number of fire <%s> but was </%s>", count,
+                  i).isEqualTo(i);
+         Thread.sleep(200);
+      }
    }
 }
