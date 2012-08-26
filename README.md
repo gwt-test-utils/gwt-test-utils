@@ -9,8 +9,8 @@ Writing tests looks like:
 public void clickOnButtonShouldDisplayMessageInLabel() {
   // Arrange
   SampleView view = new SampleView();
-  // ensure the label is visible and empty at init
-  assertThat(view.label).isVisible().textEquals("");
+  // ensure the label is not visible at init
+  assertThat(view.label).isNotVisible();
   
   // Act : simulate a click event
   Browser.click(view.button);
