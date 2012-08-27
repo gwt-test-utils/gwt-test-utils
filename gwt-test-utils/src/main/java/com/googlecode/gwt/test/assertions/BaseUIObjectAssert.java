@@ -67,6 +67,21 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
    }
 
    /**
+    * Verifies that the actual {@link UIObject} HTML contains the given sequence.
+    * 
+    * @param sequence the sequence to search for.
+    * @return this assertion object.
+    * @throws AssertionError if the actual HTML value is not equal to the given one.
+    */
+   public S htmlContains(String sequence) {
+      String html = HasHTML.class.isInstance(actual) ? ((HasHTML) actual).getHTML()
+               : actual.getElement().getInnerHTML();
+      if (html.contains(sequence))
+         return myself;
+      throw failWithMessage("actual HTML [%s] does not contains [%s]", html, sequence);
+   }
+
+   /**
     * Verifies that the actual {@link UIObject} HTML is equal to the given one.
     * 
     * @param expected the given HTML to compare the actual HTML value to.
@@ -137,6 +152,21 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
    }
 
    /**
+    * Verifies that the actual {@link UIObject} text contains the given sequence.
+    * 
+    * @param sequence the sequence to search for.
+    * @return this assertion object.
+    * @throws AssertionError if the actual text value is not equal to the given one.
+    */
+   public S textContains(String sequence) {
+      String text = HasText.class.isInstance(actual) ? ((HasText) actual).getText()
+               : actual.getElement().getInnerText();
+      if (text.contains(sequence))
+         return myself;
+      throw failWithMessage("actual text [%s] does not contains [%s]", text, sequence);
+   }
+
+   /**
     * Verifies that the actual {@link UIObject} text is equal to the given one.
     * 
     * @param expected the given text to compare the actual text value to.
@@ -149,6 +179,20 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
       if (areEqual(text, expected))
          return myself;
       throw propertyComparisonFailed("text", text, expected);
+   }
+
+   /**
+    * Verifies that the actual {@link UIObject} title contains the given sequence.
+    * 
+    * @param sequence the sequence to search for.
+    * @return this assertion object.
+    * @throws AssertionError if the actual title value is not equal to the given one.
+    */
+   public S titleContains(String sequence) {
+      String title = actual.getTitle();
+      if (title.contains(sequence))
+         return myself;
+      throw failWithMessage("actual title [%s] does not contains [%s]", title, sequence);
    }
 
    /**
