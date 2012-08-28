@@ -12,10 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;
-import com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestRpcException;
-import com.googlecode.gwt.test.internal.AsyncCallbackRecorder;
+import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
 import com.googlecode.gwt.test.internal.patchers.AbstractRemoteServiceServletPatcher;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
@@ -85,10 +84,7 @@ class GwtRpcInvocationHandler implements InvocationHandler {
                }
             }
 
-            if (target instanceof AbstractRemoteServiceServlet) {
-               AbstractRemoteServiceServletPatcher.currentCalledMethod = m;
-            }
-
+            AbstractRemoteServiceServletPatcher.currentCalledMethod = m;
             Object resultObject = m.invoke(target, serializedArgs);
 
             Object returnObject;
@@ -139,8 +135,8 @@ class GwtRpcInvocationHandler implements InvocationHandler {
          }
 
       }
-      // delegate the execution to the recorder
-      AsyncCallbackRecorder.get().handleAsyncCallback(asyncCallbackCommand);
+      // delegate the execution to the Browser simulator
+      BrowserEventLoopSimulatorImpl.get().recordAsyncCall(asyncCallbackCommand);
 
       // async callback always return void
       return null;

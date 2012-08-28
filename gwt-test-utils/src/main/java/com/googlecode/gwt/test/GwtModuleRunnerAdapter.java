@@ -16,6 +16,7 @@ import com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet;
 import com.googlecode.gwt.test.exceptions.GwtTestConfigurationException;
 import com.googlecode.gwt.test.internal.AfterTestCallback;
 import com.googlecode.gwt.test.internal.AfterTestCallbackManager;
+import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
 import com.googlecode.gwt.test.internal.GwtConfig;
 import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
 import com.googlecode.gwt.test.internal.i18n.DictionaryUtils;
@@ -33,7 +34,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
 
       public void onError(String errorMessage) {
          // remove pending tasks, no need to execute
-         FinallyCommandTrigger.clearPendingCommands();
+         browserEventLoopSimulator.clearPendingCommands();
 
          if (customHandler != null) {
             customHandler.onError(errorMessage);
@@ -63,6 +64,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    private static final String MAVEN_DEFAULT_WEB_DIR = "src/main/webapp/";
 
    private final BrowserErrorHandlerDelegate browserErrorHandlerDelegate;
+   private final BrowserEventLoopSimulatorImpl browserEventLoopSimulator;
    private boolean canDispatchEventsOnDetachedWidgets;
    private final Map<String, String> clientProperties;
    private Locale locale;
@@ -72,6 +74,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
 
    public GwtModuleRunnerAdapter() {
       browserErrorHandlerDelegate = new BrowserErrorHandlerDelegate();
+      browserEventLoopSimulator = BrowserEventLoopSimulatorImpl.get();
       clientProperties = new HashMap<String, String>();
       AfterTestCallbackManager.get().registerRemoveableCallback(this);
    }
@@ -220,6 +223,10 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       return windowOperationsHandler;
    }
 
+   protected BrowserEventLoopSimulator getBrowserEventLoopSimulator() {
+      return browserEventLoopSimulator;
+   }
+
    protected abstract BrowserErrorHandler getDefaultBrowserErrorHandler();
 
    /**
@@ -259,9 +266,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    }
 
    /**
-    * Specifies the callback to use when a simulated {@link Browser} action throws an error. New
-    * BrowserErrorHandler <strong>must</strong> call
-    * {@link FinallyCommandTrigger#clearPendingCommands()}.
+    * Specifies the callback to use when a simulated {@link Browser} action throws an error.
     * 
     * @param browserErrorHandler The custom browser error handler callback.
     */

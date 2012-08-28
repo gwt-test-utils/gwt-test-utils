@@ -37,7 +37,7 @@ public class GwtConfig implements AfterTestCallback {
    private final List<UiObjectTagFactory<?>> uiObjectTagFactories = new ArrayList<UiObjectTagFactory<?>>();
 
    private GwtConfig() {
-      AfterTestCallbackManager.get().registerCallback(this);
+      AfterTestCallbackManager.get().registerFinalCallback(this);
    }
 
    public void afterTest() throws Throwable {

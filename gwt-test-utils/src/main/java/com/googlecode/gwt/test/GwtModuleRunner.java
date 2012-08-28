@@ -84,9 +84,7 @@ public interface GwtModuleRunner {
    boolean ensureDebugId();
 
    /**
-    * Specifies the callback to use when a simulated {@link Browser} action throws an error. New
-    * BrowserErrorHandler <strong>must</strong> call
-    * {@link FinallyCommandTrigger#clearPendingCommands()}.
+    * Specifies the callback to use when a simulated {@link Browser} action throws an error.
     * 
     * @return The custom browser error handler callback.
     */

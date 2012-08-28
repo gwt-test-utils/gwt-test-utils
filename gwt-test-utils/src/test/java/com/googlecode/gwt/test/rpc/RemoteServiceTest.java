@@ -1,7 +1,7 @@
 package com.googlecode.gwt.test.rpc;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
@@ -57,7 +57,9 @@ public class RemoteServiceTest extends GwtTestTest {
       });
 
       // Assert
-      assertTrue("The service callback should have been call in a synchronised way", success);
+      assertThat(success).isFalse();
+      getBrowserEventLoopSimulator().fireLoopEnd();
+      assertThat(success).isTrue();
    }
 
    @Test
@@ -77,6 +79,8 @@ public class RemoteServiceTest extends GwtTestTest {
                fail("onSucess should not be called");
             }
          });
+
+         getBrowserEventLoopSimulator().fireLoopEnd();
 
          fail("getHttpRequestHeader should have thrown a GwtTestRpcException");
       } catch (GwtTestRpcException e) {
@@ -112,7 +116,9 @@ public class RemoteServiceTest extends GwtTestTest {
       });
 
       // Assert
-      assertTrue("The service callback should have been call in a synchronised way", failure);
+      assertThat(failure).isFalse();
+      getBrowserEventLoopSimulator().fireLoopEnd();
+      assertThat(failure).isTrue();
    }
 
    @Test
@@ -130,7 +136,7 @@ public class RemoteServiceTest extends GwtTestTest {
          }
 
          public void onSuccess(MyObject result) {
-            // Assert 1
+            // Assert 2
             assertEquals("updated field by server side code", result.getMyField());
             assertEquals("transient field", result.getMyTransientField());
 
@@ -147,8 +153,11 @@ public class RemoteServiceTest extends GwtTestTest {
          }
       });
 
-      // Assert 2
-      assertTrue("The service callback should have been call in a synchronised way", success);
+      // Assert 1
+      assertThat(success).isFalse();
+      getBrowserEventLoopSimulator().fireLoopEnd();
+      // Assert 3
+      assertThat(success).isTrue();
    }
 
 }

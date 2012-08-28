@@ -3,7 +3,7 @@ package com.googlecode.gwt.test.internal.patchers;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.core.client.impl.SchedulerImpl;
-import com.googlecode.gwt.test.FinallyCommandTrigger;
+import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
 
@@ -12,7 +12,7 @@ class SchedulerImplPatcher {
 
    @PatchMethod
    static void scheduleDeferred(SchedulerImpl impl, ScheduledCommand cmd) {
-      cmd.execute();
+      BrowserEventLoopSimulatorImpl.get().scheduleDeferred(cmd);
    }
 
    @PatchMethod
@@ -27,12 +27,12 @@ class SchedulerImplPatcher {
 
    @PatchMethod
    static void scheduleFinally(SchedulerImpl impl, RepeatingCommand cmd) {
-      FinallyCommandTrigger.add(cmd);
+      BrowserEventLoopSimulatorImpl.get().scheduleFinally(cmd);
    }
 
    @PatchMethod
    static void scheduleFinally(SchedulerImpl impl, ScheduledCommand cmd) {
-      FinallyCommandTrigger.add(cmd);
+      BrowserEventLoopSimulatorImpl.get().scheduleFinally(cmd);
    }
 
    @PatchMethod

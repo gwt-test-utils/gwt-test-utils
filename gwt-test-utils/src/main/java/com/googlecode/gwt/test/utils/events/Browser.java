@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
-import com.googlecode.gwt.test.FinallyCommandTrigger;
+import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
 import com.googlecode.gwt.test.internal.GwtConfig;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
 import com.googlecode.gwt.test.internal.utils.RadioButtonManager;
@@ -127,8 +127,8 @@ public class Browser {
     * @param item The content of the row to click.
     */
    public static <T> void click(AbstractHasData<T> hasData, T item) {
-      // trigger finally scheduled command first
-      FinallyCommandTrigger.triggerCommands();
+      // trigger an event loop end first
+      BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
 
       if (hasData.getSelectionModel() == null) {
          return;
@@ -149,10 +149,9 @@ public class Browser {
             hasData.getSelectionModel().setSelected(item,
                      !hasData.getSelectionModel().isSelected(item));
 
-            // run finally scheduled commands because some could have been
-            // scheduled
-            // when the event was dispatched.
-            FinallyCommandTrigger.triggerCommands();
+            // trigger an event loop end because some commands could have been scheduled when the
+            // event was dispatched.
+            BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
 
             return;
          }
@@ -257,10 +256,10 @@ public class Browser {
     * @param index The targeted cell header index in the table
     */
    public static void clickHeader(AbstractCellTable<?> table, int index) {
-      FinallyCommandTrigger.triggerCommands();
+      BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
       table.getColumnSortList().push(table.getColumn(index));
       ColumnSortEvent.fire(table, table.getColumnSortList());
-      FinallyCommandTrigger.triggerCommands();
+      BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
    }
 
    /**
