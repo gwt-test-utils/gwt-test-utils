@@ -47,7 +47,9 @@ public class GwtDefaultAnnotationEngine extends DefaultAnnotationEngine {
    }
 
    private Class<?> getTypeToMock(Field f) {
-      if (GwtFactory.get().getOverlayRewriter().isJsoIntf(f.getType().getName())) {
+      GwtFactory gwtFactory = GwtFactory.get();
+      if (gwtFactory != null && gwtFactory.getOverlayRewriter() != null
+               && gwtFactory.getOverlayRewriter().isJsoIntf(f.getType().getName())) {
          try {
             return Class.forName(JsValueGlue.JSO_IMPL_CLASS);
          } catch (ClassNotFoundException e) {
@@ -56,6 +58,10 @@ public class GwtDefaultAnnotationEngine extends DefaultAnnotationEngine {
                      + f.getType().getName(), e);
          }
       } else {
+         // null GwtFactory means the test is a mockito test not running with gwt-test-utils, e.g.
+         // @RunWith(GwtRunner.class)
+         // null OverlayRewriter means JavaScriptObject class has not been found in the class set to
+         // compile (should never happen in a gwt-test-utils test)
          return f.getType();
       }
    }
