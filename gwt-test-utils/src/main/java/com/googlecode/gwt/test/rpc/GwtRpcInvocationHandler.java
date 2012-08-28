@@ -14,7 +14,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestRpcException;
-import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.internal.patchers.AbstractRemoteServiceServletPatcher;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
@@ -136,7 +136,7 @@ class GwtRpcInvocationHandler implements InvocationHandler {
 
       }
       // delegate the execution to the Browser simulator
-      BrowserEventLoopSimulatorImpl.get().recordAsyncCall(asyncCallbackCommand);
+      BrowserSimulatorImpl.get().recordAsyncCall(asyncCallbackCommand);
 
       // async callback always return void
       return null;

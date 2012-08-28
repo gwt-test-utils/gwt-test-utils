@@ -7,9 +7,8 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
-import com.googlecode.gwt.test.BrowserEventLoopSimulator;
+import com.googlecode.gwt.test.BrowserSimulator;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
-import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 
 /**
  * Trigger {@link ScheduledCommand}, {@link RepeatingCommand} and RPC callbacks which were scheduled
@@ -20,11 +19,11 @@ import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
  * @author Gael Lazzari
  * 
  */
-public class BrowserEventLoopSimulatorImpl implements BrowserEventLoopSimulator, AfterTestCallback {
+public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback {
 
-   private static final BrowserEventLoopSimulatorImpl INSTANCE = new BrowserEventLoopSimulatorImpl();
+   private static final BrowserSimulatorImpl INSTANCE = new BrowserSimulatorImpl();
 
-   public static BrowserEventLoopSimulatorImpl get() {
+   public static BrowserSimulatorImpl get() {
       return INSTANCE;
    }
 
@@ -42,12 +41,12 @@ public class BrowserEventLoopSimulatorImpl implements BrowserEventLoopSimulator,
 
    private boolean isTriggering;
 
-   private BrowserEventLoopSimulatorImpl() {
+   private BrowserSimulatorImpl() {
       AfterTestCallbackManager.get().registerCallback(this);
    }
 
    /**
-    * Check there is no pending command to execute. A {@link GwtTestPatchException} would we thrown.
+    * Check there is no pending command to execute. A {@link GwtTestException} would we thrown.
     */
    public void afterTest() throws Throwable {
 
@@ -57,7 +56,7 @@ public class BrowserEventLoopSimulatorImpl implements BrowserEventLoopSimulator,
       }
 
       String testName = GwtConfig.get().getModuleRunner().getClass().getSimpleName();
-      String format = "%s pending %s must be triggered manually by calling %s.getBrowserEventLoopSimulator().fireLoopEnd() before making your test assertions";
+      String format = "%s pending %s must be triggered manually by calling %s.getBrowserSimulator().fireLoopEnd() before making your test assertions";
       String errorMessage = null;
 
       if (deferredScheduledCommands.size() > 0) {

@@ -9,7 +9,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.user.client.Event;
-import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
 import com.googlecode.gwt.test.patchers.InitMethod;
 import com.googlecode.gwt.test.patchers.PatchClass;
@@ -37,13 +37,13 @@ class DomEventPatcher {
 
       // fire browser event loop first because some command or async callback may modify the DOM
       // structure + fire NativePreviewHandler
-      onBrowserEvent.insertBefore(BrowserEventLoopSimulatorImpl.class.getName()
+      onBrowserEvent.insertBefore(BrowserSimulatorImpl.class.getName()
                + ".get().fireLoopEnd(); " + DomEventPatcher.class.getName()
                + ".triggerNativeEvent($1, $3);");
 
       // fire browser event loop at the end because some command may have been scheduled or RPC call
       // made when the event was dispatched.
-      onBrowserEvent.insertAfter(BrowserEventLoopSimulatorImpl.class.getName()
+      onBrowserEvent.insertAfter(BrowserSimulatorImpl.class.getName()
                + ".get().fireLoopEnd();");
    }
 

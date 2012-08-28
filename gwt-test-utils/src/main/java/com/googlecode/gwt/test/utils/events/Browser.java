@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
-import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.internal.GwtConfig;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
 import com.googlecode.gwt.test.internal.utils.RadioButtonManager;
@@ -128,7 +128,7 @@ public class Browser {
     */
    public static <T> void click(AbstractHasData<T> hasData, T item) {
       // trigger an event loop end first
-      BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
+      BrowserSimulatorImpl.get().fireLoopEnd();
 
       if (hasData.getSelectionModel() == null) {
          return;
@@ -151,7 +151,7 @@ public class Browser {
 
             // trigger an event loop end because some commands could have been scheduled when the
             // event was dispatched.
-            BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
+            BrowserSimulatorImpl.get().fireLoopEnd();
 
             return;
          }
@@ -256,10 +256,10 @@ public class Browser {
     * @param index The targeted cell header index in the table
     */
    public static void clickHeader(AbstractCellTable<?> table, int index) {
-      BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
+      BrowserSimulatorImpl.get().fireLoopEnd();
       table.getColumnSortList().push(table.getColumn(index));
       ColumnSortEvent.fire(table, table.getColumnSortList());
-      BrowserEventLoopSimulatorImpl.get().fireLoopEnd();
+      BrowserSimulatorImpl.get().fireLoopEnd();
    }
 
    /**

@@ -55,7 +55,7 @@ public class SimpleGwtSpringTest extends GwtSpringTest {
 
       // Assert 1
       assertThat(success).isFalse();
-      getBrowserEventLoopSimulator().fireLoopEnd();
+      getBrowserSimulator().fireLoopEnd();
       // Assert 3
       assertThat(success).isTrue();
    }

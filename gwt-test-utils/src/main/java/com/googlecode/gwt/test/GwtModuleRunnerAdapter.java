@@ -16,7 +16,7 @@ import com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet;
 import com.googlecode.gwt.test.exceptions.GwtTestConfigurationException;
 import com.googlecode.gwt.test.internal.AfterTestCallback;
 import com.googlecode.gwt.test.internal.AfterTestCallbackManager;
-import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.internal.GwtConfig;
 import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
 import com.googlecode.gwt.test.internal.i18n.DictionaryUtils;
@@ -34,7 +34,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
 
       public void onError(String errorMessage) {
          // remove pending tasks, no need to execute
-         browserEventLoopSimulator.clearPendingCommands();
+         browserSimulatorImpl.clearPendingCommands();
 
          if (customHandler != null) {
             customHandler.onError(errorMessage);
@@ -64,7 +64,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    private static final String MAVEN_DEFAULT_WEB_DIR = "src/main/webapp/";
 
    private final BrowserErrorHandlerDelegate browserErrorHandlerDelegate;
-   private final BrowserEventLoopSimulatorImpl browserEventLoopSimulator;
+   private final BrowserSimulatorImpl browserSimulatorImpl;
    private boolean canDispatchEventsOnDetachedWidgets;
    private final Map<String, String> clientProperties;
    private Locale locale;
@@ -74,7 +74,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
 
    public GwtModuleRunnerAdapter() {
       browserErrorHandlerDelegate = new BrowserErrorHandlerDelegate();
-      browserEventLoopSimulator = BrowserEventLoopSimulatorImpl.get();
+      browserSimulatorImpl = BrowserSimulatorImpl.get();
       clientProperties = new HashMap<String, String>();
       AfterTestCallbackManager.get().registerRemoveableCallback(this);
    }
@@ -223,8 +223,8 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       return windowOperationsHandler;
    }
 
-   protected BrowserEventLoopSimulator getBrowserEventLoopSimulator() {
-      return browserEventLoopSimulator;
+   protected BrowserSimulator getBrowserSimulator() {
+      return browserSimulatorImpl;
    }
 
    protected abstract BrowserErrorHandler getDefaultBrowserErrorHandler();

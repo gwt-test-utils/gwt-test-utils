@@ -58,7 +58,7 @@ public class RemoteServiceTest extends GwtTestTest {
 
       // Assert
       assertThat(success).isFalse();
-      getBrowserEventLoopSimulator().fireLoopEnd();
+      getBrowserSimulator().fireLoopEnd();
       assertThat(success).isTrue();
    }
 
@@ -80,7 +80,7 @@ public class RemoteServiceTest extends GwtTestTest {
             }
          });
 
-         getBrowserEventLoopSimulator().fireLoopEnd();
+         getBrowserSimulator().fireLoopEnd();
 
          fail("getHttpRequestHeader should have thrown a GwtTestRpcException");
       } catch (GwtTestRpcException e) {
@@ -117,7 +117,7 @@ public class RemoteServiceTest extends GwtTestTest {
 
       // Assert
       assertThat(failure).isFalse();
-      getBrowserEventLoopSimulator().fireLoopEnd();
+      getBrowserSimulator().fireLoopEnd();
       assertThat(failure).isTrue();
    }
 
@@ -155,7 +155,7 @@ public class RemoteServiceTest extends GwtTestTest {
 
       // Assert 1
       assertThat(success).isFalse();
-      getBrowserEventLoopSimulator().fireLoopEnd();
+      getBrowserSimulator().fireLoopEnd();
       // Assert 3
       assertThat(success).isTrue();
    }

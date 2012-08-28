@@ -5,7 +5,7 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
-import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.patchers.InitMethod;
 import com.googlecode.gwt.test.patchers.PatchClass;
 
@@ -15,7 +15,7 @@ class ListWrapperPatcher {
    @InitMethod
    static void initClass(CtClass c) throws CannotCompileException, NotFoundException {
       CtMethod flushMethod = c.getDeclaredMethod("flush");
-      flushMethod.insertAfter(BrowserEventLoopSimulatorImpl.class.getName()
+      flushMethod.insertAfter(BrowserSimulatorImpl.class.getName()
                + ".get().fireLoopEnd();");
    }
 

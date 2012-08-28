@@ -7,7 +7,7 @@ import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtMethod;
 
-import com.googlecode.gwt.test.internal.BrowserEventLoopSimulatorImpl;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.patchers.InitMethod;
 import com.googlecode.gwt.test.patchers.PatchClass;
 
@@ -33,11 +33,11 @@ class HasDataPresenterPatcher {
    @InitMethod
    static void initClass(CtClass c) throws CannotCompileException {
       // every method which calls HasDataPresenter.ensurePendingState() should call
-      // BrowserEventLoopSimulatorImpl.get().fireLoopEnd() at the end, so finally and deferred
+      // BrowserSimulatorImpl.get().fireLoopEnd() at the end, so finally and deferred
       // commands would be executed just after the method itself
       for (CtMethod m : c.getMethods()) {
          if (methodsToPatch.contains(m.getName())) {
-            m.insertAfter(BrowserEventLoopSimulatorImpl.class.getName() + ".get().fireLoopEnd();");
+            m.insertAfter(BrowserSimulatorImpl.class.getName() + ".get().fireLoopEnd();");
          }
       }
    }

@@ -7,13 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
- * A Browser event-loop simulator interface, to give a programmatic way of running
- * {@link ScheduledCommand}, {@link RepeatingCommand} and RPC callbacks.
- * 
- * <p>
- * A browser event loop end is automatically triggered by gwt-test-utils before and after a DOM
- * event is processed.
- * </p>
+ * A Browser simulation interface, to give a programmatic way of running Browser specific behavior.
  * 
  * @author Gael Lazzari
  * 
@@ -22,7 +16,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
  * @see Scheduler#scheduleFinally(RepeatingCommand)
  * 
  */
-public interface BrowserEventLoopSimulator {
+public interface BrowserSimulator {
 
    /**
     * Fire a Browser event loop end, so that commands scheduled with
@@ -31,6 +25,11 @@ public interface BrowserEventLoopSimulator {
     * {@link Scheduler#scheduleFinally(RepeatingCommand)} can be processed. Eventual
     * {@link AsyncCallback} are also executed if there were some {@link RemoteService} call executed
     * during a test.
+    * 
+    * <p>
+    * A browser event loop end is <strong>automatically triggered</strong> by gwt-test-utils before
+    * and after a DOM event is processed.
+    * </p>
     */
    void fireLoopEnd();
 
