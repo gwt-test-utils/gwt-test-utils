@@ -223,6 +223,11 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       return windowOperationsHandler;
    }
 
+   /**
+    * Return the browser simulator instance used by gwt-test-utils.
+    * 
+    * @return the browser simulator used internally.
+    */
    protected BrowserSimulator getBrowserSimulator() {
       return browserSimulatorImpl;
    }
