@@ -12,6 +12,7 @@ import org.mockito.stubbing.Stubber;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.exceptions.ReflectionException;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 /**
@@ -38,9 +39,15 @@ public abstract class GwtTestWithMockito extends GwtTestWithMocks {
 
       @SuppressWarnings("unchecked")
       public T answer(InvocationOnMock invocation) {
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
+
          Object[] arguments = invocation.getArguments();
          AsyncCallback<Object> callback = (AsyncCallback<Object>) arguments[arguments.length - 1];
          callback.onFailure(result);
+
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
          return null;
       }
 
@@ -56,9 +63,15 @@ public abstract class GwtTestWithMockito extends GwtTestWithMocks {
 
       @SuppressWarnings("unchecked")
       public T answer(InvocationOnMock invocation) {
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
+
          Object[] arguments = invocation.getArguments();
          AsyncCallback<Object> callback = (AsyncCallback<Object>) arguments[arguments.length - 1];
          callback.onSuccess(result);
+
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
          return null;
       }
 

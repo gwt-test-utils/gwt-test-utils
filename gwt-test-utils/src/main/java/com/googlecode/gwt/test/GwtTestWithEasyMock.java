@@ -14,6 +14,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 import com.googlecode.gwt.test.exceptions.ReflectionException;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.internal.GwtFactory;
 import com.googlecode.gwt.test.internal.utils.ArrayUtils;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
@@ -53,8 +54,14 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
 
       @SuppressWarnings("unchecked")
       public T answer() throws Throwable {
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
+
          final Object[] arguments = EasyMock.getCurrentArguments();
          AsyncCallback<T> callback = (AsyncCallback<T>) arguments[arguments.length - 1];
+
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
          callback.onFailure(result);
          return null;
       }
@@ -71,9 +78,15 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
 
       @SuppressWarnings("unchecked")
       public T answer() throws Throwable {
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
+
          final Object[] arguments = EasyMock.getCurrentArguments();
          AsyncCallback<T> callback = (AsyncCallback<T>) arguments[arguments.length - 1];
          callback.onSuccess(result);
+
+         // commands might be scheduled in the asyncCallback
+         BrowserSimulatorImpl.get().fireLoopEnd();
          return null;
       }
 
