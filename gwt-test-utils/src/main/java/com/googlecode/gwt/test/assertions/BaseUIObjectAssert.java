@@ -71,7 +71,7 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     * 
     * @param sequence the sequence to search for.
     * @return this assertion object.
-    * @throws AssertionError if the actual HTML value is not equal to the given one.
+    * @throws AssertionError if the actual HTML value does not contain the given sequence.
     */
    public S htmlContains(String sequence) {
       String html = HasHTML.class.isInstance(actual) ? ((HasHTML) actual).getHTML()
@@ -156,7 +156,7 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     * 
     * @param sequence the sequence to search for.
     * @return this assertion object.
-    * @throws AssertionError if the actual text value is not equal to the given one.
+    * @throws AssertionError if the actual text value does not contain the given sequence.
     */
    public S textContains(String sequence) {
       String text = HasText.class.isInstance(actual) ? ((HasText) actual).getText()
@@ -186,7 +186,7 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     * 
     * @param sequence the sequence to search for.
     * @return this assertion object.
-    * @throws AssertionError if the actual title value is not equal to the given one.
+    * @throws AssertionError if the actual title value does not contain the given sequence.
     */
    public S titleContains(String sequence) {
       String title = actual.getTitle();
