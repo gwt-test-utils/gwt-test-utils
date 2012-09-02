@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -46,8 +47,8 @@
 		<connection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</connection>
 		<developerConnection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</developerConnection>
 		<url>https://github.com/gwt-test-utils/gwt-test-utils</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<ciManagement>
 		<system>buildhive</system>
 		<url>https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/</url>
