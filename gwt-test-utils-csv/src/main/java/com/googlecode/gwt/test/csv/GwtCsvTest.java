@@ -564,7 +564,7 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    protected FocusWidget getFocusWidget(String... params) {
-      return getFocusWidget(params);
+      return object(params).ofType(FocusWidget.class);
    }
 
    /**
