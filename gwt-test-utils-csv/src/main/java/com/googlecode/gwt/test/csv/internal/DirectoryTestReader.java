@@ -68,16 +68,6 @@ public class DirectoryTestReader {
       }
    }
 
-   private static <T> T getAnnotation(Class<?> clazz, Class<T> annotationClass) {
-      T annotation = GwtReflectionUtils.getAnnotation(clazz, annotationClass);
-      if (annotation == null) {
-         throw new GwtTestCsvException("Missing annotation \'@" + annotationClass.getSimpleName()
-                  + "\' on class [" + clazz.getCanonicalName() + "]");
-      }
-
-      return annotation;
-   }
-
    private static File getDirectory(String path) throws IOException {
       File directory = new File(path);
       if (!directory.exists()) {
@@ -100,11 +90,19 @@ public class DirectoryTestReader {
 
    public DirectoryTestReader(Class<?> clazz) {
       try {
-         CsvDirectory csvDirectoryAnnotation = getAnnotation(clazz, CsvDirectory.class);
-         CsvMacros csvMacrosAnnotation = getAnnotation(clazz, CsvMacros.class);
+         CsvDirectory csvDirectoryAnnotation = GwtReflectionUtils.getAnnotation(clazz,
+                  CsvDirectory.class);
+
+         if (csvDirectoryAnnotation == null) {
+            throw new GwtTestCsvException("Missing annotation \'@"
+                     + CsvDirectory.class.getSimpleName() + "\' on class [" + clazz.getName() + "]");
+         }
 
          initCsvTests(csvDirectoryAnnotation);
+
+         CsvMacros csvMacrosAnnotation = GwtReflectionUtils.getAnnotation(clazz, CsvMacros.class);
          initCsvMacros(csvMacrosAnnotation);
+
          initTestMethods(clazz, csvDirectoryAnnotation);
       } catch (Exception e) {
          if (GwtTestException.class.isInstance(e)) {
@@ -147,11 +145,16 @@ public class DirectoryTestReader {
    }
 
    private void initCsvMacros(CsvMacros csvMacros) throws FileNotFoundException, IOException {
+      macros = new HashMap<String, List<List<String>>>();
+
+      if (csvMacros == null) {
+         return;
+      }
+
       Pattern macroNamePattern = (csvMacros.pattern() != null)
                ? Pattern.compile(csvMacros.pattern()) : null;
       File macrosDirectory = getDirectory(csvMacros.value());
 
-      macros = new HashMap<String, List<List<String>>>();
       for (File file : macrosDirectory.listFiles()) {
          String fileName = file.getName();
          if (macroNamePattern == null || macroNamePattern.matcher(file.getName()).matches()) {
