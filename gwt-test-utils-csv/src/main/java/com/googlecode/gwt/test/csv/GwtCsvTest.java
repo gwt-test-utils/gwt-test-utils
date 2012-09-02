@@ -116,8 +116,8 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void assertBiggerThan(String value, String... params) {
-      GwtInstance gwtInstance = object(params);
+   public void assertBiggerThan(String value, String... identifier) {
+      GwtInstance gwtInstance = object(identifier);
       Object actual = gwtInstance.getRaw();
 
       if (actual == null) {
@@ -141,30 +141,30 @@ public abstract class GwtCsvTest extends GwtTest {
    /**
     * 
     * @param containedValue
-    * @param params
+    * @param identifier
     */
    @CsvMethod
-   public void assertContains(String containedValue, String... params) {
+   public void assertContains(String containedValue, String... identifier) {
       containedValue = GwtStringUtils.resolveBackSlash(containedValue);
-      String actual = getString(params);
+      String actual = getString(identifier);
       assertThat(actual).as(prefix() + "String").contains(containedValue);
    }
 
    @CsvMethod
-   public void assertEmpty(String... params) {
-      assertExact("", params);
+   public void assertEmpty(String... identifier) {
+      assertExact("", identifier);
    }
 
    /**
     * 
     * @param expected
-    * @param params
+    * @param identifier
     */
    @CsvMethod
-   public void assertExact(String expected, String... params) {
+   public void assertExact(String expected, String... identifier) {
       expected = GwtStringUtils.resolveBackSlash(expected);
 
-      String actual = getString(params);
+      String actual = getString(identifier);
 
       if (expected == null) {
          assertThat(actual).as(prefix() + "String").isNull();
@@ -175,20 +175,20 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void assertFalse(String... params) {
-      assertThat(object(params).ofType(Boolean.class)).as(prefix() + "Boolean").isNotNull().isFalse();
+   public void assertFalse(String... identifier) {
+      assertThat(object(identifier).ofType(Boolean.class)).as(prefix() + "Boolean").isNotNull().isFalse();
    }
 
    @CsvMethod
-   public void assertHTML(String html, String... params) {
-      assertThat(object(params).ofType(UIObject.class)).withPrefix(prefix()).htmlEquals(html);
+   public void assertHTML(String html, String... identifier) {
+      assertThat(object(identifier).ofType(UIObject.class)).withPrefix(prefix()).htmlEquals(html);
    }
 
    @CsvMethod
-   public void assertInstanceOf(String className, String... params) {
+   public void assertInstanceOf(String className, String... identifier) {
       try {
          Class<?> clazz = GwtReflectionUtils.getClass(className);
-         assertThat(object(params)).withPrefix(prefix()).isInstanceOf(clazz);
+         assertThat(object(identifier)).withPrefix(prefix()).isInstanceOf(clazz);
       } catch (ClassNotFoundException e) {
          fail(prefix() + "Cannot assert instance of [" + className
                   + "] because the class cannot be found");
@@ -196,25 +196,25 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void assertListBoxDataEquals(String commaSeparatedContent, String... params) {
+   public void assertListBoxDataEquals(String commaSeparatedContent, String... identifier) {
       String[] content = commaSeparatedContent.split("\\s*,\\s*");
-      assertThat(object(params).ofType(ListBox.class)).withPrefix(prefix()).dataMatches(content);
+      assertThat(object(identifier).ofType(ListBox.class)).withPrefix(prefix()).dataMatches(content);
    }
 
    @CsvMethod
-   public void assertListBoxSelectedValueIs(String expected, String... params) {
-      assertThat(object(params).ofType(ListBox.class)).withPrefix(prefix()).selectedValueEquals(
+   public void assertListBoxSelectedValueIs(String expected, String... identifier) {
+      assertThat(object(identifier).ofType(ListBox.class)).withPrefix(prefix()).selectedValueEquals(
                expected);
    }
 
    @CsvMethod
-   public void assertNotExist(String... params) {
-      assertThat(object(params)).withPrefix(prefix()).isNull();
+   public void assertNotExist(String... identifier) {
+      assertThat(object(identifier)).withPrefix(prefix()).isNull();
    }
 
    @CsvMethod
-   public void assertNumberExact(String value, String... params) {
-      GwtInstance gwtInstance = object(params);
+   public void assertNumberExact(String value, String... identifier) {
+      GwtInstance gwtInstance = object(identifier);
       Object actual = gwtInstance.getRaw();
 
       if (actual == null) {
@@ -234,8 +234,8 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void assertSmallerThan(String value, String... params) {
-      GwtInstance gwtInstance = object(params);
+   public void assertSmallerThan(String value, String... identifier) {
+      GwtInstance gwtInstance = object(identifier);
       Object actual = gwtInstance.getRaw();
 
       if (actual == null) {
@@ -255,68 +255,69 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void assertText(String text, String... params) {
-      assertThat(object(params).ofType(UIObject.class)).withPrefix(prefix()).textEquals(text);
+   public void assertText(String text, String... identifier) {
+      assertThat(object(identifier).ofType(UIObject.class)).withPrefix(prefix()).textEquals(text);
    }
 
    @CsvMethod
-   public void assertTrue(String... params) {
-      assertThat(object(params).ofType(Boolean.class)).as(prefix() + "Boolean").isNotNull().isTrue();
+   public void assertTrue(String... identifier) {
+      assertThat(object(identifier).ofType(Boolean.class)).as(prefix() + "Boolean").isNotNull().isTrue();
    }
 
    @CsvMethod
-   public void blur(String... params) {
-      Browser.blur(object(params).ofType(Widget.class));
+   public void blur(String... identifier) {
+      Browser.blur(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void callMethod(String... params) {
-      object(params);
+   public void callMethod(String... identifier) {
+      object(identifier);
    }
 
    @CsvMethod
-   public void change(String... params) {
-      Browser.change(object(params).ofType(Widget.class));
+   public void change(String... identifier) {
+      Browser.change(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void click(String... params) {
-      Browser.click(object(params).ofType(Widget.class));
+   public void click(String... identifier) {
+      Browser.click(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void clickComplexPanel(String index, String... params) {
-      Browser.click(object(params).ofType(ComplexPanel.class), Integer.parseInt(index));
+   public void clickComplexPanel(String index, String... identifier) {
+      Browser.click(object(identifier).ofType(ComplexPanel.class), Integer.parseInt(index));
    }
 
    @CsvMethod
-   public void clickGridCell(String rowIndex, String columnIndex, String... params) {
+   public void clickGridCell(String rowIndex, String columnIndex, String... identifier) {
       int row = Integer.parseInt(rowIndex);
       int column = Integer.parseInt(columnIndex);
-      Browser.click(object(params).ofType(Grid.class), row, column);
+      Browser.click(object(identifier).ofType(Grid.class), row, column);
    }
 
    @CsvMethod
-   public void clickMenuItem(String index, String... params) {
-      Browser.click(object(params).ofType(MenuBar.class), Integer.parseInt(index));
+   public void clickMenuItem(String index, String... identifier) {
+      Browser.click(object(identifier).ofType(MenuBar.class), Integer.parseInt(index));
    }
 
    @CsvMethod
-   public void emptyTextBox(String... params) {
-      Browser.emptyText(object(params).ofType(TextBox.class));
+   public void emptyTextBox(String... identifier) {
+      Browser.emptyText(object(identifier).ofType(TextBox.class));
    }
 
    @CsvMethod
-   public void fillAndSelectInSuggestBoxByIndex(String content, String index, String... params) {
-      SuggestBox suggestBox = object(params).ofType(SuggestBox.class);
+   public void fillAndSelectInSuggestBoxByIndex(String content, String index, String... identifier) {
+      SuggestBox suggestBox = object(identifier).ofType(SuggestBox.class);
 
       Browser.fillText(suggestBox, content);
       Browser.click(suggestBox, Integer.parseInt(index));
    }
 
    @CsvMethod
-   public void fillAndSelectInSuggestBoxByText(String content, String selected, String... params) {
-      SuggestBox suggestBox = object(params).ofType(SuggestBox.class);
+   public void fillAndSelectInSuggestBoxByText(String content, String selected,
+            String... identifier) {
+      SuggestBox suggestBox = object(identifier).ofType(SuggestBox.class);
       Browser.fillText(suggestBox, content);
 
       List<MenuItem> menuItems = WidgetUtils.getMenuItems(suggestBox);
@@ -337,23 +338,23 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void fillInvisibleTextBox(String value, String... params) {
-      Browser.fillText(object(params).ofType(TextBox.class), false, value);
+   public void fillInvisibleTextBox(String value, String... identifier) {
+      Browser.fillText(object(identifier).ofType(TextBox.class), false, value);
    }
 
    @CsvMethod
-   public void fillTextBox(String value, String... params) {
-      Browser.fillText(object(params).ofType(TextBox.class), value);
+   public void fillTextBox(String value, String... identifier) {
+      Browser.fillText(object(identifier).ofType(TextBox.class), value);
    }
 
    @CsvMethod
-   public void focus(String... params) {
-      Browser.focus(object(params).ofType(Widget.class));
+   public void focus(String... identifier) {
+      Browser.focus(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void hasStyle(String style, String... params) {
-      assertThat(object(params).ofType(UIObject.class)).withPrefix(prefix()).hasStyle(style);
+   public void hasStyle(String style, String... identifier) {
+      assertThat(object(identifier).ofType(UIObject.class)).withPrefix(prefix()).hasStyle(style);
    }
 
    @CsvMethod
@@ -376,7 +377,7 @@ public abstract class GwtCsvTest extends GwtTest {
             } else {
                String cmd = line.substring(0, index);
                String param = line.substring(index + 1);
-               os.println("Command <" + cmd + ">, params : " + param);
+               os.println("Command <" + cmd + ">, identifier : " + param);
                if ("go".equals(cmd) || "getObject".equals(cmd)) {
                   try {
                      getObject(param, os);
@@ -408,28 +409,28 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void isChecked(String... params) {
-      assertThat(object(params).ofType(CheckBox.class)).withPrefix(prefix()).isChecked();
+   public void isChecked(String... identifier) {
+      assertThat(object(identifier).ofType(CheckBox.class)).withPrefix(prefix()).isChecked();
    }
 
    @CsvMethod
-   public void isEnabled(String... params) {
-      assertThat(getFocusWidget(params)).withPrefix(prefix()).isEnabled();
+   public void isEnabled(String... identifier) {
+      assertThat(getFocusWidget(identifier)).withPrefix(prefix()).isEnabled();
    }
 
    @CsvMethod
-   public void isNotChecked(String... params) {
-      assertThat(object(params).ofType(CheckBox.class)).withPrefix(prefix()).isNotChecked();
+   public void isNotChecked(String... identifier) {
+      assertThat(object(identifier).ofType(CheckBox.class)).withPrefix(prefix()).isNotChecked();
    }
 
    @CsvMethod
-   public void isNotEnabled(String... params) {
-      assertThat(getFocusWidget(params)).withPrefix(prefix()).isNotEnabled();
+   public void isNotEnabled(String... identifier) {
+      assertThat(getFocusWidget(identifier)).withPrefix(prefix()).isNotEnabled();
    }
 
    @CsvMethod
-   public void isNotVisible(String... params) {
-      GwtInstance gwtInstance = object(params);
+   public void isNotVisible(String... identifier) {
+      GwtInstance gwtInstance = object(identifier);
       Object actual = gwtInstance.getRaw();
 
       if (actual == null || !UIObject.class.isInstance(actual)) {
@@ -449,8 +450,8 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void isVisible(String... params) {
-      UIObject uiObject = object(params).ofType(UIObject.class);
+   public void isVisible(String... identifier) {
+      UIObject uiObject = object(identifier).ofType(UIObject.class);
 
       assertThat(uiObject).withPrefix(prefix()).isVisible();
 
@@ -466,37 +467,37 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void mouseDown(String... params) {
-      Browser.mouseDown(object(params).ofType(Widget.class));
+   public void mouseDown(String... identifier) {
+      Browser.mouseDown(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void mouseMove(String... params) {
-      Browser.mouseMove(object(params).ofType(Widget.class));
+   public void mouseMove(String... identifier) {
+      Browser.mouseMove(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void mouseOut(String... params) {
-      Browser.mouseOut(object(params).ofType(Widget.class));
+   public void mouseOut(String... identifier) {
+      Browser.mouseOut(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void mouseOver(String... params) {
-      Browser.mouseOver(object(params).ofType(Widget.class));
+   public void mouseOver(String... identifier) {
+      Browser.mouseOver(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void mouseUp(String... params) {
-      Browser.mouseUp(object(params).ofType(Widget.class));
+   public void mouseUp(String... identifier) {
+      Browser.mouseUp(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void mouseWheel(String... params) {
-      Browser.mouseWheel(object(params).ofType(Widget.class));
+   public void mouseWheel(String... identifier) {
+      Browser.mouseWheel(object(identifier).ofType(Widget.class));
    }
 
    @CsvMethod
-   public void runmacro(String macroName, String... params) throws Exception {
+   public void runmacro(String macroName, String... identifier) throws Exception {
       List<List<String>> macro = macroReader.getMacro(macroName);
       assertThat(macro).as(prefix() + "CsvMacro '" + macroName + "' has not been found").isNotNull();
       int i = 0;
@@ -504,8 +505,8 @@ public abstract class GwtCsvTest extends GwtTest {
          List<String> l = new ArrayList<String>();
          for (String s : line) {
             String replaced = s;
-            for (int z = 0; z < params.length; z++) {
-               String param = params[z];
+            for (int z = 0; z < identifier.length; z++) {
+               String param = identifier[z];
                if (param == null)
                   param = "*null*";
                else if ("".equals(param))
@@ -523,18 +524,18 @@ public abstract class GwtCsvTest extends GwtTest {
    }
 
    @CsvMethod
-   public void selectInListBox(String value, String... params) {
-      selectInListBox(object(params).ofType(ListBox.class), value, params);
+   public void selectInListBox(String value, String... identifier) {
+      selectInListBox(object(identifier).ofType(ListBox.class), value, identifier);
    }
 
    @CsvMethod
-   public void selectInListBoxByIndex(String index, String... params) {
-      selectInListBox(index, params);
+   public void selectInListBoxByIndex(String index, String... identifier) {
+      selectInListBox(index, identifier);
    }
 
    @CsvMethod
-   public void selectInListBoxByText(String regex, String... params) {
-      selectInListBox(regex, params);
+   public void selectInListBoxByText(String regex, String... identifier) {
+      selectInListBox(regex, identifier);
    }
 
    public void setReader(DirectoryTestReader reader) {
@@ -563,35 +564,35 @@ public abstract class GwtCsvTest extends GwtTest {
       };
    }
 
-   protected FocusWidget getFocusWidget(String... params) {
-      return object(params).ofType(FocusWidget.class);
+   protected FocusWidget getFocusWidget(String... identifier) {
+      return object(identifier).ofType(FocusWidget.class);
    }
 
    /**
     * 
     * @param clazz
     * @param failOnError
-    * @param params
+    * @param identifier
     * @return
     * 
     * @deprecated use {@link GwtFinder#object(String...)} instead
     */
    @Deprecated
-   protected <T> T getObject(Class<T> clazz, boolean failOnError, String... params) {
-      return csvRunner.getObject(clazz, failOnError, params);
+   protected <T> T getObject(Class<T> clazz, boolean failOnError, String... identifier) {
+      return csvRunner.getObject(clazz, failOnError, identifier);
    }
 
    /**
     * 
     * @param clazz
-    * @param params
+    * @param identifier
     * @return
     * 
     * @deprecated use {@link GwtFinder#object(String...)} instead
     */
    @Deprecated
-   protected <T> T getObject(Class<T> clazz, String... params) {
-      return csvRunner.getObject(clazz, params);
+   protected <T> T getObject(Class<T> clazz, String... identifier) {
+      return csvRunner.getObject(clazz, identifier);
    }
 
    protected String getString(Object o) {
@@ -611,8 +612,8 @@ public abstract class GwtCsvTest extends GwtTest {
       return actualValue;
    }
 
-   protected String getString(String... params) {
-      return getString(object(params).getRaw());
+   protected String getString(String... identifier) {
+      return getString(object(identifier).getRaw());
    }
 
    protected WidgetVisitor getWidgetVisitor() {
@@ -623,7 +624,7 @@ public abstract class GwtCsvTest extends GwtTest {
       return csvRunner.getAssertionErrorMessagePrefix();
    }
 
-   protected void selectInListBox(ListBox listBox, String regex, String... params) {
+   protected void selectInListBox(ListBox listBox, String regex, String... identifier) {
       int selectedIndex;
       String errorMessage;
       if (regex.matches("^\\d*$")) {
