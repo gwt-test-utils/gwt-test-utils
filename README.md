@@ -63,3 +63,5 @@ In addition, we are daily improving **gwt-test-utils** existing features. To per
 For any question, feedback or contribution, please contact use through the [user group](http://groups.google.com/group/gwt-test-utils-users).
 
 You can also follow the day-to-day evolution of the framework and communicate on it through Twitter : **#GwtTestUtils**
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/f46d3a68545b8811a5f5c1d837704e6d "githalytics.com")](http://githalytics.com/gwt-test-utils/gwt-test-utils)
