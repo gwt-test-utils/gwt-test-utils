@@ -59,8 +59,8 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
    /**
     * Prefixes the assertion {@link Description} with a raw prefix string.
     * 
-    * @param prefix
-    * @return
+    * @param prefix the error message prefix.
+    * @return this assertion object.
     */
    public S withPrefix(String prefix) {
       this.gwtInfo.prefix(prefix);

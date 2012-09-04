@@ -208,9 +208,9 @@ public class GwtFinder implements AfterTestCallback {
       return new GwtInstance(INSTANCE.findInternal(identifier), identifier);
    }
 
-   /**
+/**
     * Register a custom {@link ObjectFinder} implementation to handle
-    * {@link GwtFinder#find(String...)} calls with specific parameters.
+    * {@link GwtFinder#find(Object, Node) calls with specific parameters.
     * 
     * @param finder The custom finder implementation
     */
