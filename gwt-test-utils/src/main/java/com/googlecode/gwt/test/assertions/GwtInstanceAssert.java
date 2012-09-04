@@ -10,7 +10,7 @@ import com.googlecode.gwt.test.finder.GwtInstance;
  * Assertions for <code>{@link GwtInstance}</code> wrapped object.
  * <p>
  * To create a new instance of this class use the method
- * <code>{@link GwtAssertions#assertThat(GwtInstance))}</code>.
+ * {@link GwtAssertions#assertThat(GwtInstance)}.
  * </p>
  * 
  * @author Gael Lazzari
@@ -20,7 +20,7 @@ public class GwtInstanceAssert extends GwtGenericAssert<GwtInstanceAssert, Objec
    /**
     * Creates a new </code>{@link GwtInstanceAssert}</code>.
     * 
-    * @param actual the wrapper arround the target to verify.
+    * @param instance the wrapper around the target to verify.
     */
    protected GwtInstanceAssert(GwtInstance instance) {
       super(instance.getRaw(), GwtInstanceAssert.class);

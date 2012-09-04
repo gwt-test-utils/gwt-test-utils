@@ -573,7 +573,7 @@ public abstract class GwtCsvTest extends GwtTest {
     * @param clazz
     * @param failOnError
     * @param identifier
-    * @return
+    * @return The found object.
     * 
     * @deprecated use {@link GwtFinder#object(String...)} instead
     */
@@ -586,7 +586,7 @@ public abstract class GwtCsvTest extends GwtTest {
     * 
     * @param clazz
     * @param identifier
-    * @return
+    * @return The found object.
     * 
     * @deprecated use {@link GwtFinder#object(String...)} instead
     */

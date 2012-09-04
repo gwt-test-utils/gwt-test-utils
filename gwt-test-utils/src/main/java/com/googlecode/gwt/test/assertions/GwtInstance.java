@@ -5,7 +5,7 @@ import static com.googlecode.gwt.test.finder.GwtFinder.object;
 import com.googlecode.gwt.test.finder.GwtFinder;
 
 /**
- * Wrapper arround a raw object retrieved via {@link GwtFinder#find(String...)}.
+ * Wrapper arround a raw object retrieved via {@link GwtFinder#object(String...)}.
  * 
  * @author Gael Lazzari
  * 

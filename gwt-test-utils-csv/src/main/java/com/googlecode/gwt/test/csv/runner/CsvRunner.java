@@ -206,7 +206,7 @@ public class CsvRunner {
     * @param clazz
     * @param failOnError
     * @param params
-    * @return
+    * @return The found object.
     * 
     * @deprecated use {@link GwtFinder#object(String...)} instead
     */
@@ -230,7 +230,7 @@ public class CsvRunner {
     * 
     * @param clazz
     * @param params
-    * @return
+    * @return The found object.
     * 
     * @deprecated use {@link GwtFinder#object(String...)} instead
     */

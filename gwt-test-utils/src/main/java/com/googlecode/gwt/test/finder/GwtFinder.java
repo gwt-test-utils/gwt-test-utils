@@ -210,7 +210,7 @@ public class GwtFinder implements AfterTestCallback {
 
    /**
     * Register a custom {@link ObjectFinder} implementation to handle
-    * {@link GwtFinder#find(String...)} calls with specific parameters.
+    * {@link GwtFinder#find(Object, Node)} calls with specific parameters.
     * 
     * @param finder The custom finder implementation
     */

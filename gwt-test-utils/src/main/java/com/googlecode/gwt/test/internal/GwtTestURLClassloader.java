@@ -27,7 +27,7 @@ import com.googlecode.gwt.test.exceptions.GwtTestException;
  * 
  * @author Gael Lazzari
  * 
- * @see {@link ResourceOracleImpl#preload(com.google.gwt.core.ext.TreeLogger, ClassLoader)}
+ * @see ResourceOracleImpl#preload(com.google.gwt.core.ext.TreeLogger, ClassLoader)
  * 
  */
 public class GwtTestURLClassloader extends URLClassLoader {

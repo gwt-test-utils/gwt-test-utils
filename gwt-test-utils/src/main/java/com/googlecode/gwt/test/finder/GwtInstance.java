@@ -1,7 +1,7 @@
 package com.googlecode.gwt.test.finder;
 
 /**
- * Wrapper arround a raw object retrieved via {@link GwtFinder#find(String...)}.
+ * Wrapper arround a raw object retrieved via {@link GwtFinder#object(String...)}.
  * 
  * @author Gael Lazzari
  * 
@@ -14,6 +14,7 @@ public class GwtInstance {
    /**
     * Creates a new <code>{@link GwtInstance}</code>.
     * 
+    * @param instance
     * @param identifier The targeted object's identifier.
     */
    protected GwtInstance(Object instance, String... identifier) {
@@ -21,10 +22,20 @@ public class GwtInstance {
       this.wrapped = instance;
    }
 
+   /**
+    * Returns the raw object wrapped in the current {@link GwtInstance}, without any type checking.
+    * 
+    * @return the wrapped raw object.
+    */
    public final Object getRaw() {
       return wrapped;
    }
 
+   /**
+    * Returns the identifier which was used to find the wrapped object.
+    * 
+    * @return the used identifier.
+    */
    public String identifierToString() {
       StringBuilder sb = new StringBuilder();
       for (String s : identifier) {
