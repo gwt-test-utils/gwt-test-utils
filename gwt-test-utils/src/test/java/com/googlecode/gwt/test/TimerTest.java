@@ -24,12 +24,12 @@ public class TimerTest extends GwtTestTest {
       };
 
       // Act
-      timer.schedule(500);
+      timer.schedule(250);
 
       // Assert 1
       assertThat(bool).overridingErrorMessage("The Timer fired too soon").isFalse();
 
-      Thread.sleep(700);
+      Thread.sleep(400);
 
       // Assert
       assertThat(bool).overridingErrorMessage("The token was not set after Timer has run").isTrue();
@@ -38,7 +38,7 @@ public class TimerTest extends GwtTestTest {
    @Test
    public void scheduleRepeating() throws Exception {
       // Arrange
-      final int TIMES = 5;
+      final int TIMES = 3;
       i = 0;
       Timer timer = new Timer() {
 
@@ -49,16 +49,16 @@ public class TimerTest extends GwtTestTest {
       };
 
       // Act
-      timer.scheduleRepeating(200);
+      timer.scheduleRepeating(400);
 
       // Assert
-      Thread.sleep(100);
+      Thread.sleep(200);
       for (int count = 0; count <= TIMES; count++) {
-         // tests at instant 100, 300, 500, 700, 900, 1100
+         // tests at instant 200, 600, 1000, 1400
          assertThat(count).overridingErrorMessage(
                   "Timer didn't fire correctly, expected number of fire <%s> but was </%s>", count,
                   i).isEqualTo(i);
-         Thread.sleep(200);
+         Thread.sleep(400);
       }
    }
 }
