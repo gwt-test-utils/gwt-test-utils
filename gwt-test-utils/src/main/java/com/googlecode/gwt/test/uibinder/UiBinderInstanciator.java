@@ -2,8 +2,10 @@ package com.googlecode.gwt.test.uibinder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,17 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
  */
 @SuppressWarnings("unchecked")
 class UiBinderInstanciator {
+	public final static Map<Class<?>, Class<?>> primitiveMap = new HashMap<Class<?>, Class<?>>();
+	static {
+	    primitiveMap.put(boolean.class, Boolean.class);
+	    primitiveMap.put(byte.class, Byte.class);
+	    primitiveMap.put(short.class, Short.class);
+	    primitiveMap.put(char.class, Character.class);
+	    primitiveMap.put(int.class, Integer.class);
+	    primitiveMap.put(long.class, Long.class);
+	    primitiveMap.put(float.class, Float.class);
+	    primitiveMap.put(double.class, Double.class);
+	}
 
    static <U> U getInstance(Class<U> clazz, Map<String, Object> attributes, Object owner) {
 
@@ -88,6 +101,24 @@ class UiBinderInstanciator {
 
          if (allArgsAreDeclaredInUiFile(argNames, attributes)) {
             List<Object> constructorArgs = extractArgs(argNames, attributes);
+            
+            if(constructorArgs != null){
+                Class<?>[] paramTypes = uiConstructor.getParameterTypes();
+                for (int i = 0; i < argNames.length; i++) {
+                  try {
+                    Object convertedArg = convertArgs(paramTypes[i], constructorArgs.get(i));
+                    constructorArgs.set(i, convertedArg);
+      
+                    // to avoid "argument type mismatch" in populate phase
+                    attributes.put(argNames[i], convertedArg);
+                  } catch (Exception e) {
+                    throw new GwtTestUiBinderException(
+                        "Error while converting argument " + argNames[i] + " to "
+                            + paramTypes[i], e);
+                  }
+                }
+            }
+            
             return instanciate(uiConstructor, constructorArgs);
          }
 
@@ -96,7 +127,31 @@ class UiBinderInstanciator {
       return null;
    }
 
-   private static <U> U getObjectFromUiFactory(Class<U> clazz, Object owner) {
+  private static Object convertArgs(Class<?> paramType, Object object) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    if(paramType == String.class){
+      return object;
+    }
+      
+    if (paramType.isPrimitive()) {
+      paramType = primitiveMap.get(paramType);
+    }
+
+    Method valueOfMethod = null;
+    try {
+      valueOfMethod = paramType.getDeclaredMethod("valueOf", String.class);
+      if (valueOfMethod.getReturnType() != paramType) {
+        // This is not valueOf() I want.
+        return object;
+      }
+    } catch (Exception e) {
+      // No valueOf() method
+      return object;
+    }
+    
+    return valueOfMethod.invoke(null, object);
+  }
+
+  private static <U> U getObjectFromUiFactory(Class<U> clazz, Object owner) {
       Map<Method, UiFactory> map = GwtReflectionUtils.getAnnotatedMethod(owner.getClass(),
                UiFactory.class);
 
