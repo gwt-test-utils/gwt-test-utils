@@ -15,8 +15,19 @@
 			<artifactId>gwt-test-utils</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.extjs</groupId>
 			<artifactId>gxt</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<!-- GXT UiBinder -->
 		<dependency>
