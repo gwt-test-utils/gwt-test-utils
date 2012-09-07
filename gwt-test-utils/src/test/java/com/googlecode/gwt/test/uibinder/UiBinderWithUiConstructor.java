@@ -6,19 +6,18 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class UiBinderWithUiConstructor extends Composite{
+public class UiBinderWithUiConstructor extends Composite {
 
-	private static UiBinderWithUiConstructorUiBinder uiBinder = GWT
-			.create(UiBinderWithUiConstructorUiBinder.class);
-	
-	@UiField
-	UiConstructorWidget myWidget;
+  private static UiBinderWithUiConstructorUiBinder uiBinder = GWT.create(UiBinderWithUiConstructorUiBinder.class);
 
-	interface UiBinderWithUiConstructorUiBinder extends
-			UiBinder<Widget, UiBinderWithUiConstructor> {
-	}
+  @UiField
+  UiConstructorWidget myWidget;
 
-	public UiBinderWithUiConstructor() {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
+  interface UiBinderWithUiConstructorUiBinder extends
+      UiBinder<Widget, UiBinderWithUiConstructor> {
+  }
+
+  public UiBinderWithUiConstructor() {
+    initWidget(uiBinder.createAndBindUi(this));
+  }
 }

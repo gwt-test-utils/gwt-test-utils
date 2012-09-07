@@ -1,10 +1,12 @@
 package com.googlecode.gwt.test.uibinder;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
@@ -60,7 +62,13 @@ public class UiBinderBeanUtils {
     */
    public static void populateObject(Object o, Map<String, Object> properties) {
       try {
-         UIBINDER_BEANUTILS.populate(o, properties);
+         Map<String, Object> filteredProperties = new HashMap<String, Object>();
+         for(String key :properties.keySet()){
+            if(PropertyUtils.isWriteable(o, key)){
+               filteredProperties.put(key, properties.get(key));
+            }
+         }
+         UIBINDER_BEANUTILS.populate(o, filteredProperties);
       } catch (Exception e) {
          throw new ReflectionException("UiBinder error while setting properties for '"
                   + o.getClass().getSimpleName() + "'", e);

@@ -9,14 +9,14 @@ import com.googlecode.gwt.test.uibinder.UiConstructorWidget.Type;
 
 public class UiBinderWithUiConstructorTest extends GwtTestTest {
 
-   @Test
-   public void instanciation() throws Exception {
-	  // Act
-	  UiBinderWithUiConstructor w = new UiBinderWithUiConstructor();
+  @Test
+  public void instanciation() throws Exception {
+    // Act
+    UiBinderWithUiConstructor w = new UiBinderWithUiConstructor();
 
-      // Assert
-      assertEquals(5, w.myWidget.size);
-      assertEquals(Type.T1, w.myWidget.type);
-   }
+    // Assert
+    assertEquals(5, w.myWidget.size);
+    assertEquals(Type.T1, w.myWidget.type);
+  }
 
 }
