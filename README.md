@@ -51,6 +51,7 @@ Whether you want to...
 Here is the next features we are working on, ordered by priority (which is not frozen) :
 
 * Support for GWT 2.5.0-rc1
+* Support for [GWT-Bootstrap](https://github.com/gwtbootstrap/gwt-bootstrap)
 * Support for [GXT 3.0](http://www.sencha.com/products/gxt/)
 * Support for [RequestFactory](http://code.google.com/intl/fr-FR/webtoolkit/doc/latest/DevGuideRequestFactory.html)
 * Support for [PowerMock](http://code.google.com/p/powermock/)
