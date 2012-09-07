@@ -20,12 +20,13 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -70,7 +71,8 @@ public class Browser {
    /**
     * <p>
     * Add some text in a text widget, starting at {@link ValueBoxBase#getCursorPos()} index and
-    * deleting {@link ValueBoxBase#getSelectedText()}.
+    * deleting {@link ValueBoxBase#getSelectedText()} if the targeted widget is a
+    * {@link ValueBoxBase} instance.
     * </p>
     * <p>
     * <ul>
@@ -79,16 +81,16 @@ public class Browser {
     * add. They can be prevented with normal effect.</li>
     * 
     * <li>Contrary to {@link Browser#fillText(HasText, String)}, neither {@link BlurEvent} nor
-    * {@link ChangeEvent} are triggered.
+    * {@link ChangeEvent} are triggered.</li>
     * </ul>
     * </p>
     * 
-    * @param valueBox The widget to fill. <strong>It has to be attached and visible</strong>
+    * @param widget The widget to fill. <strong>It has to be attached and visible</strong>
     * @param value The value to fill. Cannot be null or empty.
     * 
     * @throws IllegalArgumentException if the value to fill is null or empty.
     */
-   public static void addText(ValueBoxBase<?> valueBox, String value)
+   public static <T extends IsWidget & HasText> void addText(T widget, String value)
             throws IllegalArgumentException {
       if (value == null || "".equals(value)) {
          throw new IllegalArgumentException(
@@ -97,7 +99,7 @@ public class Browser {
       }
 
       for (int i = 0; i < value.length(); i++) {
-         pressKey(valueBox, value.charAt(i));
+         pressKey(widget, value.charAt(i));
       }
    }
 
@@ -106,7 +108,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void blur(Widget target) {
+   public static void blur(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONBLUR).build());
    }
 
@@ -115,7 +117,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void change(Widget target) {
+   public static void change(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONCHANGE).build());
    }
 
@@ -163,17 +165,6 @@ public class Browser {
    }
 
    /**
-    * Simulates a click event on the widget with the given index inside a ComplexPanel.
-    * 
-    * @param panel The targeted panel.
-    * @param index The index of the child widget to click inside the panel.
-    */
-   public static void click(ComplexPanel panel, int index) {
-      Widget target = panel.getWidget(index);
-      clickInternal(panel, target);
-   }
-
-   /**
     * Simulates a click event on the Grid cell with the given indexes.
     * 
     * @param grid The targeted grid.
@@ -183,6 +174,15 @@ public class Browser {
    public static void click(Grid grid, int row, int column) {
       Widget target = grid.getWidget(row, column);
       clickInternal(grid, target);
+   }
+
+   /**
+    * Simulates a click event.
+    * 
+    * @param target The targeted widget.
+    */
+   public static void click(IsWidget target) {
+      clickInternal(target, target.asWidget());
    }
 
    /**
@@ -231,12 +231,14 @@ public class Browser {
    }
 
    /**
-    * Simulates a click event.
+    * Simulates a click event on the widget with the given index inside a ComplexPanel.
     * 
-    * @param target The targeted widget.
+    * @param panel The targeted panel.
+    * @param index The index of the child widget to click inside the panel.
     */
-   public static void click(Widget target) {
-      clickInternal(target, target);
+   public static <T extends IndexedPanel & IsWidget> void click(T panel, int index) {
+      Widget target = panel.getWidget(index);
+      clickInternal(panel, target);
    }
 
    /**
@@ -297,7 +299,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void dblClick(Widget target) {
+   public static void dblClick(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONDBLCLICK).build());
    }
 
@@ -307,7 +309,7 @@ public class Browser {
     * @param target The targeted widget.
     * @param events Some events to dispatch.
     */
-   public static void dispatchEvent(Widget target, Event... events) {
+   public static void dispatchEvent(IsWidget target, Event... events) {
       dispatchEventsInternal(target, true, events);
    }
 
@@ -340,7 +342,7 @@ public class Browser {
       for (int i = 0; i < baseLength; i++) {
          Event keyDownEvent = EventBuilder.create(Event.ONKEYDOWN).setKeyCode(
                   KeyCodes.KEY_BACKSPACE).build();
-         dispatchEvent((Widget) hasTextWidget, keyDownEvent);
+         dispatchEvent((IsWidget) hasTextWidget, keyDownEvent);
 
          boolean keyDownEventPreventDefault = JavaScriptObjects.getBoolean(keyDownEvent,
                   JsoProperties.EVENT_PREVENTDEFAULT);
@@ -356,12 +358,12 @@ public class Browser {
       // don't have to check if the event can be dispatch since it's check
       // before
       Event keyUpEvent = EventBuilder.create(Event.ONKEYUP).setKeyCode(KeyCodes.KEY_BACKSPACE).build();
-      dispatchEvent((Widget) hasTextWidget, keyUpEvent);
+      dispatchEvent((IsWidget) hasTextWidget, keyUpEvent);
 
-      dispatchEvent((Widget) hasTextWidget, EventBuilder.create(Event.ONBLUR).build());
+      dispatchEvent((IsWidget) hasTextWidget, EventBuilder.create(Event.ONBLUR).build());
 
       if (changed) {
-         dispatchEvent((Widget) hasTextWidget, EventBuilder.create(Event.ONCHANGE).build());
+         dispatchEvent((IsWidget) hasTextWidget, EventBuilder.create(Event.ONCHANGE).build());
       }
    }
 
@@ -473,7 +475,7 @@ public class Browser {
          // trigger keyDown and keyPress
          Event keyDownEvent = EventBuilder.create(Event.ONKEYDOWN).setKeyCode(keyCode).build();
          Event keyPressEvent = EventBuilder.create(Event.ONKEYPRESS).setKeyCode(keyCode).build();
-         dispatchEventsInternal((Widget) hasTextWidget, check, keyDownEvent, keyPressEvent);
+         dispatchEventsInternal((IsWidget) hasTextWidget, check, keyDownEvent, keyPressEvent);
 
          // check if one on the events has been prevented
          boolean keyDownEventPreventDefault = JavaScriptObjects.getBoolean(keyDownEvent,
@@ -495,17 +497,17 @@ public class Browser {
 
          // trigger keyUp
          Event keyUpEvent = EventBuilder.create(Event.ONKEYUP).setKeyCode(keyCode).build();
-         dispatchEventsInternal((Widget) hasTextWidget, check, keyUpEvent);
+         dispatchEventsInternal((IsWidget) hasTextWidget, check, keyUpEvent);
 
       }
 
       if (blur) {
          // no need to check event anymore
-         dispatchEventsInternal((Widget) hasTextWidget, false,
+         dispatchEventsInternal((IsWidget) hasTextWidget, false,
                   EventBuilder.create(Event.ONBLUR).build());
 
          if (changed) {
-            dispatchEventsInternal((Widget) hasTextWidget, false,
+            dispatchEventsInternal((IsWidget) hasTextWidget, false,
                      EventBuilder.create(Event.ONCHANGE).build());
          }
       }
@@ -573,7 +575,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void focus(Widget target) {
+   public static void focus(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONFOCUS).build());
    }
 
@@ -582,7 +584,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void keyDown(Widget target, int keyCode) {
+   public static void keyDown(IsWidget target, int keyCode) {
       dispatchEvent(target, EventBuilder.create(Event.ONKEYDOWN).setKeyCode(keyCode).build());
    }
 
@@ -591,7 +593,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void keyPress(Widget target, int keyCode) {
+   public static void keyPress(IsWidget target, int keyCode) {
       dispatchEvent(target, EventBuilder.create(Event.ONKEYPRESS).setKeyCode(keyCode).build());
    }
 
@@ -600,7 +602,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void keyUp(Widget target, int keyCode) {
+   public static void keyUp(IsWidget target, int keyCode) {
       dispatchEvent(target, EventBuilder.create(Event.ONKEYUP).setKeyCode(keyCode).build());
    }
 
@@ -609,7 +611,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void mouseDown(Widget target) {
+   public static void mouseDown(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEDOWN).build());
    }
 
@@ -618,7 +620,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void mouseMove(Widget target) {
+   public static void mouseMove(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEMOVE).build());
    }
 
@@ -627,7 +629,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void mouseOut(Widget target) {
+   public static void mouseOut(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEOUT).build());
    }
 
@@ -636,7 +638,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void mouseOver(Widget target) {
+   public static void mouseOver(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEOVER).build());
    }
 
@@ -645,7 +647,7 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void mouseUp(Widget target) {
+   public static void mouseUp(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEUP).build());
    }
 
@@ -654,19 +656,34 @@ public class Browser {
     * 
     * @param target The targeted widget.
     */
-   public static void mouseWheel(Widget target) {
+   public static void mouseWheel(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEWHEEL).build());
    }
 
-   public static void pressKey(ValueBoxBase<?> valueBox, int keyCode) {
-      if (valueBox == null) {
+   /**
+    * <p>
+    * Simulate a user key press, adding some a character at {@link ValueBoxBase#getCursorPos()}
+    * index and deleting {@link ValueBoxBase#getSelectedText()} if the targeted widget is a
+    * {@link ValueBoxBase} instance.
+    * </p>
+    * <p>
+    * {@link KeyDownEvent}, {@link KeyPressEvent} and {@link KeyUpEvent} are triggered with keyCode
+    * of the pressed key. They can be prevented with normal effect.
+    * </p>
+    * 
+    * @param widget The widget to fill. <strong>It has to be attached and visible</strong>
+    * @param keyCode The code of the key to be pressed.
+    * 
+    */
+   public static <T extends IsWidget & HasText> void pressKey(T widget, int keyCode) {
+      if (widget == null) {
          return;
       }
 
       // trigger keyDown and keyPress
       Event keyDownEvent = EventBuilder.create(Event.ONKEYDOWN).setKeyCode(keyCode).build();
       Event keyPressEvent = EventBuilder.create(Event.ONKEYPRESS).setKeyCode(keyCode).build();
-      dispatchEventsInternal(valueBox, true, keyDownEvent, keyPressEvent);
+      dispatchEventsInternal(widget, true, keyDownEvent, keyPressEvent);
 
       // check if one on the events has been prevented
       boolean keyDownEventPreventDefault = JavaScriptObjects.getBoolean(keyDownEvent,
@@ -676,12 +693,12 @@ public class Browser {
 
       if (!keyDownEventPreventDefault && !keyPressEventPreventDefault) {
 
-         StringBuilder sb = new StringBuilder(valueBox.getText());
+         StringBuilder sb = new StringBuilder(widget.getText());
 
          // remove selectionRange
-         int selectionStart = JavaScriptObjects.getInteger(valueBox.getElement(),
+         int selectionStart = JavaScriptObjects.getInteger(widget.asWidget().getElement(),
                   JsoProperties.SELECTION_START);
-         int selectionEnd = JavaScriptObjects.getInteger(valueBox.getElement(),
+         int selectionEnd = JavaScriptObjects.getInteger(widget.asWidget().getElement(),
                   JsoProperties.SELECTION_END);
 
          switch (keyCode) {
@@ -702,7 +719,7 @@ public class Browser {
                // nothing to do
                break;
             case KeyCodes.KEY_TAB:
-               blur(valueBox);
+               blur(widget);
                break;
             case KeyCodes.KEY_BACKSPACE:
                if (selectionStart == selectionEnd) {
@@ -710,7 +727,7 @@ public class Browser {
                } else {
                   sb.replace(selectionStart, selectionEnd, "");
                }
-               valueBox.setText(sb.toString());
+               widget.setText(sb.toString());
                break;
             default:
                sb.replace(selectionStart, selectionEnd, "");
@@ -719,17 +736,17 @@ public class Browser {
 
                selectionStart = selectionEnd = selectionStart + 1;
 
-               valueBox.setText(sb.toString());
+               widget.setText(sb.toString());
 
-               JavaScriptObjects.setProperty(valueBox.getElement(), JsoProperties.SELECTION_START,
-                        selectionStart);
-               JavaScriptObjects.setProperty(valueBox.getElement(), JsoProperties.SELECTION_END,
-                        selectionEnd);
+               JavaScriptObjects.setProperty(widget.asWidget().getElement(),
+                        JsoProperties.SELECTION_START, selectionStart);
+               JavaScriptObjects.setProperty(widget.asWidget().getElement(),
+                        JsoProperties.SELECTION_END, selectionEnd);
          }
 
          // trigger keyUp
          Event keyUpEvent = EventBuilder.create(Event.ONKEYUP).setKeyCode(keyCode).build();
-         dispatchEventsInternal(valueBox, true, keyUpEvent);
+         dispatchEventsInternal(widget, true, keyUpEvent);
       }
    }
 
@@ -763,7 +780,7 @@ public class Browser {
          Event keyDownEvent = EventBuilder.create(Event.ONKEYDOWN).setKeyCode(
                   KeyCodes.KEY_BACKSPACE).build();
          Event keyUpEvent = EventBuilder.create(Event.ONKEYUP).setKeyCode(KeyCodes.KEY_BACKSPACE).build();
-         dispatchEvent((Widget) hasTextWidget, keyDownEvent, keyUpEvent);
+         dispatchEvent((IsWidget) hasTextWidget, keyDownEvent, keyUpEvent);
 
          boolean keyDownEventPreventDefault = JavaScriptObjects.getBoolean(keyDownEvent,
                   JsoProperties.EVENT_PREVENTDEFAULT);
@@ -776,10 +793,10 @@ public class Browser {
 
       }
 
-      dispatchEvent((Widget) hasTextWidget, EventBuilder.create(Event.ONBLUR).build());
+      dispatchEvent((IsWidget) hasTextWidget, EventBuilder.create(Event.ONBLUR).build());
 
       if (changed) {
-         dispatchEvent((Widget) hasTextWidget, EventBuilder.create(Event.ONCHANGE).build());
+         dispatchEvent((IsWidget) hasTextWidget, EventBuilder.create(Event.ONCHANGE).build());
       }
    }
 
@@ -813,9 +830,10 @@ public class Browser {
 
    }
 
-   private static boolean canApplyEvent(Widget target, Event event) {
+   private static boolean canApplyEvent(IsWidget target, Event event) {
 
-      if (!target.isAttached()
+      Widget widget = target.asWidget();
+      if (!widget.isAttached()
                && !GwtConfig.get().getModuleRunner().canDispatchEventsOnDetachedWidgets()) {
          GwtConfig.get().getModuleRunner().getBrowserErrorHandler().onError(
                   "Cannot dispatch '" + event.getType()
@@ -825,7 +843,7 @@ public class Browser {
 
       Element targetElement = event.getEventTarget().cast();
 
-      if (!WidgetUtils.isWidgetVisible(target) && isVisible(target, targetElement)) {
+      if (!WidgetUtils.isWidgetVisible(widget) && isVisible(widget, targetElement)) {
          GwtConfig.get().getModuleRunner().getBrowserErrorHandler().onError(
                   "Cannot dispatch '" + event.getType()
                            + "' event : the targeted element or one of its parents is not visible");
@@ -843,7 +861,7 @@ public class Browser {
       return true;
    }
 
-   private static void clickInternal(Widget parent, UIObject target) {
+   private static void clickInternal(IsWidget parent, UIObject target) {
       Event onMouseOver = EventBuilder.create(Event.ONMOUSEOVER).setTarget(target).build();
       Event onMouseDown = EventBuilder.create(Event.ONMOUSEDOWN).setTarget(target).setButton(
                Event.BUTTON_LEFT).build();
@@ -868,7 +886,7 @@ public class Browser {
       }
    }
 
-   private static void dispatchEventInternal(Widget target, Event event) {
+   private static void dispatchEventInternal(IsWidget target, Event event) {
       try {
          // special case of click on CheckBox : set the internal inputElement
          // value
@@ -884,7 +902,7 @@ public class Browser {
             switch (event.getTypeInt()) {
                case Event.ONMOUSEOVER:
                case Event.ONMOUSEOUT:
-                  Widget parent = target.getParent();
+                  Widget parent = target.asWidget().getParent();
                   if (parent != null) {
                      relatedTargetElement = parent.getElement();
                   } else {
@@ -913,7 +931,7 @@ public class Browser {
       }
    }
 
-   private static void dispatchEventsInternal(Widget target, boolean check, Event... events) {
+   private static void dispatchEventsInternal(IsWidget target, boolean check, Event... events) {
 
       if (events.length == 0) {
          return;
@@ -930,7 +948,12 @@ public class Browser {
       }
    }
 
-   private static void dispatchEventWithBubble(Widget widget, Event event, Set<Widget> applied) {
+   private static void dispatchEventWithBubble(IsWidget target, Event event, Set<Widget> applied) {
+      if (target == null) {
+         return;
+      }
+
+      Widget widget = target.asWidget();
 
       if (widget == null || isEventStopped(event) || applied.contains(widget)) {
          // cancel event handling
@@ -986,12 +1009,12 @@ public class Browser {
       }
    }
 
-   private static void prepareEvents(Widget target, Event... events) {
+   private static void prepareEvents(IsWidget target, Event... events) {
       for (Event event : events) {
          Element effectiveTarget = JavaScriptObjects.getObject(event, JsoProperties.EVENT_TARGET);
 
          if (effectiveTarget == null) {
-            effectiveTarget = target.getElement();
+            effectiveTarget = target.asWidget().getElement();
             JavaScriptObjects.setProperty(event, JsoProperties.EVENT_TARGET, effectiveTarget);
          }
       }

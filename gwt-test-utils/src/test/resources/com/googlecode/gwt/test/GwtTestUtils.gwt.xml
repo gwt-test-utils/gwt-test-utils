@@ -4,9 +4,10 @@
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.i18n.I18N" />
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
-	<inherits name="com.google.web.bindery.autobean.AutoBean"/>
-	
-	<entry-point class='com.googlecode.gwt.test.client.GwtTestEntryPoint'/>
+	<inherits name="com.google.web.bindery.autobean.AutoBean" />
+	<inherits name="com.google.common.collect.Collect" />
+
+	<entry-point class='com.googlecode.gwt.test.client.GwtTestEntryPoint' />
 
 	<servlet path="/myService" class="com.googlecode.gwt.test.rpc.MyServiceImpl" />
 
@@ -20,13 +21,14 @@
 	<source path='deferred' />
 	<source path='dom' />
 	<source path='editors' />
+	<source path='guava' />
 	<source path='jso' />
 	<source path='json' />
 	<source path='i18n' />
 	<source path='resources' />
 	<source path='template' />
 	<source path='uibinder' />
-	
+
 
 	<!-- Fall through to this rule is the browser isn't IE or Mozilla -->
 	<replace-with class="com.googlecode.gwt.test.deferred.ReplaceWithDefault">
@@ -34,7 +36,8 @@
 	</replace-with>
 
 	<!-- Mozilla -->
-	<replace-with class="com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithMozilla">
+	<replace-with
+		class="com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithMozilla">
 		<when-type-is class="com.googlecode.gwt.test.deferred.IReplaceWith" />
 		<any>
 			<when-property-is name="user.agent" value="gecko" />
@@ -43,13 +46,13 @@
 	</replace-with>
 
 	<!-- IE -->
-	<replace-with class="com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithIE">
+	<replace-with
+		class="com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithIE">
 		<when-type-is class="com.googlecode.gwt.test.deferred.IReplaceWith" />
 		<when-property-is name="user.agent" value="ie6" />
 	</replace-with>
 
-	<generate-with
-		class="com.googlecode.gwt.test.deferred.MyGenerator">
+	<generate-with class="com.googlecode.gwt.test.deferred.MyGenerator">
 		<when-type-assignable class="com.googlecode.gwt.test.deferred.IGenerateWith" />
 	</generate-with>
 

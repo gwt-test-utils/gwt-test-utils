@@ -89,12 +89,15 @@ public class GwtFactory {
 
       this.surefireBooterJarUrl = surefireBooterJarUrl;
 
-      // create a the temporary URLClassloader as the context classloader so
-      // OverlaySupportClassRewriter will use it to get needed project's
-      // resources
-      // (.java file)
-      URLClassLoader classLoaderForResources = createTemporaryClassLoaderForResourceLoading(surefireBooterJarUrl);
-      Thread.currentThread().setContextClassLoader(classLoaderForResources);
+      // create a the temporary classloader used to build the CompilationState object which needs
+      // access to the project's resources (.java file)
+      ClassLoader defaultClassLoader = Thread.currentThread().getContextClassLoader();
+
+      CompilationStateClassLoader tempCl = new CompilationStateClassLoader(defaultClassLoader,
+               surefireBooterJarUrl, configurationLoader.getSrcUrls());
+      // ClassLoader classLoaderForResources =
+      // createTemporaryClassLoaderForResourceLoading(surefireBooterJarUrl);
+      Thread.currentThread().setContextClassLoader(tempCl);
 
       // create every gwt stuff, searching for resources in the setup
       // 'src-directories' entries in
@@ -104,6 +107,9 @@ public class GwtFactory {
       overlayRewriter = createOverlayRewriter(compilationState);
       gwtClassLoader = GwtClassLoader.createClassLoader(configurationLoader, compilationState,
                overlayRewriter);
+
+      // reset the default classloader
+      Thread.currentThread().setContextClassLoader(defaultClassLoader);
    }
 
    public GwtClassLoader getClassLoader() {
@@ -165,13 +171,4 @@ public class GwtFactory {
       return (jsoType != null) ? new OverlayTypesRewriter(compilationState, jsoType) : null;
    }
 
-   private URLClassLoader createTemporaryClassLoaderForResourceLoading(URL surefireBooterJarUrl) {
-
-      if (surefireBooterJarUrl == null) {
-         return new GwtTestURLClassloader(configurationLoader.getSrcUrls());
-      } else {
-         String surefireBooterJarPath = surefireBooterJarUrl.getFile();
-         return new GwtTestURLClassloader(configurationLoader.getSrcUrls(), surefireBooterJarPath);
-      }
-   }
 }
