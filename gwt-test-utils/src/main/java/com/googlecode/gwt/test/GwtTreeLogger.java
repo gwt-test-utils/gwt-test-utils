@@ -1,5 +1,8 @@
 package com.googlecode.gwt.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +18,30 @@ import com.google.gwt.dev.util.log.AbstractTreeLogger;
  */
 public class GwtTreeLogger extends AbstractTreeLogger {
 
-   private static final TreeLogger INSTANCE = new GwtTreeLogger("");
+   private static final class ErrorDto {
+
+      private final Throwable caught;
+      private final HelpInfo helpInfo;
+      private final String msg;
+
+      private ErrorDto(String msg, Throwable caught, HelpInfo helpInfo) {
+         this.msg = msg;
+         this.caught = caught;
+         this.helpInfo = helpInfo;
+      }
+   }
+
+   private static final String DEFAULT_BRANCH_INDENT = "   ";
+
+   private static final List<ErrorDto> ERROR_MSG_BUFFER = new ArrayList<ErrorDto>();
+
+   private static final GwtTreeLogger INSTANCE = new GwtTreeLogger("");
+
+   private static int lastIndexOfErrorWithinParentLogger = -1;
 
    private static final Logger LOGGER = LoggerFactory.getLogger(GwtTreeLogger.class);
 
-   public static TreeLogger get() {
+   public static GwtTreeLogger get() {
       return INSTANCE;
    }
 
@@ -29,9 +51,26 @@ public class GwtTreeLogger extends AbstractTreeLogger {
       this.indent = indent;
    }
 
+   public void onUnableToCompleteError() {
+      for (ErrorDto error : ERROR_MSG_BUFFER) {
+
+         if (error.helpInfo == null || error.helpInfo.getURL() == null) {
+            LOGGER.error(error.msg, error.caught);
+         } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append(error.msg);
+            sb.append(" (for additional info see:").append(error.helpInfo.getURL().toString());
+
+            LOGGER.error(sb.toString(), error.caught);
+         }
+      }
+
+      ERROR_MSG_BUFFER.clear();
+   }
+
    @Override
    protected AbstractTreeLogger doBranch() {
-      return new GwtTreeLogger(indent + "   ");
+      return new GwtTreeLogger(indent + DEFAULT_BRANCH_INDENT);
    }
 
    @Override
@@ -44,25 +83,34 @@ public class GwtTreeLogger extends AbstractTreeLogger {
    protected void doLog(int indexOfLogEntryWithinParentLogger, Type type, String msg,
             Throwable caught, HelpInfo helpInfo) {
 
+      if (lastIndexOfErrorWithinParentLogger > -1
+               && indexOfLogEntryWithinParentLogger < lastIndexOfErrorWithinParentLogger) {
+         // new error
+         ErrorDto baseError = ERROR_MSG_BUFFER.get(ERROR_MSG_BUFFER.size() - 1);
+         ERROR_MSG_BUFFER.clear();
+         ERROR_MSG_BUFFER.add(baseError);
+      }
+
       switch (type) {
          case DEBUG:
             if (LOGGER.isDebugEnabled()) {
-               LOGGER.debug(msg, caught);
+               LOGGER.debug(indent + msg, caught);
             }
             break;
          case ERROR:
             if (LOGGER.isErrorEnabled()) {
-               LOGGER.error(msg, caught);
+               ERROR_MSG_BUFFER.add(new ErrorDto(msg, caught, helpInfo));
+               lastIndexOfErrorWithinParentLogger = indexOfLogEntryWithinParentLogger;
             }
             break;
          case INFO:
             if (LOGGER.isInfoEnabled()) {
-               LOGGER.info(msg, caught);
+               LOGGER.info(indent + msg, caught);
             }
             break;
          case WARN:
             if (LOGGER.isWarnEnabled()) {
-               LOGGER.warn(msg, caught);
+               LOGGER.warn(indent + msg, caught);
             }
             break;
          default:

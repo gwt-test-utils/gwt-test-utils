@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWTBridge;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtLogHandler;
+import com.googlecode.gwt.test.GwtTreeLogger;
 import com.googlecode.gwt.test.Mock;
 import com.googlecode.gwt.test.exceptions.GwtTestDeferredBindingException;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
@@ -96,14 +98,16 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
             if (o != null) {
                return (T) o;
             }
+         } catch (GwtTestException e) {
+            throw e;
          } catch (Exception e) {
-            if (GwtTestException.class.isInstance(e)) {
-               throw (GwtTestException) e;
-            } else {
-               throw new GwtTestPatchException("Error while creating instance of '"
-                        + classLiteral.getName() + "' through '"
-                        + gwtCreateHandler.getClass().getName() + "' instance", e);
+            if (e instanceof UnableToCompleteException) {
+               GwtTreeLogger.get().onUnableToCompleteError();
             }
+
+            throw new GwtTestPatchException("Error while creating instance of '"
+                     + classLiteral.getName() + "' through '"
+                     + gwtCreateHandler.getClass().getName() + "' instance", e);
          }
       }
 

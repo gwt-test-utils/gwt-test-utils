@@ -16,7 +16,6 @@ import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.javac.CompilationStateBuilder;
 import com.google.gwt.dev.shell.JsValueGlue;
 import com.googlecode.gwt.test.GwtTreeLogger;
-import com.googlecode.gwt.test.exceptions.GwtTestConfigurationException;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.internal.rewrite.OverlayTypesRewriter;
 
@@ -84,7 +83,7 @@ public class GwtFactory {
 
    private final URL surefireBooterJarUrl;
 
-   private GwtFactory(URL surefireBooterJarUrl) throws GwtTestException {
+   private GwtFactory(URL surefireBooterJarUrl) {
       configurationLoader = new ConfigurationLoader();
 
       this.surefireBooterJarUrl = surefireBooterJarUrl;
@@ -99,14 +98,20 @@ public class GwtFactory {
       // createTemporaryClassLoaderForResourceLoading(surefireBooterJarUrl);
       Thread.currentThread().setContextClassLoader(tempCl);
 
-      // create every gwt stuff, searching for resources in the setup
-      // 'src-directories' entries in
-      // META-INF/gwt-test-utils.properties files
-      moduleDef = createModuleDef(configurationLoader);
-      compilationState = createCompilationState(moduleDef);
-      overlayRewriter = createOverlayRewriter(compilationState);
-      gwtClassLoader = GwtClassLoader.createClassLoader(configurationLoader, compilationState,
-               overlayRewriter);
+      try {
+         // create every gwt stuff, searching for resources in the setup
+         // 'src-directories' entries in
+         // META-INF/gwt-test-utils.properties files
+         moduleDef = createModuleDef(configurationLoader);
+         compilationState = createCompilationState(moduleDef);
+         overlayRewriter = createOverlayRewriter(compilationState);
+         gwtClassLoader = GwtClassLoader.createClassLoader(configurationLoader, compilationState,
+                  overlayRewriter);
+      } catch (UnableToCompleteException e) {
+         // log related errors
+         GwtTreeLogger.get().onUnableToCompleteError();
+         throw new GwtTestException("Error while generating gwt-test-utils prerequisites", e);
+      }
 
       // reset the default classloader
       Thread.currentThread().setContextClassLoader(defaultClassLoader);
@@ -132,35 +137,26 @@ public class GwtFactory {
       return overlayRewriter;
    }
 
-   private CompilationState createCompilationState(ModuleDef moduleDef) {
-      try {
-         TreeLogger treeLogger = GwtTreeLogger.get();
+   private CompilationState createCompilationState(ModuleDef moduleDef)
+            throws UnableToCompleteException {
+      TreeLogger treeLogger = GwtTreeLogger.get();
 
-         File target = new File("target");
-         if (!target.exists()) {
-            // not a maven project, set the 'gwt-UnitCache' directory at the
-            // root, like GWTTestCase does
-            target = new File(".");
-         }
-         CompilationStateBuilder.init(treeLogger, target);
-         return moduleDef.getCompilationState(treeLogger);
-      } catch (UnableToCompleteException e) {
-         throw new GwtTestConfigurationException("Error while creating global CompilationState :",
-                  e);
+      File target = new File("target");
+      if (!target.exists()) {
+         // not a maven project, set the 'gwt-UnitCache' directory at the
+         // root, like GWTTestCase does
+         target = new File(".");
       }
+      CompilationStateBuilder.init(treeLogger, target);
+      return moduleDef.getCompilationState(treeLogger);
    }
 
-   private ModuleDef createModuleDef(ConfigurationLoader configurationLoader) {
-      try {
-         List<String> gwtModules = configurationLoader.getGwtModules();
-         String[] inherits = gwtModules.toArray(new String[gwtModules.size()]);
-         return ModuleDefLoader.createSyntheticModule(GwtTreeLogger.get(),
-                  "com.googlecode.gwt.test.Aggregator", inherits, false);
-      } catch (UnableToCompleteException e) {
-         throw new GwtTestConfigurationException(
-                  "Error while creating global ModuleDef for module' :", e);
-      }
-
+   private ModuleDef createModuleDef(ConfigurationLoader configurationLoader)
+            throws UnableToCompleteException {
+      List<String> gwtModules = configurationLoader.getGwtModules();
+      String[] inherits = gwtModules.toArray(new String[gwtModules.size()]);
+      return ModuleDefLoader.createSyntheticModule(GwtTreeLogger.get(),
+               "com.googlecode.gwt.test.Aggregator", inherits, false);
    }
 
    private OverlayTypesRewriter createOverlayRewriter(CompilationState compilationState) {
