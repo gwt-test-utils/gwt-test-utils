@@ -111,16 +111,16 @@ class CompilationStateClassLoader extends Loader {
       return urlClassLoader;
    }
 
-   CompilationStateClassLoader(ClassLoader parent, URL surefireBooterJarUrl, URL[] srcUrls) {
-      super(createGwtGeneratedSourceLoader(surefireBooterJarUrl, srcUrls, parent), null);
+   CompilationStateClassLoader(ClassLoader parent, URL surefireBooterJarUrl,
+            ConfigurationLoader configurationLoader) {
+      super(createGwtGeneratedSourceLoader(surefireBooterJarUrl, configurationLoader.getSrcUrls(),
+               parent), null);
       ClassPool cp = new ClassPool(null);
       cp.appendSystemPath();
 
-      // create a the temporary URLClassloader as the context classloader so
-      // OverlaySupportClassRewriter will use it to get needed project's resources (.java file)
-
-      delegateLoadingOf("com.google.gwt.core.ext.");
-      delegateLoadingOf("com.google.gwt.dev.");
+      for (String delegate : configurationLoader.getDelegates()) {
+         delegateLoadingOf(delegate);
+      }
 
       try {
          addTranslator(cp, new MakeClassPublicTranslator());

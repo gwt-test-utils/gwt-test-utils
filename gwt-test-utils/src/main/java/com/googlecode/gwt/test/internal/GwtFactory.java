@@ -93,7 +93,7 @@ public class GwtFactory {
       ClassLoader defaultClassLoader = Thread.currentThread().getContextClassLoader();
 
       CompilationStateClassLoader tempCl = new CompilationStateClassLoader(defaultClassLoader,
-               surefireBooterJarUrl, configurationLoader.getSrcUrls());
+               surefireBooterJarUrl, configurationLoader);
       // ClassLoader classLoaderForResources =
       // createTemporaryClassLoaderForResourceLoading(surefireBooterJarUrl);
       Thread.currentThread().setContextClassLoader(tempCl);
