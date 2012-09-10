@@ -17,12 +17,12 @@ class SchedulerImplPatcher {
 
    @PatchMethod
    static void scheduleEntry(SchedulerImpl impl, RepeatingCommand cmd) {
-      executeRepeatingCommand(cmd);
+      BrowserSimulatorImpl.get().scheduleEntry(cmd);
    }
 
    @PatchMethod
    static void scheduleEntry(SchedulerImpl impl, ScheduledCommand cmd) {
-      cmd.execute();
+      BrowserSimulatorImpl.get().scheduleEntry(cmd);
    }
 
    @PatchMethod

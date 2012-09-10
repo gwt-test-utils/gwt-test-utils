@@ -36,6 +36,8 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
 
    private final Queue<Command> asyncCallbackCommands = new LinkedList<Command>();
    private final Queue<ScheduledCommand> deferredScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
+   private final Queue<RepeatingCommand> entryRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
+   private final Queue<ScheduledCommand> entryScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
    private final Queue<RepeatingCommand> finallyRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
    private final Queue<ScheduledCommand> finallyScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
 
@@ -50,8 +52,12 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
     */
    public void afterTest() throws Throwable {
 
-      if (deferredScheduledCommands.size() == 0 && finallyScheduledCommands.size() == 0
-               && finallyRepeatingCommands.size() == 0 && asyncCallbackCommands.size() == 0) {
+      if (deferredScheduledCommands.size() == 0 //
+               && finallyScheduledCommands.size() == 0 //
+               && finallyRepeatingCommands.size() == 0 //
+               && entryScheduledCommands.size() == 0 //
+               && entryRepeatingCommands.size() == 0 //
+               && asyncCallbackCommands.size() == 0) {
          return;
       }
 
@@ -62,6 +68,12 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
       if (deferredScheduledCommands.size() > 0) {
          errorMessage = String.format(format, deferredScheduledCommands.size(),
                   "scheduledDeferred ScheduledCommand(s)", testName);
+      } else if (entryScheduledCommands.size() > 0) {
+         errorMessage = String.format(format, entryScheduledCommands.size(),
+                  "scheduledEntry ScheduledCommand(s)", testName);
+      } else if (entryRepeatingCommands.size() > 0) {
+         errorMessage = String.format(format, entryRepeatingCommands.size(),
+                  "scheduledEntry RepeatingCommand(s)", testName);
       } else if (finallyScheduledCommands.size() > 0) {
          errorMessage = String.format(format, finallyRepeatingCommands.size(),
                   "scheduledFinally ScheduledCommand(s)", testName);
@@ -81,10 +93,11 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
 
    public void clearPendingCommands() {
       deferredScheduledCommands.clear();
+      entryScheduledCommands.clear();
+      entryRepeatingCommands.clear();
       finallyScheduledCommands.clear();
       finallyRepeatingCommands.clear();
       asyncCallbackCommands.clear();
-
    }
 
    public void fireLoopEnd() {
@@ -103,8 +116,22 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
             executeRepeatingCommand(finallyRepeatingCommands.poll());
          }
 
-         while (!deferredScheduledCommands.isEmpty()) {
-            deferredScheduledCommands.poll().execute();
+         while (!entryScheduledCommands.isEmpty()) {
+            entryScheduledCommands.poll().execute();
+         }
+
+         while (!entryRepeatingCommands.isEmpty()) {
+            executeRepeatingCommand(entryRepeatingCommands.poll());
+         }
+
+         Queue<ScheduledCommand> tempDeferredScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>(
+                  deferredScheduledCommands);
+
+         while (!tempDeferredScheduledCommands.isEmpty()) {
+            ScheduledCommand cmd = tempDeferredScheduledCommands.poll();
+            cmd.execute();
+
+            deferredScheduledCommands.remove(cmd);
          }
 
          while (!asyncCallbackCommands.isEmpty()) {
@@ -122,6 +149,14 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
 
    public void scheduleDeferred(ScheduledCommand scheduledCommand) {
       deferredScheduledCommands.add(scheduledCommand);
+   }
+
+   public void scheduleEntry(RepeatingCommand repeatingCommand) {
+      entryRepeatingCommands.add(repeatingCommand);
+   }
+
+   public void scheduleEntry(ScheduledCommand scheduledCommand) {
+      entryScheduledCommands.add(scheduledCommand);
    }
 
    public void scheduleFinally(RepeatingCommand repeatingCommand) {
