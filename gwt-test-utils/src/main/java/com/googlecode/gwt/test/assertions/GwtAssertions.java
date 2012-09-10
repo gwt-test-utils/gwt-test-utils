@@ -1,5 +1,7 @@
 package com.googlecode.gwt.test.assertions;
 
+import org.fest.assertions.api.Assertions;
+
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.DoubleBox;
@@ -24,7 +26,7 @@ import com.googlecode.gwt.test.finder.GwtInstance;
  * 
  * @author Gael Lazzari
  */
-public class GwtAssertions {
+public class GwtAssertions extends Assertions {
 
    /**
     * Creates a new instance of <code>{@link CheckBoxAssert}</code>.
