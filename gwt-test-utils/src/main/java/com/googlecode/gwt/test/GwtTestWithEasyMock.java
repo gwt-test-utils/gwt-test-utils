@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
+import org.easymock.IExpectationSetters;
 import org.junit.Before;
 
 import com.google.gwt.dev.shell.JsValueGlue;
@@ -41,14 +42,15 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils.MethodCallback;
  * </p>
  * 
  * @author Bertrand Paquet
+ * @author Gael Lazzari
  */
 public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
 
-   private static class FailureAnswer<T> implements IAnswer<T> {
+   private static class FailureAnswer<T extends Throwable> implements IAnswer<T> {
 
-      private final Throwable result;
+      private final T result;
 
-      public FailureAnswer(Throwable result) {
+      public FailureAnswer(T result) {
          this.result = result;
       }
 
@@ -162,11 +164,15 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
     * method of the corresponding AsyncCallback object.
     * 
     * @param exception The exception thrown by the stubbed remote service and passed to the callback
-    *           onFailure() method
+    *           onFailure() method.
+    * @return the value returned by the delegated call.
     */
-   protected void expectServiceAndCallbackOnFailure(final Throwable exception) {
-      IAnswer<Object> answer = new FailureAnswer<Object>(exception);
-      EasyMock.expectLastCall().andAnswer(answer);
+   @SuppressWarnings("unchecked")
+   protected <T extends Throwable> IExpectationSetters<T> expectServiceAndCallbackOnFailure(
+            final T exception) {
+      IAnswer<T> answer = new FailureAnswer<T>(exception);
+      Object o = EasyMock.expectLastCall().andAnswer(answer);
+      return (IExpectationSetters<T>) o;
    }
 
    /**
@@ -174,11 +180,13 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
     * method of the corresponding AsyncCallback object.
     * 
     * @param object The object returned by the stubbed remote service and passed to the callback
-    *           onSuccess() method
+    *           onSuccess() method.
+    * @return the value returned by the delegated call.
     */
-   protected <T> void expectServiceAndCallbackOnSuccess(final T object) {
+   @SuppressWarnings("unchecked")
+   protected <T> IExpectationSetters<T> expectServiceAndCallbackOnSuccess(final T object) {
       IAnswer<T> answer = new SuccessAnswer<T>(object);
-      EasyMock.expectLastCall().andAnswer(answer);
+      return (IExpectationSetters<T>) EasyMock.expectLastCall().andAnswer(answer);
    }
 
    /**
