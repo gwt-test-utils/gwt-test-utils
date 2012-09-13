@@ -13,7 +13,6 @@ class MockNamePatcher {
       // classes declared in some OverlayType
       // example : class com.google.gwt.user.client.Event$NativePreviewEvent
       if (clazz.getName().matches("^.+\\$.+$")) {
-         System.out.println(clazz);
          return clazz.getName().substring(clazz.getName().lastIndexOf('$') + 1);
       }
 
