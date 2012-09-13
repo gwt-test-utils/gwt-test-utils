@@ -2,13 +2,223 @@ package com.googlecode.gwt.test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
 
 public class SchedulerTest extends GwtTestTest {
+
+   @Before
+   public void before() {
+      addGwtCreateHandler(new RemoteServiceCreateHandler() {
+
+         @Override
+         protected Object findService(Class<?> remoteServiceClass, String remoteServiceRelativePath) {
+            if (remoteServiceClass == MyRemoteService.class) {
+               return new MyRemoteService() {
+
+                  public String myMethod(String param1) {
+                     return "mock " + param1;
+                  }
+               };
+            }
+
+            return null;
+         }
+      });
+   }
+
+   @Test
+   public void scheduledCommandOrder() {
+      // Arrange
+      final StringBuilder sb = new StringBuilder();
+
+      Scheduler.get().scheduleEntry(new ScheduledCommand() {
+
+         public void execute() {
+            sb.append("scheduleEntry1 ");
+
+         }
+      });
+
+      Scheduler.get().scheduleFinally(new ScheduledCommand() {
+
+         public void execute() {
+            sb.append("scheduleFinally1 ");
+
+         }
+      });
+
+      Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+         public void execute() {
+            sb.append("scheduleDeferred1 ");
+
+            Scheduler.get().scheduleEntry(new ScheduledCommand() {
+
+               public void execute() {
+                  sb.append("scheduleEntry2 ");
+
+                  Scheduler.get().scheduleEntry(new ScheduledCommand() {
+
+                     public void execute() {
+                        sb.append("scheduleEntry3 ");
+
+                     }
+                  });
+
+               }
+            });
+
+            Scheduler.get().scheduleFinally(new ScheduledCommand() {
+
+               public void execute() {
+                  sb.append("scheduleFinally2 ");
+
+                  Scheduler.get().scheduleFinally(new ScheduledCommand() {
+
+                     public void execute() {
+                        sb.append("scheduleFinally3 ");
+
+                     }
+                  });
+
+               }
+            });
+
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+               public void execute() {
+                  sb.append("scheduleDeferred2 ");
+
+               }
+            });
+
+         }
+      });
+
+      // Act
+      getBrowserSimulator().fireLoopEnd();
+
+      // Assert
+      assertThat(sb.toString()).isEqualTo(
+               "scheduleFinally1 scheduleEntry1 scheduleDeferred1 scheduleFinally2 scheduleFinally3 scheduleEntry2 scheduleEntry3 scheduleDeferred2 ");
+
+   }
+
+   @Test
+   public void scheduledCommandOrderWithRpcCall() {
+      // Arrange
+      final StringBuilder sb = new StringBuilder();
+      final MyRemoteServiceAsync service = GWT.create(MyRemoteService.class);
+
+      Scheduler.get().scheduleEntry(new ScheduledCommand() {
+
+         public void execute() {
+            sb.append("scheduleEntry1 ");
+
+         }
+      });
+
+      Scheduler.get().scheduleFinally(new ScheduledCommand() {
+
+         public void execute() {
+            sb.append("scheduleFinally1 ");
+
+         }
+      });
+
+      service.myMethod("service1", new AsyncCallback<String>() {
+
+         public void onFailure(Throwable caught) {
+         }
+
+         public void onSuccess(String result) {
+            sb.append("onSuccess1 ");
+         }
+      });
+
+      service.myMethod("service2", new AsyncCallback<String>() {
+
+         public void onFailure(Throwable caught) {
+         }
+
+         public void onSuccess(String result) {
+            sb.append("onSuccess2 ");
+         }
+      });
+
+      Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+         public void execute() {
+            sb.append("scheduleDeferred1 ");
+
+            service.myMethod("service3", new AsyncCallback<String>() {
+
+               public void onFailure(Throwable caught) {
+               }
+
+               public void onSuccess(String result) {
+                  sb.append("onSuccess3 ");
+               }
+            });
+
+            Scheduler.get().scheduleEntry(new ScheduledCommand() {
+
+               public void execute() {
+                  sb.append("scheduleEntry2 ");
+
+                  Scheduler.get().scheduleEntry(new ScheduledCommand() {
+
+                     public void execute() {
+                        sb.append("scheduleEntry3 ");
+
+                     }
+                  });
+
+               }
+            });
+
+            Scheduler.get().scheduleFinally(new ScheduledCommand() {
+
+               public void execute() {
+                  sb.append("scheduleFinally2 ");
+
+                  Scheduler.get().scheduleFinally(new ScheduledCommand() {
+
+                     public void execute() {
+                        sb.append("scheduleFinally3 ");
+
+                     }
+                  });
+
+               }
+            });
+
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+               public void execute() {
+                  sb.append("scheduleDeferred2 ");
+
+               }
+            });
+
+         }
+      });
+
+      // Act
+      getBrowserSimulator().fireLoopEnd();
+
+      // Assert
+      assertThat(sb.toString()).isEqualTo(
+               "scheduleFinally1 scheduleEntry1 scheduleDeferred1 onSuccess1 onSuccess2 scheduleFinally2 scheduleFinally3 scheduleEntry2 scheduleEntry3 scheduleDeferred2 onSuccess3 ");
+   }
 
    @Test
    public void scheduleDeferred() {
@@ -100,89 +310,5 @@ public class SchedulerTest extends GwtTestTest {
 
       // Assert
       assertThat(sb.toString()).isEqualTo("012");
-   }
-
-   @Test
-   public void scheduleOrder() {
-      // Arrange
-      final StringBuilder sb = new StringBuilder();
-
-      Scheduler.get().scheduleEntry(new ScheduledCommand() {
-
-         public void execute() {
-            sb.append("scheduleEntry1 ");
-
-         }
-      });
-
-      Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-         public void execute() {
-            sb.append("scheduleFinally1 ");
-
-         }
-      });
-
-      Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-         public void execute() {
-            sb.append("scheduleDeferred1 ");
-
-            Scheduler.get().scheduleEntry(new ScheduledCommand() {
-
-               public void execute() {
-                  sb.append("scheduleEntry2 ");
-
-                  Scheduler.get().scheduleEntry(new ScheduledCommand() {
-
-                     public void execute() {
-                        sb.append("scheduleEntry3 ");
-
-                     }
-                  });
-
-               }
-            });
-
-            Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-               public void execute() {
-                  sb.append("scheduleFinally2 ");
-
-                  Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-                     public void execute() {
-                        sb.append("scheduleFinally3 ");
-
-                     }
-                  });
-
-               }
-            });
-
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-               public void execute() {
-                  sb.append("scheduleDeferred2 ");
-
-               }
-            });
-
-         }
-      });
-
-      // Act 1
-      getBrowserSimulator().fireLoopEnd();
-
-      // Assert 1
-      assertThat(sb.toString()).isEqualTo("scheduleFinally1 scheduleEntry1 scheduleDeferred1 ");
-
-      // Act 2
-      getBrowserSimulator().fireLoopEnd();
-
-      // Assert 2
-      assertThat(sb.toString()).isEqualTo(
-               "scheduleFinally1 scheduleEntry1 scheduleDeferred1 scheduleFinally2 scheduleFinally3 scheduleEntry2 scheduleEntry3 scheduleDeferred2 ");
-
    }
 }

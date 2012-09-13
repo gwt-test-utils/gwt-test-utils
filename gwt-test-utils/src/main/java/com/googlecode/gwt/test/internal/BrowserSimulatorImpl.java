@@ -108,35 +108,17 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
       try {
          isTriggering = true;
 
-         while (!finallyScheduledCommands.isEmpty()) {
-            finallyScheduledCommands.poll().execute();
-         }
+         do {
+            Queue<ScheduledCommand> deferredToExecuteInLoop = new LinkedList<ScheduledCommand>(
+                     deferredScheduledCommands);
+            deferredScheduledCommands.clear();
 
-         while (!finallyRepeatingCommands.isEmpty()) {
-            executeRepeatingCommand(finallyRepeatingCommands.poll());
-         }
+            Queue<Command> asyncCallbackToExecuteInLoop = new LinkedList<Command>(
+                     asyncCallbackCommands);
+            asyncCallbackCommands.clear();
 
-         while (!entryScheduledCommands.isEmpty()) {
-            entryScheduledCommands.poll().execute();
-         }
-
-         while (!entryRepeatingCommands.isEmpty()) {
-            executeRepeatingCommand(entryRepeatingCommands.poll());
-         }
-
-         Queue<ScheduledCommand> tempDeferredScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>(
-                  deferredScheduledCommands);
-
-         while (!tempDeferredScheduledCommands.isEmpty()) {
-            ScheduledCommand cmd = tempDeferredScheduledCommands.poll();
-            cmd.execute();
-
-            deferredScheduledCommands.remove(cmd);
-         }
-
-         while (!asyncCallbackCommands.isEmpty()) {
-            asyncCallbackCommands.poll().execute();
-         }
+            fireEventLoop(deferredToExecuteInLoop, asyncCallbackToExecuteInLoop);
+         } while (deferredScheduledCommands.size() > 0 || asyncCallbackCommands.size() > 0);
 
       } finally {
          isTriggering = false;
@@ -165,6 +147,34 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
 
    public void scheduleFinally(ScheduledCommand scheduledCommand) {
       finallyScheduledCommands.add(scheduledCommand);
+   }
+
+   private void fireEventLoop(Queue<ScheduledCommand> deferredToExecuteInLoop,
+            Queue<Command> asyncCallbackToExecuteInLoop) {
+
+      while (!finallyScheduledCommands.isEmpty()) {
+         finallyScheduledCommands.poll().execute();
+      }
+
+      while (!finallyRepeatingCommands.isEmpty()) {
+         executeRepeatingCommand(finallyRepeatingCommands.poll());
+      }
+
+      while (!entryScheduledCommands.isEmpty()) {
+         entryScheduledCommands.poll().execute();
+      }
+
+      while (!entryRepeatingCommands.isEmpty()) {
+         executeRepeatingCommand(entryRepeatingCommands.poll());
+      }
+
+      while (!deferredToExecuteInLoop.isEmpty()) {
+         deferredToExecuteInLoop.poll().execute();
+      }
+
+      while (!asyncCallbackToExecuteInLoop.isEmpty()) {
+         asyncCallbackToExecuteInLoop.poll().execute();
+      }
    }
 
 }
