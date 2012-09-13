@@ -14,6 +14,10 @@ import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
 
 public class SchedulerTest extends GwtTestTest {
 
+   private int i;
+
+   private int j;
+
    @Before
    public void before() {
       addGwtCreateHandler(new RemoteServiceCreateHandler() {
@@ -241,6 +245,53 @@ public class SchedulerTest extends GwtTestTest {
 
       // Assert
       assertThat(sb.toString()).isEqualTo("scheduleDeferred");
+   }
+
+   @Test
+   public void scheduledRepeatingCommandOrder() {
+      // Arrange
+      i = j = 0;
+      final StringBuilder sb = new StringBuilder();
+
+      Scheduler.get().scheduleEntry(new RepeatingCommand() {
+
+         public boolean execute() {
+            sb.append("entry").append(i).append(" ");
+            return 3 > i++;
+         }
+      });
+
+      Scheduler.get().scheduleFinally(new RepeatingCommand() {
+
+         public boolean execute() {
+            sb.append("finally").append(j).append(" ");
+
+            Scheduler.get().scheduleEntry(new RepeatingCommand() {
+
+               public boolean execute() {
+                  sb.append("subentry").append(j).append(" ");
+                  return false;
+               }
+            });
+
+            Scheduler.get().scheduleFinally(new RepeatingCommand() {
+
+               public boolean execute() {
+                  sb.append("subfinally").append(j).append(" ");
+                  return false;
+               }
+            });
+
+            return 3 > j++;
+         }
+      });
+
+      // Act
+      getBrowserSimulator().fireLoopEnd();
+
+      // Assert
+      assertThat(sb.toString()).isEqualTo(
+               "finally0 subfinally1 entry0 subentry1 finally1 subfinally2 entry1 subentry2 finally2 subfinally3 entry2 subentry3 finally3 subfinally4 entry3 subentry4 ");
    }
 
    @Test

@@ -1,6 +1,8 @@
 package com.googlecode.gwt.test.internal;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import com.google.gwt.core.client.Scheduler;
@@ -27,18 +29,11 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
       return INSTANCE;
    }
 
-   private static void executeRepeatingCommand(RepeatingCommand cmd) {
-      boolean repeat = true;
-      while (repeat) {
-         repeat = cmd.execute();
-      }
-   }
-
    private final Queue<Command> asyncCallbackCommands = new LinkedList<Command>();
    private final Queue<ScheduledCommand> deferredScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
-   private final Queue<RepeatingCommand> entryRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
+   private final List<RepeatingCommand> entryRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
    private final Queue<ScheduledCommand> entryScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
-   private final Queue<RepeatingCommand> finallyRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
+   private final List<RepeatingCommand> finallyRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
    private final Queue<ScheduledCommand> finallyScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
 
    private boolean isTriggering;
@@ -118,7 +113,10 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
             asyncCallbackCommands.clear();
 
             fireEventLoop(deferredToExecuteInLoop, asyncCallbackToExecuteInLoop);
-         } while (deferredScheduledCommands.size() > 0 || asyncCallbackCommands.size() > 0);
+         } while (entryRepeatingCommands.size() > 0 //
+                  || finallyRepeatingCommands.size() > 0 //
+                  || deferredScheduledCommands.size() > 0 //
+                  || asyncCallbackCommands.size() > 0);
 
       } finally {
          isTriggering = false;
@@ -149,6 +147,24 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
       finallyScheduledCommands.add(scheduledCommand);
    }
 
+   private void executeReaptingCommnand(List<RepeatingCommand> commands) {
+      List<RepeatingCommand> toRemove = new ArrayList<RepeatingCommand>();
+      int i = 0;
+
+      while (i < commands.size()) {
+         RepeatingCommand current = commands.get(i);
+         if (!current.execute()) {
+            toRemove.add(current);
+         }
+
+         i++;
+      }
+
+      for (RepeatingCommand rc : toRemove) {
+         commands.remove(rc);
+      }
+   }
+
    private void fireEventLoop(Queue<ScheduledCommand> deferredToExecuteInLoop,
             Queue<Command> asyncCallbackToExecuteInLoop) {
 
@@ -156,17 +172,13 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
          finallyScheduledCommands.poll().execute();
       }
 
-      while (!finallyRepeatingCommands.isEmpty()) {
-         executeRepeatingCommand(finallyRepeatingCommands.poll());
-      }
+      executeReaptingCommnand(finallyRepeatingCommands);
 
       while (!entryScheduledCommands.isEmpty()) {
          entryScheduledCommands.poll().execute();
       }
 
-      while (!entryRepeatingCommands.isEmpty()) {
-         executeRepeatingCommand(entryRepeatingCommands.poll());
-      }
+      executeReaptingCommnand(entryRepeatingCommands);
 
       while (!deferredToExecuteInLoop.isEmpty()) {
          deferredToExecuteInLoop.poll().execute();
