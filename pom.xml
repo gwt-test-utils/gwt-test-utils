@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -9,7 +8,7 @@
 	<groupId>com.googlecode.gwt-test-utils</groupId>
 	<artifactId>gwt-test-utils-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>0.41-SNAPSHOT</version>
+	<version>0.41</version>
 	<name>${project.artifactId}</name>
 	<description>gwt-test-utils is a Java framework that allows to test GWT client side code in a efficient, easy way</description>
 	<url>http://code.google.com/p/gwt-test-utils/</url>
@@ -47,7 +46,7 @@
 		<connection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</connection>
 		<developerConnection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</developerConnection>
 		<url>https://github.com/gwt-test-utils/gwt-test-utils</url>
-		<tag>HEAD</tag>
+		<tag>gwt-test-utils-parent-0.41</tag>
 	</scm>
 	<ciManagement>
 		<system>buildhive</system>
