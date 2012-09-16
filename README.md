@@ -43,6 +43,7 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
 Whether you want to...
 * Use gwt-test-utils to test your GWT application
 * Make your custom widgets testable with the framework
+* Contributing code
 
 ... you'll find everything you need in the [wiki](https://github.com/gwt-test-utils/gwt-test-utils/wiki).
 
