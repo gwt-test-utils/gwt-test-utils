@@ -1,5 +1,7 @@
 package com.googlecode.gwt.test.csv.internal;
 
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -13,10 +15,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.googlecode.gwt.test.finder.Node;
 import com.googlecode.gwt.test.csv.CsvMethod;
+import com.googlecode.gwt.test.csv.GwtTestCsvException;
 import com.googlecode.gwt.test.csv.runner.CsvRunner;
-import com.googlecode.gwt.test.csv.runner.CsvRunnerException;
+import com.googlecode.gwt.test.finder.Node;
 
 public class CsvRunnerTest {
 
@@ -198,9 +200,15 @@ public class CsvRunnerTest {
    private final Object oo = new B();
    private final CsvRunner runner = new CsvRunner();
 
-   @Test(expected = CsvRunnerException.class)
-   public void executeLine_Exception() throws CsvRunnerException {
-      runner.executeLine("runMyException", new ArrayList<String>(), o);
+   @Test
+   public void executeLine_Exception() {
+      try {
+         runner.executeLine("runMyException", new ArrayList<String>(), o);
+         failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
+      } catch (GwtTestCsvException e) {
+         assertThat(e.getMessage()).isEqualTo(
+                  "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.internal.CsvRunnerTest$A.runMyException() throws com.googlecode.gwt.test.csv.internal.CsvRunnerTest$MyException");
+      }
    }
 
    @Test
@@ -287,7 +295,7 @@ public class CsvRunnerTest {
    }
 
    @Test(expected = AssertionError.class)
-   public void meth1WrongValue() throws CsvRunnerException {
+   public void meth1WrongValue() {
       runner.executeLine("meth1", Arrays.asList("p4"), o);
    }
 
@@ -321,9 +329,15 @@ public class CsvRunnerTest {
       runner.executeLine("methVar1", Arrays.asList("a", "p0", "p1", "p2"), o);
    }
 
-   @Test(expected = CsvRunnerException.class)
-   public void runtime() throws CsvRunnerException {
-      runner.executeLine("runException", new ArrayList<String>(), o);
+   @Test
+   public void runtime() {
+      try {
+         runner.executeLine("runException", new ArrayList<String>(), o);
+         failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
+      } catch (GwtTestCsvException e) {
+         assertThat(e.getMessage()).isEqualTo(
+                  "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.internal.CsvRunnerTest$A.runException()");
+      }
    }
 
    private SimiliWidgetContainer getList() {

@@ -26,6 +26,7 @@ import com.googlecode.gwt.test.finder.GwtFinder;
 import com.googlecode.gwt.test.finder.GwtInstance;
 import com.googlecode.gwt.test.finder.Node;
 import com.googlecode.gwt.test.finder.ObjectFinder;
+import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 public class CsvRunner {
@@ -44,8 +45,7 @@ public class CsvRunner {
       objectFinders.add(objectFinder);
    }
 
-   public void executeLine(String methodName, List<String> args, Object fixture)
-            throws CsvRunnerException {
+   public void executeLine(String methodName, List<String> args, Object fixture) {
       if (methodName.indexOf("**") == 0) {
          // commented line
          return;
@@ -84,28 +84,24 @@ public class CsvRunner {
          fail(getAssertionErrorMessagePrefix() + "Too many args for " + methodName);
       }
       try {
+         BrowserSimulatorImpl.get().fireLoopEnd();
          Object[] finalArgList = argList.toArray(new Object[]{});
          m.invoke(fixture, finalArgList);
-      } catch (InvocationTargetException e) {
-         if (e.getCause() != null) {
-            if (e.getCause() instanceof AssertionError) {
-               throw (AssertionError) e.getCause();
-            } else if (e.getCause() != null && e.getCause().getCause() instanceof AssertionError) {
-               throw (AssertionError) e.getCause().getCause();
-            }
-            throw createCsvExecutionException(e.getCause());
+      } catch (Throwable e) {
+
+         Throwable cause = getFixtureError(e);
+         if (cause instanceof GwtTestCsvException) {
+            throw (GwtTestCsvException) cause;
+         } else if (cause instanceof AssertionError) {
+            throw (AssertionError) cause;
+         } else {
+            throw new GwtTestCsvException(getAssertionErrorMessagePrefix()
+                     + "Error invoking @CsvMethod " + m.toString(), cause);
          }
-         logger.error(getAssertionErrorMessagePrefix() + "Execution error", e);
-         fail(getAssertionErrorMessagePrefix() + "Error invoking " + methodName + " in fixture : "
-                  + e.toString());
-      } catch (Exception e) {
-         logger.error(getAssertionErrorMessagePrefix() + "Execution error", e);
-         fail(getAssertionErrorMessagePrefix() + "Error invoking " + methodName + " in fixture : "
-                  + e.toString());
       }
    }
 
-   public void executeRow(List<String> row, Object fixture) throws CsvRunnerException {
+   public void executeRow(List<String> row, Object fixture) {
       if (row.size() == 0) {
          return;
       }
@@ -273,17 +269,6 @@ public class CsvRunner {
       return after.equals(s);
    }
 
-   private CsvRunnerException createCsvExecutionException(Throwable cause) {
-      if (cause instanceof CsvRunnerException) {
-         return (CsvRunnerException) cause;
-      } else if (UmbrellaException.class.isInstance(cause)
-               || AssertionError.class.isInstance(cause)) {
-         cause = cause.getCause();
-      }
-
-      return new CsvRunnerException(this, cause);
-   }
-
    private Object findInIterable(Iterable<Object> list, Node before, String after, Object current,
             Method m) {
       Object found = null;
@@ -390,6 +375,20 @@ public class CsvRunner {
          return getField(fixture, superClazz, fieldName);
       }
       return null;
+   }
+
+   private Throwable getFixtureError(Throwable cause) {
+
+      if (cause instanceof InvocationTargetException && cause.getCause() != null) {
+         cause = cause.getCause();
+      }
+
+      if (UmbrellaException.class.isInstance(cause)) {
+         cause = cause.getCause();
+      }
+
+      return cause;
+
    }
 
    private String getMethodName(Entry<Method, CsvMethod> entry) {
