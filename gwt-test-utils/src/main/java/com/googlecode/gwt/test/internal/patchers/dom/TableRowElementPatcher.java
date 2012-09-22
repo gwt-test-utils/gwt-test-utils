@@ -1,8 +1,8 @@
 package com.googlecode.gwt.test.internal.patchers.dom;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
@@ -16,17 +16,21 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 class TableRowElementPatcher {
 
    @PatchMethod
-   static NodeList<TableCellElement> getCells(TableRowElement element) {
-      List<TableCellElement> cells = new ArrayList<TableCellElement>();
+   static void deleteCell(TableRowElement element, int index) {
 
-      for (int i = 0; i < element.getChildCount(); i++) {
-         Node child = element.getChild(i);
-         if (TableCellElement.class.isInstance(child)) {
-            cells.add((TableCellElement) child);
-         }
+      List<Node> innerList = JsoUtils.getChildNodeInnerList(element);
+
+      if (index == -1 || index >= innerList.size()) {
+         index = innerList.size() - 1;
+
       }
 
-      return JsoUtils.newNodeList(cells);
+      innerList.remove(index);
+   }
+
+   @PatchMethod
+   static NodeList<TableCellElement> getCells(TableRowElement element) {
+      return element.getChildNodes().<NodeList<TableCellElement>> cast();
    }
 
    @PatchMethod
@@ -47,6 +51,21 @@ class TableRowElementPatcher {
 
       return -1;
 
+   }
+
+   @PatchMethod
+   static TableCellElement insertCell(TableRowElement element, int index) {
+
+      List<Node> innerList = JsoUtils.getChildNodeInnerList(element);
+      TableCellElement newCell = Document.get().createTDElement();
+
+      if (index == -1 || index >= element.getCells().getLength()) {
+         innerList.add(newCell);
+      } else {
+         innerList.add(index, newCell);
+      }
+
+      return newCell;
    }
 
 }
