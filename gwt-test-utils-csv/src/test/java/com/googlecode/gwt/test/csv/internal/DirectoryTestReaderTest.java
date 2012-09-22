@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.googlecode.gwt.test.csv.Rep1;
 import com.googlecode.gwt.test.csv.Rep2;
+import com.googlecode.gwt.test.csv.internal.DirectoryTestReader;
 import com.googlecode.gwt.test.csv.internal.DirectoryTestReader.CsvReader;
 
 public class DirectoryTestReaderTest {

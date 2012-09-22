@@ -1,4 +1,4 @@
-package com.googlecode.gwt.test.csv.internal;
+package com.googlecode.gwt.test.csv.runner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

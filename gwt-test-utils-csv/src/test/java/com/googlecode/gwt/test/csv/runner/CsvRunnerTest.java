@@ -1,4 +1,4 @@
-package com.googlecode.gwt.test.csv.internal;
+package com.googlecode.gwt.test.csv.runner;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -17,7 +17,6 @@ import org.junit.Test;
 
 import com.googlecode.gwt.test.csv.CsvMethod;
 import com.googlecode.gwt.test.csv.GwtTestCsvException;
-import com.googlecode.gwt.test.csv.runner.CsvRunner;
 import com.googlecode.gwt.test.finder.Node;
 
 public class CsvRunnerTest {
@@ -198,7 +197,7 @@ public class CsvRunnerTest {
    private final Object o = new A();
 
    private final Object oo = new B();
-   private final CsvRunner runner = new CsvRunner();
+   private final CsvRunner runner = new CsvRunner(null);
 
    @Test
    public void executeLine_Exception() {
@@ -207,7 +206,7 @@ public class CsvRunnerTest {
          failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
       } catch (GwtTestCsvException e) {
          assertThat(e.getMessage()).isEqualTo(
-                  "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.internal.CsvRunnerTest$A.runMyException() throws com.googlecode.gwt.test.csv.internal.CsvRunnerTest$MyException");
+                  "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.runner.CsvRunnerTest$A.runMyException() throws com.googlecode.gwt.test.csv.runner.CsvRunnerTest$MyException");
       }
    }
 
@@ -336,7 +335,7 @@ public class CsvRunnerTest {
          failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
       } catch (GwtTestCsvException e) {
          assertThat(e.getMessage()).isEqualTo(
-                  "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.internal.CsvRunnerTest$A.runException()");
+                  "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.runner.CsvRunnerTest$A.runException()");
       }
    }
 

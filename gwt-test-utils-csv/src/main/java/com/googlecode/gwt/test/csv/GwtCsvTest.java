@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,7 +38,9 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.csv.internal.DirectoryTestReader;
+import com.googlecode.gwt.test.csv.runner.CsvMethodInvocationHandler;
 import com.googlecode.gwt.test.csv.runner.CsvRunner;
+import com.googlecode.gwt.test.csv.runner.HasCsvMethodInvocationHandlers;
 import com.googlecode.gwt.test.csv.tools.DefaultWidgetVisitor;
 import com.googlecode.gwt.test.csv.tools.WidgetVisitor;
 import com.googlecode.gwt.test.finder.GwtFinder;
@@ -53,7 +56,7 @@ import com.googlecode.gwt.test.utils.events.Browser;
 import com.googlecode.gwt.test.utils.events.Browser.BrowserErrorHandler;
 
 @RunWith(GwtCsvRunner.class)
-public abstract class GwtCsvTest extends GwtTest {
+public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocationHandlers {
 
    private static class MacroReader {
 
@@ -99,6 +102,8 @@ public abstract class GwtCsvTest extends GwtTest {
    private static final Class<?>[] baseList = {String.class, Integer.class, int.class, Class.class};
 
    protected CsvRunner csvRunner;
+
+   private final List<CsvMethodInvocationHandler> csvMethodInvocationHandlers = new ArrayList<CsvMethodInvocationHandler>();
 
    private MacroReader macroReader;
 
@@ -352,6 +357,10 @@ public abstract class GwtCsvTest extends GwtTest {
       Browser.focus(object(identifier).ofType(Widget.class));
    }
 
+   public List<CsvMethodInvocationHandler> getCsvMethodInvocationHandlers() {
+      return Collections.unmodifiableList(csvMethodInvocationHandlers);
+   }
+
    @CsvMethod
    public void hasStyle(String style, String... identifier) {
       assertThat(object(identifier).ofType(UIObject.class)).withPrefix(prefix()).hasStyle(style);
@@ -540,13 +549,17 @@ public abstract class GwtCsvTest extends GwtTest {
 
    public void setReader(DirectoryTestReader reader) {
       this.reader = reader;
-      csvRunner = new CsvRunner();
+      csvRunner = new CsvRunner(this);
       macroReader = new MacroReader();
       for (String name : reader.getMacroFileList()) {
          macroReader.read(reader.getMacroFile(name));
       }
 
       GwtFinder.registerNodeFinder("root", rootObjectFinder);
+   }
+
+   protected void addCsvInvocationHandler(CsvMethodInvocationHandler csvMethodInvocationHandler) {
+      csvMethodInvocationHandlers.add(csvMethodInvocationHandler);
    }
 
    /*
@@ -566,33 +579,6 @@ public abstract class GwtCsvTest extends GwtTest {
 
    protected FocusWidget getFocusWidget(String... identifier) {
       return object(identifier).ofType(FocusWidget.class);
-   }
-
-   /**
-    * 
-    * @param clazz
-    * @param failOnError
-    * @param identifier
-    * @return The found object.
-    * 
-    * @deprecated use {@link GwtFinder#object(String...)} instead
-    */
-   @Deprecated
-   protected <T> T getObject(Class<T> clazz, boolean failOnError, String... identifier) {
-      return csvRunner.getObject(clazz, failOnError, identifier);
-   }
-
-   /**
-    * 
-    * @param clazz
-    * @param identifier
-    * @return The found object.
-    * 
-    * @deprecated use {@link GwtFinder#object(String...)} instead
-    */
-   @Deprecated
-   protected <T> T getObject(Class<T> clazz, String... identifier) {
-      return csvRunner.getObject(clazz, identifier);
    }
 
    protected String getString(Object o) {

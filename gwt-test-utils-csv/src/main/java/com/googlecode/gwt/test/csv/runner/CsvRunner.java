@@ -1,6 +1,5 @@
 package com.googlecode.gwt.test.csv.runner;
 
-import static com.googlecode.gwt.test.finder.GwtFinder.object;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Fail.fail;
 
@@ -8,7 +7,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,8 +20,6 @@ import com.google.gwt.event.shared.UmbrellaException;
 import com.googlecode.gwt.test.csv.CsvMethod;
 import com.googlecode.gwt.test.csv.GwtCsvTest;
 import com.googlecode.gwt.test.csv.GwtTestCsvException;
-import com.googlecode.gwt.test.finder.GwtFinder;
-import com.googlecode.gwt.test.finder.GwtInstance;
 import com.googlecode.gwt.test.finder.Node;
 import com.googlecode.gwt.test.finder.ObjectFinder;
 import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
@@ -37,68 +33,18 @@ public class CsvRunner {
 
    private String extendedLineInfo = null;
 
+   private final HasCsvMethodInvocationHandlers hasCsvMethodInvocationHandlers;
+
    private int lineNumber = -1;
 
    private final List<ObjectFinder> objectFinders = new ArrayList<ObjectFinder>();
 
-   public void addObjectFinder(ObjectFinder objectFinder) {
-      objectFinders.add(objectFinder);
+   public CsvRunner(HasCsvMethodInvocationHandlers hasCsvMethodInvocationHandlers) {
+      this.hasCsvMethodInvocationHandlers = hasCsvMethodInvocationHandlers;
    }
 
-   public void executeLine(String methodName, List<String> args, Object fixture) {
-      if (methodName.indexOf("**") == 0) {
-         // commented line
-         return;
-      }
-      List<String> filterArgs = new ArrayList<String>(args);
-      removeEmptyElements(filterArgs);
-      transformArgs(filterArgs);
-      Method m = getCsvMethod(fixture.getClass(), methodName);
-      if (m == null) {
-         fail(getAssertionErrorMessagePrefix() + "@" + CsvMethod.class.getSimpleName() + " ' "
-                  + methodName + " ' not found in object " + fixture);
-      }
-      GwtReflectionUtils.makeAccessible(m);
-      logger.debug(getProcessingMessagePrefix() + "Executing " + methodName + ", params "
-               + Arrays.toString(filterArgs.toArray()));
-      List<Object> argList = new ArrayList<Object>();
-      for (Class<?> clazz : m.getParameterTypes()) {
-         if (filterArgs.size() == 0) {
-            if (clazz.isArray()) {
-               argList.add(new String[]{});
-            } else {
-               fail(getAssertionErrorMessagePrefix() + "Too few args for @"
-                        + CsvMethod.class.getSimpleName() + " '" + methodName + "'");
-            }
-         } else {
-            if (clazz.isArray()) {
-               argList.add(filterArgs.toArray(new String[]{}));
-               filterArgs.clear();
-            } else {
-               argList.add(filterArgs.get(0));
-               filterArgs.remove(0);
-            }
-         }
-      }
-      if (filterArgs.size() != 0) {
-         fail(getAssertionErrorMessagePrefix() + "Too many args for " + methodName);
-      }
-      try {
-         BrowserSimulatorImpl.get().fireLoopEnd();
-         Object[] finalArgList = argList.toArray(new Object[]{});
-         m.invoke(fixture, finalArgList);
-      } catch (Throwable e) {
-
-         Throwable cause = getFixtureError(e);
-         if (cause instanceof GwtTestCsvException) {
-            throw (GwtTestCsvException) cause;
-         } else if (cause instanceof AssertionError) {
-            throw (AssertionError) cause;
-         } else {
-            throw new GwtTestCsvException(getAssertionErrorMessagePrefix()
-                     + "Error invoking @CsvMethod " + m.toString(), cause);
-         }
-      }
+   public void addObjectFinder(ObjectFinder objectFinder) {
+      objectFinders.add(objectFinder);
    }
 
    public void executeRow(List<String> row, Object fixture) {
@@ -197,44 +143,6 @@ public class CsvRunner {
       return (T) current;
    }
 
-   /**
-    * 
-    * @param clazz
-    * @param failOnError
-    * @param params
-    * @return The found object.
-    * 
-    * @deprecated use {@link GwtFinder#object(String...)} instead
-    */
-   @Deprecated
-   @SuppressWarnings("unchecked")
-   public <T> T getObject(Class<T> clazz, boolean failOnError, String... params) {
-
-      if (failOnError) {
-         return object(params).ofType(clazz);
-      } else {
-         GwtInstance gwtInstance = object(params);
-         if (clazz.isInstance(gwtInstance.getRaw())) {
-            return (T) gwtInstance.getRaw();
-         } else {
-            return null;
-         }
-      }
-   }
-
-   /**
-    * 
-    * @param clazz
-    * @param params
-    * @return The found object.
-    * 
-    * @deprecated use {@link GwtFinder#object(String...)} instead
-    */
-   @Deprecated
-   public <T> T getObject(Class<T> clazz, String... params) {
-      return getObject(clazz, true, params);
-   }
-
    public String getProcessingMessagePrefix() {
       return "Processing line " + (lineNumber + 1)
                + (extendedLineInfo == null ? "" : " [" + extendedLineInfo + "]") + ": ";
@@ -261,6 +169,75 @@ public class CsvRunner {
 
    public void setExtendedLineInfo(String extendedLineInfo) {
       this.extendedLineInfo = extendedLineInfo;
+   }
+
+   void executeLine(String methodName, List<String> args, Object fixture) {
+      if (methodName.indexOf("**") == 0) {
+         // commented line
+         return;
+      }
+      List<String> filterArgs = new ArrayList<String>(args);
+      removeEmptyElements(filterArgs);
+      transformArgs(filterArgs);
+      Method m = getCsvMethod(fixture.getClass(), methodName);
+      if (m == null) {
+         fail(getAssertionErrorMessagePrefix() + "@" + CsvMethod.class.getSimpleName() + " ' "
+                  + methodName + " ' not found in object " + fixture);
+      }
+      GwtReflectionUtils.makeAccessible(m);
+
+      List<Object> argList = new ArrayList<Object>();
+      for (Class<?> clazz : m.getParameterTypes()) {
+         if (filterArgs.size() == 0) {
+            if (clazz.isArray()) {
+               argList.add(new String[0]);
+            } else {
+               fail(getAssertionErrorMessagePrefix() + "Too few args for @"
+                        + CsvMethod.class.getSimpleName() + " '" + methodName + "'");
+            }
+         } else {
+            if (clazz.isArray()) {
+               argList.add(filterArgs.toArray(new String[filterArgs.size()]));
+               filterArgs.clear();
+            } else {
+               argList.add(filterArgs.get(0));
+               filterArgs.remove(0);
+            }
+         }
+      }
+      if (filterArgs.size() != 0) {
+         fail(getAssertionErrorMessagePrefix() + "Too many args for " + methodName);
+      }
+
+      try {
+         BrowserSimulatorImpl.get().fireLoopEnd();
+
+         Object[] paramValues = argList.toArray();
+
+         if (hasCsvMethodInvocationHandlers != null) {
+
+            String[] paramIdentifiers = args.toArray(new String[args.size()]);
+
+            CsvMethodInvocation invocationData = new CsvMethodInvocation(lineNumber + 1,
+                     extendedLineInfo, m, paramIdentifiers, paramValues);
+            for (CsvMethodInvocationHandler handler : hasCsvMethodInvocationHandlers.getCsvMethodInvocationHandlers()) {
+               handler.onCsvMethodInvocation(invocationData);
+            }
+         }
+
+         m.invoke(fixture, paramValues);
+      } catch (Throwable e) {
+
+         Throwable cause = getFixtureError(e);
+         if (cause instanceof GwtTestCsvException) {
+            throw (GwtTestCsvException) cause;
+         } else if (cause instanceof AssertionError) {
+            throw (AssertionError) cause;
+         } else {
+            throw new GwtTestCsvException(getAssertionErrorMessagePrefix()
+                     + "Error invoking @CsvMethod " + m.toString(), cause);
+         }
+      }
    }
 
    private boolean checkCondition(Object n, Node before, String after) {
