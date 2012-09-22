@@ -56,14 +56,8 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
 
       @SuppressWarnings("unchecked")
       public T answer() throws Throwable {
-         // commands might be scheduled in the asyncCallback
-         BrowserSimulatorImpl.get().fireLoopEnd();
-
-         final Object[] arguments = EasyMock.getCurrentArguments();
+         Object[] arguments = EasyMock.getCurrentArguments();
          AsyncCallback<T> callback = (AsyncCallback<T>) arguments[arguments.length - 1];
-
-         // commands might be scheduled in the asyncCallback
-         BrowserSimulatorImpl.get().fireLoopEnd();
          callback.onFailure(result);
          return null;
       }
@@ -80,15 +74,9 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
 
       @SuppressWarnings("unchecked")
       public T answer() throws Throwable {
-         // commands might be scheduled in the asyncCallback
-         BrowserSimulatorImpl.get().fireLoopEnd();
-
          final Object[] arguments = EasyMock.getCurrentArguments();
          AsyncCallback<T> callback = (AsyncCallback<T>) arguments[arguments.length - 1];
          callback.onSuccess(result);
-
-         // commands might be scheduled in the asyncCallback
-         BrowserSimulatorImpl.get().fireLoopEnd();
          return null;
       }
 
@@ -211,6 +199,9 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
     * Verifies that all recorded behaviors for every declared mock has actually been used.
     */
    protected void verify() {
+      // trigger commands
+      BrowserSimulatorImpl.get().fireLoopEnd();
+
       for (Object o : mockObjects.values()) {
          EasyMock.verify(o);
       }
