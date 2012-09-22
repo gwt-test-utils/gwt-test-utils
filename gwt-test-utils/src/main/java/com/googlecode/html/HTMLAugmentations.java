@@ -66,20 +66,34 @@ public class HTMLAugmentations implements Augmentations {
    // since Xerces 2.3.0
 
    /** Removes all of the elements in this augmentations object. */
-   public void removeAllItems() {
-      fItems.clear();
-   } // removeAllItems()
-
-   // from Xerces 2.0.0 (beta4) until 2.3.0
-
-   /** Removes all of the elements in this augmentations object. */
    public void clear() {
       fItems.clear();
    } // clear()
 
+   // from Xerces 2.0.0 (beta4) until 2.3.0
+
+   /**
+    * Get information identified by a key from the Augmentations structure.
+    * 
+    * @param key Identifier, can't be <code>null</code>
+    * 
+    * @return The value to which the key is mapped in the Augmentations structure; <code>null</code>
+    *         if the key is not mapped to any value.
+    */
+   public Object getItem(String key) {
+      return fItems.get(key);
+   } // getItem(String):Object
+
    //
    // Augmentations methods
    //
+
+   /**
+    * Returns an enumeration of the keys in the Augmentations structure.
+    */
+   public Enumeration keys() {
+      return fItems.keys();
+   } // keys():Enumeration
 
    /**
     * Add additional information identified by a key to the Augmentations structure.
@@ -94,17 +108,10 @@ public class HTMLAugmentations implements Augmentations {
       return fItems.put(key, item);
    } // putItem(String, Object):Object
 
-   /**
-    * Get information identified by a key from the Augmentations structure.
-    * 
-    * @param key Identifier, can't be <code>null</code>
-    * 
-    * @return The value to which the key is mapped in the Augmentations structure; <code>null</code>
-    *         if the key is not mapped to any value.
-    */
-   public Object getItem(String key) {
-      return fItems.get(key);
-   } // getItem(String):Object
+   /** Removes all of the elements in this augmentations object. */
+   public void removeAllItems() {
+      fItems.clear();
+   } // removeAllItems()
 
    /**
     * Remove additional info from the Augmentations structure
@@ -116,12 +123,5 @@ public class HTMLAugmentations implements Augmentations {
    public Object removeItem(String key) {
       return fItems.remove(key);
    } // removeItem(String):Object
-
-   /**
-    * Returns an enumeration of the keys in the Augmentations structure.
-    */
-   public Enumeration keys() {
-      return fItems.keys();
-   } // keys():Enumeration
 
 } // class HTMLAugmentations

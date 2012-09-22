@@ -44,17 +44,32 @@ class SecuritySupport12 extends SecuritySupport {
       });
    }
 
-   ClassLoader getSystemClassLoader() {
-      return (ClassLoader) AccessController.doPrivileged(new PrivilegedAction() {
+   boolean getFileExists(final File f) {
+      return ((Boolean) AccessController.doPrivileged(new PrivilegedAction() {
          public Object run() {
-            ClassLoader cl = null;
-            try {
-               cl = ClassLoader.getSystemClassLoader();
-            } catch (SecurityException ex) {
-            }
-            return cl;
+            return new Boolean(f.exists());
          }
-      });
+      })).booleanValue();
+   }
+
+   FileInputStream getFileInputStream(final File file) throws FileNotFoundException {
+      try {
+         return (FileInputStream) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+            public Object run() throws FileNotFoundException {
+               return new FileInputStream(file);
+            }
+         });
+      } catch (PrivilegedActionException e) {
+         throw (FileNotFoundException) e.getException();
+      }
+   }
+
+   long getLastModified(final File f) {
+      return ((Long) AccessController.doPrivileged(new PrivilegedAction() {
+         public Object run() {
+            return new Long(f.lastModified());
+         }
+      })).longValue();
    }
 
    ClassLoader getParentClassLoader(final ClassLoader cl) {
@@ -73,26 +88,6 @@ class SecuritySupport12 extends SecuritySupport {
       });
    }
 
-   String getSystemProperty(final String propName) {
-      return (String) AccessController.doPrivileged(new PrivilegedAction() {
-         public Object run() {
-            return System.getProperty(propName);
-         }
-      });
-   }
-
-   FileInputStream getFileInputStream(final File file) throws FileNotFoundException {
-      try {
-         return (FileInputStream) AccessController.doPrivileged(new PrivilegedExceptionAction() {
-            public Object run() throws FileNotFoundException {
-               return new FileInputStream(file);
-            }
-         });
-      } catch (PrivilegedActionException e) {
-         throw (FileNotFoundException) e.getException();
-      }
-   }
-
    InputStream getResourceAsStream(final ClassLoader cl, final String name) {
       return (InputStream) AccessController.doPrivileged(new PrivilegedAction() {
          public Object run() {
@@ -107,20 +102,25 @@ class SecuritySupport12 extends SecuritySupport {
       });
    }
 
-   boolean getFileExists(final File f) {
-      return ((Boolean) AccessController.doPrivileged(new PrivilegedAction() {
+   ClassLoader getSystemClassLoader() {
+      return (ClassLoader) AccessController.doPrivileged(new PrivilegedAction() {
          public Object run() {
-            return new Boolean(f.exists());
+            ClassLoader cl = null;
+            try {
+               cl = ClassLoader.getSystemClassLoader();
+            } catch (SecurityException ex) {
+            }
+            return cl;
          }
-      })).booleanValue();
+      });
    }
 
-   long getLastModified(final File f) {
-      return ((Long) AccessController.doPrivileged(new PrivilegedAction() {
+   String getSystemProperty(final String propName) {
+      return (String) AccessController.doPrivileged(new PrivilegedAction() {
          public Object run() {
-            return new Long(f.lastModified());
+            return System.getProperty(propName);
          }
-      })).longValue();
+      });
    }
 
 }

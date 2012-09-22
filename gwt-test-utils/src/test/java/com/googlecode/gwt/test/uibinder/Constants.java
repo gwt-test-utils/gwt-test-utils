@@ -14,8 +14,8 @@ public class Constants {
     */
    public static class Inner {
       public static String CONST_BAR = "Bar";
-      static String CONST_BAZ = "Baz";
       protected static String PROTECTED = "protected";
+      static String CONST_BAZ = "Baz";
    }
 
    /**

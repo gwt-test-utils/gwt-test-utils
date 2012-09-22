@@ -95,16 +95,16 @@ public class ElementRemover extends DefaultFilter {
    /** Accepted elements. */
    protected Hashtable fAcceptedElements = new Hashtable();
 
-   /** Removed elements. */
-   protected Hashtable fRemovedElements = new Hashtable();
-
-   // state
-
    /** The element depth. */
    protected int fElementDepth;
 
+   // state
+
    /** The element depth at element removal. */
    protected int fRemovalElementDepth;
+
+   /** Removed elements. */
+   protected Hashtable fRemovedElements = new Hashtable();
 
    //
    // Public methods
@@ -133,65 +133,18 @@ public class ElementRemover extends DefaultFilter {
       fAcceptedElements.put(key, value);
    } // acceptElement(String,String[])
 
-   /**
-    * Specifies that the given element should be completely removed. If an element is encountered
-    * during processing that is on the remove list, the element's start and end tags as well as all
-    * of content contained within the element will be removed from the processing stream.
-    * 
-    * @param element The element to completely remove.
-    */
-   public void removeElement(String element) {
-      Object key = element.toLowerCase();
-      Object value = NULL;
-      fRemovedElements.put(key, value);
-   } // removeElement(String)
+   /** Characters. */
+   public void characters(XMLString text, Augmentations augs) throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.characters(text, augs);
+      }
+   } // characters(XMLString,Augmentations)
 
    //
    // XMLDocumentHandler methods
    //
 
    // since Xerces-J 2.2.0
-
-   /** Start document. */
-   public void startDocument(XMLLocator locator, String encoding, NamespaceContext nscontext,
-            Augmentations augs) throws XNIException {
-      fElementDepth = 0;
-      fRemovalElementDepth = Integer.MAX_VALUE;
-      super.startDocument(locator, encoding, nscontext, augs);
-   } // startDocument(XMLLocator,String,NamespaceContext,Augmentations)
-
-   // old methods
-
-   /** Start document. */
-   public void startDocument(XMLLocator locator, String encoding, Augmentations augs)
-            throws XNIException {
-      startDocument(locator, encoding, null, augs);
-   } // startDocument(XMLLocator,String,Augmentations)
-
-   /** Start prefix mapping. */
-   public void startPrefixMapping(String prefix, String uri, Augmentations augs)
-            throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.startPrefixMapping(prefix, uri, augs);
-      }
-   } // startPrefixMapping(String,String,Augmentations)
-
-   /** Start element. */
-   public void startElement(QName element, XMLAttributes attributes, Augmentations augs)
-            throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth && handleOpenTag(element, attributes)) {
-         super.startElement(element, attributes, augs);
-      }
-      fElementDepth++;
-   } // startElement(QName,XMLAttributes,Augmentations)
-
-   /** Empty element. */
-   public void emptyElement(QName element, XMLAttributes attributes, Augmentations augs)
-            throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth && handleOpenTag(element, attributes)) {
-         super.emptyElement(element, attributes, augs);
-      }
-   } // emptyElement(QName,XMLAttributes,Augmentations)
 
    /** Comment. */
    public void comment(XMLString text, Augmentations augs) throws XNIException {
@@ -200,56 +153,15 @@ public class ElementRemover extends DefaultFilter {
       }
    } // comment(XMLString,Augmentations)
 
-   /** Processing instruction. */
-   public void processingInstruction(String target, XMLString data, Augmentations augs)
+   // old methods
+
+   /** Empty element. */
+   public void emptyElement(QName element, XMLAttributes attributes, Augmentations augs)
             throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.processingInstruction(target, data, augs);
+      if (fElementDepth <= fRemovalElementDepth && handleOpenTag(element, attributes)) {
+         super.emptyElement(element, attributes, augs);
       }
-   } // processingInstruction(String,XMLString,Augmentations)
-
-   /** Characters. */
-   public void characters(XMLString text, Augmentations augs) throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.characters(text, augs);
-      }
-   } // characters(XMLString,Augmentations)
-
-   /** Ignorable whitespace. */
-   public void ignorableWhitespace(XMLString text, Augmentations augs) throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.ignorableWhitespace(text, augs);
-      }
-   } // ignorableWhitespace(XMLString,Augmentations)
-
-   /** Start general entity. */
-   public void startGeneralEntity(String name, XMLResourceIdentifier id, String encoding,
-            Augmentations augs) throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.startGeneralEntity(name, id, encoding, augs);
-      }
-   } // startGeneralEntity(String,XMLResourceIdentifier,String,Augmentations)
-
-   /** Text declaration. */
-   public void textDecl(String version, String encoding, Augmentations augs) throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.textDecl(version, encoding, augs);
-      }
-   } // textDecl(String,String,Augmentations)
-
-   /** End general entity. */
-   public void endGeneralEntity(String name, Augmentations augs) throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.endGeneralEntity(name, augs);
-      }
-   } // endGeneralEntity(String,Augmentations)
-
-   /** Start CDATA section. */
-   public void startCDATA(Augmentations augs) throws XNIException {
-      if (fElementDepth <= fRemovalElementDepth) {
-         super.startCDATA(augs);
-      }
-   } // startCDATA(Augmentations)
+   } // emptyElement(QName,XMLAttributes,Augmentations)
 
    /** End CDATA section. */
    public void endCDATA(Augmentations augs) throws XNIException {
@@ -269,12 +181,100 @@ public class ElementRemover extends DefaultFilter {
       }
    } // endElement(QName,Augmentations)
 
+   /** End general entity. */
+   public void endGeneralEntity(String name, Augmentations augs) throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.endGeneralEntity(name, augs);
+      }
+   } // endGeneralEntity(String,Augmentations)
+
    /** End prefix mapping. */
    public void endPrefixMapping(String prefix, Augmentations augs) throws XNIException {
       if (fElementDepth <= fRemovalElementDepth) {
          super.endPrefixMapping(prefix, augs);
       }
    } // endPrefixMapping(String,Augmentations)
+
+   /** Ignorable whitespace. */
+   public void ignorableWhitespace(XMLString text, Augmentations augs) throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.ignorableWhitespace(text, augs);
+      }
+   } // ignorableWhitespace(XMLString,Augmentations)
+
+   /** Processing instruction. */
+   public void processingInstruction(String target, XMLString data, Augmentations augs)
+            throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.processingInstruction(target, data, augs);
+      }
+   } // processingInstruction(String,XMLString,Augmentations)
+
+   /**
+    * Specifies that the given element should be completely removed. If an element is encountered
+    * during processing that is on the remove list, the element's start and end tags as well as all
+    * of content contained within the element will be removed from the processing stream.
+    * 
+    * @param element The element to completely remove.
+    */
+   public void removeElement(String element) {
+      Object key = element.toLowerCase();
+      Object value = NULL;
+      fRemovedElements.put(key, value);
+   } // removeElement(String)
+
+   /** Start CDATA section. */
+   public void startCDATA(Augmentations augs) throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.startCDATA(augs);
+      }
+   } // startCDATA(Augmentations)
+
+   /** Start document. */
+   public void startDocument(XMLLocator locator, String encoding, Augmentations augs)
+            throws XNIException {
+      startDocument(locator, encoding, null, augs);
+   } // startDocument(XMLLocator,String,Augmentations)
+
+   /** Start document. */
+   public void startDocument(XMLLocator locator, String encoding, NamespaceContext nscontext,
+            Augmentations augs) throws XNIException {
+      fElementDepth = 0;
+      fRemovalElementDepth = Integer.MAX_VALUE;
+      super.startDocument(locator, encoding, nscontext, augs);
+   } // startDocument(XMLLocator,String,NamespaceContext,Augmentations)
+
+   /** Start element. */
+   public void startElement(QName element, XMLAttributes attributes, Augmentations augs)
+            throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth && handleOpenTag(element, attributes)) {
+         super.startElement(element, attributes, augs);
+      }
+      fElementDepth++;
+   } // startElement(QName,XMLAttributes,Augmentations)
+
+   /** Start general entity. */
+   public void startGeneralEntity(String name, XMLResourceIdentifier id, String encoding,
+            Augmentations augs) throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.startGeneralEntity(name, id, encoding, augs);
+      }
+   } // startGeneralEntity(String,XMLResourceIdentifier,String,Augmentations)
+
+   /** Start prefix mapping. */
+   public void startPrefixMapping(String prefix, String uri, Augmentations augs)
+            throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.startPrefixMapping(prefix, uri, augs);
+      }
+   } // startPrefixMapping(String,String,Augmentations)
+
+   /** Text declaration. */
+   public void textDecl(String version, String encoding, Augmentations augs) throws XNIException {
+      if (fElementDepth <= fRemovalElementDepth) {
+         super.textDecl(version, encoding, augs);
+      }
+   } // textDecl(String,String,Augmentations)
 
    //
    // Protected methods

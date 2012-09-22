@@ -15,8 +15,7 @@ class ListWrapperPatcher {
    @InitMethod
    static void initClass(CtClass c) throws CannotCompileException, NotFoundException {
       CtMethod flushMethod = c.getDeclaredMethod("flush");
-      flushMethod.insertAfter(BrowserSimulatorImpl.class.getName()
-               + ".get().fireLoopEnd();");
+      flushMethod.insertAfter(BrowserSimulatorImpl.class.getName() + ".get().fireLoopEnd();");
    }
 
 }

@@ -44,10 +44,10 @@ public interface HTMLErrorReporter {
    /** Format message without reporting error. */
    public String formatMessage(String key, Object[] args);
 
-   /** Reports a warning. */
-   public void reportWarning(String key, Object[] args) throws XMLParseException;
-
    /** Reports an error. */
    public void reportError(String key, Object[] args) throws XMLParseException;
+
+   /** Reports a warning. */
+   public void reportWarning(String key, Object[] args) throws XMLParseException;
 
 } // interface HTMLErrorReporter

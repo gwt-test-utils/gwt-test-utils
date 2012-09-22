@@ -44,9 +44,9 @@ public class XercesBridge_2_2 extends XercesBridge {
       return Version.getVersion();
    }
 
-   public void XMLDocumentHandler_startPrefixMapping(XMLDocumentHandler documentHandler,
-            String prefix, String uri, Augmentations augs) {
-      // does nothing, not needed
+   public void XMLDocumentFilter_setDocumentSource(XMLDocumentFilter filter,
+            XMLDocumentSource lastSource) {
+      filter.setDocumentSource(lastSource);
    }
 
    public void XMLDocumentHandler_startDocument(XMLDocumentHandler documentHandler,
@@ -54,8 +54,8 @@ public class XercesBridge_2_2 extends XercesBridge {
       documentHandler.startDocument(locator, encoding, nscontext, augs);
    }
 
-   public void XMLDocumentFilter_setDocumentSource(XMLDocumentFilter filter,
-            XMLDocumentSource lastSource) {
-      filter.setDocumentSource(lastSource);
+   public void XMLDocumentHandler_startPrefixMapping(XMLDocumentHandler documentHandler,
+            String prefix, String uri, Augmentations augs) {
+      // does nothing, not needed
    }
 }

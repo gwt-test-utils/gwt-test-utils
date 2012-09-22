@@ -195,8 +195,7 @@ class ElementPatcher {
    static void setPropertyObject(Element element, String name, Object value) {
 
       if (JsoProperties.ID.equals(name)) {
-         JsoUtils.onSetId(element, value.toString(),
-                  getPropertyString(element, JsoProperties.ID));
+         JsoUtils.onSetId(element, value.toString(), getPropertyString(element, JsoProperties.ID));
       }
 
       PropertyContainer properties = JsoUtils.getDomProperties(element);

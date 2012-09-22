@@ -11,21 +11,21 @@ public interface MyClientBundle extends CellTable.Resources, Resources {
 
    public static final MyClientBundle INSTANCE = GWT.create(MyClientBundle.class);
 
-   public ImageResource doubleShouldThrowException();
-
-   @Source({"css/myCssResource.css", "css/addedStyles.css"})
-   public MultipleFileCssResource multipleFileCssResource();
-
-   @Source("root-classpath-img.png")
-   public ImageResource rootClasspathImg();
-
    @Source("css/myCssResource.css")
    public MyCssResource cssResource();
 
    @Source("textResourceXml.xml")
    public DataResource dataResource();
 
+   public ImageResource doubleShouldThrowException();
+
    public ImageResource imageResource();
+
+   @Source({"css/myCssResource.css", "css/addedStyles.css"})
+   public MultipleFileCssResource multipleFileCssResource();
+
+   @Source("root-classpath-img.png")
+   public ImageResource rootClasspathImg();
 
    public TextResource textResourceTxt();
 

@@ -4,8 +4,8 @@ import com.google.gwt.user.client.ui.Label;
 
 public class ProvidedLabel extends Label {
 
-   private String customText;
    final String providedString;
+   private String customText;
 
    ProvidedLabel(String providedString) {
       this.providedString = providedString;

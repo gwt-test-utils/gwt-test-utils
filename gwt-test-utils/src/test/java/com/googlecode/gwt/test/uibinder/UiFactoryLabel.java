@@ -4,8 +4,8 @@ import com.google.gwt.user.client.ui.Label;
 
 public class UiFactoryLabel extends Label {
 
-   private String customText;
    final String uiFactoryString;
+   private String customText;
 
    UiFactoryLabel(String uiFactoryString) {
       this.uiFactoryString = uiFactoryString;

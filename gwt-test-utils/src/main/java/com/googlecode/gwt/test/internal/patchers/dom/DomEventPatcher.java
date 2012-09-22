@@ -37,14 +37,12 @@ class DomEventPatcher {
 
       // fire browser event loop first because some command or async callback may modify the DOM
       // structure + fire NativePreviewHandler
-      onBrowserEvent.insertBefore(BrowserSimulatorImpl.class.getName()
-               + ".get().fireLoopEnd(); " + DomEventPatcher.class.getName()
-               + ".triggerNativeEvent($1, $3);");
+      onBrowserEvent.insertBefore(BrowserSimulatorImpl.class.getName() + ".get().fireLoopEnd(); "
+               + DomEventPatcher.class.getName() + ".triggerNativeEvent($1, $3);");
 
       // fire browser event loop at the end because some command may have been scheduled or RPC call
       // made when the event was dispatched.
-      onBrowserEvent.insertAfter(BrowserSimulatorImpl.class.getName()
-               + ".get().fireLoopEnd();");
+      onBrowserEvent.insertAfter(BrowserSimulatorImpl.class.getName() + ".get().fireLoopEnd();");
    }
 
 }

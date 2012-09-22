@@ -70,6 +70,13 @@ public abstract class XercesBridge {
    }
 
    /**
+    * Gets the Xerces version used
+    * 
+    * @return the version
+    */
+   public abstract String getVersion();
+
+   /**
     * Default implementation does nothing
     * 
     * @param namespaceContext
@@ -82,11 +89,21 @@ public abstract class XercesBridge {
    }
 
    /**
-    * Gets the Xerces version used
-    * 
-    * @return the version
+    * Calls setDocumentSource (if available in the Xerces version used) on the
+    * {@link XMLDocumentFilter}. This implementation does nothing.
     */
-   public abstract String getVersion();
+   public void XMLDocumentFilter_setDocumentSource(XMLDocumentFilter filter,
+            XMLDocumentSource lastSource) {
+      // nothing, it didn't exist on old Xerces versions
+   }
+
+   /**
+    * Calls endPrefixMapping on the {@link XMLDocumentHandler}.
+    */
+   public void XMLDocumentHandler_endPrefixMapping(XMLDocumentHandler documentHandler,
+            String prefix, Augmentations augs) {
+      // default does nothing
+   }
 
    /**
     * Calls startDocument on the {@link XMLDocumentHandler}.
@@ -100,22 +117,5 @@ public abstract class XercesBridge {
    public void XMLDocumentHandler_startPrefixMapping(XMLDocumentHandler documentHandler,
             String prefix, String uri, Augmentations augs) {
       // default does nothing
-   }
-
-   /**
-    * Calls endPrefixMapping on the {@link XMLDocumentHandler}.
-    */
-   public void XMLDocumentHandler_endPrefixMapping(XMLDocumentHandler documentHandler,
-            String prefix, Augmentations augs) {
-      // default does nothing
-   }
-
-   /**
-    * Calls setDocumentSource (if available in the Xerces version used) on the
-    * {@link XMLDocumentFilter}. This implementation does nothing.
-    */
-   public void XMLDocumentFilter_setDocumentSource(XMLDocumentFilter filter,
-            XMLDocumentSource lastSource) {
-      // nothing, it didn't exist on old Xerces versions
    }
 }

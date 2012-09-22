@@ -34,8 +34,8 @@ class LostText {
     * Pair of (text, augmentation)
     */
    static class Entry {
-      private XMLString text_;
       private Augmentations augs_;
+      private XMLString text_;
 
       public Entry(final XMLString text, final Augmentations augs) {
          final char[] chars = new char[text.length];
@@ -57,6 +57,15 @@ class LostText {
    }
 
    /**
+    * Indicates if this container contains something
+    * 
+    * @return <code>true</code> if no lost text has been collected
+    */
+   public boolean isEmpty() {
+      return entries.isEmpty();
+   }
+
+   /**
     * Pushes the characters into the {@link XMLDocumentHandler}
     * 
     * @param tagBalancer the tag balancer that will receive the events
@@ -68,14 +77,5 @@ class LostText {
       }
       // not needed anymore once it has been used -> clear to free memory
       entries.clear();
-   }
-
-   /**
-    * Indicates if this container contains something
-    * 
-    * @return <code>true</code> if no lost text has been collected
-    */
-   public boolean isEmpty() {
-      return entries.isEmpty();
    }
 }

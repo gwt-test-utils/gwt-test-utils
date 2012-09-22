@@ -30,29 +30,6 @@ public interface HTMLEventInfo {
 
    // location information
 
-   /** Returns the line number of the beginning of this event. */
-   public int getBeginLineNumber();
-
-   /** Returns the column number of the beginning of this event. */
-   public int getBeginColumnNumber();
-
-   /** Returns the character offset of the beginning of this event. */
-   public int getBeginCharacterOffset();
-
-   /** Returns the line number of the end of this event. */
-   public int getEndLineNumber();
-
-   /** Returns the column number of the end of this event. */
-   public int getEndColumnNumber();
-
-   /** Returns the character offset of the end of this event. */
-   public int getEndCharacterOffset();
-
-   // other information
-
-   /** Returns true if this corresponding event was synthesized. */
-   public boolean isSynthesized();
-
    /**
     * Synthesized infoset item.
     * 
@@ -66,35 +43,35 @@ public interface HTMLEventInfo {
 
       // location information
 
-      /** Returns the line number of the beginning of this event. */
-      public int getBeginLineNumber() {
+      /** Returns the character offset of the beginning of this event. */
+      public int getBeginCharacterOffset() {
          return -1;
-      } // getBeginLineNumber():int
+      } // getBeginCharacterOffset():int
 
       /** Returns the column number of the beginning of this event. */
       public int getBeginColumnNumber() {
          return -1;
       } // getBeginColumnNumber():int
 
-      /** Returns the character offset of the beginning of this event. */
-      public int getBeginCharacterOffset() {
+      /** Returns the line number of the beginning of this event. */
+      public int getBeginLineNumber() {
          return -1;
-      } // getBeginCharacterOffset():int
+      } // getBeginLineNumber():int
 
-      /** Returns the line number of the end of this event. */
-      public int getEndLineNumber() {
+      /** Returns the character offset of the end of this event. */
+      public int getEndCharacterOffset() {
          return -1;
-      } // getEndLineNumber():int
+      } // getEndCharacterOffset():int
 
       /** Returns the column number of the end of this event. */
       public int getEndColumnNumber() {
          return -1;
       } // getEndColumnNumber():int
 
-      /** Returns the character offset of the end of this event. */
-      public int getEndCharacterOffset() {
+      /** Returns the line number of the end of this event. */
+      public int getEndLineNumber() {
          return -1;
-      } // getEndCharacterOffset():int
+      } // getEndLineNumber():int
 
       // other information
 
@@ -113,5 +90,28 @@ public interface HTMLEventInfo {
       } // toString():String
 
    } // class SynthesizedItem
+
+   /** Returns the character offset of the beginning of this event. */
+   public int getBeginCharacterOffset();
+
+   /** Returns the column number of the beginning of this event. */
+   public int getBeginColumnNumber();
+
+   /** Returns the line number of the beginning of this event. */
+   public int getBeginLineNumber();
+
+   /** Returns the character offset of the end of this event. */
+   public int getEndCharacterOffset();
+
+   /** Returns the column number of the end of this event. */
+   public int getEndColumnNumber();
+
+   // other information
+
+   /** Returns the line number of the end of this event. */
+   public int getEndLineNumber();
+
+   /** Returns true if this corresponding event was synthesized. */
+   public boolean isSynthesized();
 
 } // interface HTMLEventInfo

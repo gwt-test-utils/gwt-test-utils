@@ -34,14 +34,52 @@ public class HTMLEntities {
    // Constants
    //
 
+   static class IntProperties {
+      static class Entry {
+         public int key;
+         public Entry next;
+         public String value;
+
+         public Entry(int key, String value, Entry next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+         }
+      }
+
+      private Entry[] entries = new Entry[101];
+
+      public String get(int key) {
+         int hash = key % entries.length;
+         Entry entry = entries[hash];
+         while (entry != null) {
+            if (entry.key == key) {
+               return entry.value;
+            }
+            entry = entry.next;
+         }
+         return null;
+      }
+
+      public void put(int key, String value) {
+         int hash = key % entries.length;
+         Entry entry = new Entry(key, value, entries[hash]);
+         entries[hash] = entry;
+      }
+   }
+
    /** Entities. */
    protected static final Map ENTITIES;
+
+   //
+   // Static initialization
+   //
 
    /** Reverse mapping from characters to names. */
    protected static final IntProperties SEITITNE = new IntProperties();
 
    //
-   // Static initialization
+   // Public static methods
    //
 
    static {
@@ -66,18 +104,6 @@ public class HTMLEntities {
       ENTITIES = Collections.unmodifiableMap(new HashMap(props));
    }
 
-   //
-   // Public static methods
-   //
-
-   /**
-    * Returns the character associated to the given entity name, or -1 if the name is not known.
-    */
-   public static int get(String name) {
-      String value = (String) ENTITIES.get(name);
-      return value != null ? value.charAt(0) : -1;
-   } // get(String):char
-
    /**
     * Returns the name associated to the given character or null if the character is not known.
     */
@@ -89,6 +115,18 @@ public class HTMLEntities {
    // Private static methods
    //
 
+   /**
+    * Returns the character associated to the given entity name, or -1 if the name is not known.
+    */
+   public static int get(String name) {
+      String value = (String) ENTITIES.get(name);
+      return value != null ? value.charAt(0) : -1;
+   } // get(String):char
+
+   //
+   // Classes
+   //
+
    /** Loads the entity values in the specified resource. */
    private static void load0(final Properties props, final String filename) {
       try {
@@ -97,43 +135,5 @@ public class HTMLEntities {
          System.err.println("error: unable to load resource \"" + filename + "\"");
       }
    } // load0(String)
-
-   //
-   // Classes
-   //
-
-   static class IntProperties {
-      private Entry[] entries = new Entry[101];
-
-      public void put(int key, String value) {
-         int hash = key % entries.length;
-         Entry entry = new Entry(key, value, entries[hash]);
-         entries[hash] = entry;
-      }
-
-      public String get(int key) {
-         int hash = key % entries.length;
-         Entry entry = entries[hash];
-         while (entry != null) {
-            if (entry.key == key) {
-               return entry.value;
-            }
-            entry = entry.next;
-         }
-         return null;
-      }
-
-      static class Entry {
-         public int key;
-         public String value;
-         public Entry next;
-
-         public Entry(int key, String value, Entry next) {
-            this.key = key;
-            this.value = value;
-            this.next = next;
-         }
-      }
-   }
 
 } // class HTMLEntities

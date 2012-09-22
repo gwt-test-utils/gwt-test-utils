@@ -5,8 +5,8 @@ import com.google.gwt.user.client.ui.Label;
 
 public class UiConstructorLabel extends Label {
 
-   private String customText;
    final String uiConstructorLabel;
+   private String customText;
 
    @UiConstructor
    UiConstructorLabel(String uiConstructorLabel) {

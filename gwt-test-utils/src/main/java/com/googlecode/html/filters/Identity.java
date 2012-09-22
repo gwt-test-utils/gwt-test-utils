@@ -60,13 +60,11 @@ public class Identity extends DefaultFilter {
    // XMLDocumentHandler methods
    //
 
-   /** Start element. */
-   public void startElement(QName element, XMLAttributes attributes, Augmentations augs)
-            throws XNIException {
-      if (augs == null || !synthesized(augs)) {
-         super.startElement(element, attributes, augs);
-      }
-   } // startElement(QName,XMLAttributes,Augmentations)
+   /** Returns true if the information provided is synthesized. */
+   protected static boolean synthesized(Augmentations augs) {
+      HTMLEventInfo info = (HTMLEventInfo) augs.getItem(AUGMENTATIONS);
+      return info != null ? info.isSynthesized() : false;
+   } // synthesized(Augmentations):boolean
 
    /** Empty element. */
    public void emptyElement(QName element, XMLAttributes attributes, Augmentations augs)
@@ -87,10 +85,12 @@ public class Identity extends DefaultFilter {
    // Protected static methods
    //
 
-   /** Returns true if the information provided is synthesized. */
-   protected static boolean synthesized(Augmentations augs) {
-      HTMLEventInfo info = (HTMLEventInfo) augs.getItem(AUGMENTATIONS);
-      return info != null ? info.isSynthesized() : false;
-   } // synthesized(Augmentations):boolean
+   /** Start element. */
+   public void startElement(QName element, XMLAttributes attributes, Augmentations augs)
+            throws XNIException {
+      if (augs == null || !synthesized(augs)) {
+         super.startElement(element, attributes, augs);
+      }
+   } // startElement(QName,XMLAttributes,Augmentations)
 
 } // class Identity

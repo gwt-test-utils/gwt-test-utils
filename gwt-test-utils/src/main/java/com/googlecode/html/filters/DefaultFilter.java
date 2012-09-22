@@ -45,62 +45,56 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
    // Data
    //
 
+   /**
+    * Utility method for merging string arrays for recognized features and recognized properties.
+    */
+   protected static String[] merge(String[] array1, String[] array2) {
+
+      // shortcut merge
+      if (array1 == array2) {
+         return array1;
+      }
+      if (array1 == null) {
+         return array2;
+      }
+      if (array2 == null) {
+         return array1;
+      }
+
+      // full merge
+      String[] array3 = new String[array1.length + array2.length];
+      System.arraycopy(array1, 0, array3, 0, array1.length);
+      System.arraycopy(array2, 0, array3, array1.length, array2.length);
+
+      return array3;
+
+   } // merge(String[],String[]):String[]
+
    /** Document handler. */
    protected XMLDocumentHandler fDocumentHandler;
-
-   /** Document source. */
-   protected XMLDocumentSource fDocumentSource;
 
    //
    // XMLDocumentSource methods
    //
 
-   /** Sets the document handler. */
-   public void setDocumentHandler(XMLDocumentHandler handler) {
-      fDocumentHandler = handler;
-   } // setDocumentHandler(XMLDocumentHandler)
+   /** Document source. */
+   protected XMLDocumentSource fDocumentSource;
 
    // @since Xerces 2.1.0
 
-   /** Returns the document handler. */
-   public XMLDocumentHandler getDocumentHandler() {
-      return fDocumentHandler;
-   } // getDocumentHandler():XMLDocumentHandler
-
-   /** Sets the document source. */
-   public void setDocumentSource(XMLDocumentSource source) {
-      fDocumentSource = source;
-   } // setDocumentSource(XMLDocumentSource)
-
-   /** Returns the document source. */
-   public XMLDocumentSource getDocumentSource() {
-      return fDocumentSource;
-   } // getDocumentSource():XMLDocumentSource
-
-   //
-   // XMLDocumentHandler methods
-   //
-
-   // since Xerces-J 2.2.0
-
-   /** Start document. */
-   public void startDocument(XMLLocator locator, String encoding, NamespaceContext nscontext,
-            Augmentations augs) throws XNIException {
+   /** Characters. */
+   public void characters(XMLString text, Augmentations augs) throws XNIException {
       if (fDocumentHandler != null) {
-         XercesBridge.getInstance().XMLDocumentHandler_startDocument(fDocumentHandler, locator,
-                  encoding, nscontext, augs);
+         fDocumentHandler.characters(text, augs);
       }
-   } // startDocument(XMLLocator,String,Augmentations)
+   } // characters(XMLString,Augmentations)
 
-   // old methods
-
-   /** XML declaration. */
-   public void xmlDecl(String version, String encoding, String standalone, Augmentations augs)
-            throws XNIException {
+   /** Comment. */
+   public void comment(XMLString text, Augmentations augs) throws XNIException {
       if (fDocumentHandler != null) {
-         fDocumentHandler.xmlDecl(version, encoding, standalone, augs);
+         fDocumentHandler.comment(text, augs);
       }
-   } // xmlDecl(String,String,String,Augmentations)
+   } // comment(XMLString,Augmentations)
 
    /** Doctype declaration. */
    public void doctypeDecl(String root, String publicId, String systemId, Augmentations augs)
@@ -110,28 +104,11 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
       }
    } // doctypeDecl(String,String,String,Augmentations)
 
-   /** Comment. */
-   public void comment(XMLString text, Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.comment(text, augs);
-      }
-   } // comment(XMLString,Augmentations)
+   //
+   // XMLDocumentHandler methods
+   //
 
-   /** Processing instruction. */
-   public void processingInstruction(String target, XMLString data, Augmentations augs)
-            throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.processingInstruction(target, data, augs);
-      }
-   } // processingInstruction(String,XMLString,Augmentations)
-
-   /** Start element. */
-   public void startElement(QName element, XMLAttributes attributes, Augmentations augs)
-            throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.startElement(element, attributes, augs);
-      }
-   } // startElement(QName,XMLAttributes,Augmentations)
+   // since Xerces-J 2.2.0
 
    /** Empty element. */
    public void emptyElement(QName element, XMLAttributes attributes, Augmentations augs)
@@ -141,48 +118,7 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
       }
    } // emptyElement(QName,XMLAttributes,Augmentations)
 
-   /** Characters. */
-   public void characters(XMLString text, Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.characters(text, augs);
-      }
-   } // characters(XMLString,Augmentations)
-
-   /** Ignorable whitespace. */
-   public void ignorableWhitespace(XMLString text, Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.ignorableWhitespace(text, augs);
-      }
-   } // ignorableWhitespace(XMLString,Augmentations)
-
-   /** Start general entity. */
-   public void startGeneralEntity(String name, XMLResourceIdentifier id, String encoding,
-            Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.startGeneralEntity(name, id, encoding, augs);
-      }
-   } // startGeneralEntity(String,XMLResourceIdentifier,String,Augmentations)
-
-   /** Text declaration. */
-   public void textDecl(String version, String encoding, Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.textDecl(version, encoding, augs);
-      }
-   } // textDecl(String,String,Augmentations)
-
-   /** End general entity. */
-   public void endGeneralEntity(String name, Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.endGeneralEntity(name, augs);
-      }
-   } // endGeneralEntity(String,Augmentations)
-
-   /** Start CDATA section. */
-   public void startCDATA(Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.startCDATA(augs);
-      }
-   } // startCDATA(Augmentations)
+   // old methods
 
    /** End CDATA section. */
    public void endCDATA(Augmentations augs) throws XNIException {
@@ -191,13 +127,6 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
       }
    } // endCDATA(Augmentations)
 
-   /** End element. */
-   public void endElement(QName element, Augmentations augs) throws XNIException {
-      if (fDocumentHandler != null) {
-         fDocumentHandler.endElement(element, augs);
-      }
-   } // endElement(QName,Augmentations)
-
    /** End document. */
    public void endDocument(Augmentations augs) throws XNIException {
       if (fDocumentHandler != null) {
@@ -205,22 +134,19 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
       }
    } // endDocument(Augmentations)
 
-   // removed since Xerces-J 2.3.0
-
-   /** Start document. */
-   public void startDocument(XMLLocator locator, String encoding, Augmentations augs)
-            throws XNIException {
-      startDocument(locator, encoding, null, augs);
-   } // startDocument(XMLLocator,String,Augmentations)
-
-   /** Start prefix mapping. */
-   public void startPrefixMapping(String prefix, String uri, Augmentations augs)
-            throws XNIException {
+   /** End element. */
+   public void endElement(QName element, Augmentations augs) throws XNIException {
       if (fDocumentHandler != null) {
-         XercesBridge.getInstance().XMLDocumentHandler_startPrefixMapping(fDocumentHandler, prefix,
-                  uri, augs);
+         fDocumentHandler.endElement(element, augs);
       }
-   } // startPrefixMapping(String,String,Augmentations)
+   } // endElement(QName,Augmentations)
+
+   /** End general entity. */
+   public void endGeneralEntity(String name, Augmentations augs) throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.endGeneralEntity(name, augs);
+      }
+   } // endGeneralEntity(String,Augmentations)
 
    /** End prefix mapping. */
    public void endPrefixMapping(String prefix, Augmentations augs) throws XNIException {
@@ -230,17 +156,15 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
       }
    } // endPrefixMapping(String,Augmentations)
 
-   //
-   // HTMLComponent methods
-   //
+   /** Returns the document handler. */
+   public XMLDocumentHandler getDocumentHandler() {
+      return fDocumentHandler;
+   } // getDocumentHandler():XMLDocumentHandler
 
-   /**
-    * Returns a list of feature identifiers that are recognized by this component. This method may
-    * return null if no features are recognized by this component.
-    */
-   public String[] getRecognizedFeatures() {
-      return null;
-   } // getRecognizedFeatures():String[]
+   /** Returns the document source. */
+   public XMLDocumentSource getDocumentSource() {
+      return fDocumentSource;
+   } // getDocumentSource():XMLDocumentSource
 
    /**
     * Returns the default state for a feature, or null if this component does not want to report a
@@ -251,6 +175,22 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
    } // getFeatureDefault(String):Boolean
 
    /**
+    * Returns the default state for a property, or null if this component does not want to report a
+    * default value for this property.
+    */
+   public Object getPropertyDefault(String propertyId) {
+      return null;
+   } // getPropertyDefault(String):Object
+
+   /**
+    * Returns a list of feature identifiers that are recognized by this component. This method may
+    * return null if no features are recognized by this component.
+    */
+   public String[] getRecognizedFeatures() {
+      return null;
+   } // getRecognizedFeatures():String[]
+
+   /**
     * Returns a list of property identifiers that are recognized by this component. This method may
     * return null if no properties are recognized by this component.
     */
@@ -258,13 +198,20 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
       return null;
    } // getRecognizedProperties():String[]
 
-   /**
-    * Returns the default state for a property, or null if this component does not want to report a
-    * default value for this property.
-    */
-   public Object getPropertyDefault(String propertyId) {
-      return null;
-   } // getPropertyDefault(String):Object
+   /** Ignorable whitespace. */
+   public void ignorableWhitespace(XMLString text, Augmentations augs) throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.ignorableWhitespace(text, augs);
+      }
+   } // ignorableWhitespace(XMLString,Augmentations)
+
+   /** Processing instruction. */
+   public void processingInstruction(String target, XMLString data, Augmentations augs)
+            throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.processingInstruction(target, data, augs);
+      }
+   } // processingInstruction(String,XMLString,Augmentations)
 
    /**
     * Resets the component. The component can query the component manager about any features and
@@ -276,6 +223,18 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
     */
    public void reset(XMLComponentManager componentManager) throws XMLConfigurationException {
    } // reset(XMLComponentManager)
+
+   /** Sets the document handler. */
+   public void setDocumentHandler(XMLDocumentHandler handler) {
+      fDocumentHandler = handler;
+   } // setDocumentHandler(XMLDocumentHandler)
+
+   // removed since Xerces-J 2.3.0
+
+   /** Sets the document source. */
+   public void setDocumentSource(XMLDocumentSource source) {
+      fDocumentSource = source;
+   } // setDocumentSource(XMLDocumentSource)
 
    /**
     * Sets the state of a feature. This method is called by the component manager any time after
@@ -310,32 +269,73 @@ public class DefaultFilter implements XMLDocumentFilter, HTMLComponent {
    } // setProperty(String,Object)
 
    //
+   // HTMLComponent methods
+   //
+
+   /** Start CDATA section. */
+   public void startCDATA(Augmentations augs) throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.startCDATA(augs);
+      }
+   } // startCDATA(Augmentations)
+
+   /** Start document. */
+   public void startDocument(XMLLocator locator, String encoding, Augmentations augs)
+            throws XNIException {
+      startDocument(locator, encoding, null, augs);
+   } // startDocument(XMLLocator,String,Augmentations)
+
+   /** Start document. */
+   public void startDocument(XMLLocator locator, String encoding, NamespaceContext nscontext,
+            Augmentations augs) throws XNIException {
+      if (fDocumentHandler != null) {
+         XercesBridge.getInstance().XMLDocumentHandler_startDocument(fDocumentHandler, locator,
+                  encoding, nscontext, augs);
+      }
+   } // startDocument(XMLLocator,String,Augmentations)
+
+   /** Start element. */
+   public void startElement(QName element, XMLAttributes attributes, Augmentations augs)
+            throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.startElement(element, attributes, augs);
+      }
+   } // startElement(QName,XMLAttributes,Augmentations)
+
+   /** Start general entity. */
+   public void startGeneralEntity(String name, XMLResourceIdentifier id, String encoding,
+            Augmentations augs) throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.startGeneralEntity(name, id, encoding, augs);
+      }
+   } // startGeneralEntity(String,XMLResourceIdentifier,String,Augmentations)
+
+   /** Start prefix mapping. */
+   public void startPrefixMapping(String prefix, String uri, Augmentations augs)
+            throws XNIException {
+      if (fDocumentHandler != null) {
+         XercesBridge.getInstance().XMLDocumentHandler_startPrefixMapping(fDocumentHandler, prefix,
+                  uri, augs);
+      }
+   } // startPrefixMapping(String,String,Augmentations)
+
+   /** Text declaration. */
+   public void textDecl(String version, String encoding, Augmentations augs) throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.textDecl(version, encoding, augs);
+      }
+   } // textDecl(String,String,Augmentations)
+
+   //
    // Protected static methods
    //
 
-   /**
-    * Utility method for merging string arrays for recognized features and recognized properties.
-    */
-   protected static String[] merge(String[] array1, String[] array2) {
-
-      // shortcut merge
-      if (array1 == array2) {
-         return array1;
+   /** XML declaration. */
+   public void xmlDecl(String version, String encoding, String standalone, Augmentations augs)
+            throws XNIException {
+      if (fDocumentHandler != null) {
+         fDocumentHandler.xmlDecl(version, encoding, standalone, augs);
       }
-      if (array1 == null) {
-         return array2;
-      }
-      if (array2 == null) {
-         return array1;
-      }
-
-      // full merge
-      String[] array3 = new String[array1.length + array2.length];
-      System.arraycopy(array1, 0, array3, 0, array1.length);
-      System.arraycopy(array2, 0, array3, array1.length, array2.length);
-
-      return array3;
-
-   } // merge(String[],String[]):String[]
+   } // xmlDecl(String,String,String,Augmentations)
 
 } // class DefaultFilter

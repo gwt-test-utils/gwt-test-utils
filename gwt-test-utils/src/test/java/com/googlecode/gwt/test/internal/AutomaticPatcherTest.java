@@ -12,6 +12,11 @@ public class AutomaticPatcherTest extends GwtTestTest {
 
    private MyClassToPatch instance;
 
+   @Before
+   public void beforeAutomaticPatcherTest() {
+      instance = new MyClassToPatch();
+   }
+
    @Test
    public void checkPatchWithInnerClassAndMultiplePatchers() throws Exception {
       // Arrange
@@ -24,11 +29,6 @@ public class AutomaticPatcherTest extends GwtTestTest {
       assertEquals(
                "myStringMethod has been patched by override patcher : patched by MyInnerClassOverridePatcher : new field added in overrided init",
                result);
-   }
-
-   @Before
-   public void beforeAutomaticPatcherTest() {
-      instance = new MyClassToPatch();
    }
 
 }

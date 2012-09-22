@@ -72,20 +72,20 @@ class SecuritySupport {
       return null;
    }
 
-   ClassLoader getSystemClassLoader() {
-      return null;
-   }
-
-   ClassLoader getParentClassLoader(ClassLoader cl) {
-      return null;
-   }
-
-   String getSystemProperty(String propName) {
-      return System.getProperty(propName);
+   boolean getFileExists(File f) {
+      return f.exists();
    }
 
    FileInputStream getFileInputStream(File file) throws FileNotFoundException {
       return new FileInputStream(file);
+   }
+
+   long getLastModified(File f) {
+      return f.lastModified();
+   }
+
+   ClassLoader getParentClassLoader(ClassLoader cl) {
+      return null;
    }
 
    InputStream getResourceAsStream(ClassLoader cl, String name) {
@@ -98,11 +98,11 @@ class SecuritySupport {
       return ris;
    }
 
-   boolean getFileExists(File f) {
-      return f.exists();
+   ClassLoader getSystemClassLoader() {
+      return null;
    }
 
-   long getLastModified(File f) {
-      return f.lastModified();
+   String getSystemProperty(String propName) {
+      return System.getProperty(propName);
    }
 }

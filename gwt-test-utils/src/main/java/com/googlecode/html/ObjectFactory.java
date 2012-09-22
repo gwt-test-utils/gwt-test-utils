@@ -39,8 +39,40 @@ class ObjectFactory {
    // Constants
    //
 
-   // name of default properties file to look for in JDK's jre/lib directory
-   private static final String DEFAULT_PROPERTIES_FILENAME = "xerces.properties";
+   /**
+    * A configuration error.
+    */
+   static class ConfigurationError extends Error {
+
+      //
+      // Data
+      //
+
+      /** Exception. */
+      private Exception exception;
+
+      //
+      // Constructors
+      //
+
+      /**
+       * Construct a new instance with the specified detail string and exception.
+       */
+      ConfigurationError(String msg, Exception x) {
+         super(msg);
+         this.exception = x;
+      } // <init>(String,Exception)
+
+      //
+      // methods
+      //
+
+      /** Returns the exception associated to this error. */
+      Exception getException() {
+         return exception;
+      } // getException():Exception
+
+   } // class ConfigurationError
 
    /** Set to true for debugging */
    private static final boolean DEBUG = false;
@@ -50,12 +82,8 @@ class ObjectFactory {
     */
    private static final int DEFAULT_LINE_LENGTH = 80;
 
-   /**
-    * cache the contents of the xerces.properties file. Until an attempt has been made to read this
-    * file, this will be null; if the file does not exist or we encounter some other error during
-    * the read, this will be empty.
-    */
-   private static Properties fXercesProperties = null;
+   // name of default properties file to look for in JDK's jre/lib directory
+   private static final String DEFAULT_PROPERTIES_FILENAME = "xerces.properties";
 
    /***
     * Cache the time stamp of the xerces.properties file so that we know if it's been modified and
@@ -66,6 +94,13 @@ class ObjectFactory {
    //
    // static methods
    //
+
+   /**
+    * cache the contents of the xerces.properties file. Until an attempt has been made to read this
+    * file, this will be null; if the file does not exist or we encounter some other error during
+    * the read, this will be empty.
+    */
+   private static Properties fXercesProperties = null;
 
    /**
     * Finds the implementation Class object in the specified order. The specified order is the
@@ -87,6 +122,10 @@ class ObjectFactory {
    static Object createObject(String factoryId, String fallbackClassName) throws ConfigurationError {
       return createObject(factoryId, null, fallbackClassName);
    } // createObject(String,String):Object
+
+   //
+   // Private static methods
+   //
 
    /**
     * Finds the implementation Class object in the specified order. The specified order is the
@@ -223,17 +262,6 @@ class ObjectFactory {
       return newInstance(fallbackClassName, cl, true);
    } // createObject(String,String,String):Object
 
-   //
-   // Private static methods
-   //
-
-   /** Prints a message to standard error if debugging is enabled. */
-   private static void debugPrintln(String msg) {
-      if (DEBUG) {
-         System.err.println("JAXP: " + msg);
-      }
-   } // debugPrintln(String)
-
    /**
     * Figure out which ClassLoader to use. For JDK 1.2 and later use the context ClassLoader.
     */
@@ -292,26 +320,6 @@ class ObjectFactory {
    } // findClassLoader():ClassLoader
 
    /**
-    * Create an instance of a class using the specified ClassLoader
-    */
-   static Object newInstance(String className, ClassLoader cl, boolean doFallback)
-            throws ConfigurationError {
-      // assert(className != null);
-      try {
-         Class providerClass = findProviderClass(className, cl, doFallback);
-         Object instance = providerClass.newInstance();
-         if (DEBUG)
-            debugPrintln("created new instance of " + providerClass + " using ClassLoader: " + cl);
-         return instance;
-      } catch (ClassNotFoundException x) {
-         throw new ConfigurationError("Provider " + className + " not found", x);
-      } catch (Exception x) {
-         throw new ConfigurationError("Provider " + className + " could not be instantiated: " + x,
-                  x);
-      }
-   }
-
-   /**
     * Find a Class using the specified ClassLoader
     */
    static Class findProviderClass(String className, ClassLoader cl, boolean doFallback)
@@ -366,6 +374,37 @@ class ObjectFactory {
 
       return providerClass;
    }
+
+   /**
+    * Create an instance of a class using the specified ClassLoader
+    */
+   static Object newInstance(String className, ClassLoader cl, boolean doFallback)
+            throws ConfigurationError {
+      // assert(className != null);
+      try {
+         Class providerClass = findProviderClass(className, cl, doFallback);
+         Object instance = providerClass.newInstance();
+         if (DEBUG)
+            debugPrintln("created new instance of " + providerClass + " using ClassLoader: " + cl);
+         return instance;
+      } catch (ClassNotFoundException x) {
+         throw new ConfigurationError("Provider " + className + " not found", x);
+      } catch (Exception x) {
+         throw new ConfigurationError("Provider " + className + " could not be instantiated: " + x,
+                  x);
+      }
+   }
+
+   /** Prints a message to standard error if debugging is enabled. */
+   private static void debugPrintln(String msg) {
+      if (DEBUG) {
+         System.err.println("JAXP: " + msg);
+      }
+   } // debugPrintln(String)
+
+   //
+   // Classes
+   //
 
    /*
     * Try to find provider using Jar Service Provider Mechanism
@@ -447,44 +486,5 @@ class ObjectFactory {
       // No provider found
       return null;
    }
-
-   //
-   // Classes
-   //
-
-   /**
-    * A configuration error.
-    */
-   static class ConfigurationError extends Error {
-
-      //
-      // Data
-      //
-
-      /** Exception. */
-      private Exception exception;
-
-      //
-      // Constructors
-      //
-
-      /**
-       * Construct a new instance with the specified detail string and exception.
-       */
-      ConfigurationError(String msg, Exception x) {
-         super(msg);
-         this.exception = x;
-      } // <init>(String,Exception)
-
-      //
-      // methods
-      //
-
-      /** Returns the exception associated to this error. */
-      Exception getException() {
-         return exception;
-      } // getException():Exception
-
-   } // class ConfigurationError
 
 } // class ObjectFactory
