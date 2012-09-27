@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -43,7 +44,8 @@ public class PopupPanelTest extends GwtTestTest {
       // Arrange
       PopupPanel popup = new PopupPanel();
       // Pre-Assert
-      assertFalse(popup.isShowing());
+      assertThat(popup.isVisible()).isTrue();
+      assertThat(popup.isShowing()).isFalse();
 
       // Act
       popup.show();
@@ -58,13 +60,13 @@ public class PopupPanelTest extends GwtTestTest {
       PopupPanel popup = new PopupPanel();
       popup.setGlassEnabled(true);
       // Pre-Assert
-      assertFalse(popup.isShowing());
+      assertThat(popup.isShowing()).isFalse();
 
       // Act
       popup.show();
 
       // Assert
-      assertTrue(popup.isShowing());
+      assertThat(popup.isShowing()).isTrue();
    }
 
    @Test
@@ -72,15 +74,14 @@ public class PopupPanelTest extends GwtTestTest {
       // Arrange
       PopupPanel popup = new PopupPanel();
       // Pre-Assert
-      assertFalse(popup.isVisible());
-      assertEquals("hidden", popup.getElement().getStyle().getProperty("visibility"));
+      assertThat(popup.isVisible()).isTrue();
 
       // Act
-      popup.setVisible(true);
+      popup.setVisible(false);
 
       // Assert
-      assertTrue(popup.isVisible());
-      assertEquals("visible", popup.getElement().getStyle().getProperty("visibility"));
+      assertThat(popup.isVisible()).isFalse();
+      assertEquals("hidden", popup.getElement().getStyle().getProperty("visibility"));
    }
 
 }
