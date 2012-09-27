@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.gin;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -120,6 +121,19 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
          return new Impl3(toWrap);
       }
 
+   }
+
+   @GinModules(Gin7Module.class)
+   interface Gin7Injector extends Ginjector {
+      Impl2 eagerSingleton();
+   }
+
+   static class Gin7Module extends AbstractGinModule {
+
+      @Override
+      protected void configure() {
+         bind(Impl2.class).asEagerSingleton();
+      }
    }
 
    static class Impl implements Virtual {
@@ -299,6 +313,19 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
       assertNotNull(((Impl2) more.core).messages);
    }
 
+   @Test
+   public void shouldInstantiateEeagerSingleton() {
+      // Arrange
+      Gin7Injector injector7 = GWT.create(Gin7Injector.class);
+
+      // Act
+      Impl2 impl2 = injector7.eagerSingleton();
+
+      // Assert
+      assertThat(impl2).isNotNull();
+      assertNotNull(impl2.messages);
+   }
+
    /**
     * This is the use case that needs to hold. <code><pre>
     * class Animal {
@@ -308,8 +335,7 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
    @SuppressWarnings("unused")
    @Test
    public void shouldInstantiateObjectGraphsContainingProviders() {
-      final Gin4Injector injector4 = GWT.create(Gin4Injector.class);
-      final Virtual virtual = injector4.virtual();
+      Gin4Injector injector4 = GWT.create(Gin4Injector.class);
+      Virtual virtual = injector4.virtual();
    }
-
 }

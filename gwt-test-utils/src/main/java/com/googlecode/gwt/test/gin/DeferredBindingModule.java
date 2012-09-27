@@ -187,6 +187,8 @@ class DeferredBindingModule extends AbstractModule {
                      if (!d.getKey().getTypeLiteral().getRawType().isInterface()) {
                         InjectionPoint point = InjectionPoint.forConstructorOf(d.getKey().getTypeLiteral());
                         dependencies.addAll(getDependencies(point));
+                     } else {
+                        dependencies.add(d.getKey().getTypeLiteral().getRawType());
                      }
                   }
                } else {

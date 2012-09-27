@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.internal.patchers;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 
 import javassist.CannotCompileException;
@@ -9,6 +10,7 @@ import javassist.CtField;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.rebind.adapter.GwtDotCreateProvider;
 import com.google.inject.Binding;
+import com.google.inject.Inject;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.internal.AbstractBindingBuilder;
@@ -18,6 +20,7 @@ import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
+@SuppressWarnings("unchecked")
 @PatchClass(target = "com.google.gwt.inject.rebind.adapter.GwtDotCreateProvider")
 class GwtDotCreateProviderPatcher {
 
@@ -39,7 +42,11 @@ class GwtDotCreateProviderPatcher {
          throw new GwtTestGinException("Not managed binded type : " + type);
       }
 
-      @SuppressWarnings("unchecked")
+      Constructor<T> atInjectConstructor = getAtInjectConstructor((Class<T>) type);
+      if (atInjectConstructor != null) {
+         return builder.toConstructor(atInjectConstructor);
+      }
+
       GwtDotCreateProvider<T> gwtDotCreateProvider = GwtReflectionUtils.instantiateClass(GwtDotCreateProvider.class);
 
       GwtReflectionUtils.setPrivateFieldValue(gwtDotCreateProvider, BINDED_CLASS_FIELD, type);
@@ -59,6 +66,15 @@ class GwtDotCreateProviderPatcher {
    static void initClass(CtClass ctClass) throws CannotCompileException {
       CtField field = CtField.make("private Class " + BINDED_CLASS_FIELD + ";", ctClass);
       ctClass.addField(field);
+   }
+
+   private static <T> Constructor<T> getAtInjectConstructor(Class<T> toInstanciate) {
+      for (Constructor<?> cons : toInstanciate.getDeclaredConstructors()) {
+         if (cons.getAnnotation(Inject.class) != null) {
+            return (Constructor<T>) cons;
+         }
+      }
+      return null;
    }
 
 }
