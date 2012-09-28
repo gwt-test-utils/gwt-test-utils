@@ -16,6 +16,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binding;
+import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.ProvidedBy;
@@ -185,8 +186,13 @@ class DeferredBindingModule extends AbstractModule {
                   HasDependencies deps = (HasDependencies) binding;
                   for (Dependency<?> d : deps.getDependencies()) {
                      if (!d.getKey().getTypeLiteral().getRawType().isInterface()) {
-                        InjectionPoint point = InjectionPoint.forConstructorOf(d.getKey().getTypeLiteral());
-                        dependencies.addAll(getDependencies(point));
+                        try {
+                           InjectionPoint point = InjectionPoint.forConstructorOf(d.getKey().getTypeLiteral());
+                           dependencies.addAll(getDependencies(point));
+                        } catch (ConfigurationException e) {
+                           // dependency must be injected with a provider, nothing to do
+                        }
+
                      } else {
                         dependencies.add(d.getKey().getTypeLiteral().getRawType());
                      }
