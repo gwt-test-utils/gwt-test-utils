@@ -35,6 +35,11 @@ class PlaceHistoryMapperCreateHandler implements GwtCreateHandler {
          String prefix = prefixMap.get(newPlace.getClass());
 
          PlaceTokenizer<?> tokenizer = getTokenizer(prefix);
+
+         if (tokenizer == null) {
+            return null;
+         }
+
          String token = GwtReflectionUtils.callPrivateMethod(tokenizer, "getToken", newPlace);
 
          return new PrefixAndToken(prefix, token);
