@@ -3,7 +3,9 @@ package com.googlecode.gwt.test.internal;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -55,6 +57,7 @@ public final class ConfigurationLoader {
 
       readFiles();
       visitPatchClasses();
+      processRelatedProjectSrcDirectories();
    }
 
    public Set<String> getDelegates() {
@@ -75,6 +78,33 @@ public final class ConfigurationLoader {
 
    public URL[] getSrcUrls() {
       return srcDirectories.toArray(new URL[srcDirectories.size()]);
+   }
+
+   private void addToSrcUrls(File file) {
+      try {
+         srcDirectories.add(file.toURI().toURL());
+
+      } catch (Exception e) {
+         // skip : should never happen
+      }
+   }
+
+   private void collectEventualSourceDirectories(File classpathEntry) {
+      // this implementation assumes the classpath entry is a direct child directory of the java
+      // project directory. Ex: my-project/target or my-project/bin
+      String projectRootPath = classpathEntry.getParentFile().getAbsolutePath();
+      for (String srcDir : SrcDirectoriesHolder.SRC_DIRECTORIES) {
+         StringBuilder sb = new StringBuilder(projectRootPath).append("/").append(srcDir);
+         if (!srcDir.endsWith("/")) {
+            sb.append("/");
+         }
+
+         File file = new File(sb.toString());
+
+         if (file.exists()) {
+            addToSrcUrls(file);
+         }
+      }
    }
 
    private void process(Properties p, URL url) {
@@ -101,6 +131,29 @@ public final class ConfigurationLoader {
       }
    }
 
+   private void processRelatedProjectSrcDirectories() {
+
+      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+      if (classLoader instanceof URLClassLoader) {
+         URL[] classpathUrls = ((URLClassLoader) classLoader).getURLs();
+         for (URL classpathUrl : classpathUrls) {
+            if (!classpathUrl.getPath().endsWith(".jar")) {
+               // we are only interested in directory files from eventual referenced java project in
+               // workspace
+               try {
+                  collectEventualSourceDirectories(new File(classpathUrl.toURI()));
+               } catch (URISyntaxException e) {
+                  throw new GwtTestConfigurationException(
+                           "Error while getting source folder(s) related to path "
+                                    + classpathUrl.getPath(), e);
+               }
+            }
+
+         }
+      }
+
+   }
+
    private void processSrcDirectory(String srcDir) {
       SrcDirectoriesHolder.SRC_DIRECTORIES.add(srcDir);
 
@@ -113,13 +166,7 @@ public final class ConfigurationLoader {
       File file = new File(sb.toString());
 
       if (file.exists()) {
-
-         try {
-            srcDirectories.add(file.toURI().toURL());
-
-         } catch (Exception e) {
-            // skip : should never happen
-         }
+         addToSrcUrls(file);
       }
 
    }
