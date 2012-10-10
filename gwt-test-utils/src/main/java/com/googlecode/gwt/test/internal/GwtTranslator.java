@@ -18,6 +18,7 @@ class GwtTranslator implements Translator {
    private final ConfigurationLoader configurationLoader;
    private final HasHTMLModifier hasHTMLModifier;
    private final HasNameModifier hasNameModifier;
+
    private final SerializableModifier serializableModifier;
 
    GwtTranslator(ConfigurationLoader configurationLoader) {

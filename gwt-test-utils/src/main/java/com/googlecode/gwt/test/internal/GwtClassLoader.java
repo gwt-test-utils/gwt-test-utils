@@ -8,12 +8,14 @@ import java.util.regex.Pattern;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
+import javassist.CtClass;
 import javassist.Loader;
 import javassist.NotFoundException;
 import javassist.Translator;
 
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.javac.CompiledClass;
+import com.google.gwt.dev.shell.JsValueGlue;
 import com.google.gwt.dev.util.Name;
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
@@ -50,6 +52,8 @@ public class GwtClassLoader extends Loader {
 
    private static class GwtClassLoaderWithRewriter extends GwtClassLoader {
 
+      private static final CtClass JSO_CTCLASS = GwtClassPool.getClass(JsValueGlue.JSO_CLASS);
+
       private final OverlayTypesRewriter overlayRewriter;
 
       private GwtClassLoaderWithRewriter(ConfigurationLoader configurationLoader,
@@ -78,6 +82,11 @@ public class GwtClassLoader extends Loader {
             return overlayRewriter.writeJsoIntf(className);
          }
 
+         if (isUnsupportedOverlayType(className)) {
+            throw new GwtTestPatchException("Overlay type '" + className
+                     + "' has not been found. Did you forget to inherit some GWT module ?");
+         }
+
          // A JSO impl class needs the class bytes for the original class.
          String classFromPool = (overlayRewriter.isJsoImpl(className)) ? className.substring(0,
                   className.length() - 1) : className;
@@ -89,6 +98,18 @@ public class GwtClassLoader extends Loader {
          classBytes = overlayRewriter.rewrite(className, classBytes);
 
          return classBytes;
+      }
+
+      private boolean isUnsupportedOverlayType(String className) {
+         CtClass classToLoad = null;
+         try {
+            classToLoad = GwtClassPool.getClass(className);
+         } catch (GwtTestPatchException e) {
+            // nothing to do, it must be a Jso$ class
+         }
+         return classToLoad != null && classToLoad.subclassOf(JSO_CTCLASS)
+                  && classToLoad != JSO_CTCLASS;
+
       }
    }
 
@@ -206,6 +227,8 @@ public class GwtClassLoader extends Loader {
          } else {
             throw new ClassNotFoundException(className);
          }
+      } catch (GwtTestException e) {
+         throw e;
       } catch (Exception e) {
          throw new ClassNotFoundException("caught an exception while obtaining a class file for "
                   + className, e);

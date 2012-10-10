@@ -1,11 +1,7 @@
 package com.googlecode.gwt.test.internal;
 
 import java.lang.reflect.Modifier;
-import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -16,7 +12,6 @@ import javassist.Translator;
 
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.resource.impl.ResourceOracleImpl;
-import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 
 /**
@@ -71,50 +66,8 @@ class CompilationStateClassLoader extends Loader {
 
    }
 
-   private static URL[] computeURLs(URL[] srcUrls, String surefireBooterJarPath) {
-
-      try {
-         JarFile surefireBooterJar = new JarFile(surefireBooterJarPath);
-         Manifest mf = surefireBooterJar.getManifest();
-         Attributes a = mf.getMainAttributes();
-
-         String[] classpathEntries = a.getValue("Class-Path").split(" ");
-
-         URL[] urls = new URL[classpathEntries.length + srcUrls.length];
-
-         System.arraycopy(srcUrls, 0, urls, 0, srcUrls.length);
-
-         for (int i = 0; i < classpathEntries.length; i++) {
-            urls[i + srcUrls.length] = new URL(classpathEntries[i]);
-         }
-
-         return urls;
-      } catch (Exception e) {
-         throw new GwtTestException("Error while parsing maven-surefire-plugin booter jar: "
-                  + surefireBooterJarPath, e);
-      }
-
-   }
-
-   private static URLClassLoader createGwtGeneratedSourceLoader(URL surefireBooterJarUrl,
-            URL[] srcUrls, ClassLoader parent) {
-
-      URLClassLoader urlClassLoader = null;
-
-      if (surefireBooterJarUrl == null) {
-         urlClassLoader = new URLClassLoader(srcUrls, parent);
-      } else {
-         String surefireBooterJarPath = surefireBooterJarUrl.getFile();
-         urlClassLoader = new URLClassLoader(computeURLs(srcUrls, surefireBooterJarPath), parent);
-      }
-
-      return urlClassLoader;
-   }
-
-   CompilationStateClassLoader(ClassLoader parent, URL surefireBooterJarUrl,
-            ConfigurationLoader configurationLoader) {
-      super(createGwtGeneratedSourceLoader(surefireBooterJarUrl, configurationLoader.getSrcUrls(),
-               parent), null);
+   CompilationStateClassLoader(ClassLoader parent, ConfigurationLoader configurationLoader) {
+      super(new URLClassLoader(configurationLoader.getSrcUrls(), parent), null);
       ClassPool cp = new ClassPool(null);
       cp.appendSystemPath();
 

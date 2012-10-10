@@ -84,7 +84,7 @@ public class GwtFactory {
    private final URL surefireBooterJarUrl;
 
    private GwtFactory(URL surefireBooterJarUrl) {
-      configurationLoader = new ConfigurationLoader();
+      configurationLoader = new ConfigurationLoader(surefireBooterJarUrl);
 
       this.surefireBooterJarUrl = surefireBooterJarUrl;
 
@@ -93,7 +93,7 @@ public class GwtFactory {
       ClassLoader defaultClassLoader = Thread.currentThread().getContextClassLoader();
 
       CompilationStateClassLoader tempCl = new CompilationStateClassLoader(defaultClassLoader,
-               surefireBooterJarUrl, configurationLoader);
+               configurationLoader);
       // ClassLoader classLoaderForResources =
       // createTemporaryClassLoaderForResourceLoading(surefireBooterJarUrl);
       Thread.currentThread().setContextClassLoader(tempCl);
@@ -111,10 +111,10 @@ public class GwtFactory {
          // log related errors
          GwtTreeLogger.get().onUnableToCompleteError();
          throw new GwtTestException("Error while generating gwt-test-utils prerequisites", e);
+      } finally {
+         // reset the default classloader
+         Thread.currentThread().setContextClassLoader(defaultClassLoader);
       }
-
-      // reset the default classloader
-      Thread.currentThread().setContextClassLoader(defaultClassLoader);
    }
 
    public GwtClassLoader getClassLoader() {

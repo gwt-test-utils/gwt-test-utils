@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import javassist.CtClass;
 import javassist.bytecode.annotation.Annotation;
@@ -25,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.googlecode.gwt.test.exceptions.GwtTestConfigurationException;
+import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 import com.googlecode.gwt.test.internal.ClassesScanner.ClassVisitor;
 import com.googlecode.gwt.test.patchers.PatchClass;
@@ -44,12 +48,13 @@ public final class ConfigurationLoader {
    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationLoader.class);
 
    private final Set<String> delegates;
+
    private final List<String> gwtModules;
    private PatcherFactory patcherFactory;
    private final Set<String> scanPackages;
    private final List<URL> srcDirectories;
 
-   ConfigurationLoader() {
+   ConfigurationLoader(URL surefireBooterJarUrl) {
       this.gwtModules = new ArrayList<String>();
       this.delegates = new HashSet<String>();
       this.scanPackages = new HashSet<String>();
@@ -57,7 +62,7 @@ public final class ConfigurationLoader {
 
       readFiles();
       visitPatchClasses();
-      processRelatedProjectSrcDirectories();
+      processRelatedProjectSrcDirectories(surefireBooterJarUrl);
    }
 
    public Set<String> getDelegates() {
@@ -89,10 +94,18 @@ public final class ConfigurationLoader {
       }
    }
 
-   private void collectEventualSourceDirectories(File classpathEntry) {
-      // this implementation assumes the classpath entry is a direct child directory of the java
-      // project directory. Ex: my-project/target or my-project/bin
-      String projectRootPath = classpathEntry.getParentFile().getAbsolutePath();
+   /**
+    * Search recursively for java source directories related to a classpathEntry which isn't a .jar
+    * file. Typically, those entries would be 'target/classes' (maven) or 'bin' folder of java
+    * project which the current project depends on.
+    * 
+    * @param classpathEntry The classpath entry to look around
+    * @param distance The number of super folders in the folder hierarchy to scan
+    * @param currentLevel The current level in the super fold hierarchy. Starts at index 0.
+    */
+   private void collectEventualSourceDirectories(File classpathEntry, int distance, int currentLevel) {
+
+      String projectRootPath = classpathEntry.getAbsolutePath();
       for (String srcDir : SrcDirectoriesHolder.SRC_DIRECTORIES) {
          StringBuilder sb = new StringBuilder(projectRootPath).append("/").append(srcDir);
          if (!srcDir.endsWith("/")) {
@@ -105,6 +118,33 @@ public final class ConfigurationLoader {
             addToSrcUrls(file);
          }
       }
+
+      if (currentLevel < distance) {
+         collectEventualSourceDirectories(classpathEntry.getParentFile(), distance, ++currentLevel);
+      }
+   }
+
+   private URL[] extractSrcUrlsFromBooterJar(String surefireBooterJarPath) {
+
+      try {
+         JarFile surefireBooterJar = new JarFile(surefireBooterJarPath);
+         Manifest mf = surefireBooterJar.getManifest();
+         Attributes a = mf.getMainAttributes();
+
+         String[] classpathEntries = a.getValue("Class-Path").split(" ");
+
+         URL[] urls = new URL[classpathEntries.length];
+
+         for (int i = 0; i < classpathEntries.length; i++) {
+            urls[i] = new URL(classpathEntries[i]);
+         }
+
+         return urls;
+      } catch (Exception e) {
+         throw new GwtTestException("Error while parsing maven-surefire-plugin booter jar: "
+                  + surefireBooterJarPath, e);
+      }
+
    }
 
    private void process(Properties p, URL url) {
@@ -131,24 +171,38 @@ public final class ConfigurationLoader {
       }
    }
 
-   private void processRelatedProjectSrcDirectories() {
+   private void processRelatedProjectSrcDirectories(URL surefireBooterJarUrl) {
 
-      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-      if (classLoader instanceof URLClassLoader) {
-         URL[] classpathUrls = ((URLClassLoader) classLoader).getURLs();
-         for (URL classpathUrl : classpathUrls) {
-            if (!classpathUrl.getPath().endsWith(".jar")) {
-               // we are only interested in directory files from eventual referenced java project in
-               // workspace
-               try {
-                  collectEventualSourceDirectories(new File(classpathUrl.toURI()));
-               } catch (URISyntaxException e) {
-                  throw new GwtTestConfigurationException(
-                           "Error while getting source folder(s) related to path "
-                                    + classpathUrl.getPath(), e);
-               }
+      URL[] classpathUrls = null;
+
+      if (surefireBooterJarUrl != null) {
+         classpathUrls = extractSrcUrlsFromBooterJar(surefireBooterJarUrl.getFile());
+      } else {
+
+         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+         if (classLoader instanceof URLClassLoader) {
+            classpathUrls = ((URLClassLoader) classLoader).getURLs();
+         }
+      }
+
+      if (classpathUrls == null) {
+         // should never happen
+         throw new GwtTestConfigurationException("Unable to collect classpath entries");
+      }
+
+      for (URL classpathUrl : classpathUrls) {
+         srcDirectories.add(classpathUrl);
+
+         if (!classpathUrl.getPath().endsWith(".jar")) {
+            // we are only interested in directory files from eventual referenced java project in
+            // workspace
+            try {
+               collectEventualSourceDirectories(new File(classpathUrl.toURI()), 2, 0);
+            } catch (URISyntaxException e) {
+               throw new GwtTestConfigurationException(
+                        "Error while getting source folder(s) related to path "
+                                 + classpathUrl.getPath(), e);
             }
-
          }
       }
 
@@ -156,19 +210,6 @@ public final class ConfigurationLoader {
 
    private void processSrcDirectory(String srcDir) {
       SrcDirectoriesHolder.SRC_DIRECTORIES.add(srcDir);
-
-      StringBuilder sb = new StringBuilder();
-      sb.append(new File("").getAbsolutePath()).append("/").append(srcDir);
-      if (!srcDir.endsWith("/")) {
-         sb.append("/");
-      }
-
-      File file = new File(sb.toString());
-
-      if (file.exists()) {
-         addToSrcUrls(file);
-      }
-
    }
 
    private void readFiles() {

@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 /**
@@ -76,8 +77,12 @@ public class GwtReset {
                animationSchedulerImpl, "animationRequests");
       animationRequests.clear();
 
-      Class<?> clazz = Class.forName("com.google.gwt.user.client.Event$");
-      GwtReflectionUtils.setStaticField(clazz, "handlers", null);
+      try {
+         Class<?> clazz = Class.forName("com.google.gwt.user.client.Event$");
+         GwtReflectionUtils.setStaticField(clazz, "handlers", null);
+      } catch (GwtTestException e) {
+         // something goes wrong with Overlay types support, just ignore the reset
+      }
 
    }
 }
