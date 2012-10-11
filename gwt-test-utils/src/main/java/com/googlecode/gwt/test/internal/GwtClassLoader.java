@@ -83,8 +83,10 @@ public class GwtClassLoader extends Loader {
          }
 
          if (isUnsupportedOverlayType(className)) {
-            throw new GwtTestPatchException("Overlay type '" + className
-                     + "' has not been found. Did you forget to inherit some GWT module ?");
+            throw new GwtTestPatchException(
+                     "Overlay type '"
+                              + className
+                              + "' has not been found. Did you forget to inherit some GWT module ? Does your GWT code compile using the -strict option ?");
          }
 
          // A JSO impl class needs the class bytes for the original class.
