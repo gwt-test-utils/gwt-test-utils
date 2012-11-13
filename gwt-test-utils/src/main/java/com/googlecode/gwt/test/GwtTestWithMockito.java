@@ -6,12 +6,9 @@ import java.util.Set;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.Stubber;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.exceptions.ReflectionException;
+import com.googlecode.gwt.test.mockito.GwtStubber;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 /**
@@ -25,44 +22,9 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
  * context using the addMockedObject protected method.
  * 
  * @author Eric Therond
+ * @author Gael Lazzari
  */
 public abstract class GwtTestWithMockito extends GwtTestWithMocks {
-
-   private static class FailureAnswer<T> implements Answer<T> {
-
-      private final Throwable result;
-
-      public FailureAnswer(Throwable result) {
-         this.result = result;
-      }
-
-      @SuppressWarnings("unchecked")
-      public T answer(InvocationOnMock invocation) {
-         Object[] arguments = invocation.getArguments();
-         AsyncCallback<Object> callback = (AsyncCallback<Object>) arguments[arguments.length - 1];
-         callback.onFailure(result);
-         return null;
-      }
-
-   }
-
-   private static class SuccessAnswer<T> implements Answer<T> {
-
-      private final T result;
-
-      public SuccessAnswer(T result) {
-         this.result = result;
-      }
-
-      @SuppressWarnings("unchecked")
-      public T answer(InvocationOnMock invocation) {
-         Object[] arguments = invocation.getArguments();
-         AsyncCallback<Object> callback = (AsyncCallback<Object>) arguments[arguments.length - 1];
-         callback.onSuccess(result);
-         return null;
-      }
-
-   }
 
    @Before
    public void beforeGwtTestWithMockito() {
@@ -85,10 +47,10 @@ public abstract class GwtTestWithMockito extends GwtTestWithMocks {
     * @param exception The exception thrown by the stubbed remote service and passed to the callback
     *           onFailure() method
     * 
-    * @return a Mockito stubber which will call the callback onFailure() method
+    * @return a customised Mockito stubber which will call the callback.onFailure() method
     */
-   protected <T> Stubber doFailureCallback(final Throwable exception) {
-      return Mockito.doAnswer(new FailureAnswer<Object>(exception));
+   protected <T> GwtStubber doFailureCallback(final Throwable exception) {
+      return new GwtStubberImpl().doFailureCallback(exception);
    }
 
    /**
@@ -98,10 +60,10 @@ public abstract class GwtTestWithMockito extends GwtTestWithMocks {
     * @param object The object returned by the stubbed remote service and passed to the callback
     *           onSuccess() method
     * 
-    * @return a Mockito stubber which will call the callback onFailure() method
+    * @return a customised Mockito stubber which will call the callback.onSuccess() method
     */
-   protected <T> Stubber doSuccessCallback(final T object) {
-      return Mockito.doAnswer(new SuccessAnswer<Object>(object));
+   protected <T> GwtStubber doSuccessCallback(final T object) {
+      return new GwtStubberImpl().doSuccessCallback(object);
    }
 
    @Override
