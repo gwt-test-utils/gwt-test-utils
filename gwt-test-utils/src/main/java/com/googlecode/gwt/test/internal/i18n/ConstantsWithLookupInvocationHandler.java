@@ -2,10 +2,10 @@ package com.googlecode.gwt.test.internal.i18n;
 
 import java.lang.reflect.Method;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Properties;
 
 import com.google.gwt.i18n.client.LocalizableResource;
-import com.googlecode.gwt.test.exceptions.GwtTestI18NException;
 
 class ConstantsWithLookupInvocationHandler extends ConstantsInvocationHandler {
 
@@ -31,8 +31,9 @@ class ConstantsWithLookupInvocationHandler extends ConstantsInvocationHandler {
          try {
             return getProxiedClass().getMethod(methodName);
          } catch (Exception e) {
-            throw new GwtTestI18NException("Cannot find constant '" + methodName
-                     + "'; expecting a method name from " + getProxiedClass().getName());
+            throw new MissingResourceException("Cannot find constant '" + methodName
+                     + "'; expecting a method name from " + getProxiedClass().getName(),
+                     getProxiedClass().getName(), methodName);
          }
       } else {
          return method;
