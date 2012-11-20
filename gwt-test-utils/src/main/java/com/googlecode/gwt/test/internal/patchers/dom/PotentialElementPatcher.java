@@ -30,6 +30,11 @@ class PotentialElementPatcher {
    }
 
    @PatchMethod
+   static void declareShim() {
+
+   }
+
+   @PatchMethod
    static boolean isPotential(JavaScriptObject o) {
       return JavaScriptObjects.getBoolean(o, POTENTIALELEMENT_TAG);
    }

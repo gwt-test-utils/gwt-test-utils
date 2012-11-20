@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.internal.utils;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -20,7 +21,17 @@ import com.googlecode.gwt.test.utils.JavaScriptObjects;
 public class GwtStyleUtils {
 
    public static final String STYLE_OBJECT_FIELD = "STYLE_OBJECT";
+
    public static final String STYLE_PROPERTIES = "STYLE_PROPERTIES";
+   // map initialized with default style values
+   private static final Map<String, String> DEFAULT_STYLE_VALUES = new HashMap<String, String>() {
+
+      private static final long serialVersionUID = 1L;
+
+      {
+         put("whiteSpace", "nowrap");
+      }
+   };
 
    private static final Pattern STYLE_PATTERN = Pattern.compile("(.+):(.+)");
 
@@ -29,6 +40,17 @@ public class GwtStyleUtils {
       Map<String, String> newProperties = getStyleProperties(newStyle);
       newProperties.clear();
       newProperties.putAll(oldProperties);
+   }
+
+   public static String getProperty(Style style, String propertyName) {
+      String value = getStyleProperties(style).get(propertyName);
+
+      if (value == null) {
+         String defaultValue = DEFAULT_STYLE_VALUES.get(propertyName);
+         value = defaultValue != null ? defaultValue : "";
+      }
+
+      return value;
    }
 
    public static Style getStyle(Element element) {

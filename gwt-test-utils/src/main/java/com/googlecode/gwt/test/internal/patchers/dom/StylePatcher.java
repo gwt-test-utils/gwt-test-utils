@@ -1,6 +1,5 @@
 package com.googlecode.gwt.test.internal.patchers.dom;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style;
@@ -12,16 +11,6 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 
 @PatchClass(Style.class)
 class StylePatcher {
-
-   // map initialized with default style values
-   private static final Map<String, String> DEFAULT_STYLE_VALUES = new HashMap<String, String>() {
-
-      private static final long serialVersionUID = 1L;
-
-      {
-         put("whiteSpace", "nowrap");
-      }
-   };
 
    private static final String STYLE_BORDER_BOTTOM_WIDTH = "border-bottom-width";
    private static final String STYLE_BORDER_LEFT_WIDTH = "border-left-width";
@@ -44,19 +33,7 @@ class StylePatcher {
 
    @PatchMethod
    static String getBorderWidth(Style style) {
-      return getPropertyImpl(style, STYLE_BORDER_TOP_WIDTH);
-   }
-
-   @PatchMethod
-   static String getPropertyImpl(Style style, String propertyName) {
-      String value = GwtStyleUtils.getStyleProperties(style).get(propertyName);
-
-      if (value == null) {
-         String defaultValue = DEFAULT_STYLE_VALUES.get(propertyName);
-         value = defaultValue != null ? defaultValue : "";
-      }
-
-      return value;
+      return style.getProperty(STYLE_BORDER_TOP_WIDTH);
    }
 
    @PatchMethod

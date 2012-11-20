@@ -20,8 +20,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.googlecode.gwt.test.internal.utils.EventUtils;
-import com.googlecode.gwt.test.internal.utils.JsoUtils;
+import com.googlecode.gwt.test.internal.utils.GwtStyleUtils;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
+import com.googlecode.gwt.test.internal.utils.JsoUtils;
 import com.googlecode.gwt.test.internal.utils.PropertyContainer;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
@@ -364,6 +365,11 @@ class DOMImplPatcher {
    @PatchMethod
    static int getScrollLeft(Object domImpl, Element elem) {
       return JavaScriptObjects.getInteger(elem, SCROLL_LEFT);
+   }
+
+   @PatchMethod
+   static String getStyleProperty(Object domImpl, Style style, String propertyName) {
+      return GwtStyleUtils.getProperty(style, propertyName);
    }
 
    @PatchMethod

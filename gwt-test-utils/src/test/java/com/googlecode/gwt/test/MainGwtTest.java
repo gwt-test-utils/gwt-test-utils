@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,6 +15,7 @@ import org.junit.Test;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -32,6 +34,15 @@ public class MainGwtTest extends GwtTestTest {
       cal.set(2010, 10, 24);
       sToday = DateTimeFormat.getFormat("EEE dd MMM").format(cal.getTime());
       success = false;
+   }
+
+   @Test
+   public void create() {
+      // Act
+      AnchorElement e = GWT.create(AnchorElement.class);
+
+      // Assert
+      assertThat(e).isNotNull();
    }
 
    @Test
