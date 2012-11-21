@@ -65,12 +65,16 @@ public abstract class GwtTest extends GwtModuleRunnerAdapter {
       Thread.currentThread().setContextClassLoader(GwtFactory.get().getClassLoader().getParent());
    }
 
+   /**
+    * Setup a new gwt-test-utils test class.
+    */
    public GwtTest() {
-      this.setCanDispatchEventsOnDetachedWidgets(true);
+      GwtConfig.get().setupInstance(this);
    }
 
    @Before
    public final void setUpGwtTest() throws Exception {
+      this.setCanDispatchEventsOnDetachedWidgets(true);
       GwtTestDataHolder.get().setCurrentTestFailed(false);
       GwtConfig.get().setupInstance(this);
    }
