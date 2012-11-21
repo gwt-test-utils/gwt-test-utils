@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -134,6 +135,16 @@ public class GwtAssertions {
     */
    public static SuggestBoxAssert assertThat(SuggestBox actual) {
       return new SuggestBoxAssert(actual);
+   }
+
+   /**
+    * Creates a new instance of <code>{@link TabPanelAssert}</code>.
+    * 
+    * @param actual the tabPanel to be the target of the assertions methods.
+    * @return the created assertion object.
+    */
+   public static TabPanelAssert assertThat(TabPanel actual) {
+      return new TabPanelAssert(actual);
    }
 
    /**
