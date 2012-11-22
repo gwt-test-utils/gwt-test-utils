@@ -14,15 +14,15 @@ public class MyObject implements IsSerializable, Serializable {
    private String myField;
    private transient String myTransientField = "transient field";
 
-   public MyObject(String myField) {
-      this.myField = myField;
-   }
-
    /**
     * Default constructor for serialization
     */
-   MyObject() {
+   public MyObject() {
 
+   }
+
+   public MyObject(String myField) {
+      this.myField = myField;
    }
 
    public List<MyChildObject> getMyChildObjects() {

@@ -1,9 +1,11 @@
 package com.googlecode.gwt.test.internal.patchers;
 
+import org.mockito.internal.util.MockNameImpl;
+
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
 
-@PatchClass(target = "org.mockito.internal.util.MockName")
+@PatchClass(MockNameImpl.class)
 class MockNamePatcher {
 
    @PatchMethod

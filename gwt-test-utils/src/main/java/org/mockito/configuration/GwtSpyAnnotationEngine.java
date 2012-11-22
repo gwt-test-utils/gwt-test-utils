@@ -1,14 +1,21 @@
 package org.mockito.configuration;
 
+import static org.mockito.Mockito.withSettings;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.SpyAnnotationEngine;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldInitializationReport;
+import org.mockito.internal.util.reflection.FieldInitializer;
 
 /**
  * Overrides Mockito's SpyAnnotationEngine to handle {@link com.googlecode.gwt.test.Mock}
@@ -19,39 +26,48 @@ import org.mockito.internal.util.MockUtil;
  */
 class GwtSpyAnnotationEngine extends SpyAnnotationEngine {
 
-   @SuppressWarnings("deprecation")
    @Override
-   public void process(Class<?> context, Object testClass) {
+   @SuppressWarnings("deprecation")
+   // for MockitoAnnotations.Mock
+   public void process(Class<?> context, Object testInstance) {
       Field[] fields = context.getDeclaredFields();
       for (Field field : fields) {
-         if (field.isAnnotationPresent(Spy.class)) {
-            MockitoConfiguration.assertNoAnnotations(Spy.class, field, Mock.class,
-                     org.mockito.MockitoAnnotations.Mock.class, com.googlecode.gwt.test.Mock.class,
-                     Captor.class);
-            boolean wasAccessible = field.isAccessible();
-            field.setAccessible(true);
+         if (field.isAnnotationPresent(Spy.class) && !field.isAnnotationPresent(InjectMocks.class)) {
+            assertNoIncompatibleAnnotations(Spy.class, field, com.googlecode.gwt.test.Mock.class,
+                     Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
+            Object instance = null;
             try {
-               Object instance = field.get(testClass);
-               if (instance == null) {
-                  throw new MockitoException("Cannot create a @Spy for '" + field.getName()
-                           + "' field because the *instance* is missing\n"
-                           + "The instance must be created *before* initMocks();\n"
-                           + "Example of correct usage of @Spy:\n"
-                           + "   @Spy List mock = new LinkedList();\n"
-                           + "   //also, don't forget about MockitoAnnotations.initMocks();");
-
-               }
+               FieldInitializationReport report = new FieldInitializer(testInstance, field).initialize();
+               instance = report.fieldInstance();
+            } catch (MockitoException e) {
+               new Reporter().cannotInitializeForSpyAnnotation(field.getName(), e);
+            }
+            try {
                if (new MockUtil().isMock(instance)) {
                   // instance has been spied earlier
+                  // for example happens when MockitoAnnotations.initMocks is called two times.
                   Mockito.reset(instance);
                } else {
-                  field.set(testClass, Mockito.spy(instance));
+                  field.setAccessible(true);
+                  field.set(testInstance, Mockito.mock(
+                           instance.getClass(),
+                           withSettings().spiedInstance(instance).defaultAnswer(
+                                    Mockito.CALLS_REAL_METHODS).name(field.getName())));
                }
             } catch (IllegalAccessException e) {
                throw new MockitoException("Problems initiating spied field " + field.getName(), e);
-            } finally {
-               field.setAccessible(wasAccessible);
             }
+         }
+      }
+   }
+
+   // TODO duplicated elsewhere
+   void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation, Field field,
+            Class<? extends Annotation>... undesiredAnnotations) {
+      for (Class<? extends Annotation> u : undesiredAnnotations) {
+         if (field.isAnnotationPresent(u)) {
+            new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(),
+                     annotation.getClass().getSimpleName());
          }
       }
    }

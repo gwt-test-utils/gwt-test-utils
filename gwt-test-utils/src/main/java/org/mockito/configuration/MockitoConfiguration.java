@@ -39,6 +39,10 @@ public class MockitoConfiguration implements IMockitoConfiguration {
       return delegate.cleansStackTrace();
    }
 
+   public boolean enableClassCache() {
+      return delegate.enableClassCache();
+   }
+
    public AnnotationEngine getAnnotationEngine() {
       return new GwtInjectingAnnotationEngine();
    }

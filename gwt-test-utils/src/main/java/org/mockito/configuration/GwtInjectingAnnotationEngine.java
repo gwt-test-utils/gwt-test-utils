@@ -1,124 +1,114 @@
 package org.mockito.configuration;
 
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.DefaultAnnotationEngine;
 import org.mockito.internal.configuration.DefaultInjectionEngine;
 import org.mockito.internal.configuration.InjectingAnnotationEngine;
-import org.mockito.internal.util.reflection.FieldReader;
+import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
+
+import com.googlecode.gwt.test.Mock;
+import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 /**
- * Adapted from {@link InjectingAnnotationEngine} to be able to mock GWT overlay types and to
- * support {@link Mock} annotation as well as Mockito's ones.
- * 
- * @author Gael Lazzari
- * 
+ * Copied from {@link InjectingAnnotationEngine} to be able to inject our customized
+ * AnnotationEngines
  */
-@SuppressWarnings("deprecation")
 class GwtInjectingAnnotationEngine implements AnnotationEngine {
+   private final AnnotationEngine delegate;
+   private final AnnotationEngine spyAnnotationEngine;
 
-   private static Set<Field> scanForInjection(Object testClass, Class<?> clazz) {
-      Set<Field> testedFields = new HashSet<Field>();
-      Field[] fields = clazz.getDeclaredFields();
-      for (Field field : fields) {
-         if (null != field.getAnnotation(InjectMocks.class)) {
-            if (new FieldReader(testClass, field).isNull()) {
-               new Reporter().injectMockAnnotationFieldIsNull(field.getName());
-            }
-            testedFields.add(field);
-         }
-      }
+   public GwtInjectingAnnotationEngine() {
+      delegate = new DefaultAnnotationEngine();
 
-      return testedFields;
+      GwtReflectionUtils.callPrivateMethod(delegate, "registerAnnotationProcessor", Mock.class,
+               new GwtMockAnnotationProcessor());
+      GwtReflectionUtils.callPrivateMethod(delegate, "registerAnnotationProcessor",
+               org.mockito.Mock.class, new MockitoMockAnnotationProcessor());
+
+      spyAnnotationEngine = new GwtSpyAnnotationEngine();
    }
 
-   private static Set<Object> scanMocks(Object testClass, Class<?> clazz) {
-      Set<Object> mocks = new HashSet<Object>();
-      for (Field field : clazz.getDeclaredFields()) {
-         // mock or spies only
-         if (null != field.getAnnotation(Spy.class)
-                  || null != field.getAnnotation(org.mockito.Mock.class)
-                  || null != field.getAnnotation(Mock.class)
-                  || null != field.getAnnotation(com.googlecode.gwt.test.Mock.class)) {
-            Object fieldInstance = null;
-            boolean wasAccessible = field.isAccessible();
-            field.setAccessible(true);
-            try {
-               fieldInstance = field.get(testClass);
-            } catch (IllegalAccessException e) {
-               throw new MockitoException("Problems injecting dependencies in " + field.getName(),
-                        e);
-            } finally {
-               field.setAccessible(wasAccessible);
-            }
-            if (fieldInstance != null) {
-               mocks.add(fieldInstance);
-            }
-         }
-      }
-      return mocks;
-   }
-
-   AnnotationEngine delegate = new GwtDefaultAnnotationEngine();
-
-   AnnotationEngine spyAnnotationEngine = new GwtSpyAnnotationEngine();
-
-   /*
-    * (non-Javadoc)
+   /***
+    * Create a mock using {@link DefaultAnnotationEngine}
     * 
-    * @see org.mockito.AnnotationEngine#createMockFor(java.lang.annotation.Annotation ,
-    * java.lang.reflect.Field)
+    * @see org.mockito.internal.configuration.DefaultAnnotationEngine
+    * @see org.mockito.configuration.AnnotationEngine#createMockFor(java.lang.annotation.Annotation,
+    *      java.lang.reflect.Field)
     */
+   @Deprecated
    public Object createMockFor(Annotation annotation, Field field) {
       return delegate.createMockFor(annotation, field);
    }
 
-   public void process(Class<?> context, Object testClass) {
-      // this will create @Mocks, @Captors, etc:
-      delegate.process(context, testClass);
-      // this will create @Spies:
-      spyAnnotationEngine.process(context, testClass);
-
-      // this injects mocks
-      Field[] fields = context.getDeclaredFields();
-      for (Field field : fields) {
-         if (field.isAnnotationPresent(InjectMocks.class)) {
-            MockitoConfiguration.assertNoAnnotations(InjectMocks.class, field, Mock.class,
-                     org.mockito.MockitoAnnotations.Mock.class, com.googlecode.gwt.test.Mock.class,
-                     Captor.class);
-            injectMocks(testClass);
-         }
-      }
-   }
-
    /**
     * Initializes mock/spies dependencies for objects annotated with &#064;InjectMocks for given
-    * testClass.
+    * testClassInstance.
     * <p>
     * See examples in javadoc for {@link MockitoAnnotations} class.
     * 
-    * @param testClass Test class, usually <code>this</code>
+    * @param testClassInstance Test class, usually <code>this</code>
     */
-   private void injectMocks(Object testClass) {
-      Class<?> clazz = testClass.getClass();
-      Set<Field> mockDependents = new HashSet<Field>();
-      Set<Object> mocks = new HashSet<Object>();
+   public void injectMocks(final Object testClassInstance) {
+      Class<?> clazz = testClassInstance.getClass();
+      Set<Field> mockDependentFields = new HashSet<Field>();
+      Set<Object> mocks = newMockSafeHashSet();
 
       while (clazz != Object.class) {
-         mockDependents.addAll(scanForInjection(testClass, clazz));
-         mocks.addAll(scanMocks(testClass, clazz));
+         new InjectMocksScanner(clazz).addTo(mockDependentFields);
+         new GwtMockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
          clazz = clazz.getSuperclass();
       }
 
-      new DefaultInjectionEngine().injectMocksOnFields(mockDependents, mocks, testClass);
+      new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks,
+               testClassInstance);
    }
+
+   /**
+    * Process the fields of the test instance and create Mocks, Spies, Captors and inject them on
+    * fields annotated &#64;InjectMocks.
+    * 
+    * <p>
+    * This code process the test class and the super classes.
+    * <ol>
+    * <li>First create Mocks, Spies, Captors.</li>
+    * <li>Then try to inject them.</li>
+    * </ol>
+    * 
+    * @param clazz Not used
+    * @param testInstance The instance of the test, should not be null.
+    * 
+    * @see org.mockito.configuration.AnnotationEngine#process(Class, Object)
+    */
+   public void process(Class<?> clazz, Object testInstance) {
+      processIndependentAnnotations(testInstance.getClass(), testInstance);
+      processInjectMocks(testInstance.getClass(), testInstance);
+   }
+
+   private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
+      Class<?> classContext = clazz;
+      while (classContext != Object.class) {
+         // this will create @Mocks, @Captors, etc:
+         delegate.process(classContext, testInstance);
+         // this will create @Spies:
+         spyAnnotationEngine.process(classContext, testInstance);
+
+         classContext = classContext.getSuperclass();
+      }
+   }
+
+   private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
+      Class<?> classContext = clazz;
+      while (classContext != Object.class) {
+         injectMocks(testInstance);
+         classContext = classContext.getSuperclass();
+      }
+   }
+
 }
