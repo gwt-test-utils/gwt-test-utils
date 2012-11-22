@@ -76,7 +76,6 @@ public abstract class GwtTest extends GwtModuleRunnerAdapter {
    public final void setUpGwtTest() throws Exception {
       this.setCanDispatchEventsOnDetachedWidgets(true);
       GwtTestDataHolder.get().setCurrentTestFailed(false);
-      GwtConfig.get().setupInstance(this);
    }
 
    @After
