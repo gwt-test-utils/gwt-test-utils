@@ -31,6 +31,7 @@ public class UiBinderXmlUtils {
    public static final String IMAGE_TAG = "image";
    public static final String IMPORT_TAG = "import";
    public static final String MSG_TAG = "msg";
+   public static final String TEXT_TAG = "text";
    public static final String UIBINDER_NSURI = "urn:ui:com.google.gwt.uibinder";
 
    private static final Set<String> RESOURCE_TAGS = new HashSet<String>() {
@@ -44,6 +45,7 @@ public class UiBinderXmlUtils {
          add(WITH_TAG);
       }
    };
+
    private static final String STYLE_TAG = "style";
    private static final String TYPE_ATTR_NAME = "type";
    private static final String UIBINDER_TAG = "UiBinder";
@@ -91,6 +93,10 @@ public class UiBinderXmlUtils {
 
    public static boolean isStyleTag(String nameSpaceURI, String tagName) {
       return STYLE_TAG.equals(tagName) && UIBINDER_NSURI.equals(nameSpaceURI);
+   }
+
+   public static boolean isTextTag(String nameSpaceURI, String tagName) {
+      return TEXT_TAG.equals(tagName) && UIBINDER_NSURI.equals(nameSpaceURI);
    }
 
    public static boolean isTypeAttribute(String nameSpaceURI, String attrName) {

@@ -82,10 +82,11 @@ class UiTagBuilder<T> {
 
       if (UiBinderXmlUtils.isResourceTag(nameSpaceURI, localName)
                || UiBinderXmlUtils.isImportTag(nameSpaceURI, localName)) {
-         // ignore <ui:data>, <ui:image>, <ui:style> and <ui:import> tags
+         // ignore <ui:data>, <ui:image>, <ui:style> <ui:text> and <ui:import> tags
          return this;
-      } else if (UiBinderXmlUtils.isMsgTag(nameSpaceURI, localName)) {
-         // special <ui:msg> case
+      } else if (UiBinderXmlUtils.isMsgTag(nameSpaceURI, localName)
+               || UiBinderXmlUtils.isTextTag(nameSpaceURI, localName)) {
+         // special <ui:msg> and <ui:text> case
          parentTag.appendText((String) currentObject);
          return this;
       }
@@ -165,6 +166,8 @@ class UiTagBuilder<T> {
          return resourceManager.registerImport(attributes, parentTag, owner);
       } else if (UiBinderXmlUtils.isMsgTag(nameSpaceURI, localName)) {
          return resourceManager.registerMsg(attributes, parentTag, attributes);
+      } else if (UiBinderXmlUtils.isTextTag(nameSpaceURI, localName)) {
+         return resourceManager.registerText(attributes, parentTag, attributes);
       } else {
          return new UiElementTag(nameSpaceURI, localName, attributes, parentTag, owner);
       }

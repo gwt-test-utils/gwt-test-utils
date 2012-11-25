@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.uibinder'>
+
+	<ui:with field='res'
+		type='com.googlecode.gwt.test.resources.MyClientBundle' />
+
+	<g:HTMLPanel>
+		<g:Label ui:field="label">Text : <ui:text from='{res.textResourceTxt}' /></g:Label>
+	</g:HTMLPanel>
+
+</ui:UiBinder>

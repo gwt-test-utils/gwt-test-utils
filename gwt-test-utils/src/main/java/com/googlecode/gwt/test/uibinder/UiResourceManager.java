@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.DataResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -28,38 +29,6 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
  * 
  */
 class UiResourceManager {
-
-   /**
-    * Handles <ui:image /> tags.
-    */
-   private static class UiBinderImage extends UiResourceTag {
-
-      UiBinderImage(ResourcePrototypeProxyBuilder builder, String alias, UiTag<?> parentTag,
-               Object owner, Map<String, Object> resources, Map<String, Object> attributes) {
-         super(builder, alias, parentTag, owner, resources);
-
-         // handle "src" attribute
-         String src = (String) attributes.get("src");
-         builder.resourceURL(computeImageURLs(owner, src));
-      }
-
-      @Override
-      protected Object buildObject(ResourcePrototypeProxyBuilder builder) {
-         return builder.build();
-      }
-
-      private URL computeImageURLs(Object owner, String src) {
-         URL imageURL = owner.getClass().getResource(src);
-
-         if (imageURL == null) {
-            throw new GwtTestUiBinderException("Cannot find image file with src=\"" + src
-                     + "\" declared in " + owner.getClass().getSimpleName() + ".ui.xml");
-         }
-
-         return imageURL;
-      }
-
-   }
 
    /**
     * Handles <ui:data /> tags.
@@ -90,6 +59,38 @@ class UiResourceManager {
 
          return dataURL;
       }
+   }
+
+   /**
+    * Handles <ui:image /> tags.
+    */
+   private static class UiImgTag extends UiResourceTag {
+
+      UiImgTag(ResourcePrototypeProxyBuilder builder, String alias, UiTag<?> parentTag,
+               Object owner, Map<String, Object> resources, Map<String, Object> attributes) {
+         super(builder, alias, parentTag, owner, resources);
+
+         // handle "src" attribute
+         String src = (String) attributes.get("src");
+         builder.resourceURL(computeImageURLs(owner, src));
+      }
+
+      @Override
+      protected Object buildObject(ResourcePrototypeProxyBuilder builder) {
+         return builder.build();
+      }
+
+      private URL computeImageURLs(Object owner, String src) {
+         URL imageURL = owner.getClass().getResource(src);
+
+         if (imageURL == null) {
+            throw new GwtTestUiBinderException("Cannot find image file with src=\"" + src
+                     + "\" declared in " + owner.getClass().getSimpleName() + ".ui.xml");
+         }
+
+         return imageURL;
+      }
+
    }
 
    /**
@@ -374,6 +375,52 @@ class UiResourceManager {
    }
 
    /**
+    * Handles <ui:text /> tags
+    */
+   private static class UiTextTag implements UiTag<String> {
+
+      private final UiTag<?> parentTag;
+      private final TextResource textResource;
+
+      UiTextTag(Map<String, Object> attributes, UiTag<?> parentTag, Object owner) {
+         this.parentTag = parentTag;
+
+         this.textResource = (TextResource) attributes.get("from");
+
+         if (textResource == null) {
+            throw new GwtTestUiBinderException("Error in " + owner.getClass().getSimpleName()
+                     + ".ui.xml : <ui:text> tag declared without 'from' attribute");
+         }
+
+      }
+
+      public void addElement(Element element) {
+         // adapter method
+      }
+
+      public void addUiObject(UIObject uiObject) {
+         // adapter method
+      }
+
+      public void addWidget(IsWidget widget) {
+         // adapter method
+      }
+
+      public void appendText(String text) {
+         // adapter method
+      }
+
+      public String endTag() {
+         return textResource.getText();
+      }
+
+      public UiTag<?> getParentTag() {
+         return parentTag;
+      }
+
+   }
+
+   /**
     * Handles <ui:with /> tags.
     */
    private static class UiWithTag implements UiTag<Object> {
@@ -514,16 +561,29 @@ class UiResourceManager {
 
       } else if ("image".equals(localName)) {
          // <ui:image>
-         return new UiBinderImage(builder, alias, parentTag, owner, resources, attributes);
+         return new UiImgTag(builder, alias, parentTag, owner, resources, attributes);
 
       } else if ("data".equals(localName)) {
          // <ui:data>
          return new UiDataTag(builder, alias, parentTag, owner, resources, attributes);
-
       } else {
          throw new GwtTestUiBinderException("resource <" + localName
                   + "> element is not yet implemented by gwt-test-utils");
       }
+   }
+
+   /**
+    * Register a <ui:text> tag declared in the .ui.xml file.
+    * 
+    * @param attributes Map of attributes parsed from the tag
+    * @param parentTag The parent tag if any
+    * @param owner The {@link UiBinder} owner widget, which calls the
+    *           {@link UiBinder#createAndBindUi(Object)} method to initialize itself.
+    * @return The UiBinderTag which has registered the imported object instances in the
+    *         {@link UiResourceManager}.
+    */
+   UiTag<String> registerText(Map<String, Object> attributes, UiTag<?> parentTag, Object owner) {
+      return new UiTextTag(attributes, parentTag, owner);
    }
 
    private String getResourceAlias(String localName, Map<String, Object> attributes) {
@@ -552,6 +612,9 @@ class UiResourceManager {
       } else if (type == null && "data".equals(localName)) {
          // special code for <ui:data> with no 'type' attribute
          return DataResource.class;
+      } else if (type == null && "text".equals(localName)) {
+         // sepcial code for <ui:text> with no 'type' attribute
+         return TextResource.class;
       } else if (type == null) {
          throw new GwtTestUiBinderException("<" + localName + "> element declared in "
                   + owner.getClass().getSimpleName() + ".ui.xml must specify a 'type' attribute");
