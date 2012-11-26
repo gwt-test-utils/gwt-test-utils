@@ -12,9 +12,9 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Text;
 import com.google.gwt.xml.client.impl.XMLParserImpl;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
-import com.googlecode.gwt.test.internal.utils.JsoUtils;
 import com.googlecode.gwt.test.internal.utils.GwtXMLParser;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
+import com.googlecode.gwt.test.internal.utils.JsoUtils;
 import com.googlecode.gwt.test.internal.utils.PropertyContainer;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
@@ -52,7 +52,7 @@ class XMLParserImplPatcher {
    @PatchMethod
    static JavaScriptObject createElement(JavaScriptObject jsObject, String tagName) {
       Document document = jsObject.cast();
-      return document.createElement(tagName);
+      return JsoUtils.newXmlElement(document, tagName);
    }
 
    @PatchMethod

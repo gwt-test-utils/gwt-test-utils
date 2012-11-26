@@ -4,14 +4,15 @@ import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dev.shell.JsValueGlue;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Text;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
-import com.googlecode.gwt.test.internal.utils.JsoUtils;
 import com.googlecode.gwt.test.internal.utils.GwtStyleUtils;
+import com.googlecode.gwt.test.internal.utils.JsoUtils;
 import com.googlecode.gwt.test.internal.utils.PropertyContainer;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
@@ -47,7 +48,7 @@ class JavaScriptObjectPatcher {
 
       switch (nodeType) {
          case Node.DOCUMENT_NODE:
-            return "[object HTMLDocument]";
+            return documentToString(jso.<Document> cast());
          case Node.TEXT_NODE:
             Text text = jso.cast();
             return "'" + text.getData() + "'";
@@ -68,8 +69,21 @@ class JavaScriptObjectPatcher {
 
    }
 
+   private static String documentToString(Document document) {
+      StringBuilder html = new StringBuilder();
+      NodeList<Node> childs = document.getChildNodes();
+
+      for (int i = 0; i < childs.getLength(); i++) {
+         Node child = childs.getItem(i);
+         html.append(child.toString());
+      }
+
+      return html.toString();
+   }
+
    private static String elementToString(Element elem) {
-      String tagName = elem.getTagName().toLowerCase();
+      String tagName = JsoUtils.isXmlElement(elem) ? elem.getTagName()
+               : elem.getTagName().toLowerCase();
 
       // handle the particular case of <br> element
       if ("br".equals(tagName)) {
@@ -109,5 +123,4 @@ class JavaScriptObjectPatcher {
       sb.append("</").append(tagName).append(">");
       return sb.toString();
    }
-
 }

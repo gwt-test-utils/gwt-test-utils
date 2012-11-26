@@ -52,4 +52,24 @@ public class XMLDocumentTest extends GwtTestTest {
       assertEquals(document.getDocumentElement(), text.getOwnerDocument().getDocumentElement());
    }
 
+   @Test
+   public void documentToString() {
+      Document document = XMLParser.createDocument();
+      Element e = document.createElement("ThisIsATest");
+      e.appendChild(document.createTextNode("SomeTextNode"));
+      document.appendChild(e);
+
+      assertEquals("<ThisIsATest>SomeTextNode</ThisIsATest>", document.toString());
+   }
+
+   @Test
+   public void elementToString() {
+      Document document = XMLParser.createDocument();
+      Element e = document.createElement("ThisIsATest");
+      e.appendChild(document.createTextNode("SomeTextNode"));
+      document.appendChild(e);
+
+      assertEquals("<ThisIsATest>SomeTextNode</ThisIsATest>", e.toString());
+   }
+
 }

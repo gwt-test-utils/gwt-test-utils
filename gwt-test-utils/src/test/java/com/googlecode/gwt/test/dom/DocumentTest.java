@@ -23,11 +23,15 @@ public class DocumentTest extends GwtTestTest {
 
    @Test
    public void checkToString() {
+      // Arrange
+      d.getBody().appendChild(d.createAnchorElement());
+      d.getBody().appendChild(d.createAreaElement());
+
       // Act
       String toString = Document.get().toString();
 
       // Assert
-      assertEquals("[object HTMLDocument]", toString);
+      assertEquals("<html><body><a></a><area></area></body></html>", toString);
 
    }
 

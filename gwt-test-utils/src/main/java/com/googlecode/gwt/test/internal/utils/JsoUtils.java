@@ -178,6 +178,7 @@ public class JsoUtils {
    };
 
    private static final String ELEM_PROPERTIES = "ELEM_PROPERTIES";
+   private static final String IS_XML_ELEMENT = "IS_XML_ELEMENT";
    private static final String NODE_LIST_FIELD = "childNodes";
    private static final String NODE_LIST_INNER_LIST = "NODE_LIST_INNER_LIST";
    private static final String NODE_NAME = "nodeName";
@@ -293,6 +294,10 @@ public class JsoUtils {
                && DOM_PROPERTIES.contains(propertyName);
    }
 
+   public static boolean isXmlElement(JavaScriptObject jso) {
+      return JavaScriptObjects.hasProperty(jso, IS_XML_ELEMENT);
+   }
+
    public static Document newDocument() {
       Document document = newNode(Node.DOCUMENT_NODE).cast();
       JavaScriptObjects.setProperty(document, JsoProperties.NODE_OWNER_DOCUMENT, document);
@@ -335,6 +340,13 @@ public class JsoUtils {
       text.setData(data);
 
       return text;
+   }
+
+   public static Element newXmlElement(Document document, String tagName) {
+      Element xmlElement = document.createElement(tagName);
+      JavaScriptObjects.setProperty(xmlElement, IS_XML_ELEMENT, true);
+
+      return xmlElement;
    }
 
    public static void onSetHTML(JavaScriptObject jso, String newHTML, String oldHTML) {
