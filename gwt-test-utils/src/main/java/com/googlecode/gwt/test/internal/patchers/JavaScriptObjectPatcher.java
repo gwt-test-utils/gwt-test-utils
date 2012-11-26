@@ -119,8 +119,14 @@ class JavaScriptObjectPatcher {
       // remove the last space character
       sb.replace(sb.length() - 1, sb.length(), "");
 
-      sb.append(">").append(elem.getInnerHTML());
-      sb.append("</").append(tagName).append(">");
+      String innerHtml = elem.getInnerHTML();
+
+      if (JsoUtils.isXmlElement(elem) && innerHtml.trim().length() == 0) {
+         sb.append("/>");
+      } else {
+         sb.append(">").append(elem.getInnerHTML());
+         sb.append("</").append(tagName).append(">");
+      }
       return sb.toString();
    }
 }

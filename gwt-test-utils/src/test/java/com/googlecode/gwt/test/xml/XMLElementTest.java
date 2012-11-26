@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test.xml;
 
-import static org.junit.Assert.assertEquals;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 import org.junit.Test;
 
@@ -12,6 +12,33 @@ import com.googlecode.gwt.test.GwtTestTest;
 public class XMLElementTest extends GwtTestTest {
 
    @Test
+   public void elementToString() {
+      // Arrange
+      Document document = XMLParser.createDocument();
+      Element e = document.createElement("ThisIsATest");
+      e.appendChild(document.createTextNode("SomeTextNode"));
+
+      // Act
+      String toString = e.toString();
+
+      // Assert
+      assertThat(toString).isEqualTo("<ThisIsATest>SomeTextNode</ThisIsATest>");
+   }
+
+   @Test
+   public void emptyElementToString() {
+      // Arrange
+      Document document = XMLParser.createDocument();
+      Element e = document.createElement("ThisIsATest");
+
+      // Act
+      String toString = e.toString();
+
+      // Assert
+      assertThat(toString).isEqualTo("<ThisIsATest/>");
+   }
+
+   @Test
    public void setAttribute() {
       // Arrange
       Document document = XMLParser.createDocument();
@@ -21,7 +48,7 @@ public class XMLElementTest extends GwtTestTest {
       element.setAttribute("myAttr", "myValue");
 
       // Assert
-      assertEquals("myValue", element.getAttribute("myAttr"));
+      assertThat(element.getAttribute("myAttr")).isEqualTo("myValue");
    }
 
 }
