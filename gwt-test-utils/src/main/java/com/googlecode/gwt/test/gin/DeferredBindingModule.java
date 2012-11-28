@@ -22,6 +22,7 @@ import com.google.inject.Module;
 import com.google.inject.ProvidedBy;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.spi.DefaultElementVisitor;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.Element;
@@ -97,7 +98,7 @@ class DeferredBindingModule extends AbstractModule {
 
       this.ginInjectorClass = ginInjectorClass;
       List<Element> elements = Elements.getElements(modules);
-      this.classesToInstanciate = collectClassesToInstanciate(ginInjectorClass);
+      this.classesToInstanciate = collectClassesFromInjector(ginInjectorClass);
       this.classesToInstanciate.addAll(collectDependencies(elements));
       this.bindedClasses = collectBindedClasses(elements);
    }
@@ -152,11 +153,25 @@ class DeferredBindingModule extends AbstractModule {
       return bindedClasses;
    }
 
-   private Set<Class<?>> collectClassesToInstanciate(Class<?> classLiteral) {
+   private void collectDependencies(Class<?> current, Set<Class<?>> collected) {
+      if (collected.contains(current)) {
+         return;
+      }
+
+      collected.add(current);
+
+      Set<Class<?>> dependencies = getDependencies(current);
+
+      for (Class<?> dependency : dependencies) {
+         collectDependencies(dependency, collected);
+      }
+   }
+
+   private Set<Class<?>> collectClassesFromInjector(Class<?> injectorClass) {
 
       Set<Class<?>> classesToInstanciate = new HashSet<Class<?>>();
 
-      for (Method m : classLiteral.getMethods()) {
+      for (Method m : injectorClass.getMethods()) {
          if (m.getGenericParameterTypes().length > 0) {
             // This method has non-zero argument list. We cannot do anything
             // about it, so inform developer and continue
@@ -167,8 +182,7 @@ class DeferredBindingModule extends AbstractModule {
 
          Class<?> literal = m.getReturnType();
 
-         classesToInstanciate.add(literal);
-
+         collectDependencies(literal, classesToInstanciate);
       }
 
       return classesToInstanciate;
@@ -186,22 +200,14 @@ class DeferredBindingModule extends AbstractModule {
                   HasDependencies deps = (HasDependencies) binding;
                   for (Dependency<?> d : deps.getDependencies()) {
                      if (!d.getKey().getTypeLiteral().getRawType().isInterface()) {
-                        try {
-                           InjectionPoint point = InjectionPoint.forConstructorOf(d.getKey().getTypeLiteral());
-                           dependencies.addAll(getDependencies(point));
-                        } catch (ConfigurationException e) {
-                           // dependency must be injected with a provider, nothing to do
-                        }
-
+                        dependencies.addAll(getDependencies(d.getKey().getTypeLiteral()));
                      } else {
                         dependencies.add(d.getKey().getTypeLiteral().getRawType());
                      }
                   }
                } else {
                   // At least try to fix the dependecies for untargeted bindings
-                  InjectionPoint point = InjectionPoint.forConstructorOf(binding.getKey().getTypeLiteral());
-                  dependencies.addAll(getDependencies(point));
-
+                  dependencies.addAll(getDependencies(binding.getKey().getTypeLiteral()));
                }
 
                return null;
@@ -212,6 +218,32 @@ class DeferredBindingModule extends AbstractModule {
       return dependencies;
    }
 
+   private Set<Class<?>> getDependencies(Class<?> clazz) {
+
+      if (clazz.isInterface()) {
+         return java.util.Collections.<Class<?>> emptySet();
+      }
+
+      Set<Class<?>> dependencies = new HashSet<Class<?>>();
+
+      try {
+         dependencies.addAll(getDependencies(InjectionPoint.forConstructorOf(clazz)));
+      } catch (ConfigurationException e) {
+         // nothing to do
+      }
+
+      for (InjectionPoint point : InjectionPoint.forInstanceMethodsAndFields(clazz)) {
+         dependencies.addAll(getDependencies(point));
+      }
+
+      for (InjectionPoint point : InjectionPoint.forStaticMethodsAndFields(clazz)) {
+         dependencies.addAll(getDependencies(point));
+      }
+
+      return dependencies;
+
+   }
+
    private Set<Class<?>> getDependencies(InjectionPoint point) {
       Set<Class<?>> dependencies = new HashSet<Class<?>>();
       for (Dependency<?> d1 : point.getDependencies()) {
@@ -220,6 +252,30 @@ class DeferredBindingModule extends AbstractModule {
       }
 
       return dependencies;
+   }
+
+   private Set<Class<?>> getDependencies(TypeLiteral<?> type) {
+      if (type.getRawType().isInterface()) {
+         return java.util.Collections.<Class<?>> emptySet();
+      }
+      Set<Class<?>> dependencies = new HashSet<Class<?>>();
+
+      try {
+         dependencies.addAll(getDependencies(InjectionPoint.forConstructorOf(type)));
+      } catch (ConfigurationException e) {
+         // nothing to do
+      }
+
+      for (InjectionPoint point : InjectionPoint.forInstanceMethodsAndFields(type)) {
+         dependencies.addAll(getDependencies(point));
+      }
+
+      for (InjectionPoint point : InjectionPoint.forStaticMethodsAndFields(type)) {
+         dependencies.addAll(getDependencies(point));
+      }
+
+      return dependencies;
+
    }
 
    private boolean hasAnyGuiceAnnotation(Class<?> toInstanciate) {
