@@ -31,6 +31,19 @@ import com.googlecode.gwt.test.utils.events.Browser.BrowserErrorHandler;
 public interface GwtModuleRunner {
 
    /**
+    * Returns <code>true</code> if the <code>localStorage</code> part of the simulated Storage API
+    * is expected to be supported for the running test. <strong><code>true</code> by
+    * default.</strong>
+    */
+   public boolean isLocalStorageSupported();
+
+   /**
+    * Returns <code>true</code> if the <code>sessionStorage</code> part of the Storage API is
+    * expected to be supported for the running test. <strong><code>true</code> by default.</strong>
+    */
+   public boolean isSessionStorageSupported();
+
+   /**
     * Add a client's property, such as the browser 'user-agent' which could be use to simulate the
     * 'replace-with' deferred binding mechanism.
     * 

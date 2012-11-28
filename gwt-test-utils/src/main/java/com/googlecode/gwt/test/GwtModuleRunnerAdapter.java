@@ -68,14 +68,18 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    private boolean canDispatchEventsOnDetachedWidgets;
    private final Map<String, String> clientProperties;
    private Locale locale;
+   private boolean localStorageSupported;
    private GwtLogHandler logHandler;
    private ServletMockProvider servletMockProvider;
+   private boolean sessionStorageSupported;
    private WindowOperationsHandler windowOperationsHandler;
 
    public GwtModuleRunnerAdapter() {
       browserErrorHandlerDelegate = new BrowserErrorHandlerDelegate();
       browserSimulatorImpl = BrowserSimulatorImpl.get();
       clientProperties = new HashMap<String, String>();
+      localStorageSupported = true;
+      sessionStorageSupported = true;
       AfterTestCallbackManager.get().registerRemoveableCallback(this);
    }
 
@@ -131,6 +135,8 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       this.windowOperationsHandler = null;
       this.browserErrorHandlerDelegate.customHandler = null;
       this.servletMockProvider = null;
+      this.localStorageSupported = true;
+      this.sessionStorageSupported = true;
    }
 
    /*
@@ -223,6 +229,24 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       return windowOperationsHandler;
    }
 
+   /*
+    * (non-Javadoc)
+    * 
+    * @see com.googlecode.gwt.test.GwtModuleRunner#isLocalStorageSupported()
+    */
+   public boolean isLocalStorageSupported() {
+      return localStorageSupported;
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see com.googlecode.gwt.test.GwtModuleRunner#isSessionStorageSupported()
+    */
+   public boolean isSessionStorageSupported() {
+      return sessionStorageSupported;
+   }
+
    /**
     * Return the browser simulator instance used by gwt-test-utils.
     * 
@@ -301,6 +325,10 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       this.locale = locale;
    }
 
+   protected void setLocalStorageSupported(boolean localStorageSupported) {
+      this.localStorageSupported = localStorageSupported;
+   }
+
    /**
     * Specifies the callback to use to handle {@link GWT#log(String)} and
     * {@link GWT#log(String, Throwable)} calls.
@@ -319,6 +347,10 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
     */
    protected final void setServletMockProvider(ServletMockProvider servletMockProvider) {
       this.servletMockProvider = servletMockProvider;
+   }
+
+   protected void setSessionStorageSupported(boolean sessionStorageSupported) {
+      this.sessionStorageSupported = sessionStorageSupported;
    }
 
    /**
