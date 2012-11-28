@@ -44,7 +44,6 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
    private final GwtCreateHandler cellBasedWidgetImplCreateHandler;
    private final GwtCreateHandler clientBundleCreateHander;
    private final GwtCreateHandler defaultGwtCreateHandler;
-   private final GwtCreateHandler deferredGenerateWithCreateHandler;
    private final GwtCreateHandler deferredReplaceWithCreateHandler;
    private final GwtCreateHandler generatorCreateHandler;
    private final GwtCreateHandler imageBundleCreateHandler;
@@ -66,7 +65,6 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
       cellBasedWidgetImplCreateHandler = new CellBasedWidgetImplCreateHandler();
       clientBundleCreateHander = new ClientBundleCreateHandler();
       defaultGwtCreateHandler = new DefaultGwtCreateHandler();
-      deferredGenerateWithCreateHandler = new DeferredGenerateWithCreateHandler();
       deferredReplaceWithCreateHandler = new DeferredReplaceWithCreateHandler();
       imageBundleCreateHandler = new ImageBundleCreateHandler();
       localizableResourceCreateHandler = new LocalizableResourceCreateHandler();
@@ -153,9 +151,8 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
       // than, add all user custom createHandlers
       list.addAll(addedHandlers);
 
-      // than, add custom deferred bindings
+      // than, add custom deferred 'replace-with' bindings
       list.add(deferredReplaceWithCreateHandler);
-      list.add(deferredGenerateWithCreateHandler);
 
       // finally, add all default gwt-test-utils createHandlers
       list.add(localizableResourceCreateHandler);
@@ -167,9 +164,10 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
       list.add(webXmlRemoteServiceCreateHandler);
       list.add(cellBasedWidgetImplCreateHandler);
       list.add(animationSchedulerCreateHandler);
-      list.add(defaultGwtCreateHandler);
       list.add(placeHistoryMapperCreateHandler);
       list.add(autoBeanCreateHandler);
+
+      list.add(defaultGwtCreateHandler);
 
       list.add(generatorCreateHandler);
 
