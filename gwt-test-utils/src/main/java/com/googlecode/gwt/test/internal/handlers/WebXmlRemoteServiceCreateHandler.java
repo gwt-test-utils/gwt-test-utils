@@ -46,7 +46,7 @@ class WebXmlRemoteServiceCreateHandler extends RemoteServiceCreateHandler {
       }
 
       try {
-         serviceImpl = GwtReflectionUtils.instantiateClass(GwtReflectionUtils.getClass(className));
+         serviceImpl = GwtReflectionUtils.instantiateClass(GwtReflectionUtils.getClass(className.trim()));
       } catch (ClassNotFoundException e) {
          // should not happen..
          throw new GwtTestConfigurationException(e);
