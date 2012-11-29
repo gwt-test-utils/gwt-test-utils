@@ -10,3 +10,10 @@ gwt-test-utils-gxt2/target
 gwt-test-utils-gxt2/.classpath
 gwt-test-utils/target
 gwt-test-utils/.classpath
+gwt-test-utils-gwtbootstrap/target/classes/META-INF/MANIFEST.MF
+gwt-test-utils-gwtbootstrap/target/classes/META-INF/gwt-test-utils.properties
+gwt-test-utils-gwtbootstrap/target/classes/META-INF/maven/com.googlecode.gwt-test-utils/gwt-test-utils-gwtbootstrap/pom.properties
+gwt-test-utils-gwtbootstrap/target/classes/META-INF/maven/com.googlecode.gwt-test-utils/gwt-test-utils-gwtbootstrap/pom.xml
+gwt-test-utils-gwtbootstrap/target/test-classes/META-INF/gwt-test-utils.properties
+gwt-test-utils-gwtbootstrap/target/test-classes/com/googlecode/gwt/test/gwtbootstrap/test/GwtBootstrapTest.gwt.xml
+gwt-test-utils-gwtbootstrap/target/test-classes/com/googlecode/gwt/test/gwtbootstrap/test/client/TestWidget.ui.xml
