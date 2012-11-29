@@ -1,5 +1,7 @@
 package com.googlecode.gwt.test.utils.events;
 
+import static com.googlecode.gwt.test.finder.GwtFinder.object;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -35,6 +37,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
+import com.googlecode.gwt.test.finder.GwtFinder;
 import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.internal.GwtConfig;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
@@ -113,12 +116,42 @@ public class Browser {
    }
 
    /**
+    * Simulates a blur event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#blur(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void blur(String... identifier) throws ClassCastException {
+      blur(object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
     * Simulates a change event.
     * 
     * @param target The targeted widget.
     */
    public static void change(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONCHANGE).build());
+   }
+
+   /**
+    * Simulates a change event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#change(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void change(String... identifier) throws ClassCastException {
+      change(object(identifier).ofType(IsWidget.class));
    }
 
    /**
@@ -180,6 +213,8 @@ public class Browser {
     * Simulates a click event.
     * 
     * @param target The targeted widget.
+    * 
+    * @see Event#ONCLICK
     */
    public static void click(IsWidget target) {
       clickInternal(target, target.asWidget());
@@ -203,6 +238,23 @@ public class Browser {
     */
    public static void click(MenuBar menuBar, MenuItem clickedItem) {
       clickInternal(menuBar, clickedItem);
+   }
+
+   /**
+    * Simulates a click event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#click(IsWidget)
+    * @see GwtFinder#object(String...)
+    * 
+    * @see Event#ONCLICK
+    */
+   public static void click(String... identifier) throws ClassCastException {
+      click(object(identifier).ofType(IsWidget.class));
    }
 
    /**
@@ -242,7 +294,7 @@ public class Browser {
    }
 
    /**
-    * Simulate a click event on a pager "first page" button
+    * Simulate a click event on a pager "first page" button.
     * 
     * @param simplePager The targeted pager
     */
@@ -252,7 +304,22 @@ public class Browser {
    }
 
    /**
-    * Click on a specific header of a cell table
+    * Simulate a click event on a pager "first page" button.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link SimplePager}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link SimplePager} instance
+    * 
+    * @see Browser#clickFirstPage(SimplePager)
+    * @see GwtFinder#object(String...)
+    */
+   public static void clickFirstPage(String... identifier) throws ClassCastException {
+      clickFirstPage(object(identifier).ofType(SimplePager.class));
+   }
+
+   /**
+    * Click on a specific header of a cell table.
     * 
     * @param table The targeted cell table
     * @param index The targeted cell header index in the table
@@ -265,7 +332,7 @@ public class Browser {
    }
 
    /**
-    * Simulate a click event on a pager "last page" button
+    * Simulate a click event on a pager "last page" button.
     * 
     * @param simplePager The targeted pager
     */
@@ -275,7 +342,22 @@ public class Browser {
    }
 
    /**
-    * Simulate a click event on a pager "next page" button
+    * Simulate a click event on a pager "last page" button.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link SimplePager}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link SimplePager} instance
+    * 
+    * @see Browser#clickLastPage(SimplePager)
+    * @see GwtFinder#object(String...)
+    */
+   public static void clickLastPage(String... identifier) throws ClassCastException {
+      clickLastPage(object(identifier).ofType(SimplePager.class));
+   }
+
+   /**
+    * Simulate a click event on a pager "next page" button.
     * 
     * @param simplePager The targeted pager
     */
@@ -285,7 +367,22 @@ public class Browser {
    }
 
    /**
-    * Simulate a click event on a pager "previous page" button
+    * Simulate a click event on a pager "next page" button.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link SimplePager}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link SimplePager} instance
+    * 
+    * @see Browser#clickNextPage(SimplePager)
+    * @see GwtFinder#object(String...)
+    */
+   public static void clickNextPage(String... identifier) throws ClassCastException {
+      clickNextPage(object(identifier).ofType(SimplePager.class));
+   }
+
+   /**
+    * Simulate a click event on a pager "previous page" button.
     * 
     * @param simplePager The targeted pager
     */
@@ -295,12 +392,42 @@ public class Browser {
    }
 
    /**
+    * Simulate a click event on a pager "previous page" button.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link SimplePager}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link SimplePager} instance
+    * 
+    * @see Browser#clickPreviousPage(SimplePager)
+    * @see GwtFinder#object(String...)
+    */
+   public static void clickPreviousPage(String... identifier) throws ClassCastException {
+      clickPreviousPage(object(identifier).ofType(SimplePager.class));
+   }
+
+   /**
     * Simulates a dblclick event.
     * 
     * @param target The targeted widget.
     */
    public static void dblClick(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONDBLCLICK).build());
+   }
+
+   /**
+    * Simulates a dblClick event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#dblClick(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void dblClick(String... identifier) throws ClassCastException {
+      dblClick(object(identifier).ofType(IsWidget.class));
    }
 
    /**
@@ -399,34 +526,45 @@ public class Browser {
    }
 
    /**
-    * <p>
-    * Fill a widget which implements HasText interface.
-    * </p>
-    * <p>
-    * <ul>
-    * <li>For each character in the value to fill, {@link KeyDownEvent}, {@link KeyPressEvent} and
-    * {@link KeyUpEvent} are triggered. They can be prevented with normal effect.</li>
-    * <li>After typing, a {@link BlurEvent} is triggered.</li>
-    * <li>Than, if at least one of the KeyDown or KeyPress events has not been prevented, a
-    * {@link ChangeEvent} would be triggered.</li>
-    * </ul>
-    * </p>
     * 
-    * <p>
-    * <strong>Do not use this method to remove text by calling it with an empty string. Use
-    * {@link Browser#emptyText(HasText, boolean)} instead.</strong>
-    * </p>
+    * @param hasTextWidget
+    * @param check
+    * @param blur
+    * @param value
     * 
-    * @param hasTextWidget The widget to fill. If this implementation actually isn't a
-    *           {@link Widget} instance, nothing would be done.
-    * @param check Indicate if the method should check if the hasText Widget to fill is attached,
-    *           visible and enabled before applying any event.
-    * @param value The value to fill. Cannot be null or empty.
-    * @throws IllegalArgumentException if the value to fill is null or empty.
+    * @deprecated Use {@link Browser#fillText(String, boolean, boolean, HasText)
     */
+   @Deprecated
+   public static void fillText(HasText hasTextWidget, boolean check, boolean blur, String value) {
+      fillText(value, check, blur, hasTextWidget);
+   }
+
+   /**
+    * 
+    * @param hasTextWidget
+    * @param check
+    * @param value
+    * @throws IllegalArgumentException
+    * 
+    * @deprecated Use {@link Browser#fillText(String, boolean, HasText)}
+    */
+   @Deprecated
    public static void fillText(HasText hasTextWidget, boolean check, String value)
             throws IllegalArgumentException {
-      fillText(hasTextWidget, check, value, true);
+
+   }
+
+   /**
+    * 
+    * @param hasTextWidget
+    * @param value
+    * @throws IllegalArgumentException
+    * 
+    * @deprecated Use {@link Browser#fillText(String, HasText)} instead.
+    */
+   @Deprecated
+   public static void fillText(HasText hasTextWidget, String value) throws IllegalArgumentException {
+      fillText(value, hasTextWidget);
    }
 
    /**
@@ -445,17 +583,18 @@ public class Browser {
     * {@link Browser#emptyText(HasText, boolean)} instead.</strong>
     * </p>
     * 
-    * @param hasTextWidget The widget to fill. If this implementation actually isn't a
-    *           {@link Widget} instance, nothing would be done.
     * @param check Indicate if the method should check if the hasText Widget to fill is attached,
     *           visible and enabled before applying any event.
     * @param value The value to fill. Cannot be null or empty.
     * @param blur Specify if a blur event must be triggered. If <strong>true</strong> and at least
     *           one on the KeyDown or KeyPress events has not been prevented, a {@link ChangeEvent}
     *           would be triggered too.
+    * @param hasTextWidget The widget to fill. If this implementation actually isn't a
+    *           {@link Widget} instance, nothing would be done.
+    * 
     * @throws IllegalArgumentException if the value to fill is null or empty.
     */
-   public static void fillText(HasText hasTextWidget, boolean check, String value, boolean blur)
+   public static void fillText(String value, boolean check, boolean blur, HasText hasTextWidget)
             throws IllegalArgumentException {
       if (value == null || "".equals(value)) {
          throw new IllegalArgumentException(
@@ -521,6 +660,107 @@ public class Browser {
     * <ul>
     * <li>For each character in the value to fill, {@link KeyDownEvent}, {@link KeyPressEvent} and
     * {@link KeyUpEvent} are triggered. They can be prevented with normal effect.</li>
+    * </ul>
+    * </p>
+    * 
+    * <p>
+    * <strong>Do not use this method to remove text by calling it with an empty string. Use
+    * {@link Browser#emptyText(HasText, boolean)} instead.</strong>
+    * </p>
+    * 
+    * @param check Indicate if the method should check if the hasText Widget to fill is attached,
+    *           visible and enabled before applying any event.
+    * @param value The value to fill. Cannot be null or empty.
+    * @param blur Specify if a blur event must be triggered. If <strong>true</strong> and at least
+    *           one on the KeyDown or KeyPress events has not been prevented, a {@link ChangeEvent}
+    *           would be triggered too.
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * @throws IllegalArgumentException if the value to fill is null or empty.
+    */
+   public static void fillText(String value, boolean check, boolean blur, String... identifier)
+            throws ClassCastException, IllegalArgumentException {
+
+      fillText(value, check, blur, object(identifier).ofType(HasText.class));
+   }
+
+   /**
+    * <p>
+    * Fill a widget which implements HasText interface.
+    * </p>
+    * <p>
+    * <ul>
+    * <li>For each character in the value to fill, {@link KeyDownEvent}, {@link KeyPressEvent} and
+    * {@link KeyUpEvent} are triggered. They can be prevented with normal effect.</li>
+    * <li>After typing, a {@link BlurEvent} is triggered.</li>
+    * <li>Than, if at least one of the KeyDown or KeyPress events has not been prevented, a
+    * {@link ChangeEvent} would be triggered.</li>
+    * </ul>
+    * </p>
+    * 
+    * <p>
+    * <strong>Do not use this method to remove text by calling it with an empty string. Use
+    * {@link Browser#emptyText(HasText, boolean)} instead.</strong>
+    * </p>
+    * 
+    * 
+    * @param value The value to fill. Cannot be null or empty.
+    * @param check Indicate if the method should check if the hasText Widget to fill is attached,
+    *           visible and enabled before applying any event.
+    * @param hasTextWidget The widget to fill. If this implementation actually isn't a
+    *           {@link Widget} instance, nothing would be done.
+    * 
+    * @throws IllegalArgumentException if the value to fill is null or empty.
+    */
+   public static void fillText(String value, boolean check, HasText hasTextWidget)
+            throws IllegalArgumentException {
+      fillText(value, check, true, hasTextWidget);
+   }
+
+   /**
+    * <p>
+    * Fill a widget which implements HasText interface.
+    * </p>
+    * <p>
+    * <ul>
+    * <li>For each character in the value to fill, {@link KeyDownEvent}, {@link KeyPressEvent} and
+    * {@link KeyUpEvent} are triggered. They can be prevented with normal effect.</li>
+    * <li>After typing, a {@link BlurEvent} is triggered.</li>
+    * <li>Than, if at least one of the KeyDown or KeyPress events has not been prevented, a
+    * {@link ChangeEvent} would be triggered.</li>
+    * </ul>
+    * </p>
+    * 
+    * <p>
+    * <strong>Do not use this method to remove text by calling it with an empty string. Use
+    * {@link Browser#emptyText(HasText, boolean)} instead.</strong>
+    * </p>
+    * 
+    * 
+    * @param value The value to fill. Cannot be null or empty.
+    * @param check Indicate if the method should check if the hasText Widget to fill is attached,
+    *           visible and enabled before applying any event.
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * @throws IllegalArgumentException if the value to fill is null or empty.
+    */
+   public static void fillText(String value, boolean check, String... identifier)
+            throws ClassCastException, IllegalArgumentException {
+      fillText(value, check, true, identifier);
+   }
+
+   /**
+    * <p>
+    * Fill a widget which implements HasText interface.
+    * </p>
+    * <p>
+    * <ul>
+    * <li>For each character in the value to fill, {@link KeyDownEvent}, {@link KeyPressEvent} and
+    * {@link KeyUpEvent} are triggered. They can be prevented with normal effect.</li>
     * <li>After typing, a {@link BlurEvent} is triggered.</li>
     * <li>Than, if at least one on the KeyDown or KeyPress events has not been prevented, a
     * {@link ChangeEvent} would be triggered.</li>
@@ -532,13 +772,14 @@ public class Browser {
     * {@link Browser#emptyText(HasText, boolean)} instead.</strong>
     * </p>
     * 
+    * @param value The value to fill. Cannot be null or empty.
     * @param hasTextWidget The widget to fill. If this implementation actually isn't a
     *           {@link Widget} instance, nothing would be done.
-    * @param value The value to fill. Cannot be null or empty.
+    * 
     * @throws IllegalArgumentException if the value to fill is null or empty.
     */
-   public static void fillText(HasText hasTextWidget, String value) throws IllegalArgumentException {
-      fillText(hasTextWidget, true, value, true);
+   public static void fillText(String value, HasText hasTextWidget) throws IllegalArgumentException {
+      fillText(value, true, true, hasTextWidget);
    }
 
    /**
@@ -549,6 +790,9 @@ public class Browser {
     * <ul>
     * <li>For each character in the value to fill, {@link KeyDownEvent}, {@link KeyPressEvent} and
     * {@link KeyUpEvent} are triggered. They can be prevented with normal effect.</li>
+    * <li>After typing, a {@link BlurEvent} is triggered.</li>
+    * <li>Than, if at least one on the KeyDown or KeyPress events has not been prevented, a
+    * {@link ChangeEvent} would be triggered.</li>
     * </ul>
     * </p>
     * 
@@ -557,17 +801,16 @@ public class Browser {
     * {@link Browser#emptyText(HasText, boolean)} instead.</strong>
     * </p>
     * 
-    * @param hasTextWidget The widget to fill. If this implementation actually isn't a
-    *           {@link Widget} instance, nothing would be done.
     * @param value The value to fill. Cannot be null or empty.
-    * @param blur Specify if a blur event must be triggered. If <strong>true</strong> and at least
-    *           one on the KeyDown or KeyPress events has not been prevented, a {@link ChangeEvent}
-    *           would be triggered too.
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
     * @throws IllegalArgumentException if the value to fill is null or empty.
     */
-   public static void fillText(HasText hasTextWidget, String value, boolean blur)
-            throws IllegalArgumentException {
-      fillText(hasTextWidget, true, value, blur);
+   public static void fillText(String value, String... identifier) throws ClassCastException,
+            IllegalArgumentException {
+      fillText(value, true, true, object(identifier).ofType(HasText.class));
    }
 
    /**
@@ -580,30 +823,133 @@ public class Browser {
    }
 
    /**
-    * Simulates a keydown event.
+    * Simulates a focus event.
     * 
-    * @param target The targeted widget.
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#focus(IsWidget)
+    * @see GwtFinder#object(String...)
     */
-   public static void keyDown(IsWidget target, int keyCode) {
+   public static void focus(String... identifier) throws ClassCastException {
+      focus(object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
+    * Simulate a keyDown event.
+    * 
+    * @param keyCode The pushed key code.
+    * @param target the targeted widget.
+    */
+   public static void keyDown(int keyCode, IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONKEYDOWN).setKeyCode(keyCode).build());
+   }
+
+   /**
+    * Simulates a keyDown event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#keyDown(int, IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void keyDown(int keyCode, String... identifier) throws ClassCastException {
+      keyDown(keyCode, object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
+    * 
+    * @param keyCode
+    * @param target
+    * 
+    * @deprecated Use {@link Browser#keyDown(int, IsWidget)} instead
+    */
+   @Deprecated
+   public static void keyDown(IsWidget target, int keyCode) {
+      keyDown(keyCode, target);
    }
 
    /**
     * Simulates a keypress event.
     * 
+    * @param keyCode The pushed key code.
     * @param target The targeted widget.
+    * 
+    * @see Event#ONKEYPRESS
     */
-   public static void keyPress(IsWidget target, int keyCode) {
+   public static void keyPress(int keyCode, IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONKEYPRESS).setKeyCode(keyCode).build());
+   }
+
+   /**
+    * Simulates a keyPress event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#keyPress(int, IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void keyPress(int keyCode, String... identifier) throws ClassCastException {
+      keyPress(keyCode, object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
+    * 
+    * @param target
+    * @param keyCode
+    * 
+    * @deprecated Use {@link Browser#keyPress(int, IsWidget)} instead
+    */
+   @Deprecated
+   public static void keyPress(IsWidget target, int keyCode) {
+      keyPress(keyCode, target);
    }
 
    /**
     * Simulates a keyup event.
     * 
+    * @param keyCode The pushed key code.
     * @param target The targeted widget.
+    * 
+    * @see Event#ONKEYUP
     */
-   public static void keyUp(IsWidget target, int keyCode) {
+   public static void keyUp(int keyCode, IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONKEYUP).setKeyCode(keyCode).build());
+   }
+
+   /**
+    * Simulates a keyup event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#keyUp(int, IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void keyUp(int keyCode, String... identifier) throws ClassCastException {
+      keyUp(keyCode, object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
+    * 
+    * @param target
+    * @param keyCode
+    * 
+    * @deprecated Use {@link Browser#keyDown(int, IsWidget)} instead
+    */
+   @Deprecated
+   public static void keyUp(IsWidget target, int keyCode) {
+      keyUp(keyCode, target);
    }
 
    /**
@@ -616,12 +962,42 @@ public class Browser {
    }
 
    /**
+    * Simulates a mousedown event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#mouseDown(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void mouseDown(String... identifier) throws ClassCastException {
+      mouseDown(object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
     * Simulates a mousemove event.
     * 
     * @param target The targeted widget.
     */
    public static void mouseMove(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEMOVE).build());
+   }
+
+   /**
+    * Simulates a mousemove event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#mouseMove(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void mouseMove(String... identifier) throws ClassCastException {
+      mouseMove(object(identifier).ofType(IsWidget.class));
    }
 
    /**
@@ -634,12 +1010,42 @@ public class Browser {
    }
 
    /**
+    * Simulates a mouseout event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#mouseOut(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void mouseOut(String... identifier) throws ClassCastException {
+      mouseOut(object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
     * Simulates a mouseover event.
     * 
     * @param target The targeted widget.
     */
    public static void mouseOver(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEOVER).build());
+   }
+
+   /**
+    * Simulates a mouseover event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#mouseOver(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void mouseOver(String... identifier) throws ClassCastException {
+      mouseOver(object(identifier).ofType(IsWidget.class));
    }
 
    /**
@@ -652,12 +1058,42 @@ public class Browser {
    }
 
    /**
+    * Simulates a mouseup event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#mouseUp(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void mouseUp(String... identifier) throws ClassCastException {
+      mouseUp(object(identifier).ofType(IsWidget.class));
+   }
+
+   /**
     * Simulates a mousewheel event.
     * 
     * @param target The targeted widget.
     */
    public static void mouseWheel(IsWidget target) {
       dispatchEvent(target, EventBuilder.create(Event.ONMOUSEWHEEL).build());
+   }
+
+   /**
+    * Simulates a mousewheel event.
+    * 
+    * @param identifier An array of identifier parameters to retrieve an instance of
+    *           {@link IsWidget}
+    * 
+    * @throws ClassCastException If the retrieved object is not a {@link IsWidget} instance
+    * 
+    * @see Browser#mouseWheel(IsWidget)
+    * @see GwtFinder#object(String...)
+    */
+   public static void mouseWheel(String... identifier) throws ClassCastException {
+      mouseWheel(object(identifier).ofType(IsWidget.class));
    }
 
    /**
@@ -671,11 +1107,11 @@ public class Browser {
     * of the pressed key. They can be prevented with normal effect.
     * </p>
     * 
-    * @param widget The widget to fill. <strong>It has to be attached and visible</strong>
     * @param keyCode The code of the key to be pressed.
+    * @param widget The widget to fill. <strong>It has to be attached and visible</strong>
     * 
     */
-   public static <T extends IsWidget & HasText> void pressKey(T widget, int keyCode) {
+   public static <T extends IsWidget & HasText> void pressKey(int keyCode, T widget) {
       if (widget == null) {
          return;
       }
@@ -751,6 +1187,18 @@ public class Browser {
    }
 
    /**
+    * 
+    * @param widget
+    * @param keyCode
+    * 
+    * @deprecated User {@link Browser#pressKey(int, IsWidget)} instead.
+    */
+   @Deprecated
+   public static <T extends IsWidget & HasText> void pressKey(T widget, int keyCode) {
+      pressKey(keyCode, widget);
+   }
+
+   /**
     * <p>
     * Remove a fixed number of character from the text within a widget which implements HasText
     * interface by simulating a backspace key press.
@@ -821,12 +1269,12 @@ public class Browser {
                   "Cannot submit form which is not attached to the DOM '");
 
          return false;
-      } else {
-         synthesizedFrame.setInnerHTML(resultsHtml);
-         form.submit();
-
-         return true;
       }
+
+      synthesizedFrame.setInnerHTML(resultsHtml);
+      form.submit();
+
+      return true;
 
    }
 
@@ -983,9 +1431,9 @@ public class Browser {
 
       if (!Widget.class.isInstance(o)) {
          return getParent(parentElement.getParentElement());
-      } else {
-         return (Widget) o;
       }
+
+      return (Widget) o;
    }
 
    private static boolean isDisabled(Element element) {

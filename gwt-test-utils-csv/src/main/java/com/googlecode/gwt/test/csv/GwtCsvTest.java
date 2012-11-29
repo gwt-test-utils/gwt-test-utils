@@ -315,7 +315,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
    public void fillAndSelectInSuggestBoxByIndex(String content, String index, String... identifier) {
       SuggestBox suggestBox = object(identifier).ofType(SuggestBox.class);
 
-      Browser.fillText(suggestBox, content);
+      Browser.fillText(content, suggestBox);
       Browser.click(suggestBox, Integer.parseInt(index));
    }
 
@@ -323,7 +323,8 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
    public void fillAndSelectInSuggestBoxByText(String content, String selected,
             String... identifier) {
       SuggestBox suggestBox = object(identifier).ofType(SuggestBox.class);
-      Browser.fillText(suggestBox, content);
+
+      Browser.fillText(content, suggestBox);
 
       List<MenuItem> menuItems = WidgetUtils.getMenuItems(suggestBox);
       int i = 0;
@@ -344,12 +345,12 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
 
    @CsvMethod
    public void fillInvisibleTextBox(String value, String... identifier) {
-      Browser.fillText(object(identifier).ofType(TextBox.class), false, value);
+      Browser.fillText(value, false, identifier);
    }
 
    @CsvMethod
    public void fillTextBox(String value, String... identifier) {
-      Browser.fillText(object(identifier).ofType(TextBox.class), value);
+      Browser.fillText(value, identifier);
    }
 
    @CsvMethod
@@ -534,7 +535,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
 
    @CsvMethod
    public void selectInListBox(String value, String... identifier) {
-      selectInListBox(object(identifier).ofType(ListBox.class), value, identifier);
+      selectInListBox(object(identifier).ofType(ListBox.class), value);
    }
 
    @CsvMethod
@@ -610,7 +611,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
       return csvRunner.getAssertionErrorMessagePrefix();
    }
 
-   protected void selectInListBox(ListBox listBox, String regex, String... identifier) {
+   protected void selectInListBox(ListBox listBox, String regex) {
       int selectedIndex;
       String errorMessage;
       if (regex.matches("^\\d*$")) {
