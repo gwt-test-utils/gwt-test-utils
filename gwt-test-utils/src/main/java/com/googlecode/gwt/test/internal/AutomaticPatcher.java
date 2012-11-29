@@ -57,12 +57,14 @@ class AutomaticPatcher implements Patcher {
    }
 
    public void finalizeClass(CtClass c) throws Exception {
-      for (CtMethod m : patchMethods) {
-         if (!processedMethods.contains(m)) {
-            throw new GwtTestPatchException("@" + PatchMethod.class.getSimpleName()
-                     + " not used : " + m.getLongName());
-         }
-      }
+      // FIXME : re-activate this code when gwt-bootstrap will work with bootstrap 2.1.1
+
+      // for (CtMethod m : patchMethods) {
+      // if (!processedMethods.contains(m)) {
+      // throw new GwtTestPatchException("@" + PatchMethod.class.getSimpleName()
+      // + " not used : " + m.getLongName());
+      // }
+      // }
    }
 
    public String getNewBody(CtMethod m) throws Exception {

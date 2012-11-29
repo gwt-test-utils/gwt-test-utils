@@ -1,0 +1,15 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:FlowPanel>
+		<b:Alert ui:field="alert">Test</b:Alert>
+		<b:Dropdown text="I am the Caption">
+			<b:NavHeader>Header</b:NavHeader>
+			<b:NavLink>Link 1</b:NavLink>
+			<b:NavLink>Link 2</b:NavLink>
+		</b:Dropdown>
+	</g:FlowPanel>
+</ui:UiBinder> 
