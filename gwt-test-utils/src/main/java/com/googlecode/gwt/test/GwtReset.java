@@ -2,6 +2,7 @@ package com.googlecode.gwt.test;
 
 import java.util.List;
 
+import com.google.gwt.i18n.client.Dictionary;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.i18n.shared.DateTimeFormat;
@@ -41,6 +42,7 @@ public class GwtReset {
 
    public void reset() throws Exception {
       getStaticAndCallClear(Timer.class, "timers");
+      getStaticAndCallClear(Dictionary.class, "cache");
       getStaticAndCallClear(RootPanel.class, "rootPanels");
       getStaticAndCallClear(RootPanel.class, "widgetsToDetach");
       GwtReflectionUtils.setStaticField(RootLayoutPanel.class, "singleton", null);
