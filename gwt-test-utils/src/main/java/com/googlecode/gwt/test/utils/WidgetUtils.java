@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.DomEvent.Type;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -129,7 +128,7 @@ public class WidgetUtils {
          return popup.isShowing();
       } else {
 
-         return isElementVisible(object.getElement());
+         return GwtDomUtils.isVisible(object.getElement());
       }
    }
 
@@ -143,16 +142,6 @@ public class WidgetUtils {
       InputElement inputElem = GwtReflectionUtils.getPrivateFieldValue(checkBox, "inputElem");
       inputElem.setChecked(newValue);
       inputElem.setDefaultChecked(newValue);
-   }
-
-   private static boolean isElementVisible(Element element) {
-      if (!UIObject.isVisible(element)) {
-         return false;
-      } else if (element.getParentElement() != null) {
-         return isElementVisible(element.getParentElement());
-      } else {
-         return true;
-      }
    }
 
    private WidgetUtils() {

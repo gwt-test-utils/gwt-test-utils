@@ -1,6 +1,8 @@
 package com.googlecode.gwt.test.utils;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.UIObject;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
 
 /**
@@ -10,6 +12,52 @@ import com.googlecode.gwt.test.internal.utils.JsoProperties;
  * 
  */
 public class GwtDomUtils {
+
+   /**
+    * Gets all of the element's style names, as a space-separated list.
+    * 
+    * @param elem the element whose style is to be retrieved
+    * @return the objects's space-separated style names
+    */
+   public static String getStyleName(Element element) {
+      // copied from protected static UiObject method
+      return DOM.getElementProperty(element.<com.google.gwt.user.client.Element> cast(),
+               "className");
+   }
+
+   /**
+    * Gets the element's primary style name.
+    * 
+    * @param elem the element whose primary style name is to be retrieved
+    * @return the element's primary style name
+    */
+   public static String getStylePrimaryName(Element elem) {
+      // copied from protected static UiObject method
+      String fullClassName = getStyleName(elem);
+
+      // The primary style name is always the first token of the full CSS class
+      // name. There can be no leading whitespace in the class name, so it's not
+      // necessary to trim() it.
+      int spaceIdx = fullClassName.indexOf(' ');
+      if (spaceIdx >= 0) {
+         return fullClassName.substring(0, spaceIdx);
+      }
+      return fullClassName;
+   }
+
+   public static boolean hasStyle(Element element, String styleName) {
+      return getStyleName(element).contains(styleName);
+   }
+
+   public static boolean isVisible(Element element) {
+      if (!UIObject.isVisible(element)) {
+         return false;
+      } else if (element.getParentElement() != null) {
+         return isVisible(element.getParentElement());
+      } else {
+         return true;
+      }
+   }
 
    /**
     * Manually set a DOM element height.

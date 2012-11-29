@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.assertions;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.DoubleBox;
@@ -55,6 +56,16 @@ public class GwtAssertions {
     */
    public static DoubleBoxAssert assertThat(DoubleBox actual) {
       return new DoubleBoxAssert(actual);
+   }
+
+   /**
+    * Creates a new instance of <code>{@link ElementAssert}</code>.
+    * 
+    * @param actual the element to be the target of the assertions methods.
+    * @return the created assertion object.
+    */
+   public static ElementAssert assertThat(Element actual) {
+      return new ElementAssert(actual);
    }
 
    /**
