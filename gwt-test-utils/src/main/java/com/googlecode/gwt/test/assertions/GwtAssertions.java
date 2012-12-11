@@ -2,13 +2,13 @@ package com.googlecode.gwt.test.assertions;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -36,16 +36,6 @@ public class GwtAssertions {
     */
    public static CheckBoxAssert assertThat(CheckBox actual) {
       return new CheckBoxAssert(actual);
-   }
-
-   /**
-    * Creates a new instance of <code>{@link ComplexPanelAssert}</code>.
-    * 
-    * @param actual the generic complex panel to be the target of the assertions methods.
-    * @return the created assertion object.
-    */
-   public static ComplexPanelAssert assertThat(ComplexPanel actual) {
-      return new ComplexPanelAssert(actual);
    }
 
    /**
@@ -126,6 +116,16 @@ public class GwtAssertions {
     */
    public static MenuItemAssert assertThat(MenuItem actual) {
       return new MenuItemAssert(actual);
+   }
+
+   /**
+    * Creates a new instance of <code>{@link PanelAssert}</code>.
+    * 
+    * @param actual the generic panel to be the target of the assertions methods.
+    * @return the created assertion object.
+    */
+   public static PanelAssert assertThat(Panel actual) {
+      return new PanelAssert(actual);
    }
 
    /**

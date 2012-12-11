@@ -2,10 +2,16 @@ package com.googlecode.gwt.test.assertions;
 
 import static org.fest.util.Objects.areEqual;
 
+import java.util.Iterator;
+
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
- * Base class for all {@link ComplexPanel} assertions.
+ * Base class for all {@link Panel} assertions.
  * 
  * @author Gael Lazzari
  * 
@@ -15,16 +21,16 @@ import com.google.gwt.user.client.ui.ComplexPanel;
  *           implementation</a>.&quot;
  * @param <A> the type of the "actual" value.
  */
-public class BaseComplexPanelAssert<S extends BaseComplexPanelAssert<S, A>, A extends ComplexPanel>
-         extends BaseWidgetAssert<S, A> {
+public class BasePanelAssert<S extends BasePanelAssert<S, A>, A extends Panel> extends
+         BaseWidgetAssert<S, A> {
 
    /**
-    * Creates a new <code>{@link BaseComplexPanelAssert}</code>.
+    * Creates a new <code>{@link BasePanelAssert}</code>.
     * 
     * @param actual the actual value to verify.
     * @param selfType the "self type."
     */
-   protected BaseComplexPanelAssert(A actual, Class<S> selfType) {
+   protected BasePanelAssert(A actual, Class<S> selfType) {
       super(actual, selfType);
    }
 
@@ -38,10 +44,27 @@ public class BaseComplexPanelAssert<S extends BaseComplexPanelAssert<S, A>, A ex
     * @see ComplexPanel#getWidgetCount()
     */
    public S widgetCountEquals(int expected) {
-      int widgetCount = actual.getWidgetCount();
+      int widgetCount = getWigetCount(actual);
       if (areEqual(widgetCount, expected))
          return myself;
       throw propertyComparisonFailed("WidgetCount", widgetCount, expected);
+   }
+
+   private int getWigetCount(A actual) {
+      if (actual instanceof IndexedPanel) {
+         return ((IndexedPanel) actual).getWidgetCount();
+      } else if (actual instanceof SimplePanel) {
+         return 1;
+      }
+
+      Iterator<Widget> it = actual.iterator();
+      int count = 0;
+      while (it.hasNext()) {
+         count++;
+         it.next();
+      }
+
+      return count;
    }
 
 }

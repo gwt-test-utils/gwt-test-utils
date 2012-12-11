@@ -126,10 +126,9 @@ public class WidgetUtils {
       } else if (object instanceof PopupPanel) {
          PopupPanel popup = (PopupPanel) object;
          return popup.isShowing();
-      } else {
-
-         return GwtDomUtils.isVisible(object.getElement());
       }
+
+      return GwtDomUtils.isVisible(object.getElement());
    }
 
    /**
