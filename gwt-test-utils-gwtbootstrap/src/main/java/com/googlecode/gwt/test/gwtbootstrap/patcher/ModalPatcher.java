@@ -17,6 +17,11 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 @PatchClass(Modal.class)
 class ModalPatcher {
    @PatchMethod
+   static void centerVertically(Modal modal, Element e) {
+
+   }
+
+   @PatchMethod
    static void changeVisibility(Modal modal, Element e, String visibility) {
       if (VisibilityChange.SHOW.get().equals(visibility) && !modal.isVisible()) {
          show(modal);
