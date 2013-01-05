@@ -6,6 +6,7 @@
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
 	<inherits name="com.google.web.bindery.autobean.AutoBean" />
 	<inherits name="com.google.common.collect.Collect" />
+	<inherits name="com.google.gwt.inject.Inject" />
 
 	<entry-point class='com.googlecode.gwt.test.client.GwtTestEntryPoint' />
 
@@ -21,6 +22,7 @@
 	<source path='deferred' />
 	<source path='dom' />
 	<source path='editors' />
+	<source path='gin' />
 	<source path='guava' />
 	<source path='jso' />
 	<source path='json' />

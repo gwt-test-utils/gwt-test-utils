@@ -1,6 +1,7 @@
 package com.googlecode.gwt.test.gin;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Fail.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -10,211 +11,30 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.Messages;
-import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.gwt.inject.client.GinModules;
-import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.googlecode.gwt.test.GwtTestTest;
+import com.googlecode.gwt.test.gin.Injectors.Gin1Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin2Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin3Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin4Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin5Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin6Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin7Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin8Injector;
+import com.googlecode.gwt.test.gin.Injectors.Impl;
+import com.googlecode.gwt.test.gin.Injectors.Impl2;
+import com.googlecode.gwt.test.gin.Injectors.Impl3;
+import com.googlecode.gwt.test.gin.Injectors.ImplMore;
+import com.googlecode.gwt.test.gin.Injectors.Service;
+import com.googlecode.gwt.test.gin.Injectors.ServiceImpl;
+import com.googlecode.gwt.test.gin.Injectors.SomeService;
+import com.googlecode.gwt.test.gin.Injectors.SomeServiceAsync;
+import com.googlecode.gwt.test.gin.Injectors.SomeServiceImpl;
+import com.googlecode.gwt.test.gin.Injectors.Virtual;
+import com.googlecode.gwt.test.gin.Injectors.VirtualMore;
 import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
 
 public class GInjectorCreateHandlerTest extends GwtTestTest {
-
-   @GinModules({Gin1Module.class})
-   static interface Gin1Injector extends Ginjector {
-      Virtual virtual();
-   }
-
-   // This module will only contain a single binding
-   static final class Gin1Module extends AbstractGinModule {
-      @Override
-      protected void configure() {
-         bind(Virtual.class).to(Impl.class).in(Singleton.class);
-      }
-   }
-
-   @GinModules({Gin2Module.class})
-   static interface Gin2Injector extends Ginjector {
-      SomeServiceAsync service();
-
-      Virtual virtual();
-
-      VirtualMore virtualMore();
-   }
-
-   static final class Gin2Module extends AbstractGinModule {
-      @Override
-      protected void configure() {
-         bind(Virtual.class).to(Impl2.class);
-         bind(VirtualMore.class).to(ImplMore.class);
-      }
-   }
-
-   @GinModules({Gin3Module.class})
-   static interface Gin3Injector extends Ginjector {
-      ImplMore implMore();
-   }
-
-   static final class Gin3Module extends AbstractGinModule {
-      @Override
-      protected void configure() {
-         bind(Virtual.class).to(Impl2.class);
-      }
-   }
-
-   @GinModules(Gin4Module.class)
-   interface Gin4Injector extends Ginjector {
-      Virtual virtual();
-   }
-
-   static class Gin4Module extends AbstractGinModule {
-      @Override
-      protected void configure() {
-         bind(Virtual.class).to(ImplementationWithProviders.class);
-         bind(VirtualMore.class).to(ImplMore.class);
-      }
-   }
-
-   @GinModules(Gin5Module.class)
-   interface Gin5Injector extends Ginjector {
-      Impl singletonImpl();
-
-      Virtual singletonVirtual();
-
-   }
-
-   static class Gin5Module extends AbstractGinModule {
-
-      @Override
-      protected void configure() {
-         bind(Impl.class).in(Singleton.class);
-
-         bind(Virtual.class).to(Impl.class);
-      }
-
-   }
-
-   @GinModules(Gin6Module.class)
-   interface Gin6Injector extends Ginjector {
-      Virtual singletonImpl();
-
-      Impl3 wrapper();
-
-   }
-
-   static class Gin6Module extends AbstractGinModule {
-
-      @Override
-      protected void configure() {
-         bind(Virtual.class).to(Impl.class).in(Singleton.class);
-
-      }
-
-      @Provides
-      Impl3 provideImpl3(Virtual toWrap) {
-         return new Impl3(toWrap);
-      }
-
-   }
-
-   @GinModules(Gin7Module.class)
-   interface Gin7Injector extends Ginjector {
-      Impl2 eagerSingleton();
-   }
-
-   static class Gin7Module extends AbstractGinModule {
-
-      @Override
-      protected void configure() {
-         bind(Impl2.class).asEagerSingleton();
-      }
-   }
-
-   static class Impl implements Virtual {
-   }
-
-   static class Impl2 implements Virtual {
-      TestMessages messages;
-
-      @Inject
-      public Impl2(TestMessages messages) {
-         this.messages = messages;
-      }
-   }
-
-   static class Impl3 implements Virtual {
-
-      protected final Virtual wrapped;
-
-      public Impl3(Virtual impl) {
-         this.wrapped = impl;
-      }
-   }
-
-   static class ImplementationWithProviders implements Virtual {
-      @Inject
-      public ImplementationWithProviders(Provider<VirtualMore> provider) {
-      }
-   }
-
-   static class ImplMore implements VirtualMore {
-      Virtual core;
-
-      @Inject
-      public ImplMore(Virtual core) {
-         super();
-         this.core = core;
-      }
-
-   }
-
-   // These bindings test the ability of Ginjector GwtCreateHandler
-   // to fallback to GWT.create for unbound ones (like RemoteService,
-   // Constants, Messages, etc).
-   @RemoteServiceRelativePath("service")
-   static interface Service extends RemoteService {
-      String name();
-   }
-
-   static interface ServiceAsync {
-      void name(AsyncCallback<String> callback);
-   }
-
-   static class ServiceImpl implements Service {
-
-      public String name() {
-         return "Service Implementation";
-      }
-
-   }
-
-   @RemoteServiceRelativePath("someService")
-   static interface SomeService extends RemoteService {
-   }
-
-   static interface SomeServiceAsync {
-   }
-
-   static class SomeServiceImpl implements SomeService {
-
-   }
-
-   static interface TestMessages extends Messages {
-      @DefaultMessage("this is junit")
-      String myName();
-   }
-
-   // Simple bindings
-   static interface Virtual {
-   }
-   static interface VirtualMore {
-   }
 
    @Before
    public void beforeGinjectorCreateHandler() {
@@ -261,6 +81,24 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
       assertEquals(Impl2.class, virtual.getClass());
       Assert.assertNotSame(virtual, injector2.virtual());
       assertNotNull(service);
+   }
+
+   @Test
+   public void shouldInstanciateAsyncProvider() {
+      Gin8Injector injector8 = GWT.create(Gin8Injector.class);
+
+      // Act
+      injector8.classWithAsyncProvider().onSuccess(new AsyncCallback<Impl2>() {
+
+         public void onFailure(Throwable caught) {
+            fail("should not fail", caught);
+
+         }
+
+         public void onSuccess(Impl2 result) {
+            assertThat(result.messages.myName()).isEqualTo("this is junit");
+         }
+      });
    }
 
    @Test

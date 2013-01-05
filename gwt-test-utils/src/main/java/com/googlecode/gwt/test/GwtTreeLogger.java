@@ -45,6 +45,10 @@ public class GwtTreeLogger extends AbstractTreeLogger {
       return INSTANCE;
    }
 
+   public static void reset() {
+      lastIndexOfErrorWithinParentLogger = -1;
+   }
+
    private final String indent;
 
    private GwtTreeLogger(String indent) {

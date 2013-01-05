@@ -2,6 +2,8 @@ package com.googlecode.gwt.test.gin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,20 +11,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javassist.CannotCompileException;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.CtMethod;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.ClassFile;
+import javassist.bytecode.ConstPool;
+import javassist.bytecode.Descriptor;
+import javassist.bytecode.FieldInfo;
+import javassist.bytecode.SignatureAttribute;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.Ginjector;
+import com.google.gwt.inject.rebind.reflect.ReflectUtil;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binding;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.ProvidedBy;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
 import com.google.inject.spi.DefaultElementVisitor;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.Element;
@@ -30,6 +46,7 @@ import com.google.inject.spi.Elements;
 import com.google.inject.spi.HasDependencies;
 import com.google.inject.spi.InjectionPoint;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
+import com.googlecode.gwt.test.internal.GwtClassPool;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 /**
@@ -47,19 +64,19 @@ class DeferredBindingModule extends AbstractModule {
 
       private final Class<?> clazzToInstanciate;
 
-      public DeferredBindingProvider(Class<? extends Ginjector> ginInjectorClass,
-               Class<?> clazzToInstanciate) {
-         if (clazzToInstanciate.getName().endsWith("Async")) {
+      public DeferredBindingProvider(Class<? extends Ginjector> ginInjectorClass, Key<?> key) {
+         Class<?> rawType = key.getTypeLiteral().getRawType();
+         if (rawType.getName().endsWith("Async")) {
             try {
-               this.clazzToInstanciate = GwtReflectionUtils.getClass(clazzToInstanciate.getName().substring(
-                        0, clazzToInstanciate.getName().length() - 5));
+               this.clazzToInstanciate = GwtReflectionUtils.getClass(rawType.getName().substring(0,
+                        rawType.getName().length() - 5));
             } catch (ClassNotFoundException e) {
                throw new GwtTestPatchException(
                         "Error while trying to create a Guice provider for injector '"
                                  + ginInjectorClass.getName() + "'", e);
             }
          } else {
-            this.clazzToInstanciate = clazzToInstanciate;
+            this.clazzToInstanciate = rawType;
          }
       }
 
@@ -72,6 +89,8 @@ class DeferredBindingModule extends AbstractModule {
    }
 
    private static final Map<Class<?>, DeferredBindingModule> DEFERRED_BINDING_MODULES_CACHE = new HashMap<Class<?>, DeferredBindingModule>();
+
+   private static final Map<String, Class<Object>> GENERATED = new HashMap<String, Class<Object>>();
    private static final Map<Class<?>, Boolean> HAS_INJECTION_ANNOTATION_CACHE = new HashMap<Class<?>, Boolean>();
 
    private static final Logger LOGGER = LoggerFactory.getLogger(DeferredBindingModule.class);
@@ -88,9 +107,9 @@ class DeferredBindingModule extends AbstractModule {
       return deferredBindingModule;
    }
 
-   private final Set<Class<?>> bindedClasses;
+   private final Set<Key<?>> bindedClasses;
 
-   private final Set<Class<?>> classesToInstanciate;
+   private final Set<Key<?>> classesToInstanciate;
 
    private final Class<? extends Ginjector> ginInjectorClass;
 
@@ -103,48 +122,62 @@ class DeferredBindingModule extends AbstractModule {
       this.bindedClasses = collectBindedClasses(elements);
    }
 
-   @SuppressWarnings({"unchecked"})
    @Override
    protected void configure() {
+      Set<Key<?>> copy = new HashSet<Key<?>>(bindedClasses);
+      addDeferredBindings(classesToInstanciate, copy);
 
-      for (Class<?> toInstanciate : classesToInstanciate) {
+   }
+
+   @SuppressWarnings("unchecked")
+   private void addDeferredBinding(final Key<?> toInstanciate, Set<Key<?>> bindedClasses) {
+      if (isProviderKey(toInstanciate)) {
+         Key<Object> providedKey = (Key<Object>) ReflectUtil.getProvidedKey(toInstanciate);
+         if (!bindedClasses.contains(providedKey)) {
+            Set<Key<?>> collected = new HashSet<Key<?>>();
+            collectDependencies(providedKey, collected);
+            addDeferredBindings(collected, bindedClasses);
+         }
+      } else if (isAsyncProviderKey(toInstanciate)) {
+         Class<Object> asyncProviderClass = getAsyncProvider(toInstanciate);
+         bind((Key<Object>) toInstanciate).to(asyncProviderClass);
+
+         Key<Object> providedKey = (Key<Object>) ReflectUtil.getProvidedKey(toInstanciate);
+         if (!bindedClasses.contains(providedKey)) {
+            Set<Key<?>> collected = new HashSet<Key<?>>();
+            collectDependencies(providedKey, collected);
+            addDeferredBindings(collected, bindedClasses);
+         }
+
+      } else if (hasAnyGuiceAnnotation(toInstanciate.getTypeLiteral().getRawType())) {
+         // bind to itself, to tell guice there are some injection to proceed although the binding
+         // is not declared in the module
+         bind(toInstanciate);
+      } else {
+         // by default use GWT deferred binding to create leaf instances to be injected
+         bind((Key<Object>) toInstanciate).toProvider(
+                  new DeferredBindingProvider(ginInjectorClass, toInstanciate));
+      }
+
+      bindedClasses.add(toInstanciate);
+   }
+
+   private void addDeferredBindings(Set<Key<?>> classesToInstanciate, Set<Key<?>> bindedClasses) {
+      for (final Key<?> toInstanciate : classesToInstanciate) {
          if (!bindedClasses.contains(toInstanciate)) {
-
-            if (toInstanciate.equals(Provider.class)) {
-               continue;
-               // Skip the Provider class. However, there's a second
-               // issue here, when you need to inject a Provider of
-               // parameterized type not already bound (something that
-               // falls back to GWT.create): Animal(Provider<Messages>
-               // provider).
-               // I'm not sure there's a way to fix this (other that
-               // don't use Provider for generated code).
-            }
-
-            if (hasAnyGuiceAnnotation(toInstanciate)) {
-               // bind to itself, to tell guice there are some injection to
-               // proceed
-               // although the binding is not declared in the module
-               bind(toInstanciate);
-            } else {
-               // by default use GWT deferred binding to create leaf instances
-               // to be
-               // injected
-               bind((Class<Object>) toInstanciate).toProvider(
-                        new DeferredBindingProvider(ginInjectorClass, toInstanciate));
-            }
+            addDeferredBinding(toInstanciate, bindedClasses);
          }
       }
    }
 
-   private Set<Class<?>> collectBindedClasses(List<Element> elements) {
-      final Set<Class<?>> bindedClasses = new HashSet<Class<?>>();
+   private Set<Key<?>> collectBindedClasses(List<Element> elements) {
+      final Set<Key<?>> bindedClasses = new HashSet<Key<?>>();
 
       for (Element e : elements) {
          e.acceptVisitor(new DefaultElementVisitor<Void>() {
             @Override
             public <T> Void visit(Binding<T> binding) {
-               bindedClasses.add(binding.getKey().getTypeLiteral().getRawType());
+               bindedClasses.add(binding.getKey());
                return null;
             }
          });
@@ -153,23 +186,9 @@ class DeferredBindingModule extends AbstractModule {
       return bindedClasses;
    }
 
-   private void collectDependencies(Class<?> current, Set<Class<?>> collected) {
-      if (collected.contains(current)) {
-         return;
-      }
+   private Set<Key<?>> collectClassesFromInjector(Class<?> injectorClass) {
 
-      collected.add(current);
-
-      Set<Class<?>> dependencies = getDependencies(current);
-
-      for (Class<?> dependency : dependencies) {
-         collectDependencies(dependency, collected);
-      }
-   }
-
-   private Set<Class<?>> collectClassesFromInjector(Class<?> injectorClass) {
-
-      Set<Class<?>> classesToInstanciate = new HashSet<Class<?>>();
+      Set<Key<?>> classesToInstanciate = new HashSet<Key<?>>();
 
       for (Method m : injectorClass.getMethods()) {
          if (m.getGenericParameterTypes().length > 0) {
@@ -182,14 +201,28 @@ class DeferredBindingModule extends AbstractModule {
 
          Class<?> literal = m.getReturnType();
 
-         collectDependencies(literal, classesToInstanciate);
+         collectDependencies(Key.get(literal), classesToInstanciate);
       }
 
       return classesToInstanciate;
    }
 
-   private Set<Class<?>> collectDependencies(List<Element> elements) {
-      final Set<Class<?>> dependencies = new HashSet<Class<?>>();
+   private void collectDependencies(Key<?> current, Set<Key<?>> collected) {
+      if (collected.contains(current)) {
+         return;
+      }
+
+      collected.add(current);
+
+      Set<Key<?>> dependencies = getDependencies(current);
+
+      for (Key<?> dependency : dependencies) {
+         collectDependencies(dependency, collected);
+      }
+   }
+
+   private Set<Key<?>> collectDependencies(List<Element> elements) {
+      final Set<Key<?>> dependencies = new HashSet<Key<?>>();
       for (Element e : elements) {
          e.acceptVisitor(new DefaultElementVisitor<Void>() {
             @Override
@@ -199,15 +232,11 @@ class DeferredBindingModule extends AbstractModule {
                if (binding instanceof HasDependencies) {
                   HasDependencies deps = (HasDependencies) binding;
                   for (Dependency<?> d : deps.getDependencies()) {
-                     if (!d.getKey().getTypeLiteral().getRawType().isInterface()) {
-                        dependencies.addAll(getDependencies(d.getKey().getTypeLiteral()));
-                     } else {
-                        dependencies.add(d.getKey().getTypeLiteral().getRawType());
-                     }
+                     collectDependencies(d.getKey(), dependencies);
                   }
                } else {
-                  // At least try to fix the dependecies for untargeted bindings
-                  dependencies.addAll(getDependencies(binding.getKey().getTypeLiteral()));
+                  collectDependencies(binding.getKey(), dependencies);
+                  dependencies.addAll(getDependencies(binding.getKey()));
                }
 
                return null;
@@ -218,59 +247,93 @@ class DeferredBindingModule extends AbstractModule {
       return dependencies;
    }
 
-   private Set<Class<?>> getDependencies(Class<?> clazz) {
+   @SuppressWarnings("unchecked")
+   private Class<Object> generatedAsyncProvider(String className, Key<?> providedKey) {
 
-      if (clazz.isInterface()) {
-         return java.util.Collections.<Class<?>> emptySet();
-      }
+      CtClass providedCtClass = GwtClassPool.getCtClass(providedKey.getTypeLiteral().getRawType());
 
-      Set<Class<?>> dependencies = new HashSet<Class<?>>();
+      CtClass c = GwtClassPool.get().makeClass(className);
+      c.addInterface(GwtClassPool.getCtClass(AsyncProvider.class));
 
       try {
-         dependencies.addAll(getDependencies(InjectionPoint.forConstructorOf(clazz)));
-      } catch (ConfigurationException e) {
-         // nothing to do
-      }
+         ClassFile classFile = c.getClassFile();
+         classFile.setVersionToJava5();
+         ConstPool constantPool = classFile.getConstPool();
 
-      for (InjectionPoint point : InjectionPoint.forInstanceMethodsAndFields(clazz)) {
-         dependencies.addAll(getDependencies(point));
-      }
+         CtField provider = CtField.make("private " + Provider.class.getName() + " provider;", c);
+         c.addField(provider);
+         FieldInfo fieldInfo = provider.getFieldInfo();
 
-      for (InjectionPoint point : InjectionPoint.forStaticMethodsAndFields(clazz)) {
-         dependencies.addAll(getDependencies(point));
-      }
+         // Make it generic
+         SignatureAttribute signatureAttribute = new SignatureAttribute(fieldInfo.getConstPool(),
+                  "Lcom/google/inject/Provider<" + Descriptor.of(providedCtClass) + ">;");
+         fieldInfo.addAttribute(signatureAttribute);
 
-      return dependencies;
+         AnnotationsAttribute attr = new AnnotationsAttribute(constantPool,
+                  AnnotationsAttribute.visibleTag);
+         javassist.bytecode.annotation.Annotation a = new javassist.bytecode.annotation.Annotation(
+                  Inject.class.getName(), constantPool);
+         attr.setAnnotation(a);
+         provider.getFieldInfo().addAttribute(attr);
+
+         CtMethod get = CtMethod.make("public void get(" + AsyncCallback.class.getName()
+                  + " callback) { callback.onSuccess(provider.get()); }", c);
+         c.addMethod(get);
+
+         return c.toClass();
+      } catch (CannotCompileException e) {
+         throw new GwtTestGinException("Error while creating AsyncProvider subclass [" + className
+                  + "]", e);
+      }
 
    }
 
-   private Set<Class<?>> getDependencies(InjectionPoint point) {
-      Set<Class<?>> dependencies = new HashSet<Class<?>>();
+   private Class<Object> getAsyncProvider(Key<?> key) {
+
+      Key<?> providedKey = ReflectUtil.getProvidedKey(key);
+      String className = providedKey.getTypeLiteral().getRawType().getName() + "AsyncProvider";
+
+      Class<Object> clazz = GENERATED.get(className);
+
+      if (clazz != null) {
+         return clazz;
+      }
+
+      clazz = generatedAsyncProvider(className, providedKey);
+      GENERATED.put(className, clazz);
+
+      return clazz;
+   }
+
+   private Set<Key<?>> getDependencies(InjectionPoint point) {
+      Set<Key<?>> dependencies = new HashSet<Key<?>>();
       for (Dependency<?> d1 : point.getDependencies()) {
-         Class<?> classLiteral = d1.getKey().getTypeLiteral().getRawType();
-         dependencies.add(classLiteral);
+         dependencies.add(d1.getKey());
       }
 
       return dependencies;
    }
 
-   private Set<Class<?>> getDependencies(TypeLiteral<?> type) {
-      if (type.getRawType().isInterface()) {
-         return java.util.Collections.<Class<?>> emptySet();
+   private Set<Key<?>> getDependencies(Key<?> clazz) {
+
+      Set<Key<?>> dependencies = new HashSet<Key<?>>();
+
+      if (clazz.getTypeLiteral().getRawType().isInterface()) {
+         dependencies.add(clazz);
+         return dependencies;
       }
-      Set<Class<?>> dependencies = new HashSet<Class<?>>();
 
       try {
-         dependencies.addAll(getDependencies(InjectionPoint.forConstructorOf(type)));
+         dependencies.addAll(getDependencies(InjectionPoint.forConstructorOf(clazz.getTypeLiteral())));
       } catch (ConfigurationException e) {
          // nothing to do
       }
 
-      for (InjectionPoint point : InjectionPoint.forInstanceMethodsAndFields(type)) {
+      for (InjectionPoint point : InjectionPoint.forInstanceMethodsAndFields(clazz.getTypeLiteral())) {
          dependencies.addAll(getDependencies(point));
       }
 
-      for (InjectionPoint point : InjectionPoint.forStaticMethodsAndFields(type)) {
+      for (InjectionPoint point : InjectionPoint.forStaticMethodsAndFields(clazz.getTypeLiteral())) {
          dependencies.addAll(getDependencies(point));
       }
 
@@ -306,5 +369,17 @@ class DeferredBindingModule extends AbstractModule {
          }
       }
       return false;
+   }
+
+   private boolean isAsyncProviderKey(Key<?> key) {
+      Type keyType = key.getTypeLiteral().getType();
+      return keyType instanceof ParameterizedType
+               && ((ParameterizedType) keyType).getRawType() == AsyncProvider.class;
+   }
+
+   private boolean isProviderKey(Key<?> key) {
+      Type keyType = key.getTypeLiteral().getType();
+      return keyType instanceof ParameterizedType
+               && (((ParameterizedType) keyType).getRawType() == Provider.class || ((ParameterizedType) keyType).getRawType() == com.google.inject.Provider.class);
    }
 }

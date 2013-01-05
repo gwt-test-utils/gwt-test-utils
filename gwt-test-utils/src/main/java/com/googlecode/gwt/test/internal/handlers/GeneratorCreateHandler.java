@@ -14,6 +14,7 @@
 
 package com.googlecode.gwt.test.internal.handlers;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,10 @@ public class GeneratorCreateHandler implements GwtCreateHandler {
 
    public Object create(Class<?> classLiteral) throws Exception {
       Class<?> c = generate(classLiteral);
+
+      if (c.isInterface() || Modifier.isAbstract(c.getModifiers())) {
+         return null;
+      }
       return GwtReflectionUtils.instantiateClass(c);
    }
 

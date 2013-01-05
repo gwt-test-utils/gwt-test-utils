@@ -41,6 +41,7 @@ public class GwtReset {
    }
 
    public void reset() throws Exception {
+      GwtTreeLogger.reset();
       getStaticAndCallClear(Timer.class, "timers");
       getStaticAndCallClear(Dictionary.class, "cache");
       getStaticAndCallClear(RootPanel.class, "rootPanels");

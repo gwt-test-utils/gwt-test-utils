@@ -57,7 +57,7 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
       Class<? extends GinModule>[] ginModules = readGinModules(ginInjectorClass);
 
       // create a set of Guice Module bases on the GinModules
-      Set<Module> guiceModules = readGuiceModules(ginInjectorClass, ginModules);
+      Set<Module> guiceModules = readGuiceModules(ginModules);
 
       // Use Guice SPI to solve deferred binding dependencies
       DeferredBindingModule deferredBindingModule = DeferredBindingModule.getDeferredBindingModule(
@@ -99,8 +99,8 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
       return ginModules;
    }
 
-   private Set<Module> readGuiceModules(Class<? extends Ginjector> ginjectorClass,
-            Class<? extends GinModule>[] classLiterals) throws Exception {
+   private Set<Module> readGuiceModules(Class<? extends GinModule>[] classLiterals)
+            throws Exception {
 
       Set<Module> modules = new HashSet<Module>();
       for (Class<? extends GinModule> literal : classLiterals) {
