@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.googlecode.gwt-test-utils</groupId>
 		<artifactId>gwt-test-utils-parent</artifactId>
-		<version>0.45-SNAPSHOT</version>
+		<version>0.44-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -35,23 +35,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<!-- skip javadoc since there is no public class in this module -->
-						<phase>none</phase>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	
 </project>
