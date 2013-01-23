@@ -71,7 +71,7 @@ class UiBinderInvocationHandler implements InvocationHandler {
    /**
     * This method is in charge of the instanciation of DOM object / GWT widget and their binding
     * with @UiField in the owner
-    * 
+    *
     * @param owner The owner UiBinder subclass instance.
     * @return The root component, initially returned by {@link Link
     *         UiBinder#createAndBindUi(Object)}.
@@ -110,19 +110,23 @@ class UiBinderInvocationHandler implements InvocationHandler {
    @SuppressWarnings("unchecked")
    private Class<EventHandler> findHandlerClass(Method uiHandlerMethod) {
       Class<?> eventTypeClass = uiHandlerMethod.getParameterTypes()[0];
-      String eventHandlerClassName = eventTypeClass.getName().substring(0,
-               eventTypeClass.getName().lastIndexOf("Event"))
-               + "Handler";
+      String eventHandlerClassName = eventTypeClass.getName().substring(0, eventTypeClass.getName().lastIndexOf("Event")) + "Handler";
+
       try {
          return (Class<EventHandler>) GwtReflectionUtils.getClass(eventHandlerClassName);
       } catch (ClassNotFoundException e) {
-         // should never happen
-         throw new GwtTestUiBinderException("Cannot find handler class for event type '"
-                  + eventTypeClass.getName() + "'. By convention, it should be '"
-                  + eventHandlerClassName + "'");
       }
 
+      String anotherEventHandlerClassName = eventTypeClass.getName() + ".Handler";
+      try {
+         return (Class<EventHandler>) GwtReflectionUtils.getClass(anotherEventHandlerClassName);
+      } catch (ClassNotFoundException e) {
+         // should never happen
+         throw new GwtTestUiBinderException("Cannot find handler class for event type '" + eventTypeClass.getName()
+               + "'. By convention, it should be '" + eventHandlerClassName +  "' or '" + anotherEventHandlerClassName + "'");
+      }
    }
+
 
    private GwtEvent.Type<?> getEventType(Method method) {
       Class<?> eventTypeClass = method.getParameterTypes()[0];
