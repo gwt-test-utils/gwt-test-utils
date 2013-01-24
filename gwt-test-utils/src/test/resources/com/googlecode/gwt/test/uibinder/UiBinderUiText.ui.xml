@@ -5,8 +5,12 @@
 	<ui:with field='res'
 		type='com.googlecode.gwt.test.resources.MyClientBundle' />
 
+	<ui:with field="msgRes"
+		type="com.googlecode.gwt.test.i18n.MyMessages"/>
+
 	<g:HTMLPanel>
 		<g:Label ui:field="label">Text : <ui:text from='{res.textResourceTxt}' /></g:Label>
+		<g:Label ui:field="msgLabel">Text : <ui:text from='{msgRes.orangeColor}' /></g:Label>
 	</g:HTMLPanel>
 
 </ui:UiBinder>
