@@ -20,7 +20,7 @@ public void clickOnButtonShouldDisplayMessageInLabel() {
 }
 ```
 
-If you want to write **fast** tests which will still deal with your GWT view layout and simulate browser events on your widgets easily, you really should considere this framework. 
+If you want to write **fast** tests which will still deal with your GWT view layout and simulate browser events on your widgets easily, you really should consider this framework. 
 The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Getting-started) page would be a good way to start ;-) 
 
 ## Features
