@@ -17,6 +17,9 @@ public class UiBinderUiText extends Composite {
    @UiField
    Label label;
 
+   @UiField
+   Label msgLabel;
+
    public UiBinderUiText() {
       initWidget(uiBinder.createAndBindUi(this));
    }
