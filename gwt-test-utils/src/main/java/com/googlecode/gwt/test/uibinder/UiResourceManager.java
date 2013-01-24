@@ -380,18 +380,20 @@ class UiResourceManager {
    private static class UiTextTag implements UiTag<String> {
 
       private final UiTag<?> parentTag;
-      private final TextResource textResource;
+      private final String text;
 
       UiTextTag(Map<String, Object> attributes, UiTag<?> parentTag, Object owner) {
          this.parentTag = parentTag;
 
-         this.textResource = (TextResource) attributes.get("from");
-
-         if (textResource == null) {
+         Object value = attributes.get("from");
+         if (value instanceof TextResource) {
+            text = ((TextResource) value).getText();
+         } else if (value instanceof String) {
+            text = (String) value;
+         } else {
             throw new GwtTestUiBinderException("Error in " + owner.getClass().getSimpleName()
                      + ".ui.xml : <ui:text> tag declared without 'from' attribute");
          }
-
       }
 
       public void addElement(Element element) {
@@ -411,7 +413,7 @@ class UiResourceManager {
       }
 
       public String endTag() {
-         return textResource.getText();
+         return text;
       }
 
       public UiTag<?> getParentTag() {
