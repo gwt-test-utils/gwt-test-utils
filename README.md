@@ -1,6 +1,6 @@
 [![Build Status](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/badge/icon)](https://buildhive.cloudbees.com/job/gwt-test-utils/job/gwt-test-utils/)
 
-**gwt-test-utils** is a Java testing framework for [GWT](http://code.google.com/intl/fr-FR/webtoolkit/) applications. It provides a simple way to write **fast** Java tests for your GWT client code, **without GWTTestCase** or any servlet container instance ! This means you are able to use any Java tool without restriction : JUnit, reflection, Easymock, Mockito, etc.
+**gwt-test-utils** is a Java testing framework for [GWT](http://code.google.com/intl/fr-FR/webtoolkit/) applications. It provides a simple way to write **fast** Java tests for your GWT client code, **without GWTTestCase** or any servlet container instance! This means you are able to use any Java tool without restriction: JUnit, reflection, Easymock, Mockito, etc.
 
 Writing tests looks like:
 
@@ -12,11 +12,11 @@ public void clickOnButtonShouldDisplayMessageInLabel() {
   // ensure the label is not visible at init
   assertThat(view.label).isNotVisible();
   
-  // Act : simulate a click event
+  // Act: simulate a click event
   Browser.click(view.button);
   
   // Assert: label should be visible and filled
-  assertThat(view.label).isVisible().textEquals("The button was clicked !");
+  assertThat(view.label).isVisible().textEquals("The button was clicked!");
 }
 ```
 
@@ -35,21 +35,21 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
 * Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing
 * Support for [JUnitParams](http://code.google.com/p/junitparams/)
 * Support for [GXT](http://www.sencha.com/products/gxt/) library (currently only version 2.x, version 3.x is coming !)
-* Complexe use-case testing using CSV-based scenarios
-* Extensibility through the use of custom patchers
+* Complex use-case testing using CSV-based scenarios
+* Extensibility through the use of custom patchs
 
 ## Documentation
 
 Whether you want to...
 * Use gwt-test-utils to test your GWT application
 * Make your custom widgets testable with the framework
-* Contributing code
+* Contribute code
 
 ... you'll find everything you need in the [wiki](https://github.com/gwt-test-utils/gwt-test-utils/wiki).
 
 ## Roadmap
 
-Here is the next features we are working on, ordered by priority (which is not frozen) :
+Here are the features we are working on, ordered by priority (which is not frozen) :
 
 * Support for [GWT-Bootstrap](https://github.com/gwtbootstrap/gwt-bootstrap)
 * Support for [GXT 3.0](http://www.sencha.com/products/gxt/)
@@ -57,7 +57,7 @@ Here is the next features we are working on, ordered by priority (which is not f
 * Support for [PowerMock](http://code.google.com/p/powermock/)
 * Support for [TestNG](http://testng.org/)
 
-In addition, we are daily improving **gwt-test-utils** existing features. To perfect it, we need your feedback !
+In addition, we are daily improving the existing **gwt-test-utils** features. To perfect it, we need your feedback !
 
 ## Community
 
