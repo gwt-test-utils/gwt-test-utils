@@ -27,7 +27,7 @@ public class DeferredReplaceWithCreateHandler implements GwtCreateHandler {
 
       String replaceWith = getReplaceWithClass(replaceWithList);
 
-      return (replaceWith != null && !replaceWith.equals(classLiteral))
+      return (replaceWith != null && !replaceWith.equals(classLiteral.getCanonicalName()))
                ? GWT.create(GwtReflectionUtils.getClass(replaceWith)) : null;
 
    }
@@ -46,10 +46,11 @@ public class DeferredReplaceWithCreateHandler implements GwtCreateHandler {
             if (isDefault(replaceWithData)) {
                // default case : nothing is specified
                return replaceWithData.getReplaceWith();
-            } else {
-               // not a <replace-with> element to use
-               continue;
             }
+
+            // not a <replace-with> element to use
+            continue;
+
          } else if (isDefault(replaceWithData)) {
             // save the default <replace-with>, to use
             defaultReplaceWith = replaceWithData;
