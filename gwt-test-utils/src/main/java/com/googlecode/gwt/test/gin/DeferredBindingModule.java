@@ -131,9 +131,12 @@ class DeferredBindingModule extends AbstractModule {
 
    @SuppressWarnings("unchecked")
    private void addDeferredBinding(final Key<?> toInstanciate, Set<Key<?>> bindedClasses) {
+      bindedClasses.add(toInstanciate);
+
       if (isProviderKey(toInstanciate)) {
          Key<Object> providedKey = (Key<Object>) ReflectUtil.getProvidedKey(toInstanciate);
          if (!bindedClasses.contains(providedKey)) {
+            bindedClasses.add(providedKey);
             Set<Key<?>> collected = new HashSet<Key<?>>();
             collectDependencies(providedKey, collected);
             addDeferredBindings(collected, bindedClasses);
@@ -144,6 +147,7 @@ class DeferredBindingModule extends AbstractModule {
 
          Key<Object> providedKey = (Key<Object>) ReflectUtil.getProvidedKey(toInstanciate);
          if (!bindedClasses.contains(providedKey)) {
+            bindedClasses.add(providedKey);
             Set<Key<?>> collected = new HashSet<Key<?>>();
             collectDependencies(providedKey, collected);
             addDeferredBindings(collected, bindedClasses);
@@ -159,7 +163,6 @@ class DeferredBindingModule extends AbstractModule {
                   new DeferredBindingProvider(ginInjectorClass, toInstanciate));
       }
 
-      bindedClasses.add(toInstanciate);
    }
 
    private void addDeferredBindings(Set<Key<?>> classesToInstanciate, Set<Key<?>> bindedClasses) {
