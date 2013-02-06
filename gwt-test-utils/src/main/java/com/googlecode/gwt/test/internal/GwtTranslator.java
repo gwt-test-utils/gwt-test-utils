@@ -15,6 +15,7 @@ class GwtTranslator implements Translator {
 
    private static final Logger LOGGER = LoggerFactory.getLogger(GwtTranslator.class);
 
+   private final ClassVisibilityModifier classVisibilityModifier;
    private final ConfigurationLoader configurationLoader;
    private final HasHTMLModifier hasHTMLModifier;
    private final HasNameModifier hasNameModifier;
@@ -25,6 +26,7 @@ class GwtTranslator implements Translator {
       this.configurationLoader = configurationLoader;
       this.hasHTMLModifier = new HasHTMLModifier();
       this.hasNameModifier = new HasNameModifier();
+      this.classVisibilityModifier = new ClassVisibilityModifier();
       this.serializableModifier = new SerializableModifier();
    }
 
@@ -43,13 +45,14 @@ class GwtTranslator implements Translator {
          serializableModifier.modify(ctClass);
          hasHTMLModifier.modify(ctClass);
          hasNameModifier.modify(ctClass);
+         classVisibilityModifier.modify(ctClass);
 
       } catch (Exception e) {
          if (GwtTestException.class.isInstance(e)) {
             throw (GwtTestException) e;
-         } else {
-            throw new GwtTestPatchException(e);
          }
+
+         throw new GwtTestPatchException(e);
       }
 
    }
@@ -64,10 +67,10 @@ class GwtTranslator implements Translator {
          } catch (Exception e) {
             if (GwtTestException.class.isInstance(e)) {
                throw (GwtTestException) e;
-            } else {
-               throw new GwtTestPatchException("Error while patching class '"
-                        + classToPatch.getName() + "'", e);
             }
+
+            throw new GwtTestPatchException("Error while patching class '" + classToPatch.getName()
+                     + "'", e);
          }
       }
    }
