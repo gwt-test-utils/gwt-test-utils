@@ -3,9 +3,12 @@ package com.googlecode.gwt.test;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.configuration.AnnotationEngine;
+import org.mockito.configuration.AnnotationEngineHolder;
 
 import com.googlecode.gwt.test.exceptions.ReflectionException;
 import com.googlecode.gwt.test.mockito.GwtStubber;
@@ -25,6 +28,15 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
  * @author Gael Lazzari
  */
 public abstract class GwtTestWithMockito extends GwtTestWithMocks {
+
+   @AfterClass
+   public static void resetAnnotationEngineHolder() {
+      AnnotationEngineHolder.reset();
+   }
+
+   public GwtTestWithMockito() {
+      AnnotationEngineHolder.setAnnotationEngine(getCustomAnnotationEngine());
+   }
 
    @Before
    public void beforeGwtTestWithMockito() {
@@ -64,6 +76,10 @@ public abstract class GwtTestWithMockito extends GwtTestWithMocks {
     */
    protected <T> GwtStubber doSuccessCallback(final T object) {
       return new GwtStubberImpl().doSuccessCallback(object);
+   }
+
+   protected AnnotationEngine getCustomAnnotationEngine() {
+      return null;
    }
 
    @Override

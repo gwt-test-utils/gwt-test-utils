@@ -10,6 +10,7 @@ import java.util.Set;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.configuration.DefaultAnnotationEngine;
 import org.mockito.internal.configuration.DefaultInjectionEngine;
+import org.mockito.internal.configuration.FieldAnnotationProcessor;
 import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
 
@@ -18,19 +19,18 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
 /**
  * Copied from {@link InjectingAnnotationEngine} to be able to inject our customized
- * AnnotationEngines
+ * {@link FieldAnnotationProcessor}.
  */
-class GwtInjectingAnnotationEngine implements AnnotationEngine {
+public class GwtInjectingAnnotationEngine implements AnnotationEngine {
+
    private final AnnotationEngine delegate;
    private final AnnotationEngine spyAnnotationEngine;
 
    public GwtInjectingAnnotationEngine() {
       delegate = new DefaultAnnotationEngine();
 
-      GwtReflectionUtils.callPrivateMethod(delegate, "registerAnnotationProcessor", Mock.class,
-               new GwtMockAnnotationProcessor());
-      GwtReflectionUtils.callPrivateMethod(delegate, "registerAnnotationProcessor",
-               org.mockito.Mock.class, new MockitoMockAnnotationProcessor());
+      registerAnnotationProcessor(Mock.class, new GwtMockAnnotationProcessor());
+      registerAnnotationProcessor(org.mockito.Mock.class, new MockitoMockAnnotationProcessor());
 
       spyAnnotationEngine = new GwtSpyAnnotationEngine();
    }
@@ -89,6 +89,12 @@ class GwtInjectingAnnotationEngine implements AnnotationEngine {
    public void process(Class<?> clazz, Object testInstance) {
       processIndependentAnnotations(testInstance.getClass(), testInstance);
       processInjectMocks(testInstance.getClass(), testInstance);
+   }
+
+   protected <A extends Annotation> void registerAnnotationProcessor(Class<A> annotationClass,
+            FieldAnnotationProcessor<A> fieldAnnotationProcessor) {
+      GwtReflectionUtils.callPrivateMethod(delegate, "registerAnnotationProcessor",
+               annotationClass, fieldAnnotationProcessor);
    }
 
    private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {

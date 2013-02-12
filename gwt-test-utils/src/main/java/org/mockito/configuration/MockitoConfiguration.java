@@ -44,7 +44,7 @@ public class MockitoConfiguration implements IMockitoConfiguration {
    }
 
    public AnnotationEngine getAnnotationEngine() {
-      return new GwtInjectingAnnotationEngine();
+      return AnnotationEngineHolder.getAnnotationEngine();
    }
 
    public Answer<Object> getDefaultAnswer() {
