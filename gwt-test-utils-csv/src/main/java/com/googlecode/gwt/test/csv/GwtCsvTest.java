@@ -6,6 +6,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Fail.fail;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -38,9 +39,9 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.csv.internal.DirectoryTestReader;
-import com.googlecode.gwt.test.csv.runner.CsvMethodInvocationHandler;
 import com.googlecode.gwt.test.csv.runner.CsvRunner;
-import com.googlecode.gwt.test.csv.runner.HasCsvMethodInvocationHandlers;
+import com.googlecode.gwt.test.csv.runner.CsvTestExecutionHandler;
+import com.googlecode.gwt.test.csv.runner.HasCsvTestExecutionHandlers;
 import com.googlecode.gwt.test.csv.tools.DefaultWidgetVisitor;
 import com.googlecode.gwt.test.csv.tools.WidgetVisitor;
 import com.googlecode.gwt.test.finder.GwtFinder;
@@ -56,7 +57,7 @@ import com.googlecode.gwt.test.utils.events.Browser;
 import com.googlecode.gwt.test.utils.events.Browser.BrowserErrorHandler;
 
 @RunWith(GwtCsvRunner.class)
-public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocationHandlers {
+public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionHandlers {
 
    private static class MacroReader {
 
@@ -103,7 +104,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
 
    protected CsvRunner csvRunner;
 
-   private final List<CsvMethodInvocationHandler> csvMethodInvocationHandlers = new ArrayList<CsvMethodInvocationHandler>();
+   private final List<CsvTestExecutionHandler> csvTestExecutionHandlers = new ArrayList<CsvTestExecutionHandler>();
 
    private MacroReader macroReader;
 
@@ -358,8 +359,8 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
       Browser.focus(object(identifier).ofType(Widget.class));
    }
 
-   public List<CsvMethodInvocationHandler> getCsvMethodInvocationHandlers() {
-      return Collections.unmodifiableList(csvMethodInvocationHandlers);
+   public List<CsvTestExecutionHandler> getCsvTestExecutionHandlers() {
+      return Collections.unmodifiableList(csvTestExecutionHandlers);
    }
 
    @CsvMethod
@@ -472,10 +473,6 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
       }
    }
 
-   public void launchTest(String testName) throws Exception {
-      csvRunner.runSheet(reader.getTest(testName), this);
-   }
-
    @CsvMethod
    public void mouseDown(String... identifier) {
       Browser.mouseDown(object(identifier).ofType(Widget.class));
@@ -559,8 +556,8 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
       GwtFinder.registerNodeFinder("root", rootObjectFinder);
    }
 
-   protected void addCsvInvocationHandler(CsvMethodInvocationHandler csvMethodInvocationHandler) {
-      csvMethodInvocationHandlers.add(csvMethodInvocationHandler);
+   protected final void addCsvInvocationHandler(CsvTestExecutionHandler csvMethodInvocationHandler) {
+      csvTestExecutionHandlers.add(csvMethodInvocationHandler);
    }
 
    /*
@@ -605,6 +602,28 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvMethodInvocati
 
    protected WidgetVisitor getWidgetVisitor() {
       return new DefaultWidgetVisitor();
+   }
+
+   /**
+    * Called by generated JUnit test class.
+    * 
+    * @param directoryPath directory where the launched file is.
+    * @param fileName the name of the launched test file.
+    * @throws Exception
+    * 
+    * @see {@link DirectoryTestReader}
+    */
+   protected final void launchTest(String directoryPath, String fileName) throws Exception {
+      File testFile = new File(directoryPath, fileName);
+      for (CsvTestExecutionHandler handler : getCsvTestExecutionHandlers()) {
+         handler.beforeCsvTestExecution(testFile);
+      }
+
+      csvRunner.runSheet(reader.getTest(fileName), this);
+
+      for (CsvTestExecutionHandler handler : getCsvTestExecutionHandlers()) {
+         handler.afterCsvTestExecution(testFile);
+      }
    }
 
    protected String prefix() {

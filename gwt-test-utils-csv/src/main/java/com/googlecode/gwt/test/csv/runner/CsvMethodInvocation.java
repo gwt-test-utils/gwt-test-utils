@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import com.googlecode.gwt.test.csv.CsvMethod;
 
 /**
- * A DTO to old a {@link CsvMethod} annotated method invocation data.
+ * A DTO to hold a {@link CsvMethod} annotated method invocation data.
  * 
  * @author Gael Lazzari
  * 

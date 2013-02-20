@@ -107,9 +107,9 @@ public class DirectoryTestReader {
       } catch (Exception e) {
          if (GwtTestException.class.isInstance(e)) {
             throw (GwtTestException) e;
-         } else {
-            throw new GwtTestCsvException(e);
          }
+
+         throw new GwtTestCsvException(e);
       }
    }
 
@@ -125,8 +125,8 @@ public class DirectoryTestReader {
       return Collections.unmodifiableSet(macros.keySet());
    }
 
-   public List<List<String>> getTest(String testName) {
-      return tests.get(testName);
+   public List<List<String>> getTest(String filePath) {
+      return tests.get(filePath);
    }
 
    public Set<String> getTestList() {
@@ -142,6 +142,16 @@ public class DirectoryTestReader {
       });
 
       return testMethods;
+   }
+
+   private String getTestName(String fileName, CsvDirectory csvDirectory) {
+      String csvShortName = csvDirectory.value().substring(
+               csvDirectory.value().lastIndexOf('/') + 1);
+
+      String nameWithoutExtension = fileName.substring(0, fileName.length()
+               - csvDirectory.extension().length());
+
+      return csvShortName + "_" + nameWithoutExtension;
    }
 
    private void initCsvMacros(CsvMacros csvMacros) throws FileNotFoundException, IOException {
@@ -173,27 +183,24 @@ public class DirectoryTestReader {
       tests = new HashMap<String, List<List<String>>>();
       for (File f : directory.listFiles()) {
          if (f.getName().endsWith(csvDirectory.extension())) {
-            String s = f.getName();
-            s = s.substring(0, s.length() - 4);
-            tests.put(s, CsvReader.readCsv(new FileReader(f)));
+            tests.put(f.getAbsolutePath(), CsvReader.readCsv(new FileReader(f)));
          }
       }
    }
 
    private void initTestMethods(Class<?> clazz, CsvDirectory csvDirectory) throws Exception {
       testMethods = new ArrayList<Method>();
-      String csvShortName = csvDirectory.value().substring(
-               csvDirectory.value().lastIndexOf('/') + 1);
 
       CtClass newClazz = GwtClassPool.get().makeClass(
                clazz.getName() + ".generated" + System.nanoTime());
       newClazz.setSuperclass(GwtClassPool.getCtClass(clazz));
       List<String> methodList = new ArrayList<String>();
       for (Entry<String, List<List<String>>> entry : tests.entrySet()) {
-         String methodName = csvShortName + "_" + entry.getKey();
+
+         String methodName = getTestName(entry.getKey(), csvDirectory);
          CtMethod m = new CtMethod(CtClass.voidType, methodName, new CtClass[0], newClazz);
          methodList.add(methodName);
-         m.setBody("launchTest(\"" + entry.getKey() + "\");");
+         m.setBody("launchTest(\"" + csvDirectory.value() + "\", \"" + entry.getKey() + "\");");
          newClazz.addMethod(m);
       }
       generatedClazz = newClazz.toClass(getClass().getClassLoader(), null);

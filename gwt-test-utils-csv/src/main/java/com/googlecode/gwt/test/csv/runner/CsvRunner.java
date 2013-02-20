@@ -33,13 +33,13 @@ public class CsvRunner {
 
    private String extendedLineInfo = null;
 
-   private final HasCsvMethodInvocationHandlers hasCsvMethodInvocationHandlers;
+   private final HasCsvTestExecutionHandlers hasCsvMethodInvocationHandlers;
 
    private int lineNumber = -1;
 
    private final List<ObjectFinder> objectFinders = new ArrayList<ObjectFinder>();
 
-   public CsvRunner(HasCsvMethodInvocationHandlers hasCsvMethodInvocationHandlers) {
+   public CsvRunner(HasCsvTestExecutionHandlers hasCsvMethodInvocationHandlers) {
       this.hasCsvMethodInvocationHandlers = hasCsvMethodInvocationHandlers;
    }
 
@@ -220,7 +220,7 @@ public class CsvRunner {
 
             CsvMethodInvocation invocationData = new CsvMethodInvocation(lineNumber + 1,
                      extendedLineInfo, m, paramIdentifiers, paramValues);
-            for (CsvMethodInvocationHandler handler : hasCsvMethodInvocationHandlers.getCsvMethodInvocationHandlers()) {
+            for (CsvTestExecutionHandler handler : hasCsvMethodInvocationHandlers.getCsvTestExecutionHandlers()) {
                handler.onCsvMethodInvocation(invocationData);
             }
          }
