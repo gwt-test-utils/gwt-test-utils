@@ -57,6 +57,7 @@
 		<module>gwt-test-utils-csv</module>
 		<module>gwt-test-utils-gwtbootstrap</module>
 		<module>gwt-test-utils-gxt2</module>
+    <module>gwt-test-utils-jukito </module>
 		<!--<module>gwt-test-utils-gxt3</module> -->
 	</modules>
 	<properties>
