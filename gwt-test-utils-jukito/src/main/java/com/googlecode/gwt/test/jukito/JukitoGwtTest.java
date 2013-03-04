@@ -7,8 +7,12 @@ import com.googlecode.gwt.test.GwtTest;
  * @author Przemysław Gałązka
  * @since 04-03-2013
  */
-
-
 @RunWith(JukitoGwtTestRunner.class)
 public class JukitoGwtTest extends GwtTest {
+
+
+  @Override
+  protected String getHostPagePath(String moduleFullQualifiedName) {
+    return null;
+  }
 }
