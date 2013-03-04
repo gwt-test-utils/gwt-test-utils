@@ -17,3 +17,5 @@ gwt-test-utils-gwtbootstrap/target/classes/META-INF/maven/com.googlecode.gwt-tes
 gwt-test-utils-gwtbootstrap/target/test-classes/META-INF/gwt-test-utils.properties
 gwt-test-utils-gwtbootstrap/target/test-classes/com/googlecode/gwt/test/gwtbootstrap/test/GwtBootstrapTest.gwt.xml
 gwt-test-utils-gwtbootstrap/target/test-classes/com/googlecode/gwt/test/gwtbootstrap/test/client/TestWidget.ui.xml
+*.iml
+.idea
