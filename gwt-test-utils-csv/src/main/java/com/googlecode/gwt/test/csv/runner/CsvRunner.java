@@ -180,10 +180,13 @@ public class CsvRunner {
       removeEmptyElements(filterArgs);
       transformArgs(filterArgs);
       Method m = getCsvMethod(fixture.getClass(), methodName);
+
       if (m == null) {
          fail(getAssertionErrorMessagePrefix() + "@" + CsvMethod.class.getSimpleName() + " ' "
                   + methodName + " ' not found in object " + fixture);
+         return;
       }
+
       GwtReflectionUtils.makeAccessible(m);
 
       List<Object> argList = new ArrayList<Object>();
@@ -215,17 +218,10 @@ public class CsvRunner {
          Object[] paramValues = argList.toArray();
 
          if (hasCsvMethodInvocationHandlers != null) {
-
-            String[] paramIdentifiers = args.toArray(new String[args.size()]);
-
-            CsvMethodInvocation invocationData = new CsvMethodInvocation(lineNumber + 1,
-                     extendedLineInfo, m, paramIdentifiers, paramValues);
-            for (CsvTestExecutionHandler handler : hasCsvMethodInvocationHandlers.getCsvTestExecutionHandlers()) {
-               handler.onCsvMethodInvocation(invocationData);
-            }
+            invokeWithCallbacks(fixture, m, args, paramValues);
+         } else {
+            m.invoke(fixture, paramValues);
          }
-
-         m.invoke(fixture, paramValues);
       } catch (Throwable e) {
 
          Throwable cause = getFixtureError(e);
@@ -272,10 +268,13 @@ public class CsvRunner {
                   + m.getName());
       }
       Method countM = GwtReflectionUtils.getMethod(current.getClass(), m.getName() + "Count");
+
       if (countM == null) {
          fail("Count method not found in " + current.getClass().getCanonicalName() + " method "
                   + m.getName());
+         return null;
       }
+
       if (countM.getParameterTypes().length > 0) {
          fail("Too many parameter in count method " + current.getClass().getCanonicalName()
                   + " method " + countM.getName());
@@ -331,13 +330,13 @@ public class CsvRunner {
          return res;
       } else if (clazz == GwtCsvTest.class) {
          return null;
-      } else {
-         Class<?> superClass = clazz.getSuperclass();
-         if (superClass != null)
-            return getCsvMethod(clazz.getSuperclass(), methodName);
-         else
-            return null;
       }
+
+      Class<?> superClass = clazz.getSuperclass();
+      if (superClass != null) {
+         return getCsvMethod(clazz.getSuperclass(), methodName);
+      }
+      return null;
    }
 
    private Field getField(Object fixture, Class<?> clazz, String fieldName) {
@@ -404,6 +403,24 @@ public class CsvRunner {
          return m.invoke(current, tab);
       } catch (InvocationTargetException e) {
          return null;
+      }
+   }
+
+   private void invokeWithCallbacks(Object fixture, Method csvMethod, List<String> args,
+            Object[] paramValues) throws IllegalArgumentException, IllegalAccessException,
+            InvocationTargetException {
+      String[] paramIdentifiers = args.toArray(new String[args.size()]);
+
+      CsvMethodInvocation invocationData = new CsvMethodInvocation(lineNumber + 1,
+               extendedLineInfo, csvMethod, paramIdentifiers, paramValues);
+      for (CsvTestExecutionHandler handler : hasCsvMethodInvocationHandlers.getCsvTestExecutionHandlers()) {
+         handler.beforeCsvMethodInvocation(invocationData);
+      }
+
+      csvMethod.invoke(fixture, paramValues);
+
+      for (CsvTestExecutionHandler handler : hasCsvMethodInvocationHandlers.getCsvTestExecutionHandlers()) {
+         handler.afterCsvMethodInvocation(invocationData);
       }
    }
 
