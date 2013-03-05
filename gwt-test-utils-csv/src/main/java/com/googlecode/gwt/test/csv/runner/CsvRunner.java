@@ -216,12 +216,8 @@ public class CsvRunner {
          BrowserSimulatorImpl.get().fireLoopEnd();
 
          Object[] paramValues = argList.toArray();
+         invokeWithCallbacks(fixture, m, args, paramValues);
 
-         if (hasCsvMethodInvocationHandlers != null) {
-            invokeWithCallbacks(fixture, m, args, paramValues);
-         } else {
-            m.invoke(fixture, paramValues);
-         }
       } catch (Throwable e) {
 
          Throwable cause = getFixtureError(e);

@@ -13,7 +13,7 @@ import com.googlecode.gwt.test.csv.CsvMethod;
 public interface HasCsvTestExecutionHandlers {
 
    /**
-    * Get the list of handlers to trigger before invoking a {@link CsvMethod} annotated method.
+    * Get the list of handlers to trigger while invoking {@link CsvMethod} annotated method.
     * 
     * @return The list of handlers to trigger. <strong>Cannot be null</strong>
     */

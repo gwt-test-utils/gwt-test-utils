@@ -197,7 +197,12 @@ public class CsvRunnerTest {
    private final Object o = new A();
 
    private final Object oo = new B();
-   private final CsvRunner runner = new CsvRunner(null);
+   private final CsvRunner runner = new CsvRunner(new HasCsvTestExecutionHandlers() {
+
+      public List<CsvTestExecutionHandler> getCsvTestExecutionHandlers() {
+         return new ArrayList<CsvTestExecutionHandler>();
+      }
+   });
 
    @Test
    public void executeLine_Exception() {

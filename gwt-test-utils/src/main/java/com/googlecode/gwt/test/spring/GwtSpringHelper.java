@@ -12,7 +12,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * @author Gael Lazzari
  * 
  */
-public class GwtSpringHelper {
+class GwtSpringHelper {
 
    public static Object findRpcServiceInSpringContext(ApplicationContext applicationContext,
             Class<?> remoteServiceClass, String remoteServiceRelativePath) {

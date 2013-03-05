@@ -70,9 +70,9 @@ public abstract class GwtTest extends GwtModuleRunnerAdapter {
     * Setup a new gwt-test-utils test class.
     */
    public GwtTest() {
-     TestClass testClass = new TestClass(this.getClass());
-     GwtConfig.get().setupGwtModule(testClass.getJavaClass());
-     GwtConfig.get().setupInstance(this);
+      TestClass testClass = new TestClass(this.getClass());
+      GwtConfig.get().setupGwtModule(testClass.getJavaClass());
+      GwtConfig.get().setupInstance(this);
    }
 
    @Before

@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,9 +13,11 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;
+import com.googlecode.gwt.test.RemoteServiceExecutionHandler;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestRpcException;
 import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
+import com.googlecode.gwt.test.internal.GwtConfig;
 import com.googlecode.gwt.test.internal.patchers.AbstractRemoteServiceServletPatcher;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
@@ -71,6 +74,14 @@ class GwtRpcInvocationHandler implements InvocationHandler {
 
          try {
             logger.debug("Invoking " + m + " on " + target.getClass().getName());
+
+            List<RemoteServiceExecutionHandler> handlers = GwtConfig.get().getModuleRunner().getRemoteServiceExecutionHandlers();
+
+            // notify
+            for (RemoteServiceExecutionHandler handler : handlers) {
+               handler.beforeRpcRequestSerialization(m, subArgs);
+            }
+
             // Serialize objects
             Object[] serializedArgs = new Object[subArgs.length];
             for (int i = 0; i < subArgs.length; i++) {
@@ -84,12 +95,36 @@ class GwtRpcInvocationHandler implements InvocationHandler {
                }
             }
 
+            // notify
+            for (RemoteServiceExecutionHandler handler : handlers) {
+               handler.beforeRpcRequestSerialization(m, serializedArgs);
+            }
+
             AbstractRemoteServiceServletPatcher.currentCalledMethod = m;
+
+            // notify
+            for (RemoteServiceExecutionHandler handler : handlers) {
+               handler.beforeRpcMethodExecution(m, serializedArgs);
+            }
+
             Object resultObject = m.invoke(target, serializedArgs);
+
+            // notify
+            for (RemoteServiceExecutionHandler handler : handlers) {
+               handler.afterRpcMethodExecution(m, resultObject);
+            }
 
             Object returnObject;
             try {
+               // notify
+               for (RemoteServiceExecutionHandler handler : handlers) {
+                  handler.beforeRpcResponseSerialization(m, resultObject);
+               }
                returnObject = serializerHander.serializeUnserialize(resultObject);
+               // notify
+               for (RemoteServiceExecutionHandler handler : handlers) {
+                  handler.afterRpcResponseSerialization(m, returnObject);
+               }
             } catch (Exception e) {
                throw new GwtTestRpcException("Error while serializing object of type "
                         + resultObject.getClass().getName()

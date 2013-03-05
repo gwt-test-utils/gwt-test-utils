@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -142,6 +143,13 @@ public interface GwtModuleRunner {
     * @return The callback to use to handle GWT log method calls.
     */
    GwtLogHandler getLogHandler();
+
+   /**
+    * Get the list of handlers to trigger while invoking a RPC method.
+    * 
+    * @return The list of handlers to trigger. <strong>Cannot be null</strong>
+    */
+   List<RemoteServiceExecutionHandler> getRemoteServiceExecutionHandlers();
 
    /**
     * Specifies the servlet mocks provider to use whenever a method from

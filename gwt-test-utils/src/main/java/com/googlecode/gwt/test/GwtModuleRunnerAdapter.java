@@ -1,7 +1,10 @@
 package com.googlecode.gwt.test;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -70,8 +73,10 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
    private Locale locale;
    private boolean localStorageSupported;
    private GwtLogHandler logHandler;
+   private final List<RemoteServiceExecutionHandler> remoteServiceExecutionHandlers = new ArrayList<RemoteServiceExecutionHandler>();
    private ServletMockProvider servletMockProvider;
    private boolean sessionStorageSupported;
+
    private WindowOperationsHandler windowOperationsHandler;
 
    public GwtModuleRunnerAdapter() {
@@ -137,6 +142,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       this.servletMockProvider = null;
       this.localStorageSupported = true;
       this.sessionStorageSupported = true;
+      this.remoteServiceExecutionHandlers.clear();
    }
 
    /*
@@ -209,6 +215,15 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
     */
    public final GwtLogHandler getLogHandler() {
       return logHandler;
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see com.googlecode.gwt.test.GwtModuleRunner#getRemoteServiceExecutionHandlers()
+    */
+   public List<RemoteServiceExecutionHandler> getRemoteServiceExecutionHandlers() {
+      return Collections.unmodifiableList(remoteServiceExecutionHandlers);
    }
 
    /*
@@ -292,6 +307,18 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
 
       // no HTML hostpage found
       return null;
+   }
+
+   /**
+    * Registers a {@link RemoteServiceExecutionHandler} to be notified whenever a RPC method is
+    * invoked.
+    * 
+    * @param remoteServiceExecutionHandler The handler to be notified.
+    * 
+    */
+   protected final void registerRemoteServiceExecutionHandler(
+            RemoteServiceExecutionHandler remoteServiceExecutionHandler) {
+      this.remoteServiceExecutionHandlers.add(remoteServiceExecutionHandler);
    }
 
    /**
