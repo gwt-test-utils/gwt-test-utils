@@ -1,4 +1,4 @@
-package com.googlecode.gwt.test.jukito;
+package com.googlecode.gwt.test.juckito;
 
 import com.googlecode.gwt.test.internal.junit.AbstractGwtRunner;
 import com.googlecode.gwt.test.internal.junit.AbstractGwtRunnerFactory;

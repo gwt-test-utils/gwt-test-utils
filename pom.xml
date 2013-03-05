@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -57,7 +58,6 @@
 		<module>gwt-test-utils-csv</module>
 		<module>gwt-test-utils-gwtbootstrap</module>
 		<module>gwt-test-utils-gxt2</module>
-    <module>gwt-test-utils-jukito </module>
 		<!--<module>gwt-test-utils-gxt3</module> -->
 	</modules>
 	<properties>
@@ -139,6 +139,11 @@
 				<groupId>org.json</groupId>
 				<artifactId>json</artifactId>
 				<version>20090211</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jukito</groupId>
+				<artifactId>jukito</artifactId>
+				<version>1.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.extjs</groupId>
