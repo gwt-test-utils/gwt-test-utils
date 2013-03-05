@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.fest.assertions.api.Fail;
+import org.junit.After;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +120,11 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
    public GwtCsvTest() {
       setCanDispatchEventsOnDetachedWidgets(false);
+   }
+
+   @After
+   public final void afterGwtCsvTest() {
+      csvTestExecutionHandlers.clear();
    }
 
    @CsvMethod
@@ -359,6 +365,12 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
       Browser.focus(object(identifier).ofType(Widget.class));
    }
 
+   /*
+    * (non-Javadoc)
+    * 
+    * @see
+    * com.googlecode.gwt.test.csv.runner.HasCsvTestExecutionHandlers#getCsvTestExecutionHandlers()
+    */
    public List<CsvTestExecutionHandler> getCsvTestExecutionHandlers() {
       return Collections.unmodifiableList(csvTestExecutionHandlers);
    }
@@ -556,10 +568,6 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
       GwtFinder.registerNodeFinder("root", rootObjectFinder);
    }
 
-   protected final void addCsvInvocationHandler(CsvTestExecutionHandler csvMethodInvocationHandler) {
-      csvTestExecutionHandlers.add(csvMethodInvocationHandler);
-   }
-
    /*
     * (non-Javadoc)
     * 
@@ -628,6 +636,11 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
    protected String prefix() {
       return csvRunner.getAssertionErrorMessagePrefix();
+   }
+
+   protected final void registerCsvInvocationHandler(
+            CsvTestExecutionHandler csvMethodInvocationHandler) {
+      csvTestExecutionHandlers.add(csvMethodInvocationHandler);
    }
 
    protected void selectInListBox(ListBox listBox, String regex) {
