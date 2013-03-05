@@ -32,7 +32,7 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
 * Standard maven-surefire-plugin support for testing with [Maven](http://maven.apache.org/)
 * Support for GWT + [Spring](http://www.springsource.org/) application testing
 * Support for GWT + [Guice](http://code.google.com/p/google-guice/) application testing
-* Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing
+* Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing, with [Jukito](https://code.google.com/p/jukito/) if wanted
 * Support for [JUnitParams](http://code.google.com/p/junitparams/)
 * Support for [GXT](http://www.sencha.com/products/gxt/) library (currently only version 2.x, version 3.x is coming !)
 * Complex use-case testing using CSV-based scenarios
