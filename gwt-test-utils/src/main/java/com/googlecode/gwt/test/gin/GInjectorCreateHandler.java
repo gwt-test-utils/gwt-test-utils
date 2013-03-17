@@ -13,11 +13,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
+import com.google.gwt.inject.rebind.GinjectorBindings;
 import com.google.gwt.inject.rebind.adapter.GinModuleAdapter;
+import com.google.gwt.inject.rebind.util.GuiceUtil;
+import com.google.gwt.inject.rebind.util.MemberCollector;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.googlecode.gwt.test.GwtCreateHandler;
+import com.googlecode.gwt.test.GwtTreeLogger;
 
 /**
  * Handle {@link GWT#create(Class)} for {@link Ginjector}.
@@ -40,7 +44,7 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
       }
 
       @SuppressWarnings("unchecked")
-      Class<? extends Ginjector> ginInjectorClass = (Class<? extends Ginjector>) classLiteral;
+      Class<? extends Ginjector> ginjectorClass = (Class<? extends Ginjector>) classLiteral;
 
       if (injectors == null) {
          injectors = new HashMap<Class<? extends Ginjector>, Object>();
@@ -49,31 +53,31 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
       Object guiceInjectorProxy = injectors.get(classLiteral);
 
       if (guiceInjectorProxy != null) {
-         LOGGER.debug("Proxy for class '" + ginInjectorClass.getName()
+         LOGGER.debug("Proxy for class '" + ginjectorClass.getName()
                   + "'has been found in cache. It is returned");
          return guiceInjectorProxy;
       }
 
-      Class<? extends GinModule>[] ginModules = readGinModules(ginInjectorClass);
+      Class<? extends GinModule>[] ginModules = readGinModules(ginjectorClass);
 
       // create a set of Guice Module bases on the GinModules
-      Set<Module> guiceModules = readGuiceModules(ginModules);
+      Set<Module> guiceModules = readGuiceModules(ginModules, ginjectorClass);
 
       // Use Guice SPI to solve deferred binding dependencies
       DeferredBindingModule deferredBindingModule = DeferredBindingModule.getDeferredBindingModule(
-               ginInjectorClass, guiceModules);
+               ginjectorClass, guiceModules);
       guiceModules.add(deferredBindingModule);
 
       // Instantiate an injector, based on the modules read above + the
       // deferredBindingModule
       Injector injector = Guice.createInjector(guiceModules);
 
-      LOGGER.debug("creating new Proxy for class '" + ginInjectorClass.getName() + "'");
+      LOGGER.debug("creating new Proxy for class '" + ginjectorClass.getName() + "'");
 
       guiceInjectorProxy = Proxy.newProxyInstance(this.getClass().getClassLoader(),
-               new Class[]{ginInjectorClass}, new GinInjectorInvocationHandler(injector));
+               new Class[]{ginjectorClass}, new GinInjectorInvocationHandler(injector));
 
-      injectors.put(ginInjectorClass, guiceInjectorProxy);
+      injectors.put(ginjectorClass, guiceInjectorProxy);
 
       return guiceInjectorProxy;
    }
@@ -99,13 +103,16 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
       return ginModules;
    }
 
-   private Set<Module> readGuiceModules(Class<? extends GinModule>[] classLiterals)
-            throws Exception {
+   private Set<Module> readGuiceModules(Class<? extends GinModule>[] classLiterals,
+            Class<? extends Ginjector> ginectorClass) throws Exception {
 
       Set<Module> modules = new HashSet<Module>();
       for (Class<? extends GinModule> literal : classLiterals) {
          LOGGER.debug("wrapping GinModule literal " + literal);
-         modules.add(new GinModuleAdapter(literal.newInstance()));
+         MemberCollector memberCollector = new MemberCollector(GwtTreeLogger.get());
+         GuiceUtil guiceUtil = new GuiceUtil(memberCollector);
+         modules.add(new GinModuleAdapter(literal.newInstance(), new GinjectorBindings(null,
+                  GwtTreeLogger.get(), guiceUtil, ginectorClass, null, memberCollector, null, null)));
       }
 
       return modules;

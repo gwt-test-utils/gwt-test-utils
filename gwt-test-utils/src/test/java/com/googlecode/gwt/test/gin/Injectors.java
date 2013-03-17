@@ -5,6 +5,7 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
+import com.google.gwt.inject.client.assistedinject.GinFactoryModuleBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -12,8 +13,29 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.assistedinject.Assisted;
 
 public class Injectors {
+
+   public static interface AssistedInjectFactory {
+
+      ClassWithAssistedInjection newClassWithAssistedInjection(String assitedString);
+
+   }
+
+   public static class ClassWithAssistedInjection {
+
+      final String assistedString;
+
+      @Inject
+      Virtual virtual;
+
+      @Inject
+      public ClassWithAssistedInjection(@Assisted
+      String assistedString) {
+         this.assistedString = assistedString;
+      }
+   }
 
    public static class ClassWithAsyncProvider {
 
@@ -152,6 +174,21 @@ public class Injectors {
          bind(VirtualMore.class).to(ImplMore.class);
          bind(Virtual.class).to(Impl.class);
       }
+   }
+
+   @GinModules({Gin9Module.class})
+   public interface Gin9Injector extends Ginjector {
+      AssistedInjectFactory assistedInjectFactory();
+   }
+
+   public static class Gin9Module extends AbstractGinModule {
+
+      @Override
+      protected void configure() {
+         bind(Virtual.class).to(Impl2.class);
+         install(new GinFactoryModuleBuilder().build(AssistedInjectFactory.class));
+      }
+
    }
 
    public static class Impl implements Virtual {

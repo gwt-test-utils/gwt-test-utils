@@ -8,11 +8,13 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.GwtTestTest;
+import com.googlecode.gwt.test.gin.Injectors.ClassWithAssistedInjection;
 import com.googlecode.gwt.test.gin.Injectors.Gin1Injector;
 import com.googlecode.gwt.test.gin.Injectors.Gin2Injector;
 import com.googlecode.gwt.test.gin.Injectors.Gin3Injector;
@@ -21,6 +23,7 @@ import com.googlecode.gwt.test.gin.Injectors.Gin5Injector;
 import com.googlecode.gwt.test.gin.Injectors.Gin6Injector;
 import com.googlecode.gwt.test.gin.Injectors.Gin7Injector;
 import com.googlecode.gwt.test.gin.Injectors.Gin8Injector;
+import com.googlecode.gwt.test.gin.Injectors.Gin9Injector;
 import com.googlecode.gwt.test.gin.Injectors.Impl;
 import com.googlecode.gwt.test.gin.Injectors.Impl2;
 import com.googlecode.gwt.test.gin.Injectors.Impl3;
@@ -99,6 +102,23 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
             assertThat(result.messages.myName()).isEqualTo("this is junit");
          }
       });
+   }
+
+   // FIXME : we have to make Assisted injection work..
+   @Ignore
+   @Test
+   public void shouldInstanciateClassWithAssistedInjection() {
+      // Arrange
+      Gin9Injector injector9 = GWT.create(Gin9Injector.class);
+
+      // Act
+      ClassWithAssistedInjection o = injector9.assistedInjectFactory().newClassWithAssistedInjection(
+               "my assisted string");
+
+      // Assert
+      assertThat(o.assistedString).isEqualTo("my assisted string");
+      assertThat(o.virtual).isInstanceOf(Impl2.class);
+
    }
 
    @Test
