@@ -23,6 +23,13 @@ class JSONObjectParser {
    }
 
    @PatchMethod
+   static boolean containsKey(JSONObject jsonObject, String key) {
+      Map<String, JSONValue> map = getInnerMap(jsonObject);
+
+      return map.containsKey(key);
+   }
+
+   @PatchMethod
    static JSONValue get0(JSONObject jsonObject, String key) {
       Map<String, JSONValue> map = getInnerMap(jsonObject);
 
