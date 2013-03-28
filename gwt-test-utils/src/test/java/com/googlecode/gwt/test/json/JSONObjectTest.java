@@ -3,6 +3,7 @@ package com.googlecode.gwt.test.json;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
@@ -43,6 +44,9 @@ public class JSONObjectTest extends GwtTestTest {
       JSONArray array = (JSONArray) o.get("array");
       JSONObject object = (JSONObject) o.get("object");
 
+      // Contains
+      assertTrue(object.containsKey("array"));
+      assertFalse(object.containsKey("missing_key"));
       // Assert
       assertEquals("json string", string.stringValue());
       assertEquals(3.0, number.doubleValue(), 0);
@@ -72,6 +76,10 @@ public class JSONObjectTest extends GwtTestTest {
       JSONArray array = (JSONArray) o.get("array");
       JSONObject object = (JSONObject) o.get("object");
 
+
+      // Contains
+      assertTrue(object.containsKey("array"));
+      assertFalse(object.containsKey("missing_key"));
       // Assert
       assertEquals("json string", string.stringValue());
       assertEquals(3.0, number.doubleValue(), 0);
