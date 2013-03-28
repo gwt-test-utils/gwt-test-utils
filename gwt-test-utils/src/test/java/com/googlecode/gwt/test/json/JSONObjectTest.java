@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.json;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -14,6 +15,19 @@ import com.google.gwt.json.client.JSONString;
 import com.googlecode.gwt.test.GwtTestTest;
 
 public class JSONObjectTest extends GwtTestTest {
+
+   @Test
+   public void containsKey() {
+      // Arrange
+      String json = "{\"string\": \"json string\", \"int\": 3.0}";
+      JSONObject o = JSONParser.parseStrict(json).isObject();
+
+      // Test
+      assertThat(o.containsKey("string")).isTrue();
+      assertThat(o.containsKey("int")).isTrue();
+      assertThat(o.containsKey("does-not-exist")).isFalse();
+
+   }
 
    @Test
    public void parseLenient() {
