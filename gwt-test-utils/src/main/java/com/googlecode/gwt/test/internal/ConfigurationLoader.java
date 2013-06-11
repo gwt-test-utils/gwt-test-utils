@@ -164,11 +164,6 @@ public final class ConfigurationLoader {
                      + "' : unknown value '" + value + "'");
          }
       }
-
-      if (gwtModules.size() == 0) {
-         throw new GwtTestConfigurationException(
-                  "No declared module. Did you forget to add your own META-INF/gwt-test-utils.properties file with a 'gwt-module' property in the test classpath?");
-      }
    }
 
    private void processRelatedProjectSrcDirectories(URL surefireBooterJarUrl) {
@@ -229,6 +224,11 @@ public final class ConfigurationLoader {
       } catch (IOException e) {
          throw new GwtTestConfigurationException("Error while reading '" + CONFIG_FILENAME
                   + "' files", e);
+      }
+
+      if (gwtModules.size() == 0) {
+         throw new GwtTestConfigurationException(
+                  "No declared module. Did you forget to add your own META-INF/gwt-test-utils.properties file with a 'gwt-module' property in the test classpath?");
       }
    }
 
