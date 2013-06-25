@@ -19,7 +19,6 @@ import com.google.gwt.user.cellview.client.AbstractCellTable;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -1419,21 +1418,8 @@ public class Browser {
       applied.add(widget);
 
       // process bubbling
-      dispatchEventWithBubble(getParent(widget.getElement().getParentElement()), event, applied);
-   }
-
-   private static Widget getParent(Element parentElement) {
-      if (parentElement == null) {
-         return null;
-      }
-
-      Object o = DOM.getEventListener(parentElement.<com.google.gwt.user.client.Element> cast());
-
-      if (!Widget.class.isInstance(o)) {
-         return getParent(parentElement.getParentElement());
-      }
-
-      return (Widget) o;
+      dispatchEventWithBubble(WidgetUtils.getWidget(widget.getElement().getParentElement()), event,
+               applied);
    }
 
    private static boolean isDisabled(Element element) {

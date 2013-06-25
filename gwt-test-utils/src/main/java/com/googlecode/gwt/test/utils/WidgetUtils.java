@@ -6,12 +6,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.DomEvent.Type;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -103,6 +106,18 @@ public class WidgetUtils {
       SuggestionDisplay display = GwtReflectionUtils.getPrivateFieldValue(suggestBox, "display");
       MenuBar suggestionMenu = GwtReflectionUtils.getPrivateFieldValue(display, "suggestionMenu");
       return getMenuItems(suggestionMenu);
+   }
+
+   public static Widget getWidget(Element element) {
+      while (element != null) {
+         EventListener eventListener = DOM.getEventListener((com.google.gwt.user.client.Element) element);
+         if (eventListener != null && eventListener instanceof Widget) {
+            return (Widget) eventListener;
+         }
+         element = element.getParentElement();
+
+      }
+      return null;
    }
 
    public static boolean hasStyle(UIObject object, String styleName) {

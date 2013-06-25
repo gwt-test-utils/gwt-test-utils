@@ -14,12 +14,11 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Text;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.gwt.test.finder.GwtFinder;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 import com.googlecode.gwt.test.utils.JavaScriptObjects;
+import com.googlecode.gwt.test.utils.WidgetUtils;
 
 /**
  * 
@@ -350,28 +349,27 @@ public class JsoUtils {
    }
 
    public static void onSetHTML(JavaScriptObject jso, String newHTML, String oldHTML) {
-      EventListener listener = DOM.getEventListener(jso.<com.google.gwt.user.client.Element> cast());
+      Widget w = WidgetUtils.getWidget(jso.<com.google.gwt.user.client.Element> cast());
 
-      if (UIObject.class.isInstance(listener)) {
-         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetHTML", listener, newHTML,
-                  oldHTML);
+      if (w != null) {
+         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetHTML", w, newHTML, oldHTML);
       }
+
    }
 
    public static void onSetId(JavaScriptObject jso, String newId, String oldId) {
-      EventListener listener = DOM.getEventListener(jso.<com.google.gwt.user.client.Element> cast());
+      Widget w = WidgetUtils.getWidget(jso.<com.google.gwt.user.client.Element> cast());
 
-      if (UIObject.class.isInstance(listener)) {
-         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetId", listener, newId, oldId);
+      if (w != null) {
+         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetId", w, newId, oldId);
       }
    }
 
    public static void onSetText(JavaScriptObject jso, String newText, String oldText) {
-      EventListener listener = DOM.getEventListener(jso.<com.google.gwt.user.client.Element> cast());
+      Widget w = WidgetUtils.getWidget(jso.<com.google.gwt.user.client.Element> cast());
 
-      if (UIObject.class.isInstance(listener)) {
-         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetText", listener, newText,
-                  oldText);
+      if (w != null) {
+         GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetText", w, newText, oldText);
       }
    }
 
