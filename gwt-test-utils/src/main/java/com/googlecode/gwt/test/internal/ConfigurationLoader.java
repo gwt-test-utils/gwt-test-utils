@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -127,7 +128,9 @@ public final class ConfigurationLoader {
    private URL[] extractSrcUrlsFromBooterJar(String surefireBooterJarPath) {
 
       try {
-         JarFile surefireBooterJar = new JarFile(surefireBooterJarPath);
+    	//handles spaces encoded %20 to fix https://github.com/gwt-test-utils/gwt-test-utils/issues/17
+         String decodedJarPath = URLDecoder.decode(surefireBooterJarPath,"utf-8");
+		JarFile surefireBooterJar = new JarFile(decodedJarPath);
          Manifest mf = surefireBooterJar.getManifest();
          Attributes a = mf.getMainAttributes();
 
