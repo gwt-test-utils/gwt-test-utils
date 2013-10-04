@@ -19,3 +19,5 @@ gwt-test-utils-gwtbootstrap/target/test-classes/com/googlecode/gwt/test/gwtboots
 gwt-test-utils-gwtbootstrap/target/test-classes/com/googlecode/gwt/test/gwtbootstrap/test/client/TestWidget.ui.xml
 *.iml
 .idea
+.project
+.settings
