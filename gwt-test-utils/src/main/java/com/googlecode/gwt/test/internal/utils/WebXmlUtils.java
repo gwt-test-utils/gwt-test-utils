@@ -47,6 +47,7 @@ public class WebXmlUtils {
    private final Set<String> listenerClasses;
    // a map with servletUrl as key and serviceImpl className as value
    private final Map<String, String> servletClassMap;
+   private String firstWelcomeFile;
 
    private WebXmlUtils() {
       InputStream is = getWebXmlAsStream();
@@ -56,7 +57,7 @@ public class WebXmlUtils {
          XPath xpath = XPathFactory.newInstance().newXPath();
          servletClassMap = parseServletClassMap(document, xpath);
          listenerClasses = parseListeners(document, xpath);
-
+         firstWelcomeFile = parseFirstWelcomFile(document, xpath);
       } catch (Exception e) {
          if (GwtTestException.class.isInstance(e)) {
             throw (GwtTestException) e;
@@ -79,6 +80,10 @@ public class WebXmlUtils {
 
    public String getServletClass(String servletPath) {
       return servletClassMap.get(servletPath);
+   }
+
+   public String getFirstWelcomeFile() {
+      return firstWelcomeFile;
    }
 
    private InputStream getWebXmlAsStream() {
@@ -165,6 +170,12 @@ public class WebXmlUtils {
          servletsMap.put(servletName, servletClass);
       }
       return servletsMap;
+   }
+
+   private String parseFirstWelcomFile(Document document, XPath xpath)
+            throws XPathExpressionException {
+      return (String) xpath.evaluate("/web-app/welcome-file-list/welcome-file", document,
+               XPathConstants.STRING);
    }
 
 }
