@@ -23,6 +23,7 @@ import com.googlecode.gwt.test.internal.BrowserSimulatorImpl;
 import com.googlecode.gwt.test.internal.GwtConfig;
 import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
 import com.googlecode.gwt.test.internal.i18n.DictionaryUtils;
+import com.googlecode.gwt.test.internal.utils.WebXmlUtils;
 import com.googlecode.gwt.test.rpc.ServletMockProvider;
 import com.googlecode.gwt.test.uibinder.UiObjectTagFactory;
 import com.googlecode.gwt.test.utils.events.Browser;
@@ -281,30 +282,23 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
     * @return The relative path of the HTML file used, or null if there is no HTML file
     */
    protected String getHostPagePath(String moduleFullQualifiedName) {
+      // try first web.xml welcome-file
+      String webXmlFirstWelcomeFileName = WebXmlUtils.get().getFirstWelcomeFile();
       // try with gwt default structure
       String fileSimpleName = moduleFullQualifiedName.substring(moduleFullQualifiedName.lastIndexOf('.') + 1)
                + ".html";
-
-      String fileRelativePath = DEFAULT_WAR_DIR + fileSimpleName;
-      if (new File(fileRelativePath).exists()) {
-         return fileRelativePath;
+      String[] expectedFileNames = new String[]{
+               DEFAULT_WAR_DIR + webXmlFirstWelcomeFileName,
+               MAVEN_DEFAULT_WEB_DIR + webXmlFirstWelcomeFileName,
+               MAVEN_DEFAULT_RES_DIR + webXmlFirstWelcomeFileName,
+               DEFAULT_WAR_DIR + fileSimpleName,
+               MAVEN_DEFAULT_WEB_DIR + fileSimpleName,
+               MAVEN_DEFAULT_RES_DIR + fileSimpleName};
+      for (String fileName : expectedFileNames) {
+         if (new File(fileName).exists()) {
+            return fileName;
+         }
       }
-
-      // try with the new maven archetype default path
-      fileRelativePath = MAVEN_DEFAULT_WEB_DIR + fileSimpleName;
-      if (new File(fileRelativePath).exists()) {
-         return fileRelativePath;
-      }
-
-      // try with the old maven archetype default path
-      String packagePath = moduleFullQualifiedName.substring(0,
-               moduleFullQualifiedName.lastIndexOf('.') + 1).replaceAll("\\.", "/");
-
-      fileRelativePath = MAVEN_DEFAULT_RES_DIR + packagePath + "public/" + fileSimpleName;
-      if (new File(fileRelativePath).exists()) {
-         return fileRelativePath;
-      }
-
       // no HTML hostpage found
       return null;
    }
