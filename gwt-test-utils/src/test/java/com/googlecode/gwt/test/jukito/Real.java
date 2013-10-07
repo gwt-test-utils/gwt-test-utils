@@ -8,9 +8,8 @@ import com.google.inject.BindingAnnotation;
 
 import static java.lang.annotation.RetentionPolicy.*;
 
-
 /**
- * @author Przemys³aw Ga³±zka
+ * @author Przemysï¿½aw Gaï¿½ï¿½zka
  * @since 04-03-2013
  */
 @Retention(RUNTIME)

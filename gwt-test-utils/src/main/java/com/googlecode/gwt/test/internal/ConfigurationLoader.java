@@ -128,9 +128,10 @@ public final class ConfigurationLoader {
    private URL[] extractSrcUrlsFromBooterJar(String surefireBooterJarPath) {
 
       try {
-    	//handles spaces encoded %20 to fix https://github.com/gwt-test-utils/gwt-test-utils/issues/17
-         String decodedJarPath = URLDecoder.decode(surefireBooterJarPath,"utf-8");
-		JarFile surefireBooterJar = new JarFile(decodedJarPath);
+         // handles spaces encoded %20 to fix
+         // https://github.com/gwt-test-utils/gwt-test-utils/issues/17
+         String decodedJarPath = URLDecoder.decode(surefireBooterJarPath, "utf-8");
+         JarFile surefireBooterJar = new JarFile(decodedJarPath);
          Manifest mf = surefireBooterJar.getManifest();
          Attributes a = mf.getMainAttributes();
 

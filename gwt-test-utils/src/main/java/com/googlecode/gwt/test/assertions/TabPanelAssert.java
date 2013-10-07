@@ -10,14 +10,13 @@ import com.google.gwt.user.client.ui.TabPanel;
  */
 public class TabPanelAssert extends BaseTabPanelAssert<TabPanelAssert, TabPanel> {
 
-	/**
-	 * Creates a new <code>{@link TabPanelAssert}</code>.
-	 * 
-	 * @param actual
-	 *            the actual value to verify.
-	 */
-	protected TabPanelAssert(TabPanel actual) {
-		super(actual, TabPanelAssert.class);
-	}
+   /**
+    * Creates a new <code>{@link TabPanelAssert}</code>.
+    * 
+    * @param actual the actual value to verify.
+    */
+   protected TabPanelAssert(TabPanel actual) {
+      super(actual, TabPanelAssert.class);
+   }
 
 }

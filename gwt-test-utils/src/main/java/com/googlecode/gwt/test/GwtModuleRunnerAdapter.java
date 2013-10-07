@@ -291,8 +291,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
                DEFAULT_WAR_DIR + webXmlFirstWelcomeFileName,
                MAVEN_DEFAULT_WEB_DIR + webXmlFirstWelcomeFileName,
                MAVEN_DEFAULT_RES_DIR + webXmlFirstWelcomeFileName,
-               DEFAULT_WAR_DIR + fileSimpleName,
-               MAVEN_DEFAULT_WEB_DIR + fileSimpleName,
+               DEFAULT_WAR_DIR + fileSimpleName, MAVEN_DEFAULT_WEB_DIR + fileSimpleName,
                MAVEN_DEFAULT_RES_DIR + fileSimpleName};
       for (String fileName : expectedFileNames) {
          if (new File(fileName).exists()) {

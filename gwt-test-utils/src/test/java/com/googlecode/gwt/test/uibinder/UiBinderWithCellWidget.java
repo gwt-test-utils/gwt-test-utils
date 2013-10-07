@@ -11,23 +11,23 @@ import com.google.gwt.view.client.RowCountChangeEvent;
 
 public class UiBinderWithCellWidget extends Composite {
 
-	private static UiBinderWithCellWidgetUiBinder uiBinder = GWT.create(UiBinderWithCellWidgetUiBinder.class);
+   interface UiBinderWithCellWidgetUiBinder extends UiBinder<Widget, UiBinderWithCellWidget> {
+   }
 
-	interface UiBinderWithCellWidgetUiBinder extends UiBinder<Widget, UiBinderWithCellWidget> {
-	}
+   private static UiBinderWithCellWidgetUiBinder uiBinder = GWT.create(UiBinderWithCellWidgetUiBinder.class);
 
-	@UiField
-	CellTable<String> table;
+   int rowCount;
 
-	int rowCount;
+   @UiField
+   CellTable<String> table;
 
-	public UiBinderWithCellWidget() {
-		initWidget(uiBinder.createAndBindUi(this));
-	}
+   public UiBinderWithCellWidget() {
+      initWidget(uiBinder.createAndBindUi(this));
+   }
 
-	@UiHandler("table")
-	void onRowCountChange(RowCountChangeEvent evt){
-		this.rowCount = evt.getNewRowCount();
-	}
+   @UiHandler("table")
+   void onRowCountChange(RowCountChangeEvent evt) {
+      this.rowCount = evt.getNewRowCount();
+   }
 
 }

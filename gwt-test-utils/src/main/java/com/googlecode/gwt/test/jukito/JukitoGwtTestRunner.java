@@ -9,15 +9,13 @@ import com.googlecode.gwt.test.internal.junit.AbstractGwtRunnerFactory;
  */
 public class JukitoGwtTestRunner extends AbstractGwtRunner {
 
-  public JukitoGwtTestRunner(Class<?> clazz) throws Throwable {
-    super(clazz);
-  }
+   public JukitoGwtTestRunner(Class<?> clazz) throws Throwable {
+      super(clazz);
+   }
 
-
-  @Override
-  protected AbstractGwtRunnerFactory getRunnerFactory() {
-    return new JukitoGwtTestRunnerFactory();
-  }
-
+   @Override
+   protected AbstractGwtRunnerFactory getRunnerFactory() {
+      return new JukitoGwtTestRunnerFactory();
+   }
 
 }
