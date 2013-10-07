@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.googlecode.gwt.test.GwtTestTest;
-import com.googlecode.gwt.test.jukito.JukitoGwtTestRunner;
 
 /**
  * @author Przemysław Gałązka

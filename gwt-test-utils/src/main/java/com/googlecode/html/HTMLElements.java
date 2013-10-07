@@ -35,239 +35,6 @@ public class HTMLElements {
    // sequence. The parent and closes references depends on
    // this assumption. -Ac
 
-   /**
-    * Element information.
-    * 
-    * @author Andy Clark
-    */
-   public static class Element {
-
-      //
-      // Constants
-      //
-
-      /** Block element. */
-      public static final int BLOCK = 0x02;
-
-      /** Container element. */
-      public static final int CONTAINER = 0x08;
-
-      /** Empty element. */
-      public static final int EMPTY = 0x04;
-
-      /** Inline element. */
-      public static final int INLINE = 0x01;
-
-      /** Special element. */
-      public static final int SPECIAL = 0x10;
-
-      //
-      // Data
-      //
-
-      /** The bounding element code. */
-      public short bounds;
-
-      /** List of elements this element can close. */
-      public short[] closes;
-
-      /** The element code. */
-      public short code;
-
-      /** Informational flags. */
-      public int flags;
-
-      /** The element name. */
-      public String name;
-
-      /** Parent elements. */
-      public Element[] parent;
-
-      /** Parent elements. */
-      public short[] parentCodes;
-
-      //
-      // Constructors
-      //
-
-      /**
-       * Constructs an element object.
-       * 
-       * @param code The element code.
-       * @param name The element name.
-       * @param flags Informational flags
-       * @param parent Natural closing parent name.
-       * @param closes List of elements this element can close.
-       */
-      public Element(final short code, final String name, final int flags, final short parent,
-               final short bounds, final short[] closes) {
-         this(code, name, flags, new short[]{parent}, bounds, closes);
-      } // <init>(short,String,int,short,short,short[])
-
-      /**
-       * Constructs an element object.
-       * 
-       * @param code The element code.
-       * @param name The element name.
-       * @param flags Informational flags
-       * @param parent Natural closing parent name.
-       * @param closes List of elements this element can close.
-       */
-      public Element(final short code, final String name, final int flags, final short parent,
-               final short[] closes) {
-         this(code, name, flags, new short[]{parent}, (short) -1, closes);
-      } // <init>(short,String,int,short,short[]);
-
-      /**
-       * Constructs an element object.
-       * 
-       * @param code The element code.
-       * @param name The element name.
-       * @param flags Informational flags
-       * @param parents Natural closing parent names.
-       * @param closes List of elements this element can close.
-       */
-      public Element(final short code, final String name, final int flags, final short[] parents,
-               final short bounds, final short[] closes) {
-         this.code = code;
-         this.name = name;
-         this.flags = flags;
-         this.parentCodes = parents;
-         this.parent = null;
-         this.bounds = bounds;
-         this.closes = closes;
-      } // <init>(short,String,int,short[],short,short[])
-
-      /**
-       * Constructs an element object.
-       * 
-       * @param code The element code.
-       * @param name The element name.
-       * @param flags Informational flags
-       * @param parents Natural closing parent names.
-       * @param closes List of elements this element can close.
-       */
-      public Element(final short code, final String name, final int flags, final short[] parents,
-               final short[] closes) {
-         this(code, name, flags, parents, (short) -1, closes);
-      } // <init>(short,String,int,short[],short[])
-
-      //
-      // Public methods
-      //
-
-      /**
-       * Returns true if this element can close the specified Element.
-       * 
-       * @param tag The element.
-       */
-      public boolean closes(final short tag) {
-
-         if (closes != null) {
-            for (int i = 0; i < closes.length; i++) {
-               if (closes[i] == tag) {
-                  return true;
-               }
-            }
-         }
-         return false;
-
-      } // closes(short):boolean
-
-      /** Returns true if the objects are equal. */
-      public boolean equals(final Object o) {
-         return name.equals(o);
-      } // equals(Object):boolean
-
-      /** Returns a hash code for this object. */
-      public int hashCode() {
-         return name.hashCode();
-      } // hashCode():int
-
-      /** Returns true if this element is a block element. */
-      public final boolean isBlock() {
-         return (flags & BLOCK) != 0;
-      } // isBlock():boolean
-
-      /** Returns true if this element is a container element. */
-      public final boolean isContainer() {
-         return (flags & CONTAINER) != 0;
-      } // isContainer():boolean
-
-      /** Returns true if this element is an empty element. */
-      public final boolean isEmpty() {
-         return (flags & EMPTY) != 0;
-      } // isEmpty():boolean
-
-      //
-      // Object methods
-      //
-
-      /** Returns true if this element is an inline element. */
-      public final boolean isInline() {
-         return (flags & INLINE) != 0;
-      } // isInline():boolean
-
-      /**
-       * Indicates if the provided element is an accepted parent of current element
-       * 
-       * @param element the element to test for "paternity"
-       * @return <code>true</code> if <code>element</code> belongs to the {@link #parent}
-       */
-      public boolean isParent(final Element element) {
-         if (parent == null)
-            return false;
-         else {
-            for (int i = 0; i < parent.length; ++i) {
-               if (element.code == parent[i].code)
-                  return true;
-            }
-         }
-         return false;
-      }
-
-      /**
-       * Returns true if this element is special -- if its content should be parsed ignoring markup.
-       */
-      public final boolean isSpecial() {
-         return (flags & SPECIAL) != 0;
-      } // isSpecial():boolean
-
-      /**
-       * Provides a simple representation to make debugging easier
-       */
-      public String toString() {
-         return super.toString() + "(name=" + name + ")";
-      }
-   } // class Element
-   /** Unsynchronized list of elements. */
-   public static class ElementList {
-
-      //
-      // Data
-      //
-
-      /** The data in the list. */
-      public Element[] data = new Element[120];
-
-      /** The size of the list. */
-      public int size;
-
-      //
-      // Public methods
-      //
-
-      /** Adds an element to list, resizing if necessary. */
-      public void addElement(final Element element) {
-         if (size == data.length) {
-            Element[] newarray = new Element[size + 20];
-            System.arraycopy(data, 0, newarray, 0, size);
-            data = newarray;
-         }
-         data[size++] = element;
-      } // addElement(Element)
-
-   } // class Element
    public static final short A = 0;
    public static final short ABBR = A + 1;
    public static final short ACRONYM = ABBR + 1;
@@ -292,11 +59,11 @@ public class HTMLElements {
    public static final short COL = CODE + 1;
    public static final short COLGROUP = COL + 1;
    public static final short COMMENT = COLGROUP + 1;
-   public static final short DD = DIV + 1;
    public static final short DEL = COMMENT + 1;
    public static final short DFN = DEL + 1;
    public static final short DIR = DFN + 1;
    public static final short DIV = DIR + 1;
+   public static final short DD = DIV + 1;
    public static final short DL = DD + 1;
    public static final short DT = DL + 1;
    public static final short EM = DT + 1;
@@ -336,9 +103,6 @@ public class HTMLElements {
    public static final short META = MENU + 1;
    public static final short MULTICOL = META + 1;
    public static final short NEXTID = MULTICOL + 1;
-   /** No such element. */
-   public static final Element NO_SUCH_ELEMENT = new Element(UNKNOWN, "", Element.CONTAINER,
-            new short[]{BODY, HEAD}/* HTML */, null);
    public static final short NOBR = NEXTID + 1;
    public static final short NOEMBED = NOBR + 1;
    public static final short NOFRAMES = NOEMBED + 1;
@@ -346,8 +110,8 @@ public class HTMLElements {
    public static final short NOSCRIPT = NOLAYER + 1;
    public static final short OBJECT = NOSCRIPT + 1;
    public static final short OL = OBJECT + 1;
-   public static final short OPTGROUP = OPTION + 1;
    public static final short OPTION = OL + 1;
+   public static final short OPTGROUP = OPTION + 1;
    public static final short P = OPTGROUP + 1;
    public static final short PARAM = P + 1;
    public static final short PLAINTEXT = PARAM + 1;
@@ -384,30 +148,27 @@ public class HTMLElements {
    public static final short TT = TR + 1;
    public static final short U = TT + 1;
    public static final short UL = U + 1;
-   public static final short UNKNOWN = XMP + 1;
    public static final short VAR = UL + 1;
+   public static final short WBR = VAR + 1;
+   public static final short XML = WBR + 1;
+   public static final short XMP = XML + 1;
+   public static final short UNKNOWN = XMP + 1;
 
    // information
 
-   public static final short WBR = VAR + 1;
-
-   public static final short XML = WBR + 1;
-
-   public static final short XMP = XML + 1;
-
-   //
-   // Static initializer
-   //
+   /** Element information organized by first letter. */
+   protected static final Element[][] ELEMENTS_ARRAY = new Element[26][];
 
    /** Element information as a contiguous list. */
    protected static final ElementList ELEMENTS = new ElementList();
 
-   //
-   // Public static methods
-   //
+   /** No such element. */
+   public static final Element NO_SUCH_ELEMENT = new Element(UNKNOWN, "", Element.CONTAINER,
+            new short[]{BODY, HEAD}/* HTML */, null);
 
-   /** Element information organized by first letter. */
-   protected static final Element[][] ELEMENTS_ARRAY = new Element[26][];
+   //
+   // Static initializer
+   //
 
    /**
     * Initializes the element information.
@@ -720,6 +481,10 @@ public class HTMLElements {
 
    } // <clinit>()
 
+   //
+   // Public static methods
+   //
+
    /**
     * Returns the element information for the specified element code.
     * 
@@ -728,10 +493,6 @@ public class HTMLElements {
    public static final Element getElement(final short code) {
       return ELEMENTS.data[code];
    } // getElement(short):Element
-
-   //
-   // Classes
-   //
 
    /**
     * Returns the element information for the specified element name.
@@ -770,5 +531,244 @@ public class HTMLElements {
       return element;
 
    } // getElement(String):Element
+
+   //
+   // Classes
+   //
+
+   /**
+    * Element information.
+    * 
+    * @author Andy Clark
+    */
+   public static class Element {
+
+      //
+      // Constants
+      //
+
+      /** Inline element. */
+      public static final int INLINE = 0x01;
+
+      /** Block element. */
+      public static final int BLOCK = 0x02;
+
+      /** Empty element. */
+      public static final int EMPTY = 0x04;
+
+      /** Container element. */
+      public static final int CONTAINER = 0x08;
+
+      /** Special element. */
+      public static final int SPECIAL = 0x10;
+
+      //
+      // Data
+      //
+
+      /** The element code. */
+      public short code;
+
+      /** The element name. */
+      public String name;
+
+      /** Informational flags. */
+      public int flags;
+
+      /** Parent elements. */
+      public short[] parentCodes;
+
+      /** Parent elements. */
+      public Element[] parent;
+
+      /** The bounding element code. */
+      public short bounds;
+
+      /** List of elements this element can close. */
+      public short[] closes;
+
+      //
+      // Constructors
+      //
+
+      /**
+       * Constructs an element object.
+       * 
+       * @param code The element code.
+       * @param name The element name.
+       * @param flags Informational flags
+       * @param parent Natural closing parent name.
+       * @param closes List of elements this element can close.
+       */
+      public Element(final short code, final String name, final int flags, final short parent,
+               final short[] closes) {
+         this(code, name, flags, new short[]{parent}, (short) -1, closes);
+      } // <init>(short,String,int,short,short[]);
+
+      /**
+       * Constructs an element object.
+       * 
+       * @param code The element code.
+       * @param name The element name.
+       * @param flags Informational flags
+       * @param parent Natural closing parent name.
+       * @param closes List of elements this element can close.
+       */
+      public Element(final short code, final String name, final int flags, final short parent,
+               final short bounds, final short[] closes) {
+         this(code, name, flags, new short[]{parent}, bounds, closes);
+      } // <init>(short,String,int,short,short,short[])
+
+      /**
+       * Constructs an element object.
+       * 
+       * @param code The element code.
+       * @param name The element name.
+       * @param flags Informational flags
+       * @param parents Natural closing parent names.
+       * @param closes List of elements this element can close.
+       */
+      public Element(final short code, final String name, final int flags, final short[] parents,
+               final short[] closes) {
+         this(code, name, flags, parents, (short) -1, closes);
+      } // <init>(short,String,int,short[],short[])
+
+      /**
+       * Constructs an element object.
+       * 
+       * @param code The element code.
+       * @param name The element name.
+       * @param flags Informational flags
+       * @param parents Natural closing parent names.
+       * @param closes List of elements this element can close.
+       */
+      public Element(final short code, final String name, final int flags, final short[] parents,
+               final short bounds, final short[] closes) {
+         this.code = code;
+         this.name = name;
+         this.flags = flags;
+         this.parentCodes = parents;
+         this.parent = null;
+         this.bounds = bounds;
+         this.closes = closes;
+      } // <init>(short,String,int,short[],short,short[])
+
+      //
+      // Public methods
+      //
+
+      /** Returns true if this element is an inline element. */
+      public final boolean isInline() {
+         return (flags & INLINE) != 0;
+      } // isInline():boolean
+
+      /** Returns true if this element is a block element. */
+      public final boolean isBlock() {
+         return (flags & BLOCK) != 0;
+      } // isBlock():boolean
+
+      /** Returns true if this element is an empty element. */
+      public final boolean isEmpty() {
+         return (flags & EMPTY) != 0;
+      } // isEmpty():boolean
+
+      /** Returns true if this element is a container element. */
+      public final boolean isContainer() {
+         return (flags & CONTAINER) != 0;
+      } // isContainer():boolean
+
+      /**
+       * Returns true if this element is special -- if its content should be parsed ignoring markup.
+       */
+      public final boolean isSpecial() {
+         return (flags & SPECIAL) != 0;
+      } // isSpecial():boolean
+
+      /**
+       * Returns true if this element can close the specified Element.
+       * 
+       * @param tag The element.
+       */
+      public boolean closes(final short tag) {
+
+         if (closes != null) {
+            for (int i = 0; i < closes.length; i++) {
+               if (closes[i] == tag) {
+                  return true;
+               }
+            }
+         }
+         return false;
+
+      } // closes(short):boolean
+
+      //
+      // Object methods
+      //
+
+      /** Returns a hash code for this object. */
+      public int hashCode() {
+         return name.hashCode();
+      } // hashCode():int
+
+      /** Returns true if the objects are equal. */
+      public boolean equals(final Object o) {
+         return name.equals(o);
+      } // equals(Object):boolean
+
+      /**
+       * Provides a simple representation to make debugging easier
+       */
+      public String toString() {
+         return super.toString() + "(name=" + name + ")";
+      }
+
+      /**
+       * Indicates if the provided element is an accepted parent of current element
+       * 
+       * @param element the element to test for "paternity"
+       * @return <code>true</code> if <code>element</code> belongs to the {@link #parent}
+       */
+      public boolean isParent(final Element element) {
+         if (parent == null)
+            return false;
+         else {
+            for (int i = 0; i < parent.length; ++i) {
+               if (element.code == parent[i].code)
+                  return true;
+            }
+         }
+         return false;
+      }
+   } // class Element
+
+   /** Unsynchronized list of elements. */
+   public static class ElementList {
+
+      //
+      // Data
+      //
+
+      /** The size of the list. */
+      public int size;
+
+      /** The data in the list. */
+      public Element[] data = new Element[120];
+
+      //
+      // Public methods
+      //
+
+      /** Adds an element to list, resizing if necessary. */
+      public void addElement(final Element element) {
+         if (size == data.length) {
+            Element[] newarray = new Element[size + 20];
+            System.arraycopy(data, 0, newarray, 0, size);
+            data = newarray;
+         }
+         data[size++] = element;
+      } // addElement(Element)
+
+   } // class Element
 
 } // class HTMLElements

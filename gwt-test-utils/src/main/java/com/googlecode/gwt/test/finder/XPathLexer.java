@@ -31,64 +31,42 @@ public class XPathLexer extends Lexer {
       }
    }
 
-   public static final int EOF = -1;
-   public static final int EQ = 12;
-   public static final int IN = 6;
-   public static final int IN_COND = 9;
-   public static final int LABEL = 5;
-   public static final int OUT = 7;
-   public static final int OUT_COND = 10;
    public static final int SLASH = 4;
+   public static final int IN = 6;
+   public static final int OUT_COND = 10;
+   public static final int OUT = 7;
+   public static final int LABEL = 5;
+   public static final int VIRG = 8;
+   public static final int IN_COND = 9;
    public static final int VALUE = 11;
+   public static final int EQ = 12;
 
    // delegates
    // delegators
 
-   public static final int VIRG = 8;
+   public static final int EOF = -1;
 
-   static final short[] DFA3_accept = DFA.unpackEncodedString(DFA3_acceptS);
-
-   static final String DFA3_acceptS = "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\uffff\1\11\1\uffff\1\10";
-
-   static final short[] DFA3_eof = DFA.unpackEncodedString(DFA3_eofS);
-
-   static final String DFA3_eofS = "\14\uffff";
-
-   // $ANTLR end "SLASH"
-
-   static final short[] DFA3_eot = DFA.unpackEncodedString(DFA3_eotS);
-
-   // $ANTLR end "IN"
+   protected DFA3 dfa3 = new DFA3(this);
 
    static final String DFA3_eotS = "\10\uffff\1\13\1\uffff\1\13\1\uffff";
 
-   // $ANTLR end "OUT"
-
-   static final char[] DFA3_max = DFA.unpackEncodedStringToUnsignedChars(DFA3_maxS);
-
-   // $ANTLR end "IN_COND"
-
-   static final String DFA3_maxS = "\1\u00ea\7\uffff\1\u00ea\1\uffff\1\u00ea\1\uffff";
-
-   // $ANTLR end "OUT_COND"
-
-   static final char[] DFA3_min = DFA.unpackEncodedStringToUnsignedChars(DFA3_minS);
-
-   // $ANTLR end "VIRG"
+   static final String DFA3_eofS = "\14\uffff";
 
    static final String DFA3_minS = "\1\50\7\uffff\1\40\1\uffff\1\40\1\uffff";
 
-   // $ANTLR end "EQ"
+   // $ANTLR end "SLASH"
 
-   static final short[] DFA3_special = DFA.unpackEncodedString(DFA3_specialS);
+   static final String DFA3_maxS = "\1\u00ea\7\uffff\1\u00ea\1\uffff\1\u00ea\1\uffff";
 
-   // $ANTLR end "LABEL"
+   // $ANTLR end "IN"
+
+   static final String DFA3_acceptS = "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\uffff\1\11\1\uffff\1\10";
+
+   // $ANTLR end "OUT"
 
    static final String DFA3_specialS = "\14\uffff}>";
 
-   // $ANTLR end "VALUE"
-
-   static final short[][] DFA3_transition;
+   // $ANTLR end "IN_COND"
 
    static final String[] DFA3_transitionS = {
             "\1\2\1\3\2\uffff\1\6\1\uffff\1\11\1\1\12\10\3\uffff\1\7\3\uffff"
@@ -105,6 +83,29 @@ public class XPathLexer extends Lexer {
             "",
             "\1\12\14\uffff\2\11\1\uffff\12\12\5\uffff\1\11\1\uffff\32"
                      + "\12\4\uffff\1\12\1\uffff\32\12\145\uffff\1\11\7\uffff\3\11", ""};
+
+   // $ANTLR end "OUT_COND"
+
+   static final short[] DFA3_eot = DFA.unpackEncodedString(DFA3_eotS);
+
+   // $ANTLR end "VIRG"
+
+   static final short[] DFA3_eof = DFA.unpackEncodedString(DFA3_eofS);
+
+   // $ANTLR end "EQ"
+
+   static final char[] DFA3_min = DFA.unpackEncodedStringToUnsignedChars(DFA3_minS);
+
+   // $ANTLR end "LABEL"
+
+   static final char[] DFA3_max = DFA.unpackEncodedStringToUnsignedChars(DFA3_maxS);
+
+   // $ANTLR end "VALUE"
+
+   static final short[] DFA3_accept = DFA.unpackEncodedString(DFA3_acceptS);
+
+   static final short[] DFA3_special = DFA.unpackEncodedString(DFA3_specialS);
+   static final short[][] DFA3_transition;
    static {
       int numStates = DFA3_transitionS.length;
       DFA3_transition = new short[numStates][];
@@ -112,7 +113,6 @@ public class XPathLexer extends Lexer {
          DFA3_transition[i] = DFA.unpackEncodedString(DFA3_transitionS[i]);
       }
    }
-   protected DFA3 dfa3 = new DFA3(this);
 
    public XPathLexer() {
       ;

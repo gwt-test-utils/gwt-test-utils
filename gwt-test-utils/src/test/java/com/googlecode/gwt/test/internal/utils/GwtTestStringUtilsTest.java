@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.googlecode.gwt.test.internal.utils.GwtStringUtils;
-
 public class GwtTestStringUtilsTest {
 
    @Test

@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test.uibinder;
 
-import static com.googlecode.gwt.test.assertions.GwtAssertions.*;
+import static com.googlecode.gwt.test.assertions.GwtAssertions.assertThat;
 
 import org.junit.Test;
 

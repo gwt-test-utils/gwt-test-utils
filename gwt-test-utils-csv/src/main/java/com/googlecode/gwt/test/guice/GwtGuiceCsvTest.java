@@ -6,11 +6,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
-import com.googlecode.gwt.test.exceptions.GwtTestConfigurationException;
-import com.googlecode.gwt.test.guice.GwtGuiceHelper;
-import com.googlecode.gwt.test.guice.GwtGuiceTest;
-import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
 import com.googlecode.gwt.test.csv.GwtCsvTest;
+import com.googlecode.gwt.test.exceptions.GwtTestConfigurationException;
+import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
 
 /**
  * <p>

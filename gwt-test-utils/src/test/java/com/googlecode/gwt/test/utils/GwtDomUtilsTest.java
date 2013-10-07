@@ -7,7 +7,6 @@ import org.junit.Test;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.googlecode.gwt.test.GwtTestTest;
-import com.googlecode.gwt.test.utils.GwtDomUtils;
 
 public class GwtDomUtilsTest extends GwtTestTest {
 

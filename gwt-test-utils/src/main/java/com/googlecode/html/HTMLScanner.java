@@ -2947,8 +2947,8 @@ public class HTMLScanner implements XMLDocumentScanner, XMLLocator, HTMLComponen
     * Fixes Microsoft Windows&reg; specific characters.
     * <p>
     * Details about this common problem can be found at <a href=
-    * 'http://www.cs.tut.fi/~jkorpela/www/windows-chars.html'>http://www.cs.tut.fi/~jkorpela/www/windows-chars.ht
-    * m l < / a >
+    * 'http://www.cs.tut.fi/~jkorpela/www/windows-chars.html'>http://www.cs.tut.fi/~jkorpela/www/windows-chars.h
+    * t m l < / a >
     */
    protected int fixWindowsCharacter(int origChar) {
       /* PATCH: Asgeir Asgeirsson */
