@@ -194,4 +194,9 @@ public class PatcherTest extends GwtTestWithMockito {
 
       // TODO: TooltipCellDecorator test.
    }
+
+   @Override
+   protected String getHostPagePath(String moduleFullQualifiedName) {
+      return null;
+   }
 }

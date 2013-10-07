@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -526,10 +527,11 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
             String replaced = s;
             for (int z = 0; z < identifier.length; z++) {
                String param = identifier[z];
-               if (param == null)
+               if (param == null) {
                   param = "*null*";
-               else if ("".equals(param))
+               } else if ("".equals(param)) {
                   param = "*empty*";
+               }
 
                replaced = replaced.replaceAll("\\{" + z + "\\}", param);
             }
@@ -594,7 +596,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
       } else if (HasHTML.class.isInstance(o)) {
          HasHTML hasHTML = (HasHTML) o;
          String html = hasHTML.getHTML();
-         actualValue = (html != null && html.length() > 0) ? html : hasHTML.getText();
+         actualValue = html != null && html.length() > 0 ? html : hasHTML.getText();
       } else if (HasText.class.isInstance(o)) {
          actualValue = ((HasText) o).getText();
       } else {
@@ -615,19 +617,18 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
    /**
     * Called by generated JUnit test class.
     * 
-    * @param directoryPath directory where the launched file is.
-    * @param fileName the name of the launched test file.
+    * @param csvTestFileAbsolutePath absolute path of current CSV test file.
     * @throws Exception
     * 
     * @see {@link DirectoryTestReader}
     */
-   protected final void launchTest(String directoryPath, String fileName) throws Exception {
-      File testFile = new File(directoryPath, fileName);
+   protected final void launchTest(String csvTestFileAbsolutePath) throws Exception {
+      File testFile = new File(URLDecoder.decode(csvTestFileAbsolutePath, "utf-8"));
       for (CsvTestExecutionHandler handler : getCsvTestExecutionHandlers()) {
          handler.beforeCsvTestExecution(testFile);
       }
 
-      csvRunner.runSheet(reader.getTest(fileName), this);
+      csvRunner.runSheet(reader.getTest(csvTestFileAbsolutePath), this);
 
       for (CsvTestExecutionHandler handler : getCsvTestExecutionHandlers()) {
          handler.afterCsvTestExecution(testFile);

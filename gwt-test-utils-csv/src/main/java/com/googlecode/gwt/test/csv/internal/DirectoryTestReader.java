@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
 import javassist.CtClass;
 import javassist.CtMethod;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.googlecode.gwt.test.csv.CsvDirectory;
 import com.googlecode.gwt.test.csv.CsvMacros;
 import com.googlecode.gwt.test.csv.GwtTestCsvException;
@@ -144,14 +146,21 @@ public class DirectoryTestReader {
       return testMethods;
    }
 
-   private String getTestName(String fileName, CsvDirectory csvDirectory) {
-      String csvShortName = csvDirectory.value().substring(
-               csvDirectory.value().lastIndexOf('/') + 1);
+   private void collectCsvTests(File directory, String extension,
+            Map<String, List<List<String>>> tests) throws IOException {
+      for (File f : directory.listFiles()) {
+         if (f.getName().endsWith(extension)) {
+            tests.put(f.getAbsolutePath(), CsvReader.readCsv(new FileReader(f)));
+         } else if (f.isDirectory()) {
+            collectCsvTests(f, extension, tests);
+         }
+      }
+   }
 
-      String nameWithoutExtension = fileName.substring(0, fileName.length()
-               - csvDirectory.extension().length());
-
-      return csvShortName + "_" + nameWithoutExtension;
+   private String getTestName(String csvTestFileAbsolutePath, String csvExtension) {
+      String fileName = new File(csvTestFileAbsolutePath).getName();
+      String nameWithoutExtension = fileName.substring(0, fileName.length() - csvExtension.length());
+      return nameWithoutExtension;
    }
 
    private void initCsvMacros(CsvMacros csvMacros) throws FileNotFoundException, IOException {
@@ -161,8 +170,8 @@ public class DirectoryTestReader {
          return;
       }
 
-      Pattern macroNamePattern = (csvMacros.pattern() != null)
-               ? Pattern.compile(csvMacros.pattern()) : null;
+      Pattern macroNamePattern = csvMacros.pattern() != null ? Pattern.compile(csvMacros.pattern())
+               : null;
       File macrosDirectory = getDirectory(csvMacros.value());
 
       for (File file : macrosDirectory.listFiles()) {
@@ -176,16 +185,13 @@ public class DirectoryTestReader {
    }
 
    private void initCsvTests(CsvDirectory csvDirectory) throws FileNotFoundException, IOException {
-      File directory = getDirectory(csvDirectory.value());
+      File testsRoot = getDirectory(csvDirectory.value());
+      String extension = csvDirectory.extension();
 
       testMethods = new ArrayList<Method>();
 
       tests = new HashMap<String, List<List<String>>>();
-      for (File f : directory.listFiles()) {
-         if (f.getName().endsWith(csvDirectory.extension())) {
-            tests.put(f.getAbsolutePath(), CsvReader.readCsv(new FileReader(f)));
-         }
-      }
+      collectCsvTests(testsRoot, extension, tests);
    }
 
    private void initTestMethods(Class<?> clazz, CsvDirectory csvDirectory) throws Exception {
@@ -196,11 +202,12 @@ public class DirectoryTestReader {
       newClazz.setSuperclass(GwtClassPool.getCtClass(clazz));
       List<String> methodList = new ArrayList<String>();
       for (Entry<String, List<List<String>>> entry : tests.entrySet()) {
+         String fileAbsolutePath = entry.getKey();
 
-         String methodName = getTestName(entry.getKey(), csvDirectory);
+         String methodName = getTestName(fileAbsolutePath, csvDirectory.extension());
          CtMethod m = new CtMethod(CtClass.voidType, methodName, new CtClass[0], newClazz);
          methodList.add(methodName);
-         m.setBody("launchTest(\"" + csvDirectory.value() + "\", \"" + entry.getKey() + "\");");
+         m.setBody("launchTest(\"" + StringEscapeUtils.escapeJava(fileAbsolutePath) + "\");");
          newClazz.addMethod(m);
       }
       generatedClazz = newClazz.toClass(getClass().getClassLoader(), null);

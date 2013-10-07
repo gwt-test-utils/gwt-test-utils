@@ -44,10 +44,10 @@ public class WebXmlUtils {
       return INSTANCE;
    }
 
+   private String firstWelcomeFile;
    private final Set<String> listenerClasses;
    // a map with servletUrl as key and serviceImpl className as value
    private final Map<String, String> servletClassMap;
-   private String firstWelcomeFile;
 
    private WebXmlUtils() {
       InputStream is = getWebXmlAsStream();
@@ -61,9 +61,8 @@ public class WebXmlUtils {
       } catch (Exception e) {
          if (GwtTestException.class.isInstance(e)) {
             throw (GwtTestException) e;
-         } else {
-            throw new GwtTestConfigurationException("Error while parsing web.xml", e);
          }
+         throw new GwtTestConfigurationException("Error while parsing web.xml", e);
       } finally {
          // close the stream
          try {
@@ -74,16 +73,16 @@ public class WebXmlUtils {
       }
    }
 
+   public String getFirstWelcomeFile() {
+      return firstWelcomeFile;
+   }
+
    public Set<String> getListenerClasses() {
       return listenerClasses;
    }
 
    public String getServletClass(String servletPath) {
       return servletClassMap.get(servletPath);
-   }
-
-   public String getFirstWelcomeFile() {
-      return firstWelcomeFile;
    }
 
    private InputStream getWebXmlAsStream() {
@@ -97,6 +96,12 @@ public class WebXmlUtils {
 
       throw new GwtTestConfigurationException("Cannot find 'web.xml' file ' for GWT module "
                + GWT.getModuleName());
+   }
+
+   private String parseFirstWelcomFile(Document document, XPath xpath)
+            throws XPathExpressionException {
+      return (String) xpath.evaluate("/web-app/welcome-file-list/welcome-file", document,
+               XPathConstants.STRING);
    }
 
    private Set<String> parseListeners(Document document, XPath xpath)
@@ -170,12 +175,6 @@ public class WebXmlUtils {
          servletsMap.put(servletName, servletClass);
       }
       return servletsMap;
-   }
-
-   private String parseFirstWelcomFile(Document document, XPath xpath)
-            throws XPathExpressionException {
-      return (String) xpath.evaluate("/web-app/welcome-file-list/welcome-file", document,
-               XPathConstants.STRING);
    }
 
 }
