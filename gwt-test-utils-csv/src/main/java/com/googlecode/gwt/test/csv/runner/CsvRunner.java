@@ -61,8 +61,7 @@ public class CsvRunner {
    }
 
    public String getAssertionErrorMessagePrefix() {
-      return "Error line " + (lineNumber + 1)
-               + (extendedLineInfo == null ? "" : " [" + extendedLineInfo + "]") + ": ";
+      return "Error line " + getCurrentExecutedLine() + ": ";
    }
 
    @SuppressWarnings("unchecked")
@@ -78,10 +77,8 @@ public class CsvRunner {
          logger.trace(getProcessingMessagePrefix() + "Processing " + currentName);
          boolean ok = false;
          if (!ok) {
-            Method m = null;
-            if (m == null) {
-               m = GwtReflectionUtils.getMethod(current.getClass(), currentName);
-            }
+            Method m = GwtReflectionUtils.getMethod(current.getClass(), currentName);
+
             if (m == null) {
                m = GwtReflectionUtils.getMethod(current.getClass(), "get" + currentName);
             }
@@ -171,6 +168,11 @@ public class CsvRunner {
       this.extendedLineInfo = extendedLineInfo;
    }
 
+   @Override
+   public String toString() {
+      return "CsvRunner executing line " + getCurrentExecutedLine();
+   }
+
    void executeLine(String methodName, List<String> args, Object fixture) {
       if (methodName.indexOf("**") == 0) {
          // commented line
@@ -180,13 +182,10 @@ public class CsvRunner {
       removeEmptyElements(filterArgs);
       transformArgs(filterArgs);
       Method m = getCsvMethod(fixture.getClass(), methodName);
-
       if (m == null) {
          fail(getAssertionErrorMessagePrefix() + "@" + CsvMethod.class.getSimpleName() + " ' "
                   + methodName + " ' not found in object " + fixture);
-         return;
       }
-
       GwtReflectionUtils.makeAccessible(m);
 
       List<Object> argList = new ArrayList<Object>();
@@ -264,13 +263,10 @@ public class CsvRunner {
                   + m.getName());
       }
       Method countM = GwtReflectionUtils.getMethod(current.getClass(), m.getName() + "Count");
-
       if (countM == null) {
          fail("Count method not found in " + current.getClass().getCanonicalName() + " method "
                   + m.getName());
-         return null;
       }
-
       if (countM.getParameterTypes().length > 0) {
          fail("Too many parameter in count method " + current.getClass().getCanonicalName()
                   + " method " + countM.getName());
@@ -326,13 +322,18 @@ public class CsvRunner {
          return res;
       } else if (clazz == GwtCsvTest.class) {
          return null;
-      }
+      } else {
+         Class<?> superClass = clazz.getSuperclass();
+         if (superClass == null) {
+            return null;
+         }
 
-      Class<?> superClass = clazz.getSuperclass();
-      if (superClass != null) {
          return getCsvMethod(clazz.getSuperclass(), methodName);
       }
-      return null;
+   }
+
+   private String getCurrentExecutedLine() {
+      return lineNumber + 1 + (extendedLineInfo == null ? "" : " [" + extendedLineInfo + "]");
    }
 
    private Field getField(Object fixture, Class<?> clazz, String fieldName) {
@@ -366,7 +367,7 @@ public class CsvRunner {
    private String getMethodName(Entry<Method, CsvMethod> entry) {
       String methodname = entry.getValue().methodName();
 
-      return (methodname.equals("")) ? entry.getKey().getName() : methodname;
+      return methodname.equals("") ? entry.getKey().getName() : methodname;
    }
 
    private Object invoke(Object current, Method m, List<String> list)
