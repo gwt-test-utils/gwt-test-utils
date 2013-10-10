@@ -376,21 +376,22 @@ public class JsoUtils {
    public static String serialize(JavaScriptObject jso) {
       if (Node.is(jso)) {
          return jso.toString();
-      } else {
-         StringBuilder sb = new StringBuilder();
-         // FIXME : provide support for JavaScriptObject arrays
-         sb.append("{ ");
-
-         for (Map.Entry<String, Object> entry : JavaScriptObjects.entrySet(jso)) {
-            sb.append("\"").append(entry.getKey()).append("\": ");
-            sb.append(entry.getValue()).append(", ");
-         }
-
-         sb.replace(sb.length() - 2, sb.length(), "");
-         sb.append(" }");
-
-         return sb.toString();
       }
+
+      StringBuilder sb = new StringBuilder();
+      // FIXME : provide support for JavaScriptObject arrays
+      sb.append("{ ");
+
+      for (Map.Entry<String, Object> entry : JavaScriptObjects.entrySet(jso)) {
+         sb.append("\"").append(entry.getKey()).append("\": ");
+         sb.append(entry.getValue()).append(", ");
+      }
+
+      sb.replace(sb.length() - 2, sb.length(), "");
+      sb.append(" }");
+
+      return sb.toString();
+
    }
 
    public static void setParentNode(Node child, Node parent) {

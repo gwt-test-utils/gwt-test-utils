@@ -119,9 +119,9 @@ public class JavaScriptObjects {
       if (JsoUtils.isStandardDOMProperty(propertyName)) {
          // case for standard dom properties, like "id", "name", "title"...
          return JsoUtils.getDomProperties(o.<Element> cast());
-      } else {
-         return getJsoProperties(o);
       }
+
+      return getJsoProperties(o);
 
    }
 
