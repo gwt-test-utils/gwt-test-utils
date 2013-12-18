@@ -155,6 +155,7 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
       /**
        * Simple representation to make debugging easier
        */
+      @Override
       public String toString() {
          return super.toString() + qname;
       }
@@ -200,12 +201,14 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
       /**
        * Simple representation to make debugging easier
        */
+      @Override
       public String toString() {
          final StringBuffer sb = new StringBuffer("InfoStack(");
          for (int i = top - 1; i >= 0; --i) {
             sb.append(data[i]);
-            if (i != 0)
+            if (i != 0) {
                sb.append(", ");
+            }
          }
          sb.append(")");
          return sb.toString();
@@ -222,7 +225,7 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
 
       ElementEntry(final QName element, final Augmentations augs) {
          name_ = new QName(element);
-         augs_ = (augs == null) ? null : new HTMLAugmentations(augs);
+         augs_ = augs == null ? null : new HTMLAugmentations(augs);
       }
    }
 
@@ -538,8 +541,8 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
       // browser ignore the closing indication for non empty tags like <form
       // .../> but not for unknown element
       final HTMLElements.Element elem = getElement(element);
-      if (elem.isEmpty() || elem.code == HTMLElements.UNKNOWN
-               || (elem.code == HTMLElements.IFRAME && fAllowSelfclosingIframe)) {
+      if (elem.isEmpty() || elem.code == HTMLElements.UNKNOWN || elem.code == HTMLElements.IFRAME
+               && fAllowSelfclosingIframe) {
          endElement(element, augs);
       }
    } // emptyElement(QName,XMLAttributes,Augmentations)
@@ -697,7 +700,7 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
       if (depth > 1) {
          int size = fInlineStack.top;
          for (int i = 0; i < size; i++) {
-            Info info = (Info) fInlineStack.pop();
+            Info info = fInlineStack.pop();
             XMLAttributes attributes = info.attributes;
             if (fReportErrors) {
                String iname = info.qname.rawname;
@@ -981,51 +984,6 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
          consumeBufferedEndElements();
       }
 
-      // check proper parent
-      if (element.parent != null) {
-         final HTMLElements.Element preferedParent = element.parent[0];
-         if (fDocumentFragment
-                  && (preferedParent.code == HTMLElements.HEAD || preferedParent.code == HTMLElements.BODY)) {
-            // nothing, don't force HEAD or BODY creation for a document
-            // fragment
-         } else if (!fSeenRootElement && !fDocumentFragment) {
-            String pname = preferedParent.name;
-            pname = modifyName(pname, fNamesElems);
-            if (fReportErrors) {
-               String ename = elem.rawname;
-               fErrorReporter.reportWarning("HTML2002", new Object[]{ename, pname});
-            }
-            final QName qname = new QName(null, pname, pname, null);
-            final boolean parentCreated = forceStartElement(qname, null, synthesizedAugs());
-            if (!parentCreated) {
-               if (!isForcedCreation) {
-                  notifyDiscardedStartElement(elem, attrs, augs);
-               }
-               return;
-            }
-         } else {
-            if (preferedParent.code != HTMLElements.HEAD
-                     || (!fSeenBodyElement && !fDocumentFragment)) {
-               int depth = getParentDepth(element.parent, element.bounds);
-               if (depth == -1) { // no parent found
-                  final String pname = modifyName(preferedParent.name, fNamesElems);
-                  final QName qname = new QName(null, pname, pname, null);
-                  if (fReportErrors) {
-                     String ename = elem.rawname;
-                     fErrorReporter.reportWarning("HTML2004", new Object[]{ename, pname});
-                  }
-                  final boolean parentCreated = forceStartElement(qname, null, synthesizedAugs());
-                  if (!parentCreated) {
-                     if (!isForcedCreation) {
-                        notifyDiscardedStartElement(elem, attrs, augs);
-                     }
-                     return;
-                  }
-               }
-            }
-         }
-      }
-
       // if block element, save immediate parent inline elements
       int depth = 0;
       if (element.flags == 0) {
@@ -1045,7 +1003,7 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
       // close previous elements
       // all elements close a <script>
       // in head, no element has children
-      if ((fElementStack.top > 1 && (fElementStack.peek().element.code == HTMLElements.SCRIPT))
+      if (fElementStack.top > 1 && fElementStack.peek().element.code == HTMLElements.SCRIPT
                || fElementStack.top > 2
                && fElementStack.data[fElementStack.top - 2].element.code == HTMLElements.HEAD) {
          final Info info = fElementStack.pop();
@@ -1248,8 +1206,8 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
    protected final int getElementDepth(HTMLElements.Element element) {
       final boolean container = element.isContainer();
       final short elementCode = element.code;
-      final boolean tableBodyOrHtml = (elementCode == HTMLElements.TABLE)
-               || (elementCode == HTMLElements.BODY) || (elementCode == HTMLElements.HTML);
+      final boolean tableBodyOrHtml = elementCode == HTMLElements.TABLE
+               || elementCode == HTMLElements.BODY || elementCode == HTMLElements.HTML;
       int depth = -1;
       for (int i = fElementStack.top - 1; i >= fragmentContextStackSize_; i--) {
          Info info = fElementStack.data[i];
@@ -1373,8 +1331,9 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
     * Notifies the tagBalancingListener (if any) of an ignored end element
     */
    private void notifyDiscardedEndElement(final QName element, final Augmentations augs) {
-      if (tagBalancingListener != null)
+      if (tagBalancingListener != null) {
          tagBalancingListener.ignoredEndElement(element, augs);
+      }
    }
 
    /**
@@ -1382,7 +1341,8 @@ public class HTMLTagBalancer implements XMLDocumentFilter, HTMLComponent {
     */
    private void notifyDiscardedStartElement(final QName elem, final XMLAttributes attrs,
             final Augmentations augs) {
-      if (tagBalancingListener != null)
+      if (tagBalancingListener != null) {
          tagBalancingListener.ignoredStartElement(elem, attrs, augs);
+      }
    }
 } // class HTMLTagBalancer
