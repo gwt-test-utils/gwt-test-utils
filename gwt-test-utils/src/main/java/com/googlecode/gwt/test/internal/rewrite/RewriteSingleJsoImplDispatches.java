@@ -24,9 +24,7 @@ import java.util.TreeSet;
 
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.dev.asm.ClassAdapter;
 import com.google.gwt.dev.asm.ClassVisitor;
-import com.google.gwt.dev.asm.MethodAdapter;
 import com.google.gwt.dev.asm.MethodVisitor;
 import com.google.gwt.dev.asm.Opcodes;
 import com.google.gwt.dev.asm.Type;
@@ -50,10 +48,10 @@ import com.google.gwt.dev.util.collect.Sets;
  * the caller is binding to the interface rather than a concrete type.</li>
  * </ol>
  */
-class RewriteSingleJsoImplDispatches extends ClassAdapter {
-   private class MyMethodVisitor extends MethodAdapter {
+public class RewriteSingleJsoImplDispatches extends ClassVisitor {
+   private class MyMethodVisitor extends MethodVisitor {
       public MyMethodVisitor(MethodVisitor mv) {
-         super(mv);
+         super(Opcodes.ASM4, mv);
       }
 
       /*
@@ -127,7 +125,7 @@ class RewriteSingleJsoImplDispatches extends ClassAdapter {
 
    public RewriteSingleJsoImplDispatches(ClassVisitor v, TypeOracle typeOracle,
             SingleJsoImplData jsoData) {
-      super(v);
+      super(Opcodes.ASM4, v);
       this.typeOracle = typeOracle;
       this.jsoData = jsoData;
    }

@@ -13,6 +13,12 @@ class CellBasedWidgetImplStandardPatcher {
    }
 
    @PatchMethod
+   static void markDisposeEventImpl(Object cellBasedWidgetImplStandard, Element elem,
+            String typeName) {
+
+   }
+
+   @PatchMethod
    static void sinkEventImpl(Object cellBasedWidgetImplStandard, Element elem, String typeName) {
 
    }

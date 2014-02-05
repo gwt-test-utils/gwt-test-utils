@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test.internal.patchers.dom;
 
-import com.google.gwt.user.client.Element;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.impl.ElementMapperImpl;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;

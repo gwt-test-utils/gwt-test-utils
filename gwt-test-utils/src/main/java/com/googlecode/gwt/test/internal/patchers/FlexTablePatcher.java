@@ -1,8 +1,8 @@
 package com.googlecode.gwt.test.internal.patchers;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.TableRowElement;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;

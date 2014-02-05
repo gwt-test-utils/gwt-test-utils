@@ -15,9 +15,7 @@ package com.googlecode.gwt.test.internal.rewrite;
 
 import java.util.Set;
 
-import com.google.gwt.dev.asm.ClassAdapter;
 import com.google.gwt.dev.asm.ClassVisitor;
-import com.google.gwt.dev.asm.MethodAdapter;
 import com.google.gwt.dev.asm.MethodVisitor;
 import com.google.gwt.dev.asm.Opcodes;
 import com.google.gwt.dev.asm.commons.Remapper;
@@ -34,14 +32,14 @@ import com.google.gwt.dev.shell.rewrite.HostedModeClassRewriter.InstanceMethodOr
  * parameter. This modified method has same stack behavior as the original instance method.</li>
  * </ol>
  */
-class RewriteRefsToJsoClasses extends ClassAdapter {
+class RewriteRefsToJsoClasses extends ClassVisitor {
 
    /**
     * A method body rewriter to actually rewrite call sites.
     */
-   private class MyMethodAdapter extends MethodAdapter {
+   private class MyMethodAdapter extends MethodVisitor {
 
-      private final Remapper remapper = new Remapper() {
+      private Remapper remapper = new Remapper() {
          @Override
          public String map(String typeName) {
             if (jsoDescriptors.contains(typeName)) {
@@ -52,7 +50,7 @@ class RewriteRefsToJsoClasses extends ClassAdapter {
       };
 
       public MyMethodAdapter(MethodVisitor mv) {
-         super(mv);
+         super(Opcodes.ASM4, mv);
       }
 
       @Override
@@ -115,7 +113,7 @@ class RewriteRefsToJsoClasses extends ClassAdapter {
    /**
     * Maps methods to the class in which they are declared.
     */
-   private final InstanceMethodOracle mapper;
+   private InstanceMethodOracle mapper;
 
    /**
     * Construct a new rewriter instance.
@@ -127,7 +125,7 @@ class RewriteRefsToJsoClasses extends ClassAdapter {
     */
    public RewriteRefsToJsoClasses(ClassVisitor cv, Set<String> jsoDescriptors,
             InstanceMethodOracle mapper) {
-      super(cv);
+      super(Opcodes.ASM4, cv);
       this.jsoDescriptors = jsoDescriptors;
       this.mapper = mapper;
    }

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import javassist.CtClass;
 import javassist.CtMethod;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.googlecode.gwt.test.csv.CsvDirectory;
 import com.googlecode.gwt.test.csv.CsvMacros;

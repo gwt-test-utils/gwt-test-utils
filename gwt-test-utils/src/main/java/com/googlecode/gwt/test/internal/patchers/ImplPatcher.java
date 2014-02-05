@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test.internal.patchers;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.gwt.core.client.impl.Impl;
 import com.googlecode.gwt.test.internal.GwtConfig;

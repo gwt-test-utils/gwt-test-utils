@@ -5,6 +5,8 @@ import java.io.File;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.linker.ArtifactSet;
+import com.google.gwt.dev.CompilerContext;
+import com.google.gwt.dev.PrecompileTaskOptionsImpl;
 import com.google.gwt.dev.RebindCache;
 import com.google.gwt.dev.cfg.ModuleDef;
 import com.google.gwt.dev.cfg.Rules;
@@ -96,11 +98,15 @@ class GwtTestModuleSpaceHost implements ModuleSpaceHost {
          // It has to wait until now because we need to inject javascript.
          //
          Rules rules = module.getRules();
-         StandardGeneratorContext genCtx = new StandardGeneratorContext(compilationState, module,
-                  genDir, new ArtifactSet(), false);
+         PrecompileTaskOptionsImpl options = new PrecompileTaskOptionsImpl();
+         options.setGenDir(genDir);
+         CompilerContext compilerContext = new CompilerContext.Builder().module(module).options(
+                  options).build();
+         StandardGeneratorContext genCtx = new StandardGeneratorContext(compilerContext,
+                  compilationState, new ArtifactSet(), false);
 
          // Only enable generator result caching if we have a valid rebindCache
-         genCtx.setGeneratorResultCachingEnabled((rebindCache != null));
+         genCtx.setGeneratorResultCachingEnabled(rebindCache != null);
 
          rebindOracle = new StandardRebindOracle(propOracle, rules, genCtx);
          rebindOracle.setRebindCache(rebindCache);

@@ -7,7 +7,6 @@ import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.cellview.client.AbstractCellTable;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -42,7 +41,6 @@ public class GwtReset {
 
    public void reset() throws Exception {
       GwtTreeLogger.reset();
-      getStaticAndCallClear(Timer.class, "timers");
       getStaticAndCallClear(Dictionary.class, "cache");
       getStaticAndCallClear(RootPanel.class, "rootPanels");
       getStaticAndCallClear(RootPanel.class, "widgetsToDetach");

@@ -13,23 +13,22 @@
  */
 package com.googlecode.gwt.test.internal.rewrite;
 
-import com.google.gwt.dev.asm.ClassAdapter;
 import com.google.gwt.dev.asm.ClassVisitor;
 import com.google.gwt.dev.asm.Opcodes;
 
 /**
  * Performs any rewriting necessary to ensure that class files are 1.5 compatible.
  */
-class ForceClassVersion15 extends ClassAdapter {
+class ForceClassVersion15 extends ClassVisitor {
 
    public ForceClassVersion15(ClassVisitor v) {
-      super(v);
+      super(Opcodes.ASM4, v);
    }
 
    @Override
    public void visit(final int version, final int access, final String name,
             final String signature, final String superName, final String[] interfaces) {
-      assert (version >= Opcodes.V1_5 && version <= Opcodes.V1_6);
+      assert version >= Opcodes.V1_5 && version <= Opcodes.V1_6;
       super.visit(Opcodes.V1_5, access, name, signature, superName, interfaces);
    }
 }

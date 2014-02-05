@@ -3,7 +3,7 @@ package com.googlecode.gwt.test.internal.patchers;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -34,7 +34,7 @@ class JsonUtilsPatcher {
 
    @PatchMethod
    static String escapeValue(String toEscape) {
-      return "\"" + StringEscapeUtils.escapeJavaScript(toEscape) + "\"";
+      return "\"" + StringEscapeUtils.escapeEcmaScript(toEscape) + "\"";
    }
 
    @PatchMethod

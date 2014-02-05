@@ -1,8 +1,8 @@
 package com.googlecode.gwt.test.internal.patchers.dom;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
 
@@ -14,9 +14,9 @@ class DOMPatcher {
       Node firstChild = elem.getFirstChildElement();
       if (firstChild != null) {
          return firstChild.cast();
-      } else {
-         return null;
       }
+      return null;
+
    }
 
    @PatchMethod

@@ -90,7 +90,7 @@ public class GwtClassLoader extends Loader {
          }
 
          // A JSO impl class needs the class bytes for the original class.
-         String classFromPool = (overlayRewriter.isJsoImpl(className)) ? className.substring(0,
+         String classFromPool = overlayRewriter.isJsoImpl(className) ? className.substring(0,
                   className.length() - 1) : className;
 
          // Apply Patchers
@@ -140,8 +140,7 @@ public class GwtClassLoader extends Loader {
 
    private final Translator translator;
 
-   private GwtClassLoader(ConfigurationLoader configurationLoader, CompilationState compilationState)
-            throws NotFoundException, CannotCompileException {
+   private GwtClassLoader(ConfigurationLoader configurationLoader, CompilationState compilationState) {
       super(GwtClassPool.get());
       this.compilationState = compilationState;
       this.source = GwtClassPool.get();
@@ -182,20 +181,22 @@ public class GwtClassLoader extends Loader {
       int i = className.lastIndexOf('.');
       if (i != -1) {
          String pname = className.substring(0, i);
-         if (getPackage(pname) == null)
+         if (getPackage(pname) == null) {
             try {
                definePackage(pname, null, null, null, null, null, null, null);
             } catch (IllegalArgumentException e) {
                // ignore. maybe the package object for the same
                // name has been created just right away.
             }
+         }
       }
 
       try {
-         if (domain == null)
+         if (domain == null) {
             return defineClass(className, classfile, 0, classfile.length);
-         else
+         } else {
             return defineClass(className, classfile, 0, classfile.length, domain);
+         }
       } catch (Throwable t) {
          throw new GwtTestPatchException("Error while defining " + className
                   + " from modified bytecode", t);
@@ -239,7 +240,7 @@ public class GwtClassLoader extends Loader {
 
    @Override
    protected Class<?> loadClassByDelegation(String name) throws ClassNotFoundException {
-      return (delegatePattern.matcher(name).matches()) ? delegateToParent(name) : null;
+      return delegatePattern.matcher(name).matches() ? delegateToParent(name) : null;
    }
 
    private void addCompiledClass(CompiledClass compiledClass) {

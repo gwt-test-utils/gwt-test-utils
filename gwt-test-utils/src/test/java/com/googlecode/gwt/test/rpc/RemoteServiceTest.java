@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -17,7 +18,6 @@ import com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet;
 import com.googlecode.gwt.test.GwtTestTest;
 import com.googlecode.gwt.test.client.MyObject;
 import com.googlecode.gwt.test.exceptions.GwtTestRpcException;
-import com.googlecode.gwt.test.web.MockHttpServletRequest;
 
 public class RemoteServiceTest extends GwtTestTest {
 

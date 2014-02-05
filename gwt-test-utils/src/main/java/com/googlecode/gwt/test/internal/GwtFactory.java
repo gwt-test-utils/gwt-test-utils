@@ -10,6 +10,7 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.dev.CompilerContext;
 import com.google.gwt.dev.cfg.ModuleDef;
 import com.google.gwt.dev.cfg.ModuleDefLoader;
 import com.google.gwt.dev.javac.CompilationState;
@@ -46,8 +47,9 @@ public class GwtFactory {
          return true;
       }
 
-      if ((instance.surefireBooterJarUrl != null && !instance.surefireBooterJarUrl.equals(currentSurefireBooterJarUrl))
-               || (instance.surefireBooterJarUrl == null && currentSurefireBooterJarUrl != null)) {
+      if (instance.surefireBooterJarUrl != null
+               && !instance.surefireBooterJarUrl.equals(currentSurefireBooterJarUrl)
+               || instance.surefireBooterJarUrl == null && currentSurefireBooterJarUrl != null) {
          // surefire booter jar has changed : this should never happen since
          // surefire-plugin runs each sub-module tests in an isolated
          // classloader
@@ -75,6 +77,8 @@ public class GwtFactory {
    }
 
    private final CompilationState compilationState;
+   private final CompilerContext compilerContext;
+   private final CompilerContext.Builder compilerContextBuilder = new CompilerContext.Builder();
    private final ConfigurationLoader configurationLoader;
    private final GwtClassLoader gwtClassLoader;
    private final ModuleDef moduleDef;
@@ -102,8 +106,10 @@ public class GwtFactory {
          // create every gwt stuff, searching for resources in the setup
          // 'src-directories' entries in
          // META-INF/gwt-test-utils.properties files
-         moduleDef = createModuleDef(configurationLoader);
-         compilationState = createCompilationState(moduleDef);
+         CompilerContext tempContext = compilerContextBuilder.build();
+         moduleDef = createModuleDef(configurationLoader, tempContext);
+         compilerContext = compilerContextBuilder.module(moduleDef).build();
+         compilationState = createCompilationState(moduleDef, compilerContext);
          overlayRewriter = createOverlayRewriter(compilationState);
          gwtClassLoader = GwtClassLoader.createClassLoader(configurationLoader, compilationState,
                   overlayRewriter);
@@ -137,8 +143,8 @@ public class GwtFactory {
       return overlayRewriter;
    }
 
-   private CompilationState createCompilationState(ModuleDef moduleDef)
-            throws UnableToCompleteException {
+   private CompilationState createCompilationState(ModuleDef moduleDef,
+            CompilerContext compilerContext) throws UnableToCompleteException {
       TreeLogger treeLogger = GwtTreeLogger.get();
 
       File target = new File("target");
@@ -148,14 +154,14 @@ public class GwtFactory {
          target = new File(".");
       }
       CompilationStateBuilder.init(treeLogger, target);
-      return moduleDef.getCompilationState(treeLogger);
+      return moduleDef.getCompilationState(treeLogger, compilerContext);
    }
 
-   private ModuleDef createModuleDef(ConfigurationLoader configurationLoader)
-            throws UnableToCompleteException {
+   private ModuleDef createModuleDef(ConfigurationLoader configurationLoader,
+            CompilerContext compilerContext) throws UnableToCompleteException {
       List<String> gwtModules = configurationLoader.getGwtModules();
       String[] inherits = gwtModules.toArray(new String[gwtModules.size()]);
-      return ModuleDefLoader.createSyntheticModule(GwtTreeLogger.get(),
+      return ModuleDefLoader.createSyntheticModule(GwtTreeLogger.get(), compilerContext,
                "com.googlecode.gwt.test.Aggregator", inherits, false);
    }
 
@@ -164,7 +170,7 @@ public class GwtFactory {
       JClassType jsoType = typeOracle.findType(JsValueGlue.JSO_CLASS);
 
       // If we couldn't find the JSO class, we don't need to do any rewrites.
-      return (jsoType != null) ? new OverlayTypesRewriter(compilationState, jsoType) : null;
+      return jsoType != null ? new OverlayTypesRewriter(compilationState, jsoType) : null;
    }
 
 }

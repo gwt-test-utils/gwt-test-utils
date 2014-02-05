@@ -216,4 +216,9 @@ class ElementPatcher {
       setPropertyObject(element, name, value);
    }
 
+   @PatchMethod
+   static int toInt32(double val) {
+      return Double.valueOf(val).intValue();
+   }
+
 }

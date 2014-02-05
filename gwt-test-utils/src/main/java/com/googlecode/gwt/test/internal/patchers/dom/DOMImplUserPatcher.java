@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test.internal.patchers.dom;
 
-import com.google.gwt.user.client.Element;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.impl.DOMImpl;
@@ -55,7 +55,7 @@ class DOMImplUserPatcher {
    }
 
    @PatchMethod
-   static EventListener getEventListener(DOMImpl domImpl, Element elem) {
+   static EventListener getEventListener(Element elem) {
       return JavaScriptObjects.getObject(elem, ELEM_EVENTLISTENER);
    }
 
@@ -84,7 +84,7 @@ class DOMImplUserPatcher {
    }
 
    @PatchMethod
-   static void setEventListener(DOMImpl domImpl, Element elem, EventListener listener) {
+   static void setEventListener(Element elem, EventListener listener) {
       JavaScriptObjects.setProperty(elem, ELEM_EVENTLISTENER, listener);
    }
 

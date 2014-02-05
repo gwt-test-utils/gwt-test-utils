@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
@@ -42,7 +42,7 @@ public class UiDockLayoutPanelTagFactory implements UiObjectTagFactory<DockLayou
          if (!UiBinderXmlUtils.CLIENTUI_NSURI.equals(namespaceURI)) {
             super.appendElement(wrapped, element, namespaceURI, childWidgets);
          } else {
-            handleDockLayoutPanelSpecifics(wrapped, element, childWidgets);
+            handleDockLayoutPanelSpecifics(element, childWidgets);
          }
       }
 
@@ -95,8 +95,7 @@ public class UiDockLayoutPanelTagFactory implements UiObjectTagFactory<DockLayou
          return super.instanciate(clazz, attributes, owner);
       }
 
-      private void handleDockLayoutPanelSpecifics(DockLayoutPanel wrapped, Element child,
-               List<IsWidget> childWidgets) {
+      private void handleDockLayoutPanelSpecifics(Element child, List<IsWidget> childWidgets) {
          String tagName = child.getTagName();
          if ("center".equals(tagName)) {
             centerWidgets.addAll(childWidgets);

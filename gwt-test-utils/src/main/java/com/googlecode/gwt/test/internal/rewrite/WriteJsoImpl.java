@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.dev.asm.ClassAdapter;
 import com.google.gwt.dev.asm.ClassVisitor;
 import com.google.gwt.dev.asm.FieldVisitor;
 import com.google.gwt.dev.asm.MethodVisitor;
@@ -39,13 +38,14 @@ import com.googlecode.gwt.test.internal.utils.JsoProperties;
  * <code>this</code> parameter. Such methods have the same stack behavior as the original.</li>
  * </ol>
  */
-abstract class WriteJsoImpl extends ClassAdapter {
+abstract class WriteJsoImpl extends ClassVisitor {
 
    /**
     * This type implements JavaScriptObject.
     * 
     * <ol>
-    * <li>JavaScriptObject itself gets a new synthetic field to store its internal properties.</li>
+    * <li>JavaScriptObject itself gets a new synthetic field to store the underlying hosted mode
+    * reference.</li>
     * <li>Instance methods are added so that JavaScriptObject implements all SingleJsoImpl
     * interfaces.</li>
     * </ol>
@@ -76,10 +76,6 @@ abstract class WriteJsoImpl extends ClassAdapter {
 
          super.visit(version, access, name, signature, superName, interfaces);
 
-         /*
-          * Generate the synthetic "properties" field to contain every properties of the JavaScript
-          * object.
-          */
          FieldVisitor fv = visitField(Opcodes.ACC_PROTECTED | Opcodes.ACC_SYNTHETIC,
                   JsoProperties.JSO_PROPERTIES,
                   "Lcom/googlecode/gwt/test/internal/utils/PropertyContainer;", null, null);
@@ -233,9 +229,9 @@ abstract class WriteJsoImpl extends ClassAdapter {
 
       if (classDescriptor.equals(OverlayTypesRewriter.JAVASCRIPTOBJECT_IMPL_DESC)) {
          return new ForJsoDollar(cv, jsoDescriptors, mapper, singleJsoImplData);
-      } else {
-         return new ForJsoInterface(cv, mapper);
       }
+
+      return new ForJsoInterface(cv, mapper);
    }
 
    /**
@@ -257,7 +253,7 @@ abstract class WriteJsoImpl extends ClassAdapter {
     * @param mapper maps methods to the class in which they are declared
     */
    private WriteJsoImpl(ClassVisitor cv, InstanceMethodOracle mapper) {
-      super(cv);
+      super(Opcodes.ASM4, cv);
       this.mapper = mapper;
    }
 

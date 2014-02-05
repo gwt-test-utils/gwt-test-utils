@@ -477,8 +477,8 @@ public class OverlayTypesRewriter {
          buildJsoImplDescs.add(desc + "$");
 
          List<String> superTypes = jsoSuperTypes.get(jsoSubtype);
-         assert (superTypes != null);
-         assert (superTypes.size() > 0);
+         assert superTypes != null;
+         assert superTypes.size() > 0;
          for (ListIterator<String> i = superTypes.listIterator(); i.hasNext();) {
             i.set(toDescriptor(i.next()));
          }
@@ -552,7 +552,7 @@ public class OverlayTypesRewriter {
       Event classBytesRewriteEvent = SpeedTracerLogger.start(DevModeEventType.CLASS_BYTES_REWRITE,
                "Class Name", className);
       String desc = toDescriptor(className);
-      assert (!jsoIntfDescs.contains(desc));
+      assert !jsoIntfDescs.contains(desc);
 
       // The ASM model is to chain a bunch of visitors together.
       ClassWriter writer = new ClassWriter(0);
@@ -582,11 +582,11 @@ public class OverlayTypesRewriter {
 
    public byte[] writeJsoIntf(String className) {
       String desc = toDescriptor(className);
-      assert (jsoIntfDescs.contains(desc));
-      assert (jsoSuperDescs.containsKey(desc));
+      assert jsoIntfDescs.contains(desc);
+      assert jsoSuperDescs.containsKey(desc);
       List<String> superDescs = jsoSuperDescs.get(desc);
-      assert (superDescs != null);
-      assert (superDescs.size() > 0);
+      assert superDescs != null;
+      assert superDescs.size() > 0;
 
       // The ASM model is to chain a bunch of visitors together.
       ClassWriter writer = new ClassWriter(0);
