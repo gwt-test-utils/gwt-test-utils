@@ -20,6 +20,8 @@ import com.googlecode.gwt.test.utils.JavaScriptObjects;
 @PatchClass(Element.class)
 class ElementPatcher {
 
+   private static final String SCROLL_TOP = "scrollTop";
+
    @PatchMethod
    static void blur(Element element) {
 
@@ -31,28 +33,8 @@ class ElementPatcher {
    }
 
    @PatchMethod
-   static int getClientHeight(Element element) {
-      return JavaScriptObjects.getInteger(element, JsoProperties.ELEMENT_CLIENT_HEIGHT);
-   }
-
-   @PatchMethod
-   static int getClientWidth(Element element) {
-      return JavaScriptObjects.getInteger(element, JsoProperties.ELEMENT_CLIENT_WIDTH);
-   }
-
-   @PatchMethod
    static NodeList<Element> getElementsByTagName(Element elem, String tagName) {
       return DocumentPatcher.getElementsByTagName(elem, tagName);
-   }
-
-   @PatchMethod
-   static int getOffsetHeight(Element element) {
-      return GwtStringUtils.parseInt(element.getStyle().getHeight(), 0);
-   }
-
-   @PatchMethod
-   static int getOffsetLeft(Element element) {
-      return GwtStringUtils.parseInt(element.getStyle().getLeft(), 0);
    }
 
    @PatchMethod
@@ -62,16 +44,6 @@ class ElementPatcher {
       }
 
       return element.getParentElement();
-   }
-
-   @PatchMethod
-   static int getOffsetTop(Element element) {
-      return GwtStringUtils.parseInt(element.getStyle().getTop(), 0);
-   }
-
-   @PatchMethod
-   static int getOffsetWidth(Element element) {
-      return GwtStringUtils.parseInt(element.getStyle().getWidth(), 0);
    }
 
    @PatchMethod
@@ -134,6 +106,42 @@ class ElementPatcher {
       properties.put("style", "");
 
       return GwtStyleUtils.getStyle(element);
+   }
+
+   @PatchMethod
+   static double getSubPixelClientHeight(Element element) {
+      return JavaScriptObjects.getDouble(element, JsoProperties.ELEMENT_CLIENT_HEIGHT);
+   }
+
+   @PatchMethod
+   static double getSubPixelClientWidth(Element element) {
+      return JavaScriptObjects.getDouble(element, JsoProperties.ELEMENT_CLIENT_WIDTH);
+   }
+
+   @PatchMethod
+   static double getSubPixelOffsetHeight(Element element) {
+      return GwtStringUtils.parseDouble(element.getStyle().getHeight(), 0);
+   }
+
+   @PatchMethod
+   static double getSubPixelOffsetLeft(Element element) {
+      return GwtStringUtils.parseDouble(element.getStyle().getLeft(), 0);
+   }
+
+   @PatchMethod
+   static double getSubPixelOffsetTop(Element element) {
+      return GwtStringUtils.parseDouble(element.getStyle().getTop(), 0);
+
+   }
+
+   @PatchMethod
+   static double getSubPixelOffsetWidth(Element element) {
+      return GwtStringUtils.parseDouble(element.getStyle().getWidth(), 0);
+   }
+
+   @PatchMethod
+   static double getSubPixelScrollTop(Element element) {
+      return JavaScriptObjects.getDouble(element, SCROLL_TOP);
    }
 
    @PatchMethod
@@ -214,6 +222,11 @@ class ElementPatcher {
    @PatchMethod
    static void setPropertyString(Element element, String name, String value) {
       setPropertyObject(element, name, value);
+   }
+
+   @PatchMethod
+   static void setScrollTop(Element element, int scrollTop) {
+      JavaScriptObjects.setProperty(element, SCROLL_TOP, scrollTop);
    }
 
    @PatchMethod

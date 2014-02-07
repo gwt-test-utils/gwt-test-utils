@@ -46,6 +46,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
    private final GwtCreateHandler defaultGwtCreateHandler;
    private final GwtCreateHandler deferredReplaceWithCreateHandler;
    private final GwtCreateHandler generatorCreateHandler;
+   private final GwtCreateHandler htmlTableImplCreateHandler;
    private final GwtCreateHandler imageBundleCreateHandler;
    private final GwtCreateHandler localizableResourceCreateHandler;
    private GwtCreateHandler mockCreateHandler;
@@ -66,6 +67,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
       clientBundleCreateHander = new ClientBundleCreateHandler();
       defaultGwtCreateHandler = new DefaultGwtCreateHandler();
       deferredReplaceWithCreateHandler = new DeferredReplaceWithCreateHandler();
+      htmlTableImplCreateHandler = new HTMLTableImplCreateHandler();
       imageBundleCreateHandler = new ImageBundleCreateHandler();
       localizableResourceCreateHandler = new LocalizableResourceCreateHandler();
       placeHistoryMapperCreateHandler = new PlaceHistoryMapperCreateHandler();
@@ -158,6 +160,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
       list.add(localizableResourceCreateHandler);
       list.add(clientBundleCreateHander);
       list.add(imageBundleCreateHandler);
+      list.add(htmlTableImplCreateHandler);
       list.add(resizeLayoutPanelImplCreateHandler);
       list.add(uiBinderCreateHandler);
       list.add(testRemoteServiceCreateHandler);

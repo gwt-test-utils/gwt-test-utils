@@ -66,13 +66,22 @@ public class GwtStringUtils {
       return sb.toString();
    }
 
+   public static double parseDouble(String value, double defaultValue) {
+      Matcher m = DOUBLE_PATTERN.matcher(value);
+      if (m.matches()) {
+         return Double.parseDouble(m.group(1));
+      }
+      return defaultValue;
+
+   }
+
    public static int parseInt(String value, int defaultValue) {
       Matcher m = NUMBER_PATTERN.matcher(value);
       if (m.matches()) {
          return Integer.parseInt(m.group(1));
-      } else {
-         return defaultValue;
       }
+      return defaultValue;
+
    }
 
    public static String resolveBackSlash(String input) {

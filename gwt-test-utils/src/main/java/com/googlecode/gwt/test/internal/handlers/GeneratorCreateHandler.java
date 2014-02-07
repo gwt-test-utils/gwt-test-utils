@@ -25,6 +25,7 @@ import com.google.gwt.core.ext.PropertyOracle;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.dev.RebindCache;
 import com.google.gwt.dev.cfg.BindingProperty;
 import com.google.gwt.dev.cfg.ConfigurationProperty;
@@ -34,6 +35,7 @@ import com.google.gwt.dev.cfg.StaticPropertyOracle;
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.javac.CompiledClass;
 import com.google.gwt.dev.javac.JsniMethod;
+import com.google.gwt.dev.shell.ArtifactAcceptor;
 import com.google.gwt.dev.shell.DispatchIdOracle;
 import com.google.gwt.dev.shell.JsValue;
 import com.google.gwt.dev.shell.ModuleSpace;
@@ -52,6 +54,14 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
  * This is a wrapper around GWT's compilation tools
  */
 public class GeneratorCreateHandler implements GwtCreateHandler {
+
+   private static final ArtifactAcceptor ARTIFACT_ACCEPTOR = new ArtifactAcceptor() {
+
+      public void accept(TreeLogger logger, ArtifactSet newlyGeneratedArtifacts)
+               throws UnableToCompleteException {
+
+      }
+   };
 
    private static Map<String, ModuleSpaceHost> moduleSpaceHosts = new HashMap<String, ModuleSpaceHost>();
 
@@ -193,7 +203,7 @@ public class GeneratorCreateHandler implements GwtCreateHandler {
             ModuleDef moduleDef) {
       try {
          ModuleSpaceHost moduleSpaceHost = new GwtTestModuleSpaceHost(GwtTreeLogger.get(),
-                  compilationState, moduleDef, null, null, REBIND_CACHE);
+                  compilationState, moduleDef, null, ARTIFACT_ACCEPTOR, REBIND_CACHE);
          ModuleSpace moduleSpace = createModuleSpace(moduleSpaceHost);
          moduleSpaceHost.onModuleReady(moduleSpace);
 
