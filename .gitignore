@@ -21,3 +21,4 @@ gwt-test-utils-gwtbootstrap/target/test-classes/com/googlecode/gwt/test/gwtboots
 .idea
 .project
 .settings
+/gwt-unitCache
