@@ -349,7 +349,7 @@ public class JsoUtils {
    }
 
    public static void onSetHTML(JavaScriptObject jso, String newHTML, String oldHTML) {
-      Widget w = WidgetUtils.getWidget(jso.<com.google.gwt.user.client.Element> cast());
+      Widget w = WidgetUtils.getWidget(jso.<Element> cast());
 
       if (w != null) {
          GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetHTML", w, newHTML, oldHTML);
@@ -358,7 +358,7 @@ public class JsoUtils {
    }
 
    public static void onSetId(JavaScriptObject jso, String newId, String oldId) {
-      Widget w = WidgetUtils.getWidget(jso.<com.google.gwt.user.client.Element> cast());
+      Widget w = WidgetUtils.getWidget(jso.<Element> cast());
 
       if (w != null) {
          GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetId", w, newId, oldId);
@@ -366,7 +366,7 @@ public class JsoUtils {
    }
 
    public static void onSetText(JavaScriptObject jso, String newText, String oldText) {
-      Widget w = WidgetUtils.getWidget(jso.<com.google.gwt.user.client.Element> cast());
+      Widget w = WidgetUtils.getWidget(jso.<Element> cast());
 
       if (w != null) {
          GwtReflectionUtils.callStaticMethod(GwtFinder.class, "onSetText", w, newText, oldText);

@@ -277,7 +277,7 @@ public class Browser {
       Event onClick = EventBuilder.create(Event.ONCLICK).setTarget(clickedItem).build();
 
       if (canApplyEvent(suggestBox, onClick)) {
-         clickedItem.getCommand().execute();
+         clickedItem.getScheduledCommand().execute();
       }
    }
 

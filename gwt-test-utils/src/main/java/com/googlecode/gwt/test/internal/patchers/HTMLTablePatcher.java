@@ -1,7 +1,7 @@
 package com.googlecode.gwt.test.internal.patchers;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.googlecode.gwt.test.patchers.PatchClass;

@@ -110,7 +110,7 @@ public class WidgetUtils {
 
    public static Widget getWidget(Element element) {
       while (element != null) {
-         EventListener eventListener = DOM.getEventListener((com.google.gwt.user.client.Element) element);
+         EventListener eventListener = DOM.getEventListener(element);
          if (eventListener != null && eventListener instanceof Widget) {
             return (Widget) eventListener;
          }

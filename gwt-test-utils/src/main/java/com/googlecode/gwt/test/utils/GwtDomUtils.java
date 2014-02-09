@@ -1,7 +1,6 @@
 package com.googlecode.gwt.test.utils;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.UIObject;
 import com.googlecode.gwt.test.internal.utils.JsoProperties;
 
@@ -20,9 +19,7 @@ public class GwtDomUtils {
     * @return the objects's space-separated style names
     */
    public static String getStyleName(Element element) {
-      // copied from protected static UiObject method
-      return DOM.getElementProperty(element.<com.google.gwt.user.client.Element> cast(),
-               "className");
+      return element.getPropertyString("className");
    }
 
    /**

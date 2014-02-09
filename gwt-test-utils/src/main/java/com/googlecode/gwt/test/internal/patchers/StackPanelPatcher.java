@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.internal.patchers;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.WidgetCollection;
 import com.googlecode.gwt.test.patchers.PatchClass;
@@ -10,7 +11,7 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 class StackPanelPatcher {
 
    @PatchMethod
-   static int findDividerIndex(StackPanel panel, com.google.gwt.user.client.Element child) {
+   static int findDividerIndex(StackPanel panel, Element child) {
       WidgetCollection children = GwtReflectionUtils.getPrivateFieldValue(panel, "children");
 
       for (int i = 0; i < children.size(); i++) {

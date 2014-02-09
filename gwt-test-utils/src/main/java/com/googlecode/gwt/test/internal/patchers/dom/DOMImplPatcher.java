@@ -139,7 +139,7 @@ class DOMImplPatcher {
 
    @PatchMethod
    static void dispatchEvent(Object domImpl, Element target, NativeEvent evt) {
-      EventListener listener = DOM.getEventListener(target.<com.google.gwt.user.client.Element> cast());
+      EventListener listener = DOM.getEventListener(target);
       if (listener != null && evt instanceof Event) {
          listener.onBrowserEvent((Event) evt);
       }
