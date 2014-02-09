@@ -55,7 +55,9 @@
 	<modules>
 		<module>gwt-test-utils</module>
 		<module>gwt-test-utils-csv</module>
-		<module>gwt-test-utils-gwtbootstrap</module>
+		<!-- gwtbootstrap doesn't seem to be gwt 2.6.0 compatible yet -->
+		<!--<module>gwt-test-utils-gwtbootstrap</module> -->
+		<!-- gxt3 not implemented yet -->
 		<!--<module>gwt-test-utils-gxt3</module> -->
 	</modules>
 	<properties>
