@@ -246,7 +246,7 @@
 			<dependency>
 				<groupId>com.google.gwt.inject</groupId>
 				<artifactId>gin</artifactId>
-				<version>2.0.0</version>
+				<version>2.1.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
