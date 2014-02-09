@@ -1,4 +1,0 @@
-<module>
-  <inherits name='com.extjs.gxt.ui.GXT'/>
-  <!-- <entry-point class='com.extjs.gxt.samples.desktop.client.DesktopApp' /> -->
-</module>
