@@ -17,8 +17,7 @@ import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Scrollspy;
 import com.github.gwtbootstrap.client.ui.TabLink;
 import com.github.gwtbootstrap.client.ui.Tooltip;
-import com.github.gwtbootstrap.client.ui.event.CloseEvent;
-import com.github.gwtbootstrap.client.ui.event.CloseHandler;
+import com.github.gwtbootstrap.client.ui.base.AlertBase;
 import com.github.gwtbootstrap.client.ui.event.ClosedEvent;
 import com.github.gwtbootstrap.client.ui.event.ClosedHandler;
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
@@ -29,6 +28,8 @@ import com.github.gwtbootstrap.client.ui.event.ShowEvent;
 import com.github.gwtbootstrap.client.ui.event.ShowHandler;
 import com.github.gwtbootstrap.client.ui.event.ShownEvent;
 import com.github.gwtbootstrap.client.ui.event.ShownHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTestWithMockito;
@@ -45,10 +46,13 @@ public class PatcherTest extends GwtTestWithMockito {
 
    @Mock
    private HiddenHandler hiddenHandler;
+
    @Mock
    private HideHandler hideHandler;
+
    @Mock
    private ShowHandler showHandler;
+
    @Mock
    private ShownHandler shownHandler;
 
@@ -60,10 +64,10 @@ public class PatcherTest extends GwtTestWithMockito {
 
       Alert alert = module.getWidget().getAlert();
 
-      final CloseHandler closeHandler = mock(CloseHandler.class);
+      final CloseHandler<AlertBase> closeHandler = mock(CloseHandler.class);
       alert.addCloseHandler(closeHandler);
 
-      final ClosedHandler closedHandler = mock(ClosedHandler.class);
+      final ClosedHandler<AlertBase> closedHandler = mock(ClosedHandler.class);
       alert.addClosedHandler(closedHandler);
 
       alert.close();
