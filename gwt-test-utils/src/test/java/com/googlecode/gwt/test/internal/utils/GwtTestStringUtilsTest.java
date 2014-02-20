@@ -28,4 +28,8 @@ public class GwtTestStringUtilsTest {
       assertEquals("120.20202020202021px", GwtStringUtils.treatDoubleValue("120.20202020202021px"));
    }
 
+   @Test
+   public void testDoubleValue() {
+       assertEquals(250.0, GwtStringUtils.parseDouble("250px", 0), 0.001);
+   }   
 }

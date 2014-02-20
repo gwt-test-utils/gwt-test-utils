@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
  */
 public class GwtStringUtils {
 
-   private static Pattern DOUBLE_PATTERN = Pattern.compile("^\\s*\\d+\\.(\\d+).*$");
-
+   private static Pattern DOUBLE_PATTERN = Pattern.compile("^\\s*(\\d+\\.?(\\d*)).*$");
+    
    private static Pattern NUMBER_PATTERN = Pattern.compile("^\\s*(\\d+).*$");
 
    public static String camelize(String s) {
@@ -141,8 +141,8 @@ public class GwtStringUtils {
       }
 
       Matcher m = DOUBLE_PATTERN.matcher(string);
-      if (m.matches() && Double.valueOf(m.group(1)) == 0) {
-         return string.replace("." + m.group(1), "");
+      if (m.matches() && !"".equals(m.group(2)) && Double.valueOf(m.group(2)) == 0) {
+         return string.replace("." + m.group(2), "");
       } else {
          return string;
       }
