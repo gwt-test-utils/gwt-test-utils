@@ -282,17 +282,20 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
     * @return The relative path of the HTML file used, or null if there is no HTML file
     */
    protected String getHostPagePath(String moduleFullQualifiedName) {
-      // try first web.xml welcome-file
-      String webXmlFirstWelcomeFileName = WebXmlUtils.get().getFirstWelcomeFile();
+      List<String> expectedFileNames = new ArrayList<String>();
+
+      // Use maybeGet : we may not always have a web.xml file.
+      WebXmlUtils webXmlUtils = WebXmlUtils.maybeGet();
+      if (webXmlUtils != null) {
+         // try first web.xml welcome-file
+         addHostPagePaths(expectedFileNames, webXmlUtils.getFirstWelcomeFile());
+      }
+
       // try with gwt default structure
       String fileSimpleName = moduleFullQualifiedName.substring(moduleFullQualifiedName.lastIndexOf('.') + 1)
                + ".html";
-      String[] expectedFileNames = new String[]{
-               DEFAULT_WAR_DIR + webXmlFirstWelcomeFileName,
-               MAVEN_DEFAULT_WEB_DIR + webXmlFirstWelcomeFileName,
-               MAVEN_DEFAULT_RES_DIR + webXmlFirstWelcomeFileName,
-               DEFAULT_WAR_DIR + fileSimpleName, MAVEN_DEFAULT_WEB_DIR + fileSimpleName,
-               MAVEN_DEFAULT_RES_DIR + fileSimpleName};
+      addHostPagePaths(expectedFileNames, fileSimpleName);
+
       for (String fileName : expectedFileNames) {
          if (new File(fileName).exists()) {
             return fileName;
@@ -300,6 +303,14 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
       }
       // no HTML hostpage found
       return null;
+   }
+
+   private void addHostPagePaths(List<String> list, String filename) {
+      if (filename != null) {
+         list.add(DEFAULT_WAR_DIR + filename);
+         list.add(MAVEN_DEFAULT_WEB_DIR + filename);
+         list.add(MAVEN_DEFAULT_RES_DIR + filename);
+      }
    }
 
    /**
