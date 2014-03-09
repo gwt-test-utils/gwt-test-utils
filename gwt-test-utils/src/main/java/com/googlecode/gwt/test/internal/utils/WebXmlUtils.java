@@ -40,8 +40,20 @@ public class WebXmlUtils {
       if (INSTANCE == null) {
          INSTANCE = new WebXmlUtils();
       }
-
       return INSTANCE;
+   }
+
+   /**
+    * Gets a WebXmlUtils, or null if it fails.
+    * 
+    * @return
+    */
+   public static WebXmlUtils maybeGet() {
+      try {
+         return get();
+      } catch (GwtTestConfigurationException exception) {
+         return null;
+      }
    }
 
    private String firstWelcomeFile;
