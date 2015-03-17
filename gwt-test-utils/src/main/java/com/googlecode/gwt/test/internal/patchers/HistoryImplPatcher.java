@@ -1,8 +1,12 @@
 package com.googlecode.gwt.test.internal.patchers;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.server.ServerGwtBridge;
+import com.google.gwt.core.server.ServerGwtBridge.ClassInstantiator;
+import com.google.gwt.core.server.ServerGwtBridge.Properties;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -10,11 +14,13 @@ import com.googlecode.gwt.test.internal.AfterTestCallback;
 import com.googlecode.gwt.test.internal.AfterTestCallbackManager;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
+import com.googlecode.gwt.test.patchers.PatchMethod.ParamType;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
-@PatchClass(target="com.google.gwt.user.client.History.HistoryImpl")
+@PatchClass(target=HistoryImplPatcher.HISTORY_IMPL)
 class HistoryImplPatcher {
 
+   static final String HISTORY_IMPL = "com.google.gwt.user.client.History$HistoryImpl";
    static class GwtBrowserHistory implements AfterTestCallback {
 
       private int currentIndex;
@@ -49,11 +55,14 @@ class HistoryImplPatcher {
          stack.clear();
          currentIndex = -1;
 
-         Object historyImpl = GwtReflectionUtils.getStaticFieldValue(History.class, "impl");
+         Object historyImpl = GwtReflectionUtils.getStaticFieldValue(History.class, "historyEventSource");
          GwtReflectionUtils.callPrivateMethod(GwtReflectionUtils.getPrivateFieldValue(
                   GwtReflectionUtils.getPrivateFieldValue(
                            GwtReflectionUtils.getPrivateFieldValue(historyImpl, "handlers"),
                            "eventBus"), "map"), "clear");
+         
+         BROWSER_HISTORY.currentIndex = -1;
+         BROWSER_HISTORY.stack.clear();
       }
 
       /**
@@ -108,9 +117,10 @@ class HistoryImplPatcher {
       }
 
       private void fireHistoryChanged(String token) {
-         Object impl = GwtReflectionUtils.getStaticFieldValue(History.class, "impl");
+         Object impl = GwtReflectionUtils.getStaticFieldValue(History.class, "historyEventSource");
          try {
-           GwtReflectionUtils.findMethod(impl.getClass(), "fireHistoryChangedImpl", String.class).invoke(impl, token);
+           Method method = GwtReflectionUtils.findMethod(impl.getClass(), "fireValueChangedEvent", String.class);
+           method.invoke(impl, token);
          } catch (Exception e) {
            throw new RuntimeException(e);
          }
@@ -121,8 +131,16 @@ class HistoryImplPatcher {
    static GwtBrowserHistory BROWSER_HISTORY = new GwtBrowserHistory();
 
    @PatchMethod
-   static String encodeFragment(Object impl, String fragment) {
+   static String encodeHistoryToken(@ParamType(HISTORY_IMPL) Object impl, String fragment) {
       return URL.encodeQueryString(fragment).replace("#", "%23");
+   }
+
+   @PatchMethod
+   static void newToken(@ParamType(HISTORY_IMPL) Object impl, String token) {
+      if (token == null) {
+         token = "";
+      }
+      BROWSER_HISTORY.addToken(token);
    }
 
    @PatchMethod
@@ -131,7 +149,7 @@ class HistoryImplPatcher {
    }
 
    @PatchMethod
-   static boolean init(Object historyImpl) {
+   static boolean init(@ParamType(HISTORY_IMPL) Object historyImpl) {
       String hash = Window.Location.getHash();
       int index = hash.indexOf("#");
       if (index > -1) {
@@ -143,12 +161,17 @@ class HistoryImplPatcher {
    }
 
    @PatchMethod
-   static void nativeUpdate(Object historyImpl, String historyToken) {
+   static void nativeUpdate(@ParamType(HISTORY_IMPL) Object historyImpl, String historyToken) {
       if (historyToken == null) {
          historyToken = "";
       }
 
       BROWSER_HISTORY.addToken(historyToken);
+   }
+   
+
+   @PatchMethod
+   static void attachListener(@ParamType(HISTORY_IMPL) Object historyImpl) {
    }
 
 }

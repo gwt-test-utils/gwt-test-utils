@@ -1,6 +1,7 @@
 package com.googlecode.gwt.test.internal.patchers;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.slf4j.Logger;

@@ -148,25 +148,6 @@ public class GwtFactory {
    private CompilationState createCompilationState(ModuleDef moduleDef,
             CompilerContext compilerContext) throws UnableToCompleteException {
       TreeLogger treeLogger = GwtTreeLogger.get();
-
-      File target = new File("target");
-      if (!target.exists()) {
-         // not a maven project, set the 'gwt-UnitCache' directory at the
-         // root, like GWTTestCase does
-         target = new File(".");
-      }
-      CompilationUnitArchive archive;
-      try {
-        treeLogger.log(Type.ERROR, "\n\n\nFile: "+target.getCanonicalPath());
-        if (!target.exists()) {
-          target.mkdirs();
-        }
-        archive = CompilationUnitArchive.createFromFile(target);
-      } catch (Exception e) {
-        treeLogger.log(Type.ERROR, "Unable to load compilation unit archive from "+target, e);
-        throw new UnableToCompleteException();
-      }
-      CompilationStateBuilder.addArchive(compilerContext, archive);
       return moduleDef.getCompilationState(treeLogger, compilerContext);
    }
 

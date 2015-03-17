@@ -270,11 +270,8 @@ public class OverlayTypesRewriter {
                   }
                   decl += ")";
 
-                  List<Method> declarations = getDeclarations(decl);
-                  if (declarations != null && !declarations.isEmpty()) {
-                    Method declaration = declarations.get(0);
-                    addToMap(mangledNamesToDeclarations, mangledName, declaration);
-                  }
+                  Method declaration = Method.getMethod(decl);
+                  addToMap(mangledNamesToDeclarations, mangledName, declaration);
                }
 
                /*
