@@ -4,9 +4,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.server.ServerGwtBridge;
-import com.google.gwt.core.server.ServerGwtBridge.ClassInstantiator;
-import com.google.gwt.core.server.ServerGwtBridge.Properties;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -60,9 +57,7 @@ class HistoryImplPatcher {
                   GwtReflectionUtils.getPrivateFieldValue(
                            GwtReflectionUtils.getPrivateFieldValue(historyImpl, "handlers"),
                            "eventBus"), "map"), "clear");
-         
-         BROWSER_HISTORY.currentIndex = -1;
-         BROWSER_HISTORY.stack.clear();
+         GwtReflectionUtils.setStaticField(History.class, "token", "");
       }
 
       /**
@@ -168,7 +163,7 @@ class HistoryImplPatcher {
 
       BROWSER_HISTORY.addToken(historyToken);
    }
-   
+
 
    @PatchMethod
    static void attachListener(@ParamType(HISTORY_IMPL) Object historyImpl) {
