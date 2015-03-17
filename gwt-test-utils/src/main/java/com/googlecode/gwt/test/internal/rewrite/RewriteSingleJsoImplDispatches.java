@@ -1,11 +1,11 @@
 /*
  * Copyright 2009 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -22,13 +22,14 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.Method;
+
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.dev.asm.ClassVisitor;
-import com.google.gwt.dev.asm.MethodVisitor;
-import com.google.gwt.dev.asm.Opcodes;
-import com.google.gwt.dev.asm.Type;
-import com.google.gwt.dev.asm.commons.Method;
 import com.google.gwt.dev.shell.rewrite.HostedModeClassRewriter.SingleJsoImplData;
 import com.google.gwt.dev.util.collect.Maps;
 import com.google.gwt.dev.util.collect.Sets;
@@ -68,13 +69,13 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
             } else {
                /*
                 * Might be referring to a subtype of a SingleJso interface:
-                * 
+                *
                 * interface IA { void foo() }
-                * 
+                *
                 * interface JA extends JSO implements IA;
-                * 
+                *
                 * interface IB extends IA {}
-                * 
+                *
                 * void bar() { ((IB) object).foo(); }
                 */
                outer : for (String intf : computeAllInterfaces(owner)) {
@@ -292,7 +293,7 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
                /*
                 * It just so happens that the stack and local variable sizes are the same, but
                 * they're kept distinct to aid in clarity should the dispatch logic change.
-                * 
+                *
                 * These start at 1 because we need to load "this" onto the stack
                 */
                int var = 1;

@@ -6,14 +6,13 @@ import java.util.List;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.impl.HistoryImpl;
 import com.googlecode.gwt.test.internal.AfterTestCallback;
 import com.googlecode.gwt.test.internal.AfterTestCallbackManager;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.patchers.PatchMethod;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
-@PatchClass(HistoryImpl.class)
+@PatchClass(target="com.google.gwt.user.client.History.HistoryImpl")
 class HistoryImplPatcher {
 
    static class GwtBrowserHistory implements AfterTestCallback {
@@ -29,7 +28,7 @@ class HistoryImplPatcher {
 
       /**
        * Add a new token in the history if it does not equal the current token
-       * 
+       *
        * @param token
        */
       public void addToken(String token) {
@@ -50,7 +49,7 @@ class HistoryImplPatcher {
          stack.clear();
          currentIndex = -1;
 
-         HistoryImpl historyImpl = GwtReflectionUtils.getStaticFieldValue(History.class, "impl");
+         Object historyImpl = GwtReflectionUtils.getStaticFieldValue(History.class, "impl");
          GwtReflectionUtils.callPrivateMethod(GwtReflectionUtils.getPrivateFieldValue(
                   GwtReflectionUtils.getPrivateFieldValue(
                            GwtReflectionUtils.getPrivateFieldValue(historyImpl, "handlers"),
@@ -59,7 +58,7 @@ class HistoryImplPatcher {
 
       /**
        * Simulate a Browser back button click
-       * 
+       *
        * @return the previous token or an empty String
        */
       public String back() {
@@ -86,7 +85,7 @@ class HistoryImplPatcher {
 
       /**
        * Simulate a Browser forward button click
-       * 
+       *
        * @return the next token or an empty String
        */
       public String forward() {
@@ -101,7 +100,7 @@ class HistoryImplPatcher {
 
       /**
        * Return the current token in history
-       * 
+       *
        * @return the current token in history or an empty String if no token is set in the URL
        */
       public String getCurrentToken() {
@@ -109,8 +108,12 @@ class HistoryImplPatcher {
       }
 
       private void fireHistoryChanged(String token) {
-         HistoryImpl impl = GwtReflectionUtils.getStaticFieldValue(History.class, "impl");
-         impl.fireHistoryChangedImpl(token);
+         Object impl = GwtReflectionUtils.getStaticFieldValue(History.class, "impl");
+         try {
+           GwtReflectionUtils.findMethod(impl.getClass(), "fireHistoryChangedImpl", String.class).invoke(impl, token);
+         } catch (Exception e) {
+           throw new RuntimeException(e);
+         }
       }
 
    }
@@ -118,7 +121,7 @@ class HistoryImplPatcher {
    static GwtBrowserHistory BROWSER_HISTORY = new GwtBrowserHistory();
 
    @PatchMethod
-   static String encodeFragment(HistoryImpl impl, String fragment) {
+   static String encodeFragment(Object impl, String fragment) {
       return URL.encodeQueryString(fragment).replace("#", "%23");
    }
 
@@ -128,7 +131,7 @@ class HistoryImplPatcher {
    }
 
    @PatchMethod
-   static boolean init(HistoryImpl historyImpl) {
+   static boolean init(Object historyImpl) {
       String hash = Window.Location.getHash();
       int index = hash.indexOf("#");
       if (index > -1) {
@@ -140,7 +143,7 @@ class HistoryImplPatcher {
    }
 
    @PatchMethod
-   static void nativeUpdate(HistoryImpl historyImpl, String historyToken) {
+   static void nativeUpdate(Object historyImpl, String historyToken) {
       if (historyToken == null) {
          historyToken = "";
       }

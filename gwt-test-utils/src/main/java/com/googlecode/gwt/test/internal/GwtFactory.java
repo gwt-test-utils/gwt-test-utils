@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
@@ -15,6 +16,7 @@ import com.google.gwt.dev.cfg.ModuleDef;
 import com.google.gwt.dev.cfg.ModuleDefLoader;
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.javac.CompilationStateBuilder;
+import com.google.gwt.dev.javac.CompilationUnitArchive;
 import com.google.gwt.dev.shell.JsValueGlue;
 import com.googlecode.gwt.test.GwtTreeLogger;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
@@ -23,9 +25,9 @@ import com.googlecode.gwt.test.internal.rewrite.OverlayTypesRewriter;
 /**
  * An unique place for internal singleton which are ClassLoader independent and can eventually be
  * reset. <strong>For internal use only.</strong>
- * 
+ *
  * @author Gael Lazzari
- * 
+ *
  */
 public class GwtFactory {
 
@@ -153,7 +155,18 @@ public class GwtFactory {
          // root, like GWTTestCase does
          target = new File(".");
       }
-      CompilationStateBuilder.init(treeLogger, target);
+      CompilationUnitArchive archive;
+      try {
+        treeLogger.log(Type.ERROR, "\n\n\nFile: "+target.getCanonicalPath());
+        if (!target.exists()) {
+          target.mkdirs();
+        }
+        archive = CompilationUnitArchive.createFromFile(target);
+      } catch (Exception e) {
+        treeLogger.log(Type.ERROR, "Unable to load compilation unit archive from "+target, e);
+        throw new UnableToCompleteException();
+      }
+      CompilationStateBuilder.addArchive(compilerContext, archive);
       return moduleDef.getCompilationState(treeLogger, compilerContext);
    }
 

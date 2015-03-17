@@ -11,6 +11,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.Method;
+
 import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.typeinfo.JArrayType;
@@ -20,10 +26,6 @@ import com.google.gwt.core.ext.typeinfo.JParameter;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.dev.asm.ClassReader;
-import com.google.gwt.dev.asm.ClassVisitor;
-import com.google.gwt.dev.asm.ClassWriter;
-import com.google.gwt.dev.asm.Opcodes;
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.jjs.InternalCompilerException;
 import com.google.gwt.dev.shell.JsValueGlue;
@@ -51,7 +53,7 @@ import com.googlecode.gwt.test.GwtTreeLogger;
  * <li>JavaScriptObject$ implements all the interface types and is the only instantiable type.</li>
  * </ol>
  * <strong>For internal use only.</strong>
- * 
+ *
  * @see RewriteRefsToJsoClasses
  * @see WriteJsoImpl
  */
@@ -169,15 +171,15 @@ public class OverlayTypesRewriter {
     * includes the set of SingleJsoImpl interfaces actually implemented by a JSO type, the mangled
     * method names, and the names of the Methods that should actually implement the virtual
     * functions.
-    * 
+    *
     * Given the current implementation of JSO$ and incremental execution of rebinds, it's not
     * possible for Generators to produce additional JavaScriptObject subtypes, so this data can
     * remain static.
     */
    private class MySingleJsoImplData implements SingleJsoImplData {
       private final SortedSet<String> mangledNames = new TreeSet<String>();
-      private final Map<String, List<com.google.gwt.dev.asm.commons.Method>> mangledNamesToDeclarations = new HashMap<String, List<com.google.gwt.dev.asm.commons.Method>>();
-      private final Map<String, List<com.google.gwt.dev.asm.commons.Method>> mangledNamesToImplementations = new HashMap<String, List<com.google.gwt.dev.asm.commons.Method>>();
+      private final Map<String, List<Method>> mangledNamesToDeclarations = new HashMap<String, List<Method>>();
+      private final Map<String, List<Method>> mangledNamesToImplementations = new HashMap<String, List<Method>>();
       private final Set<String> unmodifiableIntfNames = Collections.unmodifiableSet(singleJsoImplTypes);
       private final SortedSet<String> unmodifiableNames = Collections.unmodifiableSortedSet(mangledNames);
 
@@ -189,17 +191,17 @@ public class OverlayTypesRewriter {
             /*
              * By preemptively adding all possible mangled names by which a method could be called,
              * we greatly simplify the logic necessary to rewrite the call-site.
-             * 
+             *
              * interface A {void m();}
-             * 
+             *
              * interface B extends A {void z();}
-             * 
+             *
              * becomes
-             * 
+             *
              * c_g_p_A_m() -> JsoA$.m$()
-             * 
+             *
              * c_g_p_B_m() -> JsoA$.m$()
-             * 
+             *
              * c_g_p_B_z() -> JsoB$.z$()
              */
             for (JMethod intfMethod : type.getOverridableMethods()) {
@@ -208,9 +210,9 @@ public class OverlayTypesRewriter {
                /*
                 * It is necessary to locate the implementing type on a per-method basis. Consider
                 * the case of
-                * 
+                *
                 * @SingleJsoImpl interface C extends A, B {}
-                * 
+                *
                 * Methods inherited from interfaces A and B must be dispatched to their respective
                 * JSO implementations.
                 */
@@ -234,7 +236,7 @@ public class OverlayTypesRewriter {
 
                /*
                 * The mangled name adds the current interface like
-                * 
+                *
                 * com_foo_Bar_methodName
                 */
                String mangledName = getBinaryName(type).replace('.', '_') + "_"
@@ -254,9 +256,9 @@ public class OverlayTypesRewriter {
                /*
                 * Create a pseudo-method declaration for the interface method. This should look
                 * something like
-                * 
+                *
                 * ReturnType method$ (ParamType, ParamType)
-                * 
+                *
                 * This must be kept in sync with the WriteJsoImpl class.
                 */
                {
@@ -268,16 +270,19 @@ public class OverlayTypesRewriter {
                   }
                   decl += ")";
 
-                  com.google.gwt.dev.asm.commons.Method declaration = com.google.gwt.dev.asm.commons.Method.getMethod(decl);
-                  addToMap(mangledNamesToDeclarations, mangledName, declaration);
+                  List<Method> declarations = getDeclarations(decl);
+                  if (declarations != null && !declarations.isEmpty()) {
+                    Method declaration = declarations.get(0);
+                    addToMap(mangledNamesToDeclarations, mangledName, declaration);
+                  }
                }
 
                /*
                 * Cook up the a pseudo-method declaration for the concrete type. This should look
                 * something like
-                * 
+                *
                 * ReturnType method$ (JsoType, ParamType, ParamType)
-                * 
+                *
                 * This must be kept in sync with the WriteJsoImpl class.
                 */
                {
@@ -291,7 +296,7 @@ public class OverlayTypesRewriter {
                   }
                   decl += ")";
 
-                  com.google.gwt.dev.asm.commons.Method toImplement = com.google.gwt.dev.asm.commons.Method.getMethod(decl);
+                  Method toImplement = Method.getMethod(decl);
                   addToMap(mangledNamesToImplementations, mangledName, toImplement);
                }
             }
@@ -300,19 +305,19 @@ public class OverlayTypesRewriter {
          TreeLogger logger = GwtTreeLogger.get();
          if (logger.isLoggable(TreeLogger.SPAM)) {
             TreeLogger dumpLogger = logger.branch(TreeLogger.SPAM, "SingleJsoImpl method mappings");
-            for (Map.Entry<String, List<com.google.gwt.dev.asm.commons.Method>> entry : mangledNamesToImplementations.entrySet()) {
+            for (Map.Entry<String, List<Method>> entry : mangledNamesToImplementations.entrySet()) {
                dumpLogger.log(TreeLogger.SPAM, entry.getKey() + " -> " + entry.getValue());
             }
          }
       }
 
-      public List<com.google.gwt.dev.asm.commons.Method> getDeclarations(String mangledName) {
-         List<com.google.gwt.dev.asm.commons.Method> toReturn = mangledNamesToDeclarations.get(mangledName);
+      public List<Method> getDeclarations(String mangledName) {
+         List<Method> toReturn = mangledNamesToDeclarations.get(mangledName);
          return toReturn == null ? null : Collections.unmodifiableList(toReturn);
       }
 
-      public List<com.google.gwt.dev.asm.commons.Method> getImplementations(String mangledName) {
-         List<com.google.gwt.dev.asm.commons.Method> toReturn = mangledNamesToImplementations.get(mangledName);
+      public List<Method> getImplementations(String mangledName) {
+         List<Method> toReturn = mangledNamesToImplementations.get(mangledName);
          return toReturn == null ? toReturn : Collections.unmodifiableList(toReturn);
       }
 
@@ -441,7 +446,7 @@ public class OverlayTypesRewriter {
    private final TypeOracle typeOracle;
 
    /**
-    * 
+    *
     * @param compilationState the name of the GWT module under test
     * @param jsoType the type of JavaScriptObject
     */
@@ -544,7 +549,7 @@ public class OverlayTypesRewriter {
 
    /**
     * Performs rewriting transformations on a class.
-    * 
+    *
     * @param className the name of the class
     * @param classBytes the bytes of the class
     */
