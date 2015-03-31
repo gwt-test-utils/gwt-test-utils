@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
@@ -15,6 +16,7 @@ import com.google.gwt.dev.cfg.ModuleDef;
 import com.google.gwt.dev.cfg.ModuleDefLoader;
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.javac.CompilationStateBuilder;
+import com.google.gwt.dev.javac.CompilationUnitArchive;
 import com.google.gwt.dev.shell.JsValueGlue;
 import com.googlecode.gwt.test.GwtTreeLogger;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
@@ -23,9 +25,9 @@ import com.googlecode.gwt.test.internal.rewrite.OverlayTypesRewriter;
 /**
  * An unique place for internal singleton which are ClassLoader independent and can eventually be
  * reset. <strong>For internal use only.</strong>
- * 
+ *
  * @author Gael Lazzari
- * 
+ *
  */
 public class GwtFactory {
 
@@ -146,14 +148,6 @@ public class GwtFactory {
    private CompilationState createCompilationState(ModuleDef moduleDef,
             CompilerContext compilerContext) throws UnableToCompleteException {
       TreeLogger treeLogger = GwtTreeLogger.get();
-
-      File target = new File("target");
-      if (!target.exists()) {
-         // not a maven project, set the 'gwt-UnitCache' directory at the
-         // root, like GWTTestCase does
-         target = new File(".");
-      }
-      CompilationStateBuilder.init(treeLogger, target);
       return moduleDef.getCompilationState(treeLogger, compilerContext);
    }
 

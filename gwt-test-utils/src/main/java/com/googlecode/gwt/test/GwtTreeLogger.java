@@ -12,9 +12,9 @@ import com.google.gwt.dev.util.log.AbstractTreeLogger;
 /**
  * The holder for the shared {@link TreeLogger} instance. If no custom logger is set, a default one
  * which prints in {@link System#out} is used. <strong>For internal use only.</strong>
- * 
+ *
  * @author Gael Lazzari
- * 
+ *
  */
 public class GwtTreeLogger extends AbstractTreeLogger {
 
@@ -70,6 +70,7 @@ public class GwtTreeLogger extends AbstractTreeLogger {
       }
 
       ERROR_MSG_BUFFER.clear();
+      reset();
    }
 
    @Override

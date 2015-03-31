@@ -18,6 +18,11 @@ class DOMPatcher {
       return null;
 
    }
+   
+   @PatchMethod
+   static Element resolve(Element elem) {
+      return PotentialElementPatcher.isPotential(elem) ? PotentialElementPatcher.resolve(elem) : elem;
+   }
 
    @PatchMethod
    static Element getParent(Element elem) {
