@@ -96,17 +96,13 @@ public class LocalizableResourceCreateHandler implements GwtCreateHandler {
          return defaultImpl.newInstance();
       }
 
-      Class<?> implementationClass;
-      try {
-         implementationClass = GwtReflectionUtils.getClass(localizedClass.getName() + "_"
-                  + locale.getLanguage());
-      } catch (ClassNotFoundException e) {
-         try {
-            implementationClass = GwtReflectionUtils.getClass(localizedClass.getName() + "_"
-                     + locale.getCountry());
-         } catch (ClassNotFoundException e2) {
-            implementationClass = null;
-         }
+      Class<?> implementationClass = getLocalizedClassImpl(localizedClass, locale.getLanguage() + "_" + locale.getCountry());
+      if (implementationClass == null) {
+         implementationClass = getLocalizedClassImpl(localizedClass, locale.getLanguage());
+      }
+
+      if (implementationClass == null) {
+         implementationClass = getLocalizedClassImpl(localizedClass, locale.getCountry());
       }
 
       if (implementationClass == null) {
@@ -116,4 +112,11 @@ public class LocalizableResourceCreateHandler implements GwtCreateHandler {
       return implementationClass.newInstance();
    }
 
+   private Class<?> getLocalizedClassImpl(Class<?> localizedClass, String suffix) {
+      try {
+         return GwtReflectionUtils.getClass(localizedClass.getName() + "_" + suffix);
+      } catch (ClassNotFoundException e) {
+         return null;
+      }
+   }
 }
