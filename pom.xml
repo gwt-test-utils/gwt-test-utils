@@ -183,7 +183,7 @@
 			<dependency>
 				<groupId>org.javassist</groupId>
 				<artifactId>javassist</artifactId>
-				<version>3.15.0-GA</version>
+				<version>3.20.0-GA</version>
 			</dependency>
 			<dependency>
 				<groupId>org.easytesting</groupId>
@@ -348,6 +348,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+                  <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
