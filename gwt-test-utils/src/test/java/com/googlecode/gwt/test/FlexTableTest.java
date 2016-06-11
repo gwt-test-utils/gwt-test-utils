@@ -4,13 +4,11 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("deprecation")
@@ -87,6 +85,22 @@ public class FlexTableTest extends GwtTestTest {
         HeadingElement h1 = e.getChild(0).cast();
         assertEquals("H1", h1.getTagName());
         assertEquals("test", h1.getInnerText());
+    }
+
+    @Test
+    public void innerFlexTable() {
+        FlexTable t = new FlexTable();
+        Label label1 = new Label("1st label");
+        t.setWidget(0, 0, label1);
+        FlexTable innerTable = new FlexTable();
+        innerTable.setWidget(0, 4, new Label());
+        innerTable.setWidget(0, 6, new TextBox());
+        t.setWidget(0, 1, innerTable);
+        Label label2 = new Label("2nd label");
+        t.setWidget(0, 2, label2);
+
+        assertThat(t.getWidget(0, 0)).isEqualTo(label1);
+        assertThat(t.getWidget(0, 2)).isEqualTo(label2);
     }
 
     @Test
