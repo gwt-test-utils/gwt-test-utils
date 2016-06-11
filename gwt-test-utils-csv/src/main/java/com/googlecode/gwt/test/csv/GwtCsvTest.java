@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.csv;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.csv.internal.DirectoryTestReader;
@@ -249,7 +250,12 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
     @CsvMethod
     public void assertText(String text, String... identifier) {
-        assertThat(object(identifier).ofType(UIObject.class)).withPrefix(prefix()).textEquals(text);
+        Object raw = object(identifier).getRaw();
+        if (raw instanceof UIObject) {
+            assertThat((UIObject) raw).withPrefix(prefix()).textEquals(text);
+        } else if (raw instanceof Element) {
+            assertThat((Element) raw).withPrefix(prefix()).textEquals(text);
+        }
     }
 
     @CsvMethod
@@ -358,7 +364,22 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
     @CsvMethod
     public void hasStyle(String style, String... identifier) {
-        assertThat(object(identifier).ofType(UIObject.class)).withPrefix(prefix()).hasStyle(style);
+        Object raw = object(identifier).getRaw();
+        if (raw instanceof UIObject) {
+            assertThat((UIObject) raw).withPrefix(prefix()).hasStyle(style);
+        } else if (raw instanceof Element) {
+            assertThat((Element) raw).withPrefix(prefix()).hasStyle(style);
+        }
+    }
+
+    @CsvMethod
+    public void doesNotHaveStyle(String style, String... identifier) {
+        Object raw = object(identifier).getRaw();
+        if (raw instanceof UIObject) {
+            assertThat((UIObject) raw).withPrefix(prefix()).doesNotHaveStyle(style);
+        } else if (raw instanceof Element) {
+            assertThat((Element) raw).withPrefix(prefix()).doesNotHaveStyle(style);
+        }
     }
 
     @CsvMethod
