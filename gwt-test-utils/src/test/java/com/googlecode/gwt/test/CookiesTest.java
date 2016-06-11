@@ -26,4 +26,10 @@ public class CookiesTest extends GwtTestTest {
         assertNull(Cookies.getCookie("test"));
     }
 
+    @Test
+    public void removeCookieWhenItDoesNotExist() {
+        Cookies.removeCookie("test");
+        assertNull(Cookies.getCookie("test"));
+    }
+
 }
