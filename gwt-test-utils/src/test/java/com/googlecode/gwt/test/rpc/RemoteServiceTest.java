@@ -1,163 +1,161 @@
 package com.googlecode.gwt.test.rpc;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.lang.reflect.Method;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.mock.web.MockHttpServletRequest;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet;
 import com.googlecode.gwt.test.GwtTestTest;
 import com.googlecode.gwt.test.client.MyObject;
 import com.googlecode.gwt.test.exceptions.GwtTestRpcException;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class RemoteServiceTest extends GwtTestTest {
 
-   private boolean failure;
-   private boolean success;
+    private boolean failure;
+    private boolean success;
 
-   @Test
-   public void accessToHttpRequest() {
-      // Arrange
-      MyServiceAsync myService = GWT.create(MyService.class);
-      setServletMockProvider(new ServletMockProviderAdapter() {
+    @Test
+    public void accessToHttpRequest() {
+        // Arrange
+        MyServiceAsync myService = GWT.create(MyService.class);
+        setServletMockProvider(new ServletMockProviderAdapter() {
 
-         @Override
-         public HttpServletRequest getMockedRequest(AbstractRemoteServiceServlet rpcService,
-                  Method rpcMethod) {
+            @Override
+            public HttpServletRequest getMockedRequest(AbstractRemoteServiceServlet rpcService,
+                                                       Method rpcMethod) {
 
-            MockHttpServletRequest mock = new MockHttpServletRequest();
-            mock.addHeader("myHeader", "mocked header's value");
+                MockHttpServletRequest mock = new MockHttpServletRequest();
+                mock.addHeader("myHeader", "mocked header's value");
 
-            return mock;
-         }
+                return mock;
+            }
 
-      });
+        });
 
-      // Act
-      myService.getHttpRequestHeader("myHeader", new AsyncCallback<String>() {
-
-         public void onFailure(Throwable caught) {
-            fail("onFailure should not be called");
-         }
-
-         public void onSuccess(String result) {
-            success = true;
-            assertEquals("mocked header's value", result);
-
-         }
-      });
-
-      // Assert
-      assertThat(success).isFalse();
-      getBrowserSimulator().fireLoopEnd();
-      assertThat(success).isTrue();
-   }
-
-   @Test
-   public void accessToHttpRequest_ThrowsExceptionWhenNoMockConfigured() {
-      // Arrange
-      MyServiceAsync myService = GWT.create(MyService.class);
-
-      // Act
-      try {
-         myService.getHttpRequestHeader("myHeader", new AsyncCallback<String>() {
+        // Act
+        myService.getHttpRequestHeader("myHeader", new AsyncCallback<String>() {
 
             public void onFailure(Throwable caught) {
-               fail("onFailure should not be called");
+                fail("onFailure should not be called");
             }
 
             public void onSuccess(String result) {
-               fail("onSucess should not be called");
+                success = true;
+                assertEquals("mocked header's value", result);
+
             }
-         });
+        });
 
-         getBrowserSimulator().fireLoopEnd();
+        // Assert
+        assertThat(success).isFalse();
+        getBrowserSimulator().fireLoopEnd();
+        assertThat(success).isTrue();
+    }
 
-         fail("getHttpRequestHeader should have thrown a GwtTestRpcException");
-      } catch (GwtTestRpcException e) {
-         assertEquals(
-                  "Illegal call to com.googlecode.gwt.test.rpc.MyServiceImpl.getThreadLocalRequest() : You have to set a valid ServletMockProvider instance through RemoteServiceTest.setServletMockProvider(..) method",
-                  e.getMessage());
-      }
-   }
+    @Test
+    public void accessToHttpRequest_ThrowsExceptionWhenNoMockConfigured() {
+        // Arrange
+        MyServiceAsync myService = GWT.create(MyService.class);
 
-   @Before
-   public void beforeRemoteServiceTest() {
-      failure = false;
-      success = false;
-   }
+        // Act
+        try {
+            myService.getHttpRequestHeader("myHeader", new AsyncCallback<String>() {
 
-   @Test
-   public void rpcCall_WithException() {
-      // Arrange
-      MyServiceAsync myService = GWT.create(MyService.class);
+                public void onFailure(Throwable caught) {
+                    fail("onFailure should not be called");
+                }
 
-      // Act
-      myService.someCallWithException(new AsyncCallback<Void>() {
+                public void onSuccess(String result) {
+                    fail("onSucess should not be called");
+                }
+            });
 
-         public void onFailure(Throwable caught) {
+            getBrowserSimulator().fireLoopEnd();
 
-            assertEquals("Server side thrown exception !!", caught.getMessage());
-            failure = true;
-         }
+            fail("getHttpRequestHeader should have thrown a GwtTestRpcException");
+        } catch (GwtTestRpcException e) {
+            assertEquals(
+                    "Illegal call to com.googlecode.gwt.test.rpc.MyServiceImpl.getThreadLocalRequest() : You have to set a valid ServletMockProvider instance through RemoteServiceTest.setServletMockProvider(..) method",
+                    e.getMessage());
+        }
+    }
 
-         public void onSuccess(Void result) {
-            fail("onSucess should not be called");
-         }
-      });
+    @Before
+    public void beforeRemoteServiceTest() {
+        failure = false;
+        success = false;
+    }
 
-      // Assert
-      assertThat(failure).isFalse();
-      getBrowserSimulator().fireLoopEnd();
-      assertThat(failure).isTrue();
-   }
+    @Test
+    public void rpcCall_WithException() {
+        // Arrange
+        MyServiceAsync myService = GWT.create(MyService.class);
 
-   @Test
-   public void rpcCall_WithSuccess() {
-      // Arrange
-      MyObject object = new MyObject("my field initialized during test setup");
+        // Act
+        myService.someCallWithException(new AsyncCallback<Void>() {
 
-      MyServiceAsync myService = GWT.create(MyService.class);
+            public void onFailure(Throwable caught) {
 
-      // Act
-      myService.update(object, new AsyncCallback<MyObject>() {
+                assertEquals("Server side thrown exception !!", caught.getMessage());
+                failure = true;
+            }
 
-         public void onFailure(Throwable caught) {
-            fail("onFailure should not be called");
-         }
+            public void onSuccess(Void result) {
+                fail("onSucess should not be called");
+            }
+        });
 
-         public void onSuccess(MyObject result) {
-            // Assert 2
-            assertEquals("updated field by server side code", result.getMyField());
-            assertEquals("transient field", result.getMyTransientField());
+        // Assert
+        assertThat(failure).isFalse();
+        getBrowserSimulator().fireLoopEnd();
+        assertThat(failure).isTrue();
+    }
 
-            assertEquals("A single child object should have been instanciate in server code", 1,
-                     result.getMyChildObjects().size());
-            assertEquals("this is a child !", result.getMyChildObjects().get(0).getMyChildField());
-            assertEquals("child object transient field",
-                     result.getMyChildObjects().get(0).getMyChildTransientField());
+    @Test
+    public void rpcCall_WithSuccess() {
+        // Arrange
+        MyObject object = new MyObject("my field initialized during test setup");
 
-            assertEquals("the field inherited from the parent has been updated !",
-                     result.getMyChildObjects().get(0).getMyField());
-            assertEquals("transient field", result.getMyChildObjects().get(0).getMyTransientField());
-            success = true;
-         }
-      });
+        MyServiceAsync myService = GWT.create(MyService.class);
 
-      // Assert 1
-      assertThat(success).isFalse();
-      getBrowserSimulator().fireLoopEnd();
-      // Assert 3
-      assertThat(success).isTrue();
-   }
+        // Act
+        myService.update(object, new AsyncCallback<MyObject>() {
+
+            public void onFailure(Throwable caught) {
+                fail("onFailure should not be called");
+            }
+
+            public void onSuccess(MyObject result) {
+                // Assert 2
+                assertEquals("updated field by server side code", result.getMyField());
+                assertEquals("transient field", result.getMyTransientField());
+
+                assertEquals("A single child object should have been instanciate in server code", 1,
+                        result.getMyChildObjects().size());
+                assertEquals("this is a child !", result.getMyChildObjects().get(0).getMyChildField());
+                assertEquals("child object transient field",
+                        result.getMyChildObjects().get(0).getMyChildTransientField());
+
+                assertEquals("the field inherited from the parent has been updated !",
+                        result.getMyChildObjects().get(0).getMyField());
+                assertEquals("transient field", result.getMyChildObjects().get(0).getMyTransientField());
+                success = true;
+            }
+        });
+
+        // Assert 1
+        assertThat(success).isFalse();
+        getBrowserSimulator().fireLoopEnd();
+        // Assert 3
+        assertThat(success).isTrue();
+    }
 
 }

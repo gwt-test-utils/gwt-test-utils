@@ -9,32 +9,32 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(DOM.class)
 class DOMPatcher {
 
-   @PatchMethod
-   static Element getFirstChild(Element elem) {
-      Node firstChild = elem.getFirstChildElement();
-      if (firstChild != null) {
-         return firstChild.cast();
-      }
-      return null;
+    @PatchMethod
+    static Element getFirstChild(Element elem) {
+        Node firstChild = elem.getFirstChildElement();
+        if (firstChild != null) {
+            return firstChild.cast();
+        }
+        return null;
 
-   }
-   
-   @PatchMethod
-   static Element resolve(Element elem) {
-      return PotentialElementPatcher.isPotential(elem) ? PotentialElementPatcher.resolve(elem) : elem;
-   }
+    }
 
-   @PatchMethod
-   static Element getParent(Element elem) {
-      com.google.gwt.dom.client.Element parentElem = elem.getParentElement();
+    @PatchMethod
+    static Element resolve(Element elem) {
+        return PotentialElementPatcher.isPotential(elem) ? PotentialElementPatcher.resolve(elem) : elem;
+    }
 
-      if (parentElem == null) {
-         return null;
-      }
+    @PatchMethod
+    static Element getParent(Element elem) {
+        com.google.gwt.dom.client.Element parentElem = elem.getParentElement();
 
-      Element parent = parentElem.cast();
-      return parent;
+        if (parentElem == null) {
+            return null;
+        }
 
-   }
+        Element parent = parentElem.cast();
+        return parent;
+
+    }
 
 }

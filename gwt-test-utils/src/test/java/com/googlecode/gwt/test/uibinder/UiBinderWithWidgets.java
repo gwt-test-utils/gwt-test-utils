@@ -10,112 +10,105 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.*;
 
 public class UiBinderWithWidgets extends Composite {
 
-   interface MyStyle extends CssResource {
-      String disabled();
+    interface MyStyle extends CssResource {
+        String disabled();
 
-      String enabled();
-   }
+        String enabled();
+    }
 
-   interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderWithWidgets> {
-   }
+    interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderWithWidgets> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   Button button;
+    @UiField
+    Button button;
 
-   @UiField
-   DataResource data;
+    @UiField
+    DataResource data;
 
-   @UiField
-   Image image;
+    @UiField
+    Image image;
 
-   @UiField
-   Image imageWithUrl;
+    @UiField
+    Image imageWithUrl;
 
-   @UiField
-   ImageResource img;
+    @UiField
+    ImageResource img;
 
-   @UiField
-   IsWidgetLabel isWidgetLabel;
+    @UiField
+    IsWidgetLabel isWidgetLabel;
 
-   @UiField
-   ListBox listBox;
+    @UiField
+    ListBox listBox;
 
-   @UiField
-   Label msgInnerWidget;
+    @UiField
+    Label msgInnerWidget;
 
-   @UiField
-   Label msgLabel;
+    @UiField
+    Label msgLabel;
 
-   @UiField(provided = true)
-   ProvidedLabel providedLabel;
+    @UiField(provided = true)
+    ProvidedLabel providedLabel;
 
-   @UiField
-   PushButton pushButton;
+    @UiField
+    PushButton pushButton;
 
-   @UiField
-   RadioButton radioButton1;
+    @UiField
+    RadioButton radioButton1;
 
-   @UiField
-   RadioButton radioButton2;
+    @UiField
+    RadioButton radioButton2;
 
-   @UiField
-   MyStyle style;
+    @UiField
+    MyStyle style;
 
-   @UiField
-   TextBox textBox;
+    @UiField
+    TextBox textBox;
 
-   @UiField
-   UiConstructorLabel uiConstructorLabel;
+    @UiField
+    UiConstructorLabel uiConstructorLabel;
 
-   @UiField
-   UiFactoryLabel uiFactoryLabel;
+    @UiField
+    UiFactoryLabel uiFactoryLabel;
 
-   @UiField
-   VerticalPanel verticalPanel;
+    @UiField
+    VerticalPanel verticalPanel;
 
-   private final String uiFactoryLabelText;
+    private final String uiFactoryLabelText;
 
-   public UiBinderWithWidgets(String... names) {
-      providedLabel = new ProvidedLabel("my provided string");
-      this.uiFactoryLabelText = names[0];
+    public UiBinderWithWidgets(String... names) {
+        providedLabel = new ProvidedLabel("my provided string");
+        this.uiFactoryLabelText = names[0];
 
-      initWidget(uiBinder.createAndBindUi(this));
-      for (String name : names) {
-         listBox.addItem(name);
-      }
+        initWidget(uiBinder.createAndBindUi(this));
+        for (String name : names) {
+            listBox.addItem(name);
+        }
 
-      providedLabel.setStyleName(style.disabled());
-   }
+        providedLabel.setStyleName(style.disabled());
+    }
 
-   @UiHandler("textBox")
-   public void textBox_onValueChange(ValueChangeEvent<String> event) {
-      msgLabel.setText(event.getValue());
-   }
+    @UiHandler("textBox")
+    public void textBox_onValueChange(ValueChangeEvent<String> event) {
+        msgLabel.setText(event.getValue());
+    }
 
-   @UiHandler("button")
-   void handleClick(ClickEvent e) {
-      listBox.setVisibleItemCount(2);
-   }
+    @UiHandler("button")
+    void handleClick(ClickEvent e) {
+        listBox.setVisibleItemCount(2);
+    }
 
-   /** Used by MyUiBinder to instantiate UiFactoryLabel */
-   @UiFactory
-   UiFactoryLabel makeUiFactoryLabel() { // method name is insignificant
-      return new UiFactoryLabel(uiFactoryLabelText);
-   }
+    /**
+     * Used by MyUiBinder to instantiate UiFactoryLabel
+     */
+    @UiFactory
+    UiFactoryLabel makeUiFactoryLabel() { // method name is insignificant
+        return new UiFactoryLabel(uiFactoryLabelText);
+    }
 
 }

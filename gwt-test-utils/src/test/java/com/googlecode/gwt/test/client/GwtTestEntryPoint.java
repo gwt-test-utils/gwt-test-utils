@@ -4,8 +4,8 @@ import com.google.gwt.core.client.EntryPoint;
 
 public class GwtTestEntryPoint implements EntryPoint {
 
-   public void onModuleLoad() {
-      // noOp implementation
-   }
+    public void onModuleLoad() {
+        // noOp implementation
+    }
 
 }

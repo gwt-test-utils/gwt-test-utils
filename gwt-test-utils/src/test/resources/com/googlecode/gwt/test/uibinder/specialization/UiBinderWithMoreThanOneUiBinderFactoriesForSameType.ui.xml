@@ -1,10 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ow="urn:import:com.googlecode.gwt.test.uibinder.specialization">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:ow="urn:import:com.googlecode.gwt.test.uibinder.specialization">
 
-	<g:HTMLPanel>
-		<ow:GenericWidget.PersonWidget ui:field="personWidget" />
-		<ow:GenericWidget.ItemWidget ui:field="itemWidget" />
-	</g:HTMLPanel>
+    <g:HTMLPanel>
+        <ow:GenericWidget.PersonWidget ui:field="personWidget"/>
+        <ow:GenericWidget.ItemWidget ui:field="itemWidget"/>
+    </g:HTMLPanel>
 
 </ui:UiBinder> 

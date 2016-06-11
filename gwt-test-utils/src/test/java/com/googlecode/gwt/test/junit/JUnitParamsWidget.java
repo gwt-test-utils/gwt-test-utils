@@ -6,16 +6,16 @@ import com.google.gwt.user.client.ui.HasText;
 
 class JUnitParamsWidget extends Composite implements HasText {
 
-   JUnitParamsWidget() {
-      initWidget(new FlowPanel());
-   }
+    JUnitParamsWidget() {
+        initWidget(new FlowPanel());
+    }
 
-   public String getText() {
-      return this.getWidget().getElement().getInnerText();
-   }
+    public String getText() {
+        return this.getWidget().getElement().getInnerText();
+    }
 
-   public void setText(String text) {
-      this.getWidget().getElement().setInnerText("text : " + text);
-   }
+    public void setText(String text) {
+        this.getWidget().getElement().setInnerText("text : " + text);
+    }
 
 }

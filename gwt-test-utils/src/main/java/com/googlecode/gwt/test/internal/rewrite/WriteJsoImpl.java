@@ -13,25 +13,20 @@
  */
 package com.googlecode.gwt.test.internal.rewrite;
 
+import com.google.gwt.dev.shell.rewrite.HostedModeClassRewriter.InstanceMethodOracle;
+import com.google.gwt.dev.shell.rewrite.HostedModeClassRewriter.SingleJsoImplData;
+import com.googlecode.gwt.test.internal.utils.JsoProperties;
+import org.objectweb.asm.*;
+import org.objectweb.asm.commons.Method;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.Method;
-
-import com.google.gwt.dev.shell.rewrite.HostedModeClassRewriter.InstanceMethodOracle;
-import com.google.gwt.dev.shell.rewrite.HostedModeClassRewriter.SingleJsoImplData;
-import com.googlecode.gwt.test.internal.utils.JsoProperties;
-
 /**
  * Writes the implementation classes for JSO and its subtypes.
- *
+ * <p>
  * Changes made by the base class:
  * <ol>
  * <li>The new type has the same name as the old type with a '$' appended.</li>
@@ -41,270 +36,269 @@ import com.googlecode.gwt.test.internal.utils.JsoProperties;
  */
 abstract class WriteJsoImpl extends ClassVisitor {
 
-   /**
-    * This type implements JavaScriptObject.
-    *
-    * <ol>
-    * <li>JavaScriptObject itself gets a new synthetic field to store the underlying hosted mode
-    * reference.</li>
-    * <li>Instance methods are added so that JavaScriptObject implements all SingleJsoImpl
-    * interfaces.</li>
-    * </ol>
-    *
-    */
-   private static class ForJsoDollar extends WriteJsoImpl {
-      private final SingleJsoImplData jsoData;
-      /**
-       * An unmodifiable set of descriptors containing <code>JavaScriptObject</code> and all
-       * subclasses.
-       */
-      private final Set<String> jsoDescriptors;
+    /**
+     * This type implements JavaScriptObject.
+     * <p>
+     * <ol>
+     * <li>JavaScriptObject itself gets a new synthetic field to store the underlying hosted mode
+     * reference.</li>
+     * <li>Instance methods are added so that JavaScriptObject implements all SingleJsoImpl
+     * interfaces.</li>
+     * </ol>
+     */
+    private static class ForJsoDollar extends WriteJsoImpl {
+        private final SingleJsoImplData jsoData;
+        /**
+         * An unmodifiable set of descriptors containing <code>JavaScriptObject</code> and all
+         * subclasses.
+         */
+        private final Set<String> jsoDescriptors;
 
-      public ForJsoDollar(ClassVisitor cv, Set<String> jsoDescriptors, InstanceMethodOracle mapper,
-               SingleJsoImplData jsoData) {
-         super(cv, mapper);
-         this.jsoDescriptors = jsoDescriptors;
-         this.jsoData = jsoData;
-      }
+        public ForJsoDollar(ClassVisitor cv, Set<String> jsoDescriptors, InstanceMethodOracle mapper,
+                            SingleJsoImplData jsoData) {
+            super(cv, mapper);
+            this.jsoDescriptors = jsoDescriptors;
+            this.jsoData = jsoData;
+        }
 
-      @Override
-      public void visit(int version, int access, String name, String signature, String superName,
-               String[] interfaces) {
+        @Override
+        public void visit(int version, int access, String name, String signature, String superName,
+                          String[] interfaces) {
 
-         ArrayList<String> jsoDescList = new ArrayList<String>();
-         jsoDescList.addAll(jsoDescriptors);
-         interfaces = jsoDescList.toArray(new String[jsoDescList.size()]);
+            ArrayList<String> jsoDescList = new ArrayList<String>();
+            jsoDescList.addAll(jsoDescriptors);
+            interfaces = jsoDescList.toArray(new String[jsoDescList.size()]);
 
-         super.visit(version, access, name, signature, superName, interfaces);
+            super.visit(version, access, name, signature, superName, interfaces);
 
-         FieldVisitor fv = visitField(Opcodes.ACC_PROTECTED | Opcodes.ACC_SYNTHETIC,
-                  JsoProperties.JSO_PROPERTIES,
-                  "Lcom/googlecode/gwt/test/internal/utils/PropertyContainer;", null, null);
-         if (fv != null) {
-            fv.visitEnd();
-         }
-
-         // Implement the trampoline methods
-         for (String mangledName : jsoData.getMangledNames()) {
-            List<Method> declarations = jsoData.getDeclarations(mangledName);
-            List<Method> implementations = jsoData.getImplementations(mangledName);
-            assert declarations.size() == implementations.size() : "Declaration / implementation size mismatch";
-
-            Iterator<Method> declIterator = declarations.iterator();
-            Iterator<Method> implIterator = implementations.iterator();
-
-            while (declIterator.hasNext()) {
-               assert implIterator.hasNext();
-               writeTrampoline(mangledName, declIterator.next(), implIterator.next());
+            FieldVisitor fv = visitField(Opcodes.ACC_PROTECTED | Opcodes.ACC_SYNTHETIC,
+                    JsoProperties.JSO_PROPERTIES,
+                    "Lcom/googlecode/gwt/test/internal/utils/PropertyContainer;", null, null);
+            if (fv != null) {
+                fv.visitEnd();
             }
-         }
-      }
 
-      @Override
-      public MethodVisitor visitMethod(int access, String name, String desc, String signature,
-               String[] exceptions) {
-         if (isCtor(name)) {
-            // make the JavaScriptObject$ constructor public
-            access &= ~(Opcodes.ACC_PRIVATE | Opcodes.ACC_PROTECTED);
-            access |= Opcodes.ACC_PUBLIC;
-         }
-         return super.visitMethod(access, name, desc, signature, exceptions);
-      }
+            // Implement the trampoline methods
+            for (String mangledName : jsoData.getMangledNames()) {
+                List<Method> declarations = jsoData.getDeclarations(mangledName);
+                List<Method> implementations = jsoData.getImplementations(mangledName);
+                assert declarations.size() == implementations.size() : "Declaration / implementation size mismatch";
 
-      /**
-       * JSO methods are implemented as flyweight style, with the instance being passed as the first
-       * parameter. This loop create instance methods on JSO$ for all of the mangled SingleJsoImpl
-       * interface method names. These instance methods simply turn around and call the
-       * static-dispatch methods. In Java, it might look like:
-       *
-       * <pre>
-     * interface Interface {
-     *   String someMethod(int a, double b);
-     * }
-     *
-     * class J extends JSO implements I {
-     *   public String com_google_Interface_someMethod(int a, double b) {
-     *     return com.google.MyJso$.someMethod$(this, a, b);
-     *   }
-     * }
-     * </pre>
-       *
-       * @param mangledName {@code com_google_gwt_sample_hello_client_Interface_a}
-       * @param interfaceMethod {@code java.lang.String a(int, double)}
-       * @param implementingMethod {@code static final java.lang.String
-       *          a$(com.google.gwt.sample.hello.client.Jso, ...);}
-       */
-      private void writeTrampoline(String mangledName, Method interfaceMethod,
-               Method implementingMethod) {
-         assert implementingMethod.getArgumentTypes().length > 0;
+                Iterator<Method> declIterator = declarations.iterator();
+                Iterator<Method> implIterator = implementations.iterator();
+
+                while (declIterator.hasNext()) {
+                    assert implIterator.hasNext();
+                    writeTrampoline(mangledName, declIterator.next(), implIterator.next());
+                }
+            }
+        }
+
+        @Override
+        public MethodVisitor visitMethod(int access, String name, String desc, String signature,
+                                         String[] exceptions) {
+            if (isCtor(name)) {
+                // make the JavaScriptObject$ constructor public
+                access &= ~(Opcodes.ACC_PRIVATE | Opcodes.ACC_PROTECTED);
+                access |= Opcodes.ACC_PUBLIC;
+            }
+            return super.visitMethod(access, name, desc, signature, exceptions);
+        }
+
+        /**
+         * JSO methods are implemented as flyweight style, with the instance being passed as the first
+         * parameter. This loop create instance methods on JSO$ for all of the mangled SingleJsoImpl
+         * interface method names. These instance methods simply turn around and call the
+         * static-dispatch methods. In Java, it might look like:
+         * <p>
+         * <pre>
+         * interface Interface {
+         *   String someMethod(int a, double b);
+         * }
+         *
+         * class J extends JSO implements I {
+         *   public String com_google_Interface_someMethod(int a, double b) {
+         *     return com.google.MyJso$.someMethod$(this, a, b);
+         *   }
+         * }
+         * </pre>
+         *
+         * @param mangledName        {@code com_google_gwt_sample_hello_client_Interface_a}
+         * @param interfaceMethod    {@code java.lang.String a(int, double)}
+         * @param implementingMethod {@code static final java.lang.String
+         *                           a$(com.google.gwt.sample.hello.client.Jso, ...);}
+         */
+        private void writeTrampoline(String mangledName, Method interfaceMethod,
+                                     Method implementingMethod) {
+            assert implementingMethod.getArgumentTypes().length > 0;
 
          /*
           * The local descriptor is the same as the descriptor from the abstract method in the
           * interface.
           */
-         String localDescriptor = interfaceMethod.getDescriptor();
-         Method localMethod = new Method(mangledName, localDescriptor);
+            String localDescriptor = interfaceMethod.getDescriptor();
+            Method localMethod = new Method(mangledName, localDescriptor);
 
          /*
           * We also use the first argument to know which type to statically dispatch to.
           */
-         Type implementingType = Type.getType("L"
-                  + implementingMethod.getArgumentTypes()[0].getInternalName() + "$;");
+            Type implementingType = Type.getType("L"
+                    + implementingMethod.getArgumentTypes()[0].getInternalName() + "$;");
 
-         // Maybe create the method. This is marked final as a sanity check
-         MethodVisitor mv = visitMethodNoRewrite(Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL
-                  | Opcodes.ACC_SYNTHETIC, localMethod.getName(), localMethod.getDescriptor(),
-                  null, null);
+            // Maybe create the method. This is marked final as a sanity check
+            MethodVisitor mv = visitMethodNoRewrite(Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL
+                            | Opcodes.ACC_SYNTHETIC, localMethod.getName(), localMethod.getDescriptor(),
+                    null, null);
 
-         if (mv != null) {
-            mv.visitCode();
+            if (mv != null) {
+                mv.visitCode();
 
             /*
              * It just so happens that the stack and local variable sizes are the same, but they're
              * kept distinct to aid in clarity should the dispatch logic change.
              */
-            int var = 0;
-            int size = 0;
+                int var = 0;
+                int size = 0;
 
-            for (Type t : implementingMethod.getArgumentTypes()) {
-               size += t.getSize();
-               mv.visitVarInsn(t.getOpcode(Opcodes.ILOAD), var);
-               var += t.getSize();
+                for (Type t : implementingMethod.getArgumentTypes()) {
+                    size += t.getSize();
+                    mv.visitVarInsn(t.getOpcode(Opcodes.ILOAD), var);
+                    var += t.getSize();
+                }
+
+                // Make sure there's enough room for the return value
+                size = Math.max(size, implementingMethod.getReturnType().getSize());
+
+                mv.visitMethodInsn(Opcodes.INVOKESTATIC, implementingType.getInternalName(),
+                        implementingMethod.getName(), implementingMethod.getDescriptor());
+                mv.visitInsn(localMethod.getReturnType().getOpcode(Opcodes.IRETURN));
+                mv.visitMaxs(size, var);
+                mv.visitEnd();
             }
+        }
+    }
 
-            // Make sure there's enough room for the return value
-            size = Math.max(size, implementingMethod.getReturnType().getSize());
+    /**
+     * This type is used to implement subtypes of JSO.
+     * <p>
+     * <ol>
+     * <li>The new type's superclass is mangled by adding $.</li>
+     * <li>Constructors are deleted.</li>
+     * </ol>
+     */
+    private static class ForJsoInterface extends WriteJsoImpl {
+        public ForJsoInterface(ClassVisitor cv, InstanceMethodOracle mapper) {
+            super(cv, mapper);
+        }
 
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, implementingType.getInternalName(),
-                     implementingMethod.getName(), implementingMethod.getDescriptor());
-            mv.visitInsn(localMethod.getReturnType().getOpcode(Opcodes.IRETURN));
-            mv.visitMaxs(size, var);
-            mv.visitEnd();
-         }
-      }
-   }
+        @Override
+        public void visit(int version, int access, String name, String signature, String superName,
+                          String[] interfaces) {
+            // Reference the old superclass's implementation class.
+            superName += '$';
+            interfaces = null;
 
-   /**
-    * This type is used to implement subtypes of JSO.
-    *
-    * <ol>
-    * <li>The new type's superclass is mangled by adding $.</li>
-    * <li>Constructors are deleted.</li>
-    * </ol>
-    */
-   private static class ForJsoInterface extends WriteJsoImpl {
-      public ForJsoInterface(ClassVisitor cv, InstanceMethodOracle mapper) {
-         super(cv, mapper);
-      }
+            super.visit(version, access, name, signature, superName, interfaces);
+        }
 
-      @Override
-      public void visit(int version, int access, String name, String signature, String superName,
-               String[] interfaces) {
-         // Reference the old superclass's implementation class.
-         superName += '$';
-         interfaces = null;
+        @Override
+        public MethodVisitor visitMethod(int access, String name, String desc, String signature,
+                                         String[] exceptions) {
+            boolean isCtor = isCtor(name);
+            if (isCtor) {
+                // Don't copy over constructors except for JavaScriptObject itself.
+                return null;
+            }
+            return super.visitMethod(access, name, desc, signature, exceptions);
+        }
+    }
 
-         super.visit(version, access, name, signature, superName, interfaces);
-      }
+    /**
+     * Creates a ClassVisitor to implement a JavaScriptObject subtype. This will select between a
+     * simple implementation for user-defined JSO subtypes and the complex implementation for
+     * implementing JavaScriptObject$.
+     */
+    public static ClassVisitor create(ClassVisitor cv, String classDescriptor,
+                                      Set<String> jsoDescriptors, InstanceMethodOracle mapper,
+                                      SingleJsoImplData singleJsoImplData) {
 
-      @Override
-      public MethodVisitor visitMethod(int access, String name, String desc, String signature,
-               String[] exceptions) {
-         boolean isCtor = isCtor(name);
-         if (isCtor) {
-            // Don't copy over constructors except for JavaScriptObject itself.
-            return null;
-         }
-         return super.visitMethod(access, name, desc, signature, exceptions);
-      }
-   }
+        if (classDescriptor.equals(OverlayTypesRewriter.JAVASCRIPTOBJECT_IMPL_DESC)) {
+            return new ForJsoDollar(cv, jsoDescriptors, mapper, singleJsoImplData);
+        }
 
-   /**
-    * Creates a ClassVisitor to implement a JavaScriptObject subtype. This will select between a
-    * simple implementation for user-defined JSO subtypes and the complex implementation for
-    * implementing JavaScriptObject$.
-    */
-   public static ClassVisitor create(ClassVisitor cv, String classDescriptor,
-            Set<String> jsoDescriptors, InstanceMethodOracle mapper,
-            SingleJsoImplData singleJsoImplData) {
+        return new ForJsoInterface(cv, mapper);
+    }
 
-      if (classDescriptor.equals(OverlayTypesRewriter.JAVASCRIPTOBJECT_IMPL_DESC)) {
-         return new ForJsoDollar(cv, jsoDescriptors, mapper, singleJsoImplData);
-      }
+    /**
+     * Maps methods to the class in which they are declared.
+     */
+    private final InstanceMethodOracle mapper;
 
-      return new ForJsoInterface(cv, mapper);
-   }
+    /**
+     * The original name of the class being visited.
+     */
+    private String originalName;
 
-   /**
-    * Maps methods to the class in which they are declared.
-    */
-   private final InstanceMethodOracle mapper;
+    /**
+     * Construct a new rewriter instance.
+     *
+     * @param cv             the visitor to chain to
+     * @param jsoDescriptors an unmodifiable set of descriptors containing
+     *                       <code>JavaScriptObject</code> and all subclasses
+     * @param mapper         maps methods to the class in which they are declared
+     */
+    private WriteJsoImpl(ClassVisitor cv, InstanceMethodOracle mapper) {
+        super(Opcodes.ASM4, cv);
+        this.mapper = mapper;
+    }
 
-   /**
-    * The original name of the class being visited.
-    */
-   private String originalName;
+    /**
+     * Records the original name and resets access opcodes.
+     */
+    @Override
+    public void visit(int version, int access, String name, String signature, String superName,
+                      String[] interfaces) {
+        originalName = name;
+        super.visit(version, Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_SYNTHETIC,
+                name + '$', signature, superName, interfaces);
+    }
 
-   /**
-    * Construct a new rewriter instance.
-    *
-    * @param cv the visitor to chain to
-    * @param jsoDescriptors an unmodifiable set of descriptors containing
-    *           <code>JavaScriptObject</code> and all subclasses
-    * @param mapper maps methods to the class in which they are declared
-    */
-   private WriteJsoImpl(ClassVisitor cv, InstanceMethodOracle mapper) {
-      super(Opcodes.ASM4, cv);
-      this.mapper = mapper;
-   }
+    /**
+     * Mangle all instance methods declared in JavaScriptObject types.
+     */
+    @Override
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature,
+                                     String[] exceptions) {
+        boolean isCtor = isCtor(name);
+        if (!isCtor && !isStatic(access) && !isObjectMethod(name + desc)) {
+            access |= Opcodes.ACC_STATIC;
+            desc = OverlayTypesRewriter.addSyntheticThisParam(getOriginalName(), desc);
+            name = name + "$";
+        }
+        return super.visitMethod(access, name, desc, signature, exceptions);
+    }
 
-   /**
-    * Records the original name and resets access opcodes.
-    */
-   @Override
-   public void visit(int version, int access, String name, String signature, String superName,
-            String[] interfaces) {
-      originalName = name;
-      super.visit(version, Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_SYNTHETIC,
-               name + '$', signature, superName, interfaces);
-   }
+    protected String getOriginalName() {
+        return originalName;
+    }
 
-   /**
-    * Mangle all instance methods declared in JavaScriptObject types.
-    */
-   @Override
-   public MethodVisitor visitMethod(int access, String name, String desc, String signature,
-            String[] exceptions) {
-      boolean isCtor = isCtor(name);
-      if (!isCtor && !isStatic(access) && !isObjectMethod(name + desc)) {
-         access |= Opcodes.ACC_STATIC;
-         desc = OverlayTypesRewriter.addSyntheticThisParam(getOriginalName(), desc);
-         name = name + "$";
-      }
-      return super.visitMethod(access, name, desc, signature, exceptions);
-   }
+    protected boolean isCtor(String name) {
+        return "<init>".equals(name);
+    }
 
-   protected String getOriginalName() {
-      return originalName;
-   }
+    protected boolean isObjectMethod(String signature) {
+        return "java/lang/Object".equals(mapper.findOriginalDeclaringClass(originalName, signature));
+    }
 
-   protected boolean isCtor(String name) {
-      return "<init>".equals(name);
-   }
+    protected boolean isStatic(int access) {
+        return (access & Opcodes.ACC_STATIC) != 0;
+    }
 
-   protected boolean isObjectMethod(String signature) {
-      return "java/lang/Object".equals(mapper.findOriginalDeclaringClass(originalName, signature));
-   }
-
-   protected boolean isStatic(int access) {
-      return (access & Opcodes.ACC_STATIC) != 0;
-   }
-
-   /**
-    * Allows access to an unmodified visitMethod call.
-    */
-   protected MethodVisitor visitMethodNoRewrite(int access, String name, String desc,
-            String signature, String[] exceptions) {
-      return super.visitMethod(access, name, desc, signature, exceptions);
-   }
+    /**
+     * Allows access to an unmodified visitMethod call.
+     */
+    protected MethodVisitor visitMethodNoRewrite(int access, String name, String desc,
+                                                 String signature, String[] exceptions) {
+        return super.visitMethod(access, name, desc, signature, exceptions);
+    }
 }

@@ -9,44 +9,44 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 public class UiBinderWithMenuBar extends Composite {
 
-   interface MyUiBinder extends UiBinder<MenuBar, UiBinderWithMenuBar> {
-   }
+    interface MyUiBinder extends UiBinder<MenuBar, UiBinderWithMenuBar> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   MenuBar menu1;
+    @UiField
+    MenuBar menu1;
 
-   @UiField
-   MenuBar menu2;
+    @UiField
+    MenuBar menu2;
 
-   @UiField
-   MenuBar menu3;
+    @UiField
+    MenuBar menu3;
 
-   @UiField
-   MenuItem menuItem1;
+    @UiField
+    MenuItem menuItem1;
 
-   @UiField
-   MenuItem menuItem2;
+    @UiField
+    MenuItem menuItem2;
 
-   @UiField
-   MenuItem menuItem3;
+    @UiField
+    MenuItem menuItem3;
 
-   @UiField
-   MenuItem subMenuItem1;
+    @UiField
+    MenuItem subMenuItem1;
 
-   @UiField
-   MenuItem subMenuItem2;
+    @UiField
+    MenuItem subMenuItem2;
 
-   @UiField
-   MenuItem subMenuItem3;
+    @UiField
+    MenuItem subMenuItem3;
 
-   public UiBinderWithMenuBar() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithMenuBar() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public MenuBar getMenu() {
-      return (MenuBar) this.getWidget();
-   }
+    public MenuBar getMenu() {
+        return (MenuBar) this.getWidget();
+    }
 
 }

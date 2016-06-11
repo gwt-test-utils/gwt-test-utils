@@ -1,18 +1,12 @@
 package com.googlecode.gwt.test.internal;
 
-import java.lang.reflect.Modifier;
-import java.net.URLClassLoader;
-
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.Loader;
-import javassist.NotFoundException;
-import javassist.Translator;
-
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.resource.impl.ResourceOracleImpl;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
+import javassist.*;
+
+import java.lang.reflect.Modifier;
+import java.net.URLClassLoader;
 
 /**
  * Classloader used by gwt-test-utils when computing the CompilationState. It is able to load both
@@ -35,54 +29,51 @@ import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
  * href="http://code.google.com/p/gwt-test-utils/issues/detail?id=161">issue with gwt-guava
  * GwtTransiant anntation</a>.
  * </p>
- * 
- * 
+ *
  * @author Gael Lazzari
- * 
  */
 class CompilationStateClassLoader extends Loader {
 
-   /**
-    * javassist translator to make loaded classes public by default
-    * 
-    */
-   private class MakeClassPublicTranslator implements Translator {
+    /**
+     * javassist translator to make loaded classes public by default
+     */
+    private class MakeClassPublicTranslator implements Translator {
 
-      public void onLoad(ClassPool pool, String classname) throws NotFoundException,
-               CannotCompileException {
+        public void onLoad(ClassPool pool, String classname) throws NotFoundException,
+                CannotCompileException {
 
-         CtClass ctClass = pool.get(classname);
+            CtClass ctClass = pool.get(classname);
 
-         int modifiers = ctClass.getModifiers();
-         if (!Modifier.isPublic(modifiers)) {
-            ctClass.setModifiers(modifiers + Modifier.PUBLIC);
-         }
+            int modifiers = ctClass.getModifiers();
+            if (!Modifier.isPublic(modifiers)) {
+                ctClass.setModifiers(modifiers + Modifier.PUBLIC);
+            }
 
-      }
+        }
 
-      public void start(ClassPool pool) throws NotFoundException, CannotCompileException {
+        public void start(ClassPool pool) throws NotFoundException, CannotCompileException {
 
-      }
+        }
 
-   }
+    }
 
-   CompilationStateClassLoader(ClassLoader parent, ConfigurationLoader configurationLoader) {
-      super(new URLClassLoader(configurationLoader.getSrcUrls(), parent), null);
-      ClassPool cp = new ClassPool(null);
-      cp.appendSystemPath();
+    CompilationStateClassLoader(ClassLoader parent, ConfigurationLoader configurationLoader) {
+        super(new URLClassLoader(configurationLoader.getSrcUrls(), parent), null);
+        ClassPool cp = new ClassPool(null);
+        cp.appendSystemPath();
 
-      for (String delegate : configurationLoader.getDelegates()) {
-         delegateLoadingOf(delegate);
-      }
+        for (String delegate : configurationLoader.getDelegates()) {
+            delegateLoadingOf(delegate);
+        }
 
-      try {
-         addTranslator(cp, new MakeClassPublicTranslator());
-      } catch (Exception e) {
-         // should never happen
-         throw new GwtTestPatchException(
-                  "Error while trying to setup the temporary classloader to load GWT generated .java files",
-                  e);
-      }
-   }
+        try {
+            addTranslator(cp, new MakeClassPublicTranslator());
+        } catch (Exception e) {
+            // should never happen
+            throw new GwtTestPatchException(
+                    "Error while trying to setup the temporary classloader to load GWT generated .java files",
+                    e);
+        }
+    }
 
 }

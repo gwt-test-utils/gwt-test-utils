@@ -1,26 +1,26 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<g:DockLayoutPanel unit='EM'>
-		<g:north size='5'>
-			<g:Label ui:field="northLabel">North</g:Label>
-		</g:north>
-		<g:center>
-			<g:Label ui:field="centerLabel">Center</g:Label>
-		</g:center>
-		<g:west size='10'>
-			<g:HTML ui:field="westHTML">
-				<ul>
-					<li id="li-west0">west0</li>
-					<li id="li-west1">west1</li>
-				</ul>
-			</g:HTML>
-		</g:west>
-		<g:east size="5">
-			<g:Label ui:field="eastLabel">East</g:Label>
-		</g:east>
-		<g:south size="30">
-			<g:Label ui:field="southLabel">South</g:Label>
-		</g:south>
-	</g:DockLayoutPanel>
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <g:DockLayoutPanel unit='EM'>
+        <g:north size='5'>
+            <g:Label ui:field="northLabel">North</g:Label>
+        </g:north>
+        <g:center>
+            <g:Label ui:field="centerLabel">Center</g:Label>
+        </g:center>
+        <g:west size='10'>
+            <g:HTML ui:field="westHTML">
+                <ul>
+                    <li id="li-west0">west0</li>
+                    <li id="li-west1">west1</li>
+                </ul>
+            </g:HTML>
+        </g:west>
+        <g:east size="5">
+            <g:Label ui:field="eastLabel">East</g:Label>
+        </g:east>
+        <g:south size="30">
+            <g:Label ui:field="southLabel">South</g:Label>
+        </g:south>
+    </g:DockLayoutPanel>
 </ui:UiBinder> 

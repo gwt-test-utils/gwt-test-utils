@@ -9,10 +9,10 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(CellFormatter.class)
 class HTMLTableCellFormatterPatcher {
 
-   @PatchMethod
-   static Element getCellElement(CellFormatter cellFormatter, Element table, int row, int col) {
-      TableRowElement rowElement = (TableRowElement) table.getChildNodes().getItem(row);
-      return rowElement.getChildNodes().getItem(col).cast();
-   }
+    @PatchMethod
+    static Element getCellElement(CellFormatter cellFormatter, Element table, int row, int col) {
+        TableRowElement rowElement = (TableRowElement) table.getChildNodes().getItem(row);
+        return rowElement.getChildNodes().getItem(col).cast();
+    }
 
 }

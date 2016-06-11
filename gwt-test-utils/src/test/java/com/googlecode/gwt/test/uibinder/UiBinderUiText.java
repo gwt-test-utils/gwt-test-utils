@@ -9,19 +9,19 @@ import com.google.gwt.user.client.ui.Label;
 
 public class UiBinderUiText extends Composite {
 
-   interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderUiText> {
-   }
+    interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderUiText> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   Label label;
+    @UiField
+    Label label;
 
-   @UiField
-   Label msgLabel;
+    @UiField
+    Label msgLabel;
 
-   public UiBinderUiText() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderUiText() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
 }

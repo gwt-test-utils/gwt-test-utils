@@ -1,8 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:p="urn:import:com.googlecode.gwt.test.uibinder">
-	<g:FlowPanel>
-		<p:UiConstructorWidget size="5" type="T1" anotherType="T2" ui:field="myWidget"></p:UiConstructorWidget>	
-	</g:FlowPanel>
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:p="urn:import:com.googlecode.gwt.test.uibinder">
+    <g:FlowPanel>
+        <p:UiConstructorWidget size="5" type="T1" anotherType="T2" ui:field="myWidget"></p:UiConstructorWidget>
+    </g:FlowPanel>
 </ui:UiBinder> 

@@ -9,20 +9,20 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 
 public class UiBinderWithDisclosurePanel extends Composite {
 
-   interface UiBinderDisclosurePanelUiBinder extends
+    interface UiBinderDisclosurePanelUiBinder extends
             UiBinder<HTMLPanel, UiBinderWithDisclosurePanel> {
-   }
+    }
 
-   private static UiBinderDisclosurePanelUiBinder uiBinder = GWT.create(UiBinderDisclosurePanelUiBinder.class);
+    private static UiBinderDisclosurePanelUiBinder uiBinder = GWT.create(UiBinderDisclosurePanelUiBinder.class);
 
-   @UiField
-   DisclosurePanel disclosurePanelWithCustomHeader;
+    @UiField
+    DisclosurePanel disclosurePanelWithCustomHeader;
 
-   @UiField
-   DisclosurePanel disclosurePanelWithTextHeader;
+    @UiField
+    DisclosurePanel disclosurePanelWithTextHeader;
 
-   public UiBinderWithDisclosurePanel() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithDisclosurePanel() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
 }

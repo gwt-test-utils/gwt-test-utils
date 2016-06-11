@@ -5,10 +5,10 @@ import com.googlecode.gwt.test.client.MyObject;
 
 public interface MyServiceAsync {
 
-   void getHttpRequestHeader(String header, AsyncCallback<String> callback);
+    void getHttpRequestHeader(String header, AsyncCallback<String> callback);
 
-   void someCallWithException(AsyncCallback<Void> callback);
+    void someCallWithException(AsyncCallback<Void> callback);
 
-   void update(MyObject object, AsyncCallback<MyObject> callback);
+    void update(MyObject object, AsyncCallback<MyObject> callback);
 
 }

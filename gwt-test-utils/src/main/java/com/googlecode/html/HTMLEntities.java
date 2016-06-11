@@ -15,125 +15,126 @@
 package com.googlecode.html;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Pre-defined HTML entities.
- * 
+ *
  * @author Andy Clark
- * 
  * @version $Id: HTMLEntities.java,v 1.5 2005/02/14 03:56:54 andyc Exp $
  */
 public class HTMLEntities {
 
-   //
-   // Constants
-   //
+    //
+    // Constants
+    //
 
-   static class IntProperties {
-      static class Entry {
-         public int key;
-         public Entry next;
-         public String value;
+    static class IntProperties {
+        static class Entry {
+            public int key;
+            public Entry next;
+            public String value;
 
-         public Entry(int key, String value, Entry next) {
-            this.key = key;
-            this.value = value;
-            this.next = next;
-         }
-      }
-
-      private Entry[] entries = new Entry[101];
-
-      public String get(int key) {
-         int hash = key % entries.length;
-         Entry entry = entries[hash];
-         while (entry != null) {
-            if (entry.key == key) {
-               return entry.value;
+            public Entry(int key, String value, Entry next) {
+                this.key = key;
+                this.value = value;
+                this.next = next;
             }
-            entry = entry.next;
-         }
-         return null;
-      }
+        }
 
-      public void put(int key, String value) {
-         int hash = key % entries.length;
-         Entry entry = new Entry(key, value, entries[hash]);
-         entries[hash] = entry;
-      }
-   }
+        private Entry[] entries = new Entry[101];
 
-   /** Entities. */
-   protected static final Map ENTITIES;
+        public String get(int key) {
+            int hash = key % entries.length;
+            Entry entry = entries[hash];
+            while (entry != null) {
+                if (entry.key == key) {
+                    return entry.value;
+                }
+                entry = entry.next;
+            }
+            return null;
+        }
 
-   //
-   // Static initialization
-   //
+        public void put(int key, String value) {
+            int hash = key % entries.length;
+            Entry entry = new Entry(key, value, entries[hash]);
+            entries[hash] = entry;
+        }
+    }
 
-   /** Reverse mapping from characters to names. */
-   protected static final IntProperties SEITITNE = new IntProperties();
+    /**
+     * Entities.
+     */
+    protected static final Map ENTITIES;
 
-   //
-   // Public static methods
-   //
+    //
+    // Static initialization
+    //
 
-   static {
-      final Properties props = new Properties();
-      // load entities
-      load0(props, "res/HTMLlat1.properties");
-      load0(props, "res/HTMLspecial.properties");
-      load0(props, "res/HTMLsymbol.properties");
-      load0(props, "res/XMLbuiltin.properties");
+    /**
+     * Reverse mapping from characters to names.
+     */
+    protected static final IntProperties SEITITNE = new IntProperties();
 
-      // store reverse mappings
-      final Enumeration keys = props.propertyNames();
-      while (keys.hasMoreElements()) {
-         final String key = (String) keys.nextElement();
-         final String value = props.getProperty(key);
-         if (value.length() == 1) {
-            final int ivalue = value.charAt(0);
-            SEITITNE.put(ivalue, key);
-         }
-      }
+    //
+    // Public static methods
+    //
 
-      ENTITIES = Collections.unmodifiableMap(new HashMap(props));
-   }
+    static {
+        final Properties props = new Properties();
+        // load entities
+        load0(props, "res/HTMLlat1.properties");
+        load0(props, "res/HTMLspecial.properties");
+        load0(props, "res/HTMLsymbol.properties");
+        load0(props, "res/XMLbuiltin.properties");
 
-   /**
-    * Returns the name associated to the given character or null if the character is not known.
-    */
-   public static String get(int c) {
-      return SEITITNE.get(c);
-   } // get(int):String
+        // store reverse mappings
+        final Enumeration keys = props.propertyNames();
+        while (keys.hasMoreElements()) {
+            final String key = (String) keys.nextElement();
+            final String value = props.getProperty(key);
+            if (value.length() == 1) {
+                final int ivalue = value.charAt(0);
+                SEITITNE.put(ivalue, key);
+            }
+        }
 
-   //
-   // Private static methods
-   //
+        ENTITIES = Collections.unmodifiableMap(new HashMap(props));
+    }
 
-   /**
-    * Returns the character associated to the given entity name, or -1 if the name is not known.
-    */
-   public static int get(String name) {
-      String value = (String) ENTITIES.get(name);
-      return value != null ? value.charAt(0) : -1;
-   } // get(String):char
+    /**
+     * Returns the name associated to the given character or null if the character is not known.
+     */
+    public static String get(int c) {
+        return SEITITNE.get(c);
+    } // get(int):String
 
-   //
-   // Classes
-   //
+    //
+    // Private static methods
+    //
 
-   /** Loads the entity values in the specified resource. */
-   private static void load0(final Properties props, final String filename) {
-      try {
-         props.load(HTMLEntities.class.getResourceAsStream(filename));
-      } catch (final IOException e) {
-         System.err.println("error: unable to load resource \"" + filename + "\"");
-      }
-   } // load0(String)
+    /**
+     * Returns the character associated to the given entity name, or -1 if the name is not known.
+     */
+    public static int get(String name) {
+        String value = (String) ENTITIES.get(name);
+        return value != null ? value.charAt(0) : -1;
+    } // get(String):char
+
+    //
+    // Classes
+    //
+
+    /**
+     * Loads the entity values in the specified resource.
+     */
+    private static void load0(final Properties props, final String filename) {
+        try {
+            props.load(HTMLEntities.class.getResourceAsStream(filename));
+        } catch (final IOException e) {
+            System.err.println("error: unable to load resource \"" + filename + "\"");
+        }
+    } // load0(String)
 
 } // class HTMLEntities

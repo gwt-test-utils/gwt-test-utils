@@ -23,31 +23,36 @@ import org.apache.xerces.xni.parser.XMLParseException;
  * <p>
  * When used in a configuration, the error reporter instance should be set as a property with the
  * following property identifier:
- * 
+ * <p>
  * <pre>
  * "http://cyberneko.org/html/internal/error-reporter" in the
  * </pre>
  * Components in the configuration can query the error reporter using this property identifier.
  * <p>
  * <strong>Note:</strong> All reported errors are within the domain "http://cyberneko.org/html".
- * 
+ *
  * @author Andy Clark
- * 
  * @version $Id: HTMLErrorReporter.java,v 1.4 2005/02/14 03:56:54 andyc Exp $
  */
 public interface HTMLErrorReporter {
 
-   //
-   // HTMLErrorReporter methods
-   //
+    //
+    // HTMLErrorReporter methods
+    //
 
-   /** Format message without reporting error. */
-   public String formatMessage(String key, Object[] args);
+    /**
+     * Format message without reporting error.
+     */
+    public String formatMessage(String key, Object[] args);
 
-   /** Reports an error. */
-   public void reportError(String key, Object[] args) throws XMLParseException;
+    /**
+     * Reports an error.
+     */
+    public void reportError(String key, Object[] args) throws XMLParseException;
 
-   /** Reports a warning. */
-   public void reportWarning(String key, Object[] args) throws XMLParseException;
+    /**
+     * Reports a warning.
+     */
+    public void reportWarning(String key, Object[] args) throws XMLParseException;
 
 } // interface HTMLErrorReporter

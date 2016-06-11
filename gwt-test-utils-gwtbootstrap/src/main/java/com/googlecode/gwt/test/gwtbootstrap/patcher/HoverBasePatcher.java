@@ -7,16 +7,15 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 
 /**
  * Patcher for {@link HoverBase}.
- * 
+ * <p>
  * <p>
  * This patcher do nothing only for avoiding {@code UnsatisfiedLinkError}.
- * 
+ *
  * @author Kenichiro Tanaka
- * 
  */
 @PatchClass(HoverBase.class)
 class HoverBasePatcher {
-   @PatchMethod
-   static void removeDataIfExists(HoverBase hoverBase, Element e, String dataName) {
-   }
+    @PatchMethod
+    static void removeDataIfExists(HoverBase hoverBase, Element e, String dataName) {
+    }
 }

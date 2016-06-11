@@ -1,12 +1,12 @@
 package com.googlecode.gwt.test.jukito;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.google.inject.BindingAnnotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author Przemys�aw Ga��zka

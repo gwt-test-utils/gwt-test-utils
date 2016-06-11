@@ -8,16 +8,16 @@ import com.google.gwt.user.client.ui.ListBox;
 
 public class UiBinderWithListBox extends Composite {
 
-   private static interface MyListBoxUiBinder extends UiBinder<ListBox, UiBinderWithListBox> {
-   }
+    private static interface MyListBoxUiBinder extends UiBinder<ListBox, UiBinderWithListBox> {
+    }
 
-   private static MyListBoxUiBinder uiBinder = GWT.create(MyListBoxUiBinder.class);
+    private static MyListBoxUiBinder uiBinder = GWT.create(MyListBoxUiBinder.class);
 
-   @UiField
-   ListBox listBox;
+    @UiField
+    ListBox listBox;
 
-   public UiBinderWithListBox() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithListBox() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
 }

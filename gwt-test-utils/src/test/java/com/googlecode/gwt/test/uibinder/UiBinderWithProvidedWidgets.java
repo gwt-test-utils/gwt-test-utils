@@ -8,22 +8,22 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 
 public class UiBinderWithProvidedWidgets extends Composite {
 
-   interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderWithProvidedWidgets> {
-   }
+    interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderWithProvidedWidgets> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField(provided = true)
-   ProvidedLabel firstProvidedLabel;
+    @UiField(provided = true)
+    ProvidedLabel firstProvidedLabel;
 
-   @UiField(provided = true)
-   ProvidedLabel secondProvidedLabel;
+    @UiField(provided = true)
+    ProvidedLabel secondProvidedLabel;
 
-   public UiBinderWithProvidedWidgets() {
-      firstProvidedLabel = new ProvidedLabel("first provided string");
-      secondProvidedLabel = new ProvidedLabel("second provided string");
+    public UiBinderWithProvidedWidgets() {
+        firstProvidedLabel = new ProvidedLabel("first provided string");
+        secondProvidedLabel = new ProvidedLabel("second provided string");
 
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
 }

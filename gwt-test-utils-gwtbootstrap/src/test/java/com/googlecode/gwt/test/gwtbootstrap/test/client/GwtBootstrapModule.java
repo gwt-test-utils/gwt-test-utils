@@ -6,18 +6,18 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 public class GwtBootstrapModule implements EntryPoint {
 
-   private TestWidget widget;
+    private TestWidget widget;
 
-   public TestWidget getWidget() {
-      return widget;
-   }
+    public TestWidget getWidget() {
+        return widget;
+    }
 
-   public void onModuleLoad() {
-      FlowPanel panel = new FlowPanel();
-      RootLayoutPanel.get().add(panel);
+    public void onModuleLoad() {
+        FlowPanel panel = new FlowPanel();
+        RootLayoutPanel.get().add(panel);
 
-      widget = new TestWidget();
-      panel.add(widget);
-   }
+        widget = new TestWidget();
+        panel.add(widget);
+    }
 
 }

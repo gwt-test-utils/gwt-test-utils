@@ -1,108 +1,107 @@
 package com.googlecode.gwt.test;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.google.gwt.user.client.ui.TextArea;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class TextAreaTest extends GwtTestTest {
 
-   @Test
-   public void getCursorPos() {
-      // Arrange
-      TextArea t = new TextArea();
-      t.setText("myText");
-      GwtReflectionUtils.setPrivateFieldValue(t, "attached", true);
+    @Test
+    public void getCursorPos() {
+        // Arrange
+        TextArea t = new TextArea();
+        t.setText("myText");
+        GwtReflectionUtils.setPrivateFieldValue(t, "attached", true);
 
-      // Act
-      t.setCursorPos(2);
+        // Act
+        t.setCursorPos(2);
 
-      // Assert
-      assertEquals(2, t.getCursorPos());
-   }
+        // Assert
+        assertEquals(2, t.getCursorPos());
+    }
 
-   @Test
-   public void getSelectionLength() {
-      // Arrange
-      TextArea t = new TextArea();
-      t.setText("myText");
-      GwtReflectionUtils.setPrivateFieldValue(t, "attached", true);
+    @Test
+    public void getSelectionLength() {
+        // Arrange
+        TextArea t = new TextArea();
+        t.setText("myText");
+        GwtReflectionUtils.setPrivateFieldValue(t, "attached", true);
 
-      // Act
-      t.setSelectionRange(1, 3);
+        // Act
+        t.setSelectionRange(1, 3);
 
-      // Assert
-      assertEquals(3, t.getSelectionLength());
-   }
+        // Assert
+        assertEquals(3, t.getSelectionLength());
+    }
 
-   @Test
-   public void name() {
-      // Arrange
-      TextArea t = new TextArea();
-      // Pre-Assert
-      assertEquals("", t.getName());
+    @Test
+    public void name() {
+        // Arrange
+        TextArea t = new TextArea();
+        // Pre-Assert
+        assertEquals("", t.getName());
 
-      // Act
-      t.setName("name");
+        // Act
+        t.setName("name");
 
-      // Assert
-      assertEquals("name", t.getName());
-   }
+        // Assert
+        assertEquals("name", t.getName());
+    }
 
-   @Test
-   public void text() {
-      // Arrange
-      TextArea t = new TextArea();
-      // Pre-Assert
-      assertEquals("", t.getText());
+    @Test
+    public void text() {
+        // Arrange
+        TextArea t = new TextArea();
+        // Pre-Assert
+        assertEquals("", t.getText());
 
-      // Act
-      t.setText("text");
+        // Act
+        t.setText("text");
 
-      // Assert
-      assertEquals("text", t.getText());
-   }
+        // Assert
+        assertEquals("text", t.getText());
+    }
 
-   @Test
-   public void title() {
-      // Arrange
-      TextArea t = new TextArea();
-      // Pre-Assert
-      assertEquals("", t.getTitle());
+    @Test
+    public void title() {
+        // Arrange
+        TextArea t = new TextArea();
+        // Pre-Assert
+        assertEquals("", t.getTitle());
 
-      // Act
-      t.setTitle("title");
+        // Act
+        t.setTitle("title");
 
-      // Assert
-      assertEquals("title", t.getTitle());
-   }
+        // Assert
+        assertEquals("title", t.getTitle());
+    }
 
-   @Test
-   public void visible() {
-      // Arrange
-      TextArea t = new TextArea();
-      // Pre-Assert
-      assertEquals(true, t.isVisible());
+    @Test
+    public void visible() {
+        // Arrange
+        TextArea t = new TextArea();
+        // Pre-Assert
+        assertEquals(true, t.isVisible());
 
-      // Act
-      t.setVisible(false);
+        // Act
+        t.setVisible(false);
 
-      // Assert
-      assertEquals(false, t.isVisible());
-   }
+        // Assert
+        assertEquals(false, t.isVisible());
+    }
 
-   @Test
-   public void visibleLines() {
-      // Arrange
-      TextArea t = new TextArea();
+    @Test
+    public void visibleLines() {
+        // Arrange
+        TextArea t = new TextArea();
 
-      // Act
-      t.setVisibleLines(10);
+        // Act
+        t.setVisibleLines(10);
 
-      // Assert
-      assertEquals(10, t.getVisibleLines());
-   }
+        // Assert
+        assertEquals(10, t.getVisibleLines());
+    }
 
 }

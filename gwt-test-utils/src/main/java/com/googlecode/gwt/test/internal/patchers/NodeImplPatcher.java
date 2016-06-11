@@ -9,10 +9,10 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 @PatchClass(target = "com.google.gwt.xml.client.impl.NodeImpl")
 class NodeImplPatcher {
 
-   @PatchMethod
-   static String toString(Node nodeImpl) {
-      JavaScriptObject jso = GwtReflectionUtils.getPrivateFieldValue(nodeImpl, "jsObject");
-      return jso.toString();
-   }
+    @PatchMethod
+    static String toString(Node nodeImpl) {
+        JavaScriptObject jso = GwtReflectionUtils.getPrivateFieldValue(nodeImpl, "jsObject");
+        return jso.toString();
+    }
 
 }

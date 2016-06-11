@@ -1,28 +1,27 @@
 package com.googlecode.gwt.test;
 
-import static org.junit.Assert.assertEquals;
-
+import com.google.gwt.user.client.ui.Button;
 import org.junit.Test;
 
-import com.google.gwt.user.client.ui.Button;
+import static org.junit.Assert.assertEquals;
 
 public class DebugIdEnabledTest extends GwtTestTest {
 
-   @Override
-   public boolean ensureDebugId() {
-      return true;
-   }
+    @Override
+    public boolean ensureDebugId() {
+        return true;
+    }
 
-   @Test
-   public void ensureDebugId_Enabled() {
-      // Arrange
-      Button b = new Button();
+    @Test
+    public void ensureDebugId_Enabled() {
+        // Arrange
+        Button b = new Button();
 
-      // Act
-      b.ensureDebugId("myDebugId");
+        // Act
+        b.ensureDebugId("myDebugId");
 
-      // Assert
-      assertEquals("gwt-debug-myDebugId", b.getElement().getId());
-   }
+        // Assert
+        assertEquals("gwt-debug-myDebugId", b.getElement().getId());
+    }
 
 }

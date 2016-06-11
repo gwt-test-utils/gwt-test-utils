@@ -9,26 +9,26 @@ import com.google.gwt.user.client.ui.StackLayoutPanel;
 
 public class UiBinderWithStackLayoutPanel extends Composite {
 
-   interface MyUiBinder extends UiBinder<StackLayoutPanel, UiBinderWithStackLayoutPanel> {
-   }
+    interface MyUiBinder extends UiBinder<StackLayoutPanel, UiBinderWithStackLayoutPanel> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   Label customHeader;
+    @UiField
+    Label customHeader;
 
-   @UiField
-   Label first;
+    @UiField
+    Label first;
 
-   @UiField
-   Label second;
+    @UiField
+    Label second;
 
-   public UiBinderWithStackLayoutPanel() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithStackLayoutPanel() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public StackLayoutPanel getPanel() {
-      return (StackLayoutPanel) this.getWidget();
-   }
+    public StackLayoutPanel getPanel() {
+        return (StackLayoutPanel) this.getWidget();
+    }
 
 }

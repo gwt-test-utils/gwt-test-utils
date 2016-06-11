@@ -14,21 +14,14 @@
 
 package com.googlecode.html.filters;
 
-import org.apache.xerces.util.XMLChar;
-import org.apache.xerces.util.XMLStringBuffer;
-import org.apache.xerces.xni.Augmentations;
-import org.apache.xerces.xni.NamespaceContext;
-import org.apache.xerces.xni.QName;
-import org.apache.xerces.xni.XMLAttributes;
-import org.apache.xerces.xni.XMLLocator;
-import org.apache.xerces.xni.XMLString;
-import org.apache.xerces.xni.XNIException;
-import org.apache.xerces.xni.parser.XMLComponentManager;
-import org.apache.xerces.xni.parser.XMLConfigurationException;
-
 import com.googlecode.html.HTMLAugmentations;
 import com.googlecode.html.HTMLEventInfo;
 import com.googlecode.html.xercesbridge.XercesBridge;
+import org.apache.xerces.util.XMLChar;
+import org.apache.xerces.util.XMLStringBuffer;
+import org.apache.xerces.xni.*;
+import org.apache.xerces.xni.parser.XMLComponentManager;
+import org.apache.xerces.xni.parser.XMLConfigurationException;
 
 /**
  * This filter purifies the HTML input to ensure XML well-formedness. The purification process
@@ -58,386 +51,459 @@ import com.googlecode.html.xercesbridge.XercesBridge;
  * The URI used for synthesized namespace bindings is
  * "http://cyberneko.org/html/ns/synthesized/<i>number</i>" where <i>number</i> is generated to
  * ensure uniqueness.
- * 
+ *
  * @author Andy Clark
- * 
  * @version $Id: Purifier.java,v 1.5 2005/02/14 03:56:54 andyc Exp $
  */
 public class Purifier extends DefaultFilter {
 
-   //
-   // Constants
-   //
+    //
+    // Constants
+    //
 
-   /** Synthesized namespace binding prefix. */
-   public static final String SYNTHESIZED_NAMESPACE_PREFX = "http://cyberneko.org/html/ns/synthesized/";
+    /**
+     * Synthesized namespace binding prefix.
+     */
+    public static final String SYNTHESIZED_NAMESPACE_PREFX = "http://cyberneko.org/html/ns/synthesized/";
 
-   /** Include infoset augmentations. */
-   protected static final String AUGMENTATIONS = "http://cyberneko.org/html/features/augmentations";
+    /**
+     * Include infoset augmentations.
+     */
+    protected static final String AUGMENTATIONS = "http://cyberneko.org/html/features/augmentations";
 
-   /** Namespaces. */
-   protected static final String NAMESPACES = "http://xml.org/sax/features/namespaces";
+    /**
+     * Namespaces.
+     */
+    protected static final String NAMESPACES = "http://xml.org/sax/features/namespaces";
 
-   /** Synthesized event info item. */
-   protected static final HTMLEventInfo SYNTHESIZED_ITEM = new HTMLEventInfo.SynthesizedItem();
+    /**
+     * Synthesized event info item.
+     */
+    protected static final HTMLEventInfo SYNTHESIZED_ITEM = new HTMLEventInfo.SynthesizedItem();
 
-   // static vars
+    // static vars
 
-   /** Recognized features. */
-   private static final String[] RECOGNIZED_FEATURES = {NAMESPACES, AUGMENTATIONS,};
+    /**
+     * Recognized features.
+     */
+    private static final String[] RECOGNIZED_FEATURES = {NAMESPACES, AUGMENTATIONS,};
 
-   //
-   // Data
-   //
+    //
+    // Data
+    //
 
-   // features
+    // features
 
-   /** Returns a padded hexadecimal string for the given value. */
-   protected static String toHexString(int c, int padlen) {
-      StringBuffer str = new StringBuffer(padlen);
-      str.append(Integer.toHexString(c));
-      int len = padlen - str.length();
-      for (int i = 0; i < len; i++) {
-         str.insert(0, '0');
-      }
-      return str.toString().toUpperCase();
-   } // toHexString(int,int):String
+    /**
+     * Returns a padded hexadecimal string for the given value.
+     */
+    protected static String toHexString(int c, int padlen) {
+        StringBuffer str = new StringBuffer(padlen);
+        str.append(Integer.toHexString(c));
+        int len = padlen - str.length();
+        for (int i = 0; i < len; i++) {
+            str.insert(0, '0');
+        }
+        return str.toString().toUpperCase();
+    } // toHexString(int,int):String
 
-   /** Augmentations. */
-   protected boolean fAugmentations;
+    /**
+     * Augmentations.
+     */
+    protected boolean fAugmentations;
 
-   // state
+    // state
 
-   /** True if inside a CDATA section. */
-   protected boolean fInCDATASection;
+    /**
+     * True if inside a CDATA section.
+     */
+    protected boolean fInCDATASection;
 
-   /** Namespace information. */
-   protected NamespaceContext fNamespaceContext;
+    /**
+     * Namespace information.
+     */
+    protected NamespaceContext fNamespaceContext;
 
-   /** Namespaces. */
-   protected boolean fNamespaces;
+    /**
+     * Namespaces.
+     */
+    protected boolean fNamespaces;
 
-   // doctype declaration info
+    // doctype declaration info
 
-   /** Public identifier of doctype declaration. */
-   protected String fPublicId;
+    /**
+     * Public identifier of doctype declaration.
+     */
+    protected String fPublicId;
 
-   /** True if the doctype declaration was seen. */
-   protected boolean fSeenDoctype;
+    /**
+     * True if the doctype declaration was seen.
+     */
+    protected boolean fSeenDoctype;
 
-   // namespace info
+    // namespace info
 
-   /** True if root element was seen. */
-   protected boolean fSeenRootElement;
+    /**
+     * True if root element was seen.
+     */
+    protected boolean fSeenRootElement;
 
-   /** Synthesized namespace binding count. */
-   protected int fSynthesizedNamespaceCount;
+    /**
+     * Synthesized namespace binding count.
+     */
+    protected int fSynthesizedNamespaceCount;
 
-   // temp vars
+    // temp vars
 
-   /** System identifier of doctype declaration. */
-   protected String fSystemId;
+    /**
+     * System identifier of doctype declaration.
+     */
+    protected String fSystemId;
 
-   /** Augmentations. */
-   private final HTMLAugmentations fInfosetAugs = new HTMLAugmentations();
+    /**
+     * Augmentations.
+     */
+    private final HTMLAugmentations fInfosetAugs = new HTMLAugmentations();
 
-   /** Qualified name. */
-   private QName fQName = new QName();
+    /**
+     * Qualified name.
+     */
+    private QName fQName = new QName();
 
-   //
-   // XMLComponent methods
-   //
+    //
+    // XMLComponent methods
+    //
 
-   /** String buffer. */
-   private final XMLStringBuffer fStringBuffer = new XMLStringBuffer();
+    /**
+     * String buffer.
+     */
+    private final XMLStringBuffer fStringBuffer = new XMLStringBuffer();
 
-   //
-   // XMLDocumentHandler methods
-   //
+    //
+    // XMLDocumentHandler methods
+    //
 
-   /** Characters. */
-   public void characters(XMLString text, Augmentations augs) throws XNIException {
-      text = purifyText(text);
-      if (fInCDATASection) {
-         StringBuffer str = new StringBuffer(text.toString());
-         int length = str.length();
-         for (int i = length - 1; i >= 0; i--) {
+    /**
+     * Characters.
+     */
+    public void characters(XMLString text, Augmentations augs) throws XNIException {
+        text = purifyText(text);
+        if (fInCDATASection) {
+            StringBuffer str = new StringBuffer(text.toString());
+            int length = str.length();
+            for (int i = length - 1; i >= 0; i--) {
+                char c = str.charAt(i);
+                if (c == ']') {
+                    str.insert(i + 1, ' ');
+                }
+            }
+            fStringBuffer.length = 0;
+            fStringBuffer.append(str.toString());
+            text = fStringBuffer;
+        }
+        super.characters(text, augs);
+    } // characters(XMLString,Augmentations)
+
+    /**
+     * Comment.
+     */
+    public void comment(XMLString text, Augmentations augs) throws XNIException {
+        StringBuffer str = new StringBuffer(purifyText(text).toString());
+        int length = str.length();
+        for (int i = length - 1; i >= 0; i--) {
             char c = str.charAt(i);
-            if (c == ']') {
-               str.insert(i + 1, ' ');
+            if (c == '-') {
+                str.insert(i + 1, ' ');
             }
-         }
-         fStringBuffer.length = 0;
-         fStringBuffer.append(str.toString());
-         text = fStringBuffer;
-      }
-      super.characters(text, augs);
-   } // characters(XMLString,Augmentations)
+        }
+        fStringBuffer.length = 0;
+        fStringBuffer.append(str.toString());
+        text = fStringBuffer;
+        super.comment(text, augs);
+    } // comment(XMLString,Augmentations)
 
-   /** Comment. */
-   public void comment(XMLString text, Augmentations augs) throws XNIException {
-      StringBuffer str = new StringBuffer(purifyText(text).toString());
-      int length = str.length();
-      for (int i = length - 1; i >= 0; i--) {
-         char c = str.charAt(i);
-         if (c == '-') {
-            str.insert(i + 1, ' ');
-         }
-      }
-      fStringBuffer.length = 0;
-      fStringBuffer.append(str.toString());
-      text = fStringBuffer;
-      super.comment(text, augs);
-   } // comment(XMLString,Augmentations)
-
-   /** Doctype declaration. */
-   public void doctypeDecl(String root, String pubid, String sysid, Augmentations augs)
+    /**
+     * Doctype declaration.
+     */
+    public void doctypeDecl(String root, String pubid, String sysid, Augmentations augs)
             throws XNIException {
-      fSeenDoctype = true;
-      // NOTE: It doesn't matter what the root element name is because
-      // it must match the root element. -Ac
-      fPublicId = pubid;
-      fSystemId = sysid;
-      // NOTE: If the public identifier is specified, then a system
-      // identifier must also be specified. -Ac
-      if (fPublicId != null && fSystemId == null) {
-         fSystemId = "";
-      }
-      // NOTE: Can't save the augmentations because the object state
-      // is transient. -Ac
-   } // doctypeDecl(String,String,String,Augmentations)
+        fSeenDoctype = true;
+        // NOTE: It doesn't matter what the root element name is because
+        // it must match the root element. -Ac
+        fPublicId = pubid;
+        fSystemId = sysid;
+        // NOTE: If the public identifier is specified, then a system
+        // identifier must also be specified. -Ac
+        if (fPublicId != null && fSystemId == null) {
+            fSystemId = "";
+        }
+        // NOTE: Can't save the augmentations because the object state
+        // is transient. -Ac
+    } // doctypeDecl(String,String,String,Augmentations)
 
-   /** Empty element. */
-   public void emptyElement(QName element, XMLAttributes attrs, Augmentations augs)
+    /**
+     * Empty element.
+     */
+    public void emptyElement(QName element, XMLAttributes attrs, Augmentations augs)
             throws XNIException {
-      handleStartElement(element, attrs);
-      super.emptyElement(element, attrs, augs);
-   } // emptyElement(QName,XMLAttributes,Augmentations)
+        handleStartElement(element, attrs);
+        super.emptyElement(element, attrs, augs);
+    } // emptyElement(QName,XMLAttributes,Augmentations)
 
-   /** End CDATA section. */
-   public void endCDATA(Augmentations augs) throws XNIException {
-      fInCDATASection = false;
-      super.endCDATA(augs);
-   } // endCDATA(Augmentations)
+    /**
+     * End CDATA section.
+     */
+    public void endCDATA(Augmentations augs) throws XNIException {
+        fInCDATASection = false;
+        super.endCDATA(augs);
+    } // endCDATA(Augmentations)
 
-   /** End element. */
-   public void endElement(QName element, Augmentations augs) throws XNIException {
-      element = purifyQName(element);
-      if (fNamespaces) {
-         if (element.prefix != null && element.uri == null) {
-            element.uri = fNamespaceContext.getURI(element.prefix);
-         }
-      }
-      super.endElement(element, augs);
-   } // endElement(QName,Augmentations)
-
-   /** Processing instruction. */
-   public void processingInstruction(String target, XMLString data, Augmentations augs)
-            throws XNIException {
-      target = purifyName(target, true);
-      data = purifyText(data);
-      super.processingInstruction(target, data, augs);
-   } // processingInstruction(String,XMLString,Augmentations)
-
-   public void reset(XMLComponentManager manager) throws XMLConfigurationException {
-
-      // state
-      fInCDATASection = false;
-
-      // features
-      fNamespaces = manager.getFeature(NAMESPACES);
-      fAugmentations = manager.getFeature(AUGMENTATIONS);
-
-   } // reset(XMLComponentManager)
-
-   /** Start CDATA section. */
-   public void startCDATA(Augmentations augs) throws XNIException {
-      fInCDATASection = true;
-      super.startCDATA(augs);
-   } // startCDATA(Augmentations)
-
-   /** Start document. */
-   public void startDocument(XMLLocator locator, String encoding, Augmentations augs)
-            throws XNIException {
-      fNamespaceContext = fNamespaces ? new NamespaceBinder.NamespaceSupport() : null;
-      fSynthesizedNamespaceCount = 0;
-      handleStartDocument();
-      super.startDocument(locator, encoding, augs);
-   } // startDocument(XMLLocator,String,Augmentations)
-
-   /** Start document. */
-   public void startDocument(XMLLocator locator, String encoding, NamespaceContext nscontext,
-            Augmentations augs) throws XNIException {
-      fNamespaceContext = nscontext;
-      fSynthesizedNamespaceCount = 0;
-      handleStartDocument();
-      super.startDocument(locator, encoding, nscontext, augs);
-   } // startDocument(XMLLocator,NamespaceContext,String,Augmentations)
-
-   /** Start element. */
-   public void startElement(QName element, XMLAttributes attrs, Augmentations augs)
-            throws XNIException {
-      handleStartElement(element, attrs);
-      super.startElement(element, attrs, augs);
-   } // startElement(QName,XMLAttributes,Augmentations)
-
-   //
-   // Protected methods
-   //
-
-   /** XML declaration. */
-   public void xmlDecl(String version, String encoding, String standalone, Augmentations augs)
-            throws XNIException {
-      if (version == null || !version.equals("1.0")) {
-         version = "1.0";
-      }
-      if (encoding != null && encoding.length() == 0) {
-         encoding = null;
-      }
-      if (standalone != null) {
-         if (!standalone.equalsIgnoreCase("true") && !standalone.equalsIgnoreCase("false")) {
-            standalone = null;
-         } else {
-            standalone = standalone.toLowerCase();
-         }
-      }
-      super.xmlDecl(version, encoding, standalone, augs);
-   } // xmlDecl(String,String,String,Augmentations)
-
-   /** Handle start document. */
-   protected void handleStartDocument() {
-      fSeenDoctype = false;
-      fSeenRootElement = false;
-   } // handleStartDocument()
-
-   /** Handle start element. */
-   protected void handleStartElement(QName element, XMLAttributes attrs) {
-
-      // handle element and attributes
-      element = purifyQName(element);
-      int attrCount = attrs != null ? attrs.getLength() : 0;
-      for (int i = attrCount - 1; i >= 0; i--) {
-         // purify attribute name
-         attrs.getName(i, fQName);
-         attrs.setName(i, purifyQName(fQName));
-
-         // synthesize namespace bindings
-         if (fNamespaces) {
-            if (!fQName.rawname.equals("xmlns") && !fQName.rawname.startsWith("xmlns:")) {
-               // NOTE: Must get attribute name again because the
-               // purifyQName method does not guarantee that
-               // the same QName object is returned. -Ac
-               attrs.getName(i, fQName);
-               if (fQName.prefix != null && fQName.uri == null) {
-                  synthesizeBinding(attrs, fQName.prefix);
-               }
+    /**
+     * End element.
+     */
+    public void endElement(QName element, Augmentations augs) throws XNIException {
+        element = purifyQName(element);
+        if (fNamespaces) {
+            if (element.prefix != null && element.uri == null) {
+                element.uri = fNamespaceContext.getURI(element.prefix);
             }
-         }
-      }
+        }
+        super.endElement(element, augs);
+    } // endElement(QName,Augmentations)
 
-      // synthesize namespace bindings
-      if (fNamespaces) {
-         if (element.prefix != null && element.uri == null) {
-            synthesizeBinding(attrs, element.prefix);
-         }
-      }
+    /**
+     * Processing instruction.
+     */
+    public void processingInstruction(String target, XMLString data, Augmentations augs)
+            throws XNIException {
+        target = purifyName(target, true);
+        data = purifyText(data);
+        super.processingInstruction(target, data, augs);
+    } // processingInstruction(String,XMLString,Augmentations)
 
-      // synthesize doctype declaration
-      if (!fSeenRootElement && fSeenDoctype) {
-         Augmentations augs = synthesizedAugs();
-         super.doctypeDecl(element.rawname, fPublicId, fSystemId, augs);
-      }
+    public void reset(XMLComponentManager manager) throws XMLConfigurationException {
 
-      // mark start element as seen
-      fSeenRootElement = true;
+        // state
+        fInCDATASection = false;
 
-   } // handleStartElement(QName,XMLAttributes)
+        // features
+        fNamespaces = manager.getFeature(NAMESPACES);
+        fAugmentations = manager.getFeature(AUGMENTATIONS);
 
-   /** Purify name. */
-   protected String purifyName(String name, boolean localpart) {
-      if (name == null) {
-         return name;
-      }
-      StringBuffer str = new StringBuffer();
-      int length = name.length();
-      boolean seenColon = localpart;
-      for (int i = 0; i < length; i++) {
-         char c = name.charAt(i);
-         if (i == 0) {
-            if (!XMLChar.isNameStart(c)) {
-               str.append("_u" + toHexString(c, 4) + "_");
+    } // reset(XMLComponentManager)
+
+    /**
+     * Start CDATA section.
+     */
+    public void startCDATA(Augmentations augs) throws XNIException {
+        fInCDATASection = true;
+        super.startCDATA(augs);
+    } // startCDATA(Augmentations)
+
+    /**
+     * Start document.
+     */
+    public void startDocument(XMLLocator locator, String encoding, Augmentations augs)
+            throws XNIException {
+        fNamespaceContext = fNamespaces ? new NamespaceBinder.NamespaceSupport() : null;
+        fSynthesizedNamespaceCount = 0;
+        handleStartDocument();
+        super.startDocument(locator, encoding, augs);
+    } // startDocument(XMLLocator,String,Augmentations)
+
+    /**
+     * Start document.
+     */
+    public void startDocument(XMLLocator locator, String encoding, NamespaceContext nscontext,
+                              Augmentations augs) throws XNIException {
+        fNamespaceContext = nscontext;
+        fSynthesizedNamespaceCount = 0;
+        handleStartDocument();
+        super.startDocument(locator, encoding, nscontext, augs);
+    } // startDocument(XMLLocator,NamespaceContext,String,Augmentations)
+
+    /**
+     * Start element.
+     */
+    public void startElement(QName element, XMLAttributes attrs, Augmentations augs)
+            throws XNIException {
+        handleStartElement(element, attrs);
+        super.startElement(element, attrs, augs);
+    } // startElement(QName,XMLAttributes,Augmentations)
+
+    //
+    // Protected methods
+    //
+
+    /**
+     * XML declaration.
+     */
+    public void xmlDecl(String version, String encoding, String standalone, Augmentations augs)
+            throws XNIException {
+        if (version == null || !version.equals("1.0")) {
+            version = "1.0";
+        }
+        if (encoding != null && encoding.length() == 0) {
+            encoding = null;
+        }
+        if (standalone != null) {
+            if (!standalone.equalsIgnoreCase("true") && !standalone.equalsIgnoreCase("false")) {
+                standalone = null;
             } else {
-               str.append(c);
+                standalone = standalone.toLowerCase();
             }
-         } else {
-            if ((fNamespaces && c == ':' && seenColon) || !XMLChar.isName(c)) {
-               str.append("_u" + toHexString(c, 4) + "_");
+        }
+        super.xmlDecl(version, encoding, standalone, augs);
+    } // xmlDecl(String,String,String,Augmentations)
+
+    /**
+     * Handle start document.
+     */
+    protected void handleStartDocument() {
+        fSeenDoctype = false;
+        fSeenRootElement = false;
+    } // handleStartDocument()
+
+    /**
+     * Handle start element.
+     */
+    protected void handleStartElement(QName element, XMLAttributes attrs) {
+
+        // handle element and attributes
+        element = purifyQName(element);
+        int attrCount = attrs != null ? attrs.getLength() : 0;
+        for (int i = attrCount - 1; i >= 0; i--) {
+            // purify attribute name
+            attrs.getName(i, fQName);
+            attrs.setName(i, purifyQName(fQName));
+
+            // synthesize namespace bindings
+            if (fNamespaces) {
+                if (!fQName.rawname.equals("xmlns") && !fQName.rawname.startsWith("xmlns:")) {
+                    // NOTE: Must get attribute name again because the
+                    // purifyQName method does not guarantee that
+                    // the same QName object is returned. -Ac
+                    attrs.getName(i, fQName);
+                    if (fQName.prefix != null && fQName.uri == null) {
+                        synthesizeBinding(attrs, fQName.prefix);
+                    }
+                }
+            }
+        }
+
+        // synthesize namespace bindings
+        if (fNamespaces) {
+            if (element.prefix != null && element.uri == null) {
+                synthesizeBinding(attrs, element.prefix);
+            }
+        }
+
+        // synthesize doctype declaration
+        if (!fSeenRootElement && fSeenDoctype) {
+            Augmentations augs = synthesizedAugs();
+            super.doctypeDecl(element.rawname, fPublicId, fSystemId, augs);
+        }
+
+        // mark start element as seen
+        fSeenRootElement = true;
+
+    } // handleStartElement(QName,XMLAttributes)
+
+    /**
+     * Purify name.
+     */
+    protected String purifyName(String name, boolean localpart) {
+        if (name == null) {
+            return name;
+        }
+        StringBuffer str = new StringBuffer();
+        int length = name.length();
+        boolean seenColon = localpart;
+        for (int i = 0; i < length; i++) {
+            char c = name.charAt(i);
+            if (i == 0) {
+                if (!XMLChar.isNameStart(c)) {
+                    str.append("_u" + toHexString(c, 4) + "_");
+                } else {
+                    str.append(c);
+                }
             } else {
-               str.append(c);
+                if ((fNamespaces && c == ':' && seenColon) || !XMLChar.isName(c)) {
+                    str.append("_u" + toHexString(c, 4) + "_");
+                } else {
+                    str.append(c);
+                }
+                seenColon = seenColon || c == ':';
             }
-            seenColon = seenColon || c == ':';
-         }
-      }
-      return str.toString();
-   } // purifyName(String):String
+        }
+        return str.toString();
+    } // purifyName(String):String
 
-   //
-   // Protected methods
-   //
+    //
+    // Protected methods
+    //
 
-   /** Purify qualified name. */
-   protected QName purifyQName(QName qname) {
-      qname.prefix = purifyName(qname.prefix, true);
-      qname.localpart = purifyName(qname.localpart, true);
-      qname.rawname = purifyName(qname.rawname, false);
-      return qname;
-   } // purifyQName(QName):QName
+    /**
+     * Purify qualified name.
+     */
+    protected QName purifyQName(QName qname) {
+        qname.prefix = purifyName(qname.prefix, true);
+        qname.localpart = purifyName(qname.localpart, true);
+        qname.rawname = purifyName(qname.rawname, false);
+        return qname;
+    } // purifyQName(QName):QName
 
-   /** Purify content. */
-   protected XMLString purifyText(XMLString text) {
-      fStringBuffer.length = 0;
-      for (int i = 0; i < text.length; i++) {
-         char c = text.ch[text.offset + i];
-         if (XMLChar.isInvalid(c)) {
-            fStringBuffer.append("\\u" + toHexString(c, 4));
-         } else {
-            fStringBuffer.append(c);
-         }
-      }
-      return fStringBuffer;
-   } // purifyText(XMLString):XMLString
+    /**
+     * Purify content.
+     */
+    protected XMLString purifyText(XMLString text) {
+        fStringBuffer.length = 0;
+        for (int i = 0; i < text.length; i++) {
+            char c = text.ch[text.offset + i];
+            if (XMLChar.isInvalid(c)) {
+                fStringBuffer.append("\\u" + toHexString(c, 4));
+            } else {
+                fStringBuffer.append(c);
+            }
+        }
+        return fStringBuffer;
+    } // purifyText(XMLString):XMLString
 
-   /** Synthesize namespace binding. */
-   protected void synthesizeBinding(XMLAttributes attrs, String ns) {
-      String prefix = "xmlns";
-      String localpart = ns;
-      String qname = prefix + ':' + localpart;
-      String uri = NamespaceBinder.NAMESPACES_URI;
-      String atype = "CDATA";
-      String avalue = SYNTHESIZED_NAMESPACE_PREFX + fSynthesizedNamespaceCount++;
+    /**
+     * Synthesize namespace binding.
+     */
+    protected void synthesizeBinding(XMLAttributes attrs, String ns) {
+        String prefix = "xmlns";
+        String localpart = ns;
+        String qname = prefix + ':' + localpart;
+        String uri = NamespaceBinder.NAMESPACES_URI;
+        String atype = "CDATA";
+        String avalue = SYNTHESIZED_NAMESPACE_PREFX + fSynthesizedNamespaceCount++;
 
-      // add attribute
-      fQName.setValues(prefix, localpart, qname, uri);
-      attrs.addAttribute(fQName, atype, avalue);
+        // add attribute
+        fQName.setValues(prefix, localpart, qname, uri);
+        attrs.addAttribute(fQName, atype, avalue);
 
-      // bind namespace
-      XercesBridge.getInstance().NamespaceContext_declarePrefix(fNamespaceContext, ns, avalue);
+        // bind namespace
+        XercesBridge.getInstance().NamespaceContext_declarePrefix(fNamespaceContext, ns, avalue);
 
-   } // synthesizeBinding(XMLAttributes,String)
+    } // synthesizeBinding(XMLAttributes,String)
 
-   //
-   // Protected static methods
-   //
+    //
+    // Protected static methods
+    //
 
-   /** Returns an augmentations object with a synthesized item added. */
-   protected final Augmentations synthesizedAugs() {
-      HTMLAugmentations augs = null;
-      if (fAugmentations) {
-         augs = fInfosetAugs;
-         augs.removeAllItems();
-         augs.putItem(AUGMENTATIONS, SYNTHESIZED_ITEM);
-      }
-      return augs;
-   } // synthesizedAugs():Augmentations
+    /**
+     * Returns an augmentations object with a synthesized item added.
+     */
+    protected final Augmentations synthesizedAugs() {
+        HTMLAugmentations augs = null;
+        if (fAugmentations) {
+            augs = fInfosetAugs;
+            augs.removeAllItems();
+            augs.putItem(AUGMENTATIONS, SYNTHESIZED_ITEM);
+        }
+        return augs;
+    } // synthesizedAugs():Augmentations
 
 } // class Purifier

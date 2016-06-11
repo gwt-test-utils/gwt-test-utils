@@ -8,8 +8,8 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(ScrollPanel.class)
 class ScrollPanelPatcher {
 
-   @PatchMethod
-   static void ensureVisibleImpl(ScrollPanel scrollPanel, Element scroll, Element e) {
+    @PatchMethod
+    static void ensureVisibleImpl(ScrollPanel scrollPanel, Element scroll, Element e) {
 
-   }
+    }
 }

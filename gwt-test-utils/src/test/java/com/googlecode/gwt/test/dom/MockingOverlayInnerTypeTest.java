@@ -1,35 +1,34 @@
 package com.googlecode.gwt.test.dom;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.googlecode.gwt.test.GwtTestTest;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.googlecode.gwt.test.GwtTestTest;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 public class MockingOverlayInnerTypeTest extends GwtTestTest {
 
-   @Test
-   public void withEasyMock() {
-      // Act
-      NativePreviewEvent event = EasyMock.createMock(NativePreviewEvent.class);
+    @Test
+    public void withEasyMock() {
+        // Act
+        NativePreviewEvent event = EasyMock.createMock(NativePreviewEvent.class);
 
-      // Assert
-      assertThat(event).isNotNull();
-   }
+        // Assert
+        assertThat(event).isNotNull();
+    }
 
-   @Test
-   public void withMockito() {
-      // Arrange
-      // see MockNamePatcher
+    @Test
+    public void withMockito() {
+        // Arrange
+        // see MockNamePatcher
 
-      // Act
-      NativePreviewEvent event = Mockito.mock(NativePreviewEvent.class);
+        // Act
+        NativePreviewEvent event = Mockito.mock(NativePreviewEvent.class);
 
-      // Assert
-      assertThat(event).isNotNull();
-   }
+        // Assert
+        assertThat(event).isNotNull();
+    }
 
 }

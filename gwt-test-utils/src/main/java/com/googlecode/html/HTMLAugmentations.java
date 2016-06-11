@@ -14,10 +14,10 @@
 
 package com.googlecode.html;
 
+import org.apache.xerces.xni.Augmentations;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
-
-import org.apache.xerces.xni.Augmentations;
 
 /**
  * This class is here to overcome the XNI changes to the <code>Augmentations</code> interface. In
@@ -28,100 +28,104 @@ import org.apache.xerces.xni.Augmentations;
  * <p>
  * <strong>Note:</strong> This code is inspired by performance enhancements submitted by Marc-André
  * Morissette.
- * 
+ *
  * @author Andy Clark
  */
 public class HTMLAugmentations implements Augmentations {
 
-   //
-   // Data
-   //
+    //
+    // Data
+    //
 
-   /** Augmentation items. */
-   protected final Hashtable fItems = new Hashtable();
+    /**
+     * Augmentation items.
+     */
+    protected final Hashtable fItems = new Hashtable();
 
-   //
-   // Public methods
-   //
-   public HTMLAugmentations() {
-      // nothing
-   }
+    //
+    // Public methods
+    //
+    public HTMLAugmentations() {
+        // nothing
+    }
 
-   /**
-    * Copy constructor
-    * 
-    * @param augs the object to copy
-    */
-   HTMLAugmentations(final Augmentations augs) {
-      for (final Enumeration keys = augs.keys(); keys.hasMoreElements();) {
-         final String key = (String) keys.nextElement();
-         Object value = augs.getItem(key);
-         if (value instanceof HTMLScanner.LocationItem) {
-            value = new HTMLScanner.LocationItem((HTMLScanner.LocationItem) value);
-         }
-         fItems.put(key, value);
-      }
-   }
+    /**
+     * Copy constructor
+     *
+     * @param augs the object to copy
+     */
+    HTMLAugmentations(final Augmentations augs) {
+        for (final Enumeration keys = augs.keys(); keys.hasMoreElements(); ) {
+            final String key = (String) keys.nextElement();
+            Object value = augs.getItem(key);
+            if (value instanceof HTMLScanner.LocationItem) {
+                value = new HTMLScanner.LocationItem((HTMLScanner.LocationItem) value);
+            }
+            fItems.put(key, value);
+        }
+    }
 
-   // since Xerces 2.3.0
+    // since Xerces 2.3.0
 
-   /** Removes all of the elements in this augmentations object. */
-   public void clear() {
-      fItems.clear();
-   } // clear()
+    /**
+     * Removes all of the elements in this augmentations object.
+     */
+    public void clear() {
+        fItems.clear();
+    } // clear()
 
-   // from Xerces 2.0.0 (beta4) until 2.3.0
+    // from Xerces 2.0.0 (beta4) until 2.3.0
 
-   /**
-    * Get information identified by a key from the Augmentations structure.
-    * 
-    * @param key Identifier, can't be <code>null</code>
-    * 
-    * @return The value to which the key is mapped in the Augmentations structure; <code>null</code>
-    *         if the key is not mapped to any value.
-    */
-   public Object getItem(String key) {
-      return fItems.get(key);
-   } // getItem(String):Object
+    /**
+     * Get information identified by a key from the Augmentations structure.
+     *
+     * @param key Identifier, can't be <code>null</code>
+     * @return The value to which the key is mapped in the Augmentations structure; <code>null</code>
+     * if the key is not mapped to any value.
+     */
+    public Object getItem(String key) {
+        return fItems.get(key);
+    } // getItem(String):Object
 
-   //
-   // Augmentations methods
-   //
+    //
+    // Augmentations methods
+    //
 
-   /**
-    * Returns an enumeration of the keys in the Augmentations structure.
-    */
-   public Enumeration keys() {
-      return fItems.keys();
-   } // keys():Enumeration
+    /**
+     * Returns an enumeration of the keys in the Augmentations structure.
+     */
+    public Enumeration keys() {
+        return fItems.keys();
+    } // keys():Enumeration
 
-   /**
-    * Add additional information identified by a key to the Augmentations structure.
-    * 
-    * @param key Identifier, can't be <code>null</code>
-    * @param item Additional information
-    * 
-    * @return The previous value of the specified key in the Augmentations structure, or
-    *         <code>null</code> if it did not have one.
-    */
-   public Object putItem(String key, Object item) {
-      return fItems.put(key, item);
-   } // putItem(String, Object):Object
+    /**
+     * Add additional information identified by a key to the Augmentations structure.
+     *
+     * @param key  Identifier, can't be <code>null</code>
+     * @param item Additional information
+     * @return The previous value of the specified key in the Augmentations structure, or
+     * <code>null</code> if it did not have one.
+     */
+    public Object putItem(String key, Object item) {
+        return fItems.put(key, item);
+    } // putItem(String, Object):Object
 
-   /** Removes all of the elements in this augmentations object. */
-   public void removeAllItems() {
-      fItems.clear();
-   } // removeAllItems()
+    /**
+     * Removes all of the elements in this augmentations object.
+     */
+    public void removeAllItems() {
+        fItems.clear();
+    } // removeAllItems()
 
-   /**
-    * Remove additional info from the Augmentations structure
-    * 
-    * @param key Identifier, can't be <code>null</code>
-    * @return The previous value of the specified key in the Augmentations structure, or
-    *         <code>null</code> if it did not have one.
-    */
-   public Object removeItem(String key) {
-      return fItems.remove(key);
-   } // removeItem(String):Object
+    /**
+     * Remove additional info from the Augmentations structure
+     *
+     * @param key Identifier, can't be <code>null</code>
+     * @return The previous value of the specified key in the Augmentations structure, or
+     * <code>null</code> if it did not have one.
+     */
+    public Object removeItem(String key) {
+        return fItems.remove(key);
+    } // removeItem(String):Object
 
 } // class HTMLAugmentations

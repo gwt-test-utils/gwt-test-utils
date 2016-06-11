@@ -7,14 +7,14 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(Duration.class)
 class DurationPatcher {
 
-   @PatchMethod
-   static double currentTimeMillis() {
-      return System.currentTimeMillis();
-   }
+    @PatchMethod
+    static double currentTimeMillis() {
+        return System.currentTimeMillis();
+    }
 
-   @PatchMethod
-   static int uncheckedConversion(double elapsed) {
-      return (int) elapsed;
-   }
+    @PatchMethod
+    static int uncheckedConversion(double elapsed) {
+        return (int) elapsed;
+    }
 
 }

@@ -9,23 +9,23 @@ import com.googlecode.gwt.test.utils.JavaScriptObjects;
 @PatchClass(ElementMapperImpl.class)
 class ElementMapperImplPatcher {
 
-   private static final String widgetId = "__uiObjectID";
+    private static final String widgetId = "__uiObjectID";
 
-   @PatchMethod
-   static void clearIndex(Element e) {
-      JavaScriptObjects.setProperty(e, widgetId, null);
-      e.setPropertyString(widgetId, null);
-   }
+    @PatchMethod
+    static void clearIndex(Element e) {
+        JavaScriptObjects.setProperty(e, widgetId, null);
+        e.setPropertyString(widgetId, null);
+    }
 
-   @PatchMethod
-   static int getIndex(Element e) {
-      String index = JavaScriptObjects.getObject(e, widgetId);
-      return index == null ? -1 : Integer.parseInt(index);
-   }
+    @PatchMethod
+    static int getIndex(Element e) {
+        String index = JavaScriptObjects.getObject(e, widgetId);
+        return index == null ? -1 : Integer.parseInt(index);
+    }
 
-   @PatchMethod
-   static void setIndex(Element e, int index) {
-      JavaScriptObjects.setProperty(e, widgetId, Integer.toString(index));
-   }
+    @PatchMethod
+    static void setIndex(Element e, int index) {
+        JavaScriptObjects.setProperty(e, widgetId, Integer.toString(index));
+    }
 
 }

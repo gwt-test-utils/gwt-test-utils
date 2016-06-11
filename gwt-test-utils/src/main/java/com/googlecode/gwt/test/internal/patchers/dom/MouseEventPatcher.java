@@ -7,14 +7,14 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(MouseEvent.class)
 class MouseEventPatcher {
 
-   @PatchMethod
-   static int getX(MouseEvent<?> event) {
-      return event.getClientX();
-   }
+    @PatchMethod
+    static int getX(MouseEvent<?> event) {
+        return event.getClientX();
+    }
 
-   @PatchMethod
-   static int getY(MouseEvent<?> event) {
-      return event.getClientY();
-   }
+    @PatchMethod
+    static int getY(MouseEvent<?> event) {
+        return event.getClientY();
+    }
 
 }

@@ -6,46 +6,45 @@ import org.fest.assertions.description.TextDescription;
 
 /**
  * Writable information about a GWT assertion.
- * 
+ *
  * @author Gael Lazzari
- * 
  */
 class GwtWritableAssertionInfo extends WritableAssertionInfo {
 
-   private String prefix;
+    private String prefix;
 
-   @Override
-   public Description description() {
-      return (prefix == null) ? super.description()
-               : new TextDescription(computeDescribitionText());
-   }
+    @Override
+    public Description description() {
+        return (prefix == null) ? super.description()
+                : new TextDescription(computeDescribitionText());
+    }
 
-   @Override
-   public String descriptionText() {
-      return (prefix == null) ? super.descriptionText() : computeDescribitionText();
-   }
+    @Override
+    public String descriptionText() {
+        return (prefix == null) ? super.descriptionText() : computeDescribitionText();
+    }
 
-   public String prefix() {
-      return prefix;
-   }
+    public String prefix() {
+        return prefix;
+    }
 
-   public void prefix(String prefix) {
-      this.prefix = prefix;
-   }
+    public void prefix(String prefix) {
+        this.prefix = prefix;
+    }
 
-   public Description superDescription() {
-      return super.description();
-   }
+    public Description superDescription() {
+        return super.description();
+    }
 
-   private String computeDescribitionText() {
-      StringBuilder sb = new StringBuilder();
-      sb.append(prefix.trim());
+    private String computeDescribitionText() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix.trim());
 
-      Description d = super.description();
-      if (d != null) {
-         sb.append(" ").append(d.value());
-      }
-      return sb.toString();
-   }
+        Description d = super.description();
+        if (d != null) {
+            sb.append(" ").append(d.value());
+        }
+        return sb.toString();
+    }
 
 }

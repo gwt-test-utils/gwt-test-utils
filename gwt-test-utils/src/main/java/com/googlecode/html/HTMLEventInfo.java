@@ -17,101 +17,130 @@ package com.googlecode.html;
 /**
  * This interface is used to pass augmentated information to the application through the XNI
  * pipeline.
- * 
+ *
  * @author Andy Clark
- * 
  * @version $Id: HTMLEventInfo.java,v 1.4 2005/02/14 03:56:54 andyc Exp $
  */
 public interface HTMLEventInfo {
 
-   //
-   // HTMLEventInfo methods
-   //
+    //
+    // HTMLEventInfo methods
+    //
 
-   // location information
+    // location information
 
-   /**
-    * Synthesized infoset item.
-    * 
-    * @author Andy Clark
-    */
-   public static class SynthesizedItem implements HTMLEventInfo {
+    /**
+     * Synthesized infoset item.
+     *
+     * @author Andy Clark
+     */
+    public static class SynthesizedItem implements HTMLEventInfo {
 
-      //
-      // HTMLEventInfo methods
-      //
+        //
+        // HTMLEventInfo methods
+        //
 
-      // location information
+        // location information
 
-      /** Returns the character offset of the beginning of this event. */
-      public int getBeginCharacterOffset() {
-         return -1;
-      } // getBeginCharacterOffset():int
+        /**
+         * Returns the character offset of the beginning of this event.
+         */
+        public int getBeginCharacterOffset() {
+            return -1;
+        } // getBeginCharacterOffset():int
 
-      /** Returns the column number of the beginning of this event. */
-      public int getBeginColumnNumber() {
-         return -1;
-      } // getBeginColumnNumber():int
+        /**
+         * Returns the column number of the beginning of this event.
+         */
+        public int getBeginColumnNumber() {
+            return -1;
+        } // getBeginColumnNumber():int
 
-      /** Returns the line number of the beginning of this event. */
-      public int getBeginLineNumber() {
-         return -1;
-      } // getBeginLineNumber():int
+        /**
+         * Returns the line number of the beginning of this event.
+         */
+        public int getBeginLineNumber() {
+            return -1;
+        } // getBeginLineNumber():int
 
-      /** Returns the character offset of the end of this event. */
-      public int getEndCharacterOffset() {
-         return -1;
-      } // getEndCharacterOffset():int
+        /**
+         * Returns the character offset of the end of this event.
+         */
+        public int getEndCharacterOffset() {
+            return -1;
+        } // getEndCharacterOffset():int
 
-      /** Returns the column number of the end of this event. */
-      public int getEndColumnNumber() {
-         return -1;
-      } // getEndColumnNumber():int
+        /**
+         * Returns the column number of the end of this event.
+         */
+        public int getEndColumnNumber() {
+            return -1;
+        } // getEndColumnNumber():int
 
-      /** Returns the line number of the end of this event. */
-      public int getEndLineNumber() {
-         return -1;
-      } // getEndLineNumber():int
+        /**
+         * Returns the line number of the end of this event.
+         */
+        public int getEndLineNumber() {
+            return -1;
+        } // getEndLineNumber():int
 
-      // other information
+        // other information
 
-      /** Returns true if this corresponding event was synthesized. */
-      public boolean isSynthesized() {
-         return true;
-      } // isSynthesized():boolean
+        /**
+         * Returns true if this corresponding event was synthesized.
+         */
+        public boolean isSynthesized() {
+            return true;
+        } // isSynthesized():boolean
 
-      //
-      // Object methods
-      //
+        //
+        // Object methods
+        //
 
-      /** Returns a string representation of this object. */
-      public String toString() {
-         return "synthesized";
-      } // toString():String
+        /**
+         * Returns a string representation of this object.
+         */
+        public String toString() {
+            return "synthesized";
+        } // toString():String
 
-   } // class SynthesizedItem
+    } // class SynthesizedItem
 
-   /** Returns the character offset of the beginning of this event. */
-   public int getBeginCharacterOffset();
+    /**
+     * Returns the character offset of the beginning of this event.
+     */
+    public int getBeginCharacterOffset();
 
-   /** Returns the column number of the beginning of this event. */
-   public int getBeginColumnNumber();
+    /**
+     * Returns the column number of the beginning of this event.
+     */
+    public int getBeginColumnNumber();
 
-   /** Returns the line number of the beginning of this event. */
-   public int getBeginLineNumber();
+    /**
+     * Returns the line number of the beginning of this event.
+     */
+    public int getBeginLineNumber();
 
-   /** Returns the character offset of the end of this event. */
-   public int getEndCharacterOffset();
+    /**
+     * Returns the character offset of the end of this event.
+     */
+    public int getEndCharacterOffset();
 
-   /** Returns the column number of the end of this event. */
-   public int getEndColumnNumber();
+    /**
+     * Returns the column number of the end of this event.
+     */
+    public int getEndColumnNumber();
 
-   // other information
+    // other information
 
-   /** Returns the line number of the end of this event. */
-   public int getEndLineNumber();
+    /**
+     * Returns the line number of the end of this event.
+     */
+    public int getEndLineNumber();
 
-   /** Returns true if this corresponding event was synthesized. */
-   public boolean isSynthesized();
+    /**
+     * Returns true if this corresponding event was synthesized.
+     */
+    public boolean isSynthesized();
 
 } // interface HTMLEventInfo

@@ -1,67 +1,66 @@
 package com.googlecode.gwt.test;
 
-import static org.junit.Assert.assertEquals;
-
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import org.junit.Test;
 
-import com.google.gwt.user.client.ui.PasswordTextBox;
+import static org.junit.Assert.assertEquals;
 
 public class PasswordTextBoxTest extends GwtTestTest {
 
-   @Test
-   public void name() {
-      // Arrange
-      PasswordTextBox ptb = new PasswordTextBox();
-      // Pre-Assert
-      assertEquals("", ptb.getName());
+    @Test
+    public void name() {
+        // Arrange
+        PasswordTextBox ptb = new PasswordTextBox();
+        // Pre-Assert
+        assertEquals("", ptb.getName());
 
-      // Act
-      ptb.setName("name");
+        // Act
+        ptb.setName("name");
 
-      // Assert
-      assertEquals("name", ptb.getName());
-   }
+        // Assert
+        assertEquals("name", ptb.getName());
+    }
 
-   @Test
-   public void text() {
-      // Arrange
-      PasswordTextBox ptb = new PasswordTextBox();
-      // Pre-Assert
-      assertEquals("", ptb.getText());
+    @Test
+    public void text() {
+        // Arrange
+        PasswordTextBox ptb = new PasswordTextBox();
+        // Pre-Assert
+        assertEquals("", ptb.getText());
 
-      // Act
-      ptb.setText("text");
+        // Act
+        ptb.setText("text");
 
-      // Assert
-      assertEquals("text", ptb.getText());
-   }
+        // Assert
+        assertEquals("text", ptb.getText());
+    }
 
-   @Test
-   public void title() {
-      // Arrange
-      PasswordTextBox ptb = new PasswordTextBox();
-      // Pre-Assert
-      assertEquals("", ptb.getTitle());
+    @Test
+    public void title() {
+        // Arrange
+        PasswordTextBox ptb = new PasswordTextBox();
+        // Pre-Assert
+        assertEquals("", ptb.getTitle());
 
-      // Act
-      ptb.setTitle("title");
+        // Act
+        ptb.setTitle("title");
 
-      // Assert
-      assertEquals("title", ptb.getTitle());
-   }
+        // Assert
+        assertEquals("title", ptb.getTitle());
+    }
 
-   @Test
-   public void visible() {
-      // Arrange
-      PasswordTextBox ptb = new PasswordTextBox();
-      // Pre-Assert
-      assertEquals(true, ptb.isVisible());
+    @Test
+    public void visible() {
+        // Arrange
+        PasswordTextBox ptb = new PasswordTextBox();
+        // Pre-Assert
+        assertEquals(true, ptb.isVisible());
 
-      // Act
-      ptb.setVisible(false);
+        // Act
+        ptb.setVisible(false);
 
-      // Assert
-      assertEquals(false, ptb.isVisible());
-   }
+        // Assert
+        assertEquals(false, ptb.isVisible());
+    }
 
 }

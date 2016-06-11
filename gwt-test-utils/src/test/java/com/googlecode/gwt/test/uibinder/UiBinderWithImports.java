@@ -11,32 +11,32 @@ import com.google.gwt.user.client.ui.Label;
 
 public class UiBinderWithImports extends Composite {
 
-   @UiTemplate("UiBinderWithImports-UiTemplate.ui.xml")
-   interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderWithImports> {
-   }
+    @UiTemplate("UiBinderWithImports-UiTemplate.ui.xml")
+    interface MyUiBinder extends UiBinder<HTMLPanel, UiBinderWithImports> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   Label enumImport;
+    @UiField
+    Label enumImport;
 
-   @UiField
-   Label multipleConstantsImport;
+    @UiField
+    Label multipleConstantsImport;
 
-   @UiField
-   DateLabel myDateLabel;
+    @UiField
+    DateLabel myDateLabel;
 
-   @UiField
-   DateLabel myDateLabel2;
+    @UiField
+    DateLabel myDateLabel2;
 
-   @UiField
-   DateLabel myDateLabel3;
+    @UiField
+    DateLabel myDateLabel3;
 
-   @UiField
-   Label singleConstantImport;
+    @UiField
+    Label singleConstantImport;
 
-   public UiBinderWithImports() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithImports() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
 }

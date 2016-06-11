@@ -10,33 +10,33 @@ import com.google.gwt.user.client.ui.Label;
 
 public class UiBinderWithDockLayoutPanel extends Composite {
 
-   interface UiBinderWithDocLayoutPanelUiBinder extends
+    interface UiBinderWithDocLayoutPanelUiBinder extends
             UiBinder<DockLayoutPanel, UiBinderWithDockLayoutPanel> {
-   }
+    }
 
-   private static UiBinderWithDocLayoutPanelUiBinder uiBinder = GWT.create(UiBinderWithDocLayoutPanelUiBinder.class);
+    private static UiBinderWithDocLayoutPanelUiBinder uiBinder = GWT.create(UiBinderWithDocLayoutPanelUiBinder.class);
 
-   @UiField
-   Label centerLabel;
+    @UiField
+    Label centerLabel;
 
-   @UiField
-   Label eastLabel;
+    @UiField
+    Label eastLabel;
 
-   @UiField
-   Label northLabel;
+    @UiField
+    Label northLabel;
 
-   @UiField
-   Label southLabel;
+    @UiField
+    Label southLabel;
 
-   @UiField
-   HTML westHTML;
+    @UiField
+    HTML westHTML;
 
-   public UiBinderWithDockLayoutPanel() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithDockLayoutPanel() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public DockLayoutPanel getLayout() {
-      return (DockLayoutPanel) getWidget();
-   }
+    public DockLayoutPanel getLayout() {
+        return (DockLayoutPanel) getWidget();
+    }
 
 }

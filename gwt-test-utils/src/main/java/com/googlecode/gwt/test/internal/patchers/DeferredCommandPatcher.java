@@ -10,14 +10,14 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(DeferredCommand.class)
 class DeferredCommandPatcher {
 
-   @PatchMethod
-   static void addCommand(Command command) {
-      command.execute();
-   }
+    @PatchMethod
+    static void addCommand(Command command) {
+        command.execute();
+    }
 
-   @PatchMethod
-   static void addCommand(IncrementalCommand command) {
-      command.execute();
-   }
+    @PatchMethod
+    static void addCommand(IncrementalCommand command) {
+        command.execute();
+    }
 
 }

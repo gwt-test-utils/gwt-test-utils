@@ -9,23 +9,23 @@ import com.google.gwt.user.client.ui.Label;
 
 public class UiBinderWithCellPanel extends Composite {
 
-   interface UiBinderCellPanelUiBinder extends UiBinder<CellPanel, UiBinderWithCellPanel> {
-   }
+    interface UiBinderCellPanelUiBinder extends UiBinder<CellPanel, UiBinderWithCellPanel> {
+    }
 
-   private static UiBinderCellPanelUiBinder uiBinder = GWT.create(UiBinderCellPanelUiBinder.class);
+    private static UiBinderCellPanelUiBinder uiBinder = GWT.create(UiBinderCellPanelUiBinder.class);
 
-   @UiField
-   Label leftSide;
+    @UiField
+    Label leftSide;
 
-   @UiField
-   Label rightSide;
+    @UiField
+    Label rightSide;
 
-   public UiBinderWithCellPanel() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithCellPanel() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public CellPanel getPanel() {
-      return (CellPanel) getWidget();
-   }
+    public CellPanel getPanel() {
+        return (CellPanel) getWidget();
+    }
 
 }

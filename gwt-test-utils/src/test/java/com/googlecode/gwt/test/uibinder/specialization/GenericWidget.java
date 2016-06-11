@@ -9,31 +9,31 @@ import com.google.gwt.user.client.ui.Widget;
 
 class GenericWidget<T> extends Composite {
 
-   @SuppressWarnings("rawtypes")
-   interface GenericWidgetContainerUiBinder extends UiBinder<Widget, GenericWidget> {
-   }
+    @SuppressWarnings("rawtypes")
+    interface GenericWidgetContainerUiBinder extends UiBinder<Widget, GenericWidget> {
+    }
 
-   static class ItemWidget extends GenericWidget<Item> {
+    static class ItemWidget extends GenericWidget<Item> {
 
-      public ItemWidget(final Item object) {
-         super(object);
-      }
-   }
+        public ItemWidget(final Item object) {
+            super(object);
+        }
+    }
 
-   static class PersonWidget extends GenericWidget<Person> {
+    static class PersonWidget extends GenericWidget<Person> {
 
-      public PersonWidget(final Person object) {
-         super(object);
-      }
-   }
+        public PersonWidget(final Person object) {
+            super(object);
+        }
+    }
 
-   private static GenericWidgetContainerUiBinder uiBinder = GWT.create(GenericWidgetContainerUiBinder.class);
+    private static GenericWidgetContainerUiBinder uiBinder = GWT.create(GenericWidgetContainerUiBinder.class);
 
-   @UiField
-   Label genericLabel;
+    @UiField
+    Label genericLabel;
 
-   public GenericWidget(final T object) {
-      initWidget(uiBinder.createAndBindUi(this));
-      genericLabel.setText(object.toString());
-   }
+    public GenericWidget(final T object) {
+        initWidget(uiBinder.createAndBindUi(this));
+        genericLabel.setText(object.toString());
+    }
 }

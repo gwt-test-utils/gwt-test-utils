@@ -1,17 +1,18 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.uibinder'>
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+>
 
-	<g:LayoutPanel>
-		<!-- No constraints causes the layer to fill the parent -->
-		<g:layer>
-			<g:Label ui:field="defaultLabel">Lorem ipsum...</g:Label>
-		</g:layer>
-		<!-- Position horizontally 25% from each edge; Vertically 4px from the 
-			top and 10em tall. -->
-		<g:layer left='25%' right='25%' top='4px' height='10em'>
-			<g:Label ui:field="headerLabel">Header</g:Label>
-		</g:layer>
-	</g:LayoutPanel>
+    <g:LayoutPanel>
+        <!-- No constraints causes the layer to fill the parent -->
+        <g:layer>
+            <g:Label ui:field="defaultLabel">Lorem ipsum...</g:Label>
+        </g:layer>
+        <!-- Position horizontally 25% from each edge; Vertically 4px from the
+            top and 10em tall. -->
+        <g:layer left='25%' right='25%' top='4px' height='10em'>
+            <g:Label ui:field="headerLabel">Header</g:Label>
+        </g:layer>
+    </g:LayoutPanel>
 </ui:UiBinder>
  

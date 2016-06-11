@@ -8,15 +8,14 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 
 /**
  * Patcher for {@link LoadingStateBehavior}.
- * 
+ *
  * @author Kenichiro Tanaka
- * 
  */
 @PatchClass(Button.LoadingStateBehavior.class)
 class ButtonLoadingStateBehaviorPatcher {
 
-   @PatchMethod
-   static void setLoadingBehavior(Button.LoadingStateBehavior lsb, Element e, String behavior) {
-      // Nothing to do??
-   }
+    @PatchMethod
+    static void setLoadingBehavior(Button.LoadingStateBehavior lsb, Element e, String behavior) {
+        // Nothing to do??
+    }
 }

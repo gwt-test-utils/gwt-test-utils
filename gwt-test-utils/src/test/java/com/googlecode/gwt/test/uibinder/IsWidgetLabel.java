@@ -6,18 +6,18 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class IsWidgetLabel implements IsWidget {
 
-   private final Label wrapped;
+    private final Label wrapped;
 
-   public IsWidgetLabel() {
-      wrapped = new Label("isWidget Label");
-   }
+    public IsWidgetLabel() {
+        wrapped = new Label("isWidget Label");
+    }
 
-   public Widget asWidget() {
-      return wrapped;
-   }
+    public Widget asWidget() {
+        return wrapped;
+    }
 
-   public String getText() {
-      return ((Label) asWidget()).getText();
-   }
+    public String getText() {
+        return ((Label) asWidget()).getText();
+    }
 
 }

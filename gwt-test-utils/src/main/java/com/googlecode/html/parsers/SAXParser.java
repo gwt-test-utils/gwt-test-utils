@@ -14,26 +14,26 @@
 
 package com.googlecode.html.parsers;
 
-import org.apache.xerces.parsers.AbstractSAXParser;
-
 import com.googlecode.html.HTMLConfiguration;
+import org.apache.xerces.parsers.AbstractSAXParser;
 
 /**
  * A SAX parser for HTML documents.
- * 
+ *
  * @author Andy Clark
- * 
  * @version $Id: SAXParser.java,v 1.4 2005/02/14 03:56:54 andyc Exp $
  */
 public class SAXParser extends AbstractSAXParser {
 
-   //
-   // Constructors
-   //
+    //
+    // Constructors
+    //
 
-   /** Default constructor. */
-   public SAXParser() {
-      super(new HTMLConfiguration());
-   } // <init>()
+    /**
+     * Default constructor.
+     */
+    public SAXParser() {
+        super(new HTMLConfiguration());
+    } // <init>()
 
 } // class SAXParser

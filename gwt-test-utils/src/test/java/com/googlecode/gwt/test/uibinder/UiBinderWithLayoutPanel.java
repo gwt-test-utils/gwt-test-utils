@@ -9,23 +9,23 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 
 public class UiBinderWithLayoutPanel extends Composite {
 
-   interface MyUiBinder extends UiBinder<LayoutPanel, UiBinderWithLayoutPanel> {
-   }
+    interface MyUiBinder extends UiBinder<LayoutPanel, UiBinderWithLayoutPanel> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   Label defaultLabel;
+    @UiField
+    Label defaultLabel;
 
-   @UiField
-   Label headerLabel;
+    @UiField
+    Label headerLabel;
 
-   public UiBinderWithLayoutPanel() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithLayoutPanel() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public LayoutPanel getPanel() {
-      return (LayoutPanel) this.getWidget();
-   }
+    public LayoutPanel getPanel() {
+        return (LayoutPanel) this.getWidget();
+    }
 
 }

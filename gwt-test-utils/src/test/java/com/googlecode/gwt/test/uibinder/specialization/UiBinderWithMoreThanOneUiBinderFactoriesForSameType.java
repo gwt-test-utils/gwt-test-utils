@@ -11,29 +11,29 @@ import com.googlecode.gwt.test.uibinder.specialization.GenericWidget.PersonWidge
 
 class UiBinderWithMoreThanOneUiBinderFactoriesForSameType extends Composite {
 
-   interface MyUiBinder extends
+    interface MyUiBinder extends
             UiBinder<HTMLPanel, UiBinderWithMoreThanOneUiBinderFactoriesForSameType> {
-   }
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   public GenericWidget<Item> itemWidget;
+    @UiField
+    public GenericWidget<Item> itemWidget;
 
-   @UiField
-   public GenericWidget<Person> personWidget;
+    @UiField
+    public GenericWidget<Person> personWidget;
 
-   public UiBinderWithMoreThanOneUiBinderFactoriesForSameType() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithMoreThanOneUiBinderFactoriesForSameType() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   @UiFactory
-   protected ItemWidget createItemWidget() {
-      return new ItemWidget(new Item("item created by @UiFactory"));
-   }
+    @UiFactory
+    protected ItemWidget createItemWidget() {
+        return new ItemWidget(new Item("item created by @UiFactory"));
+    }
 
-   @UiFactory
-   protected PersonWidget createPersonWidget() {
-      return new PersonWidget(new Person("person created by @UiFactory"));
-   }
+    @UiFactory
+    protected PersonWidget createPersonWidget() {
+        return new PersonWidget(new Person("person created by @UiFactory"));
+    }
 }

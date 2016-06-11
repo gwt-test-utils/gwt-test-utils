@@ -9,11 +9,11 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 @PatchClass(target = "com.google.gwt.xml.client.impl.ProcessingInstructionImpl")
 class ProcessingInstructionImplPatcher {
 
-   @PatchMethod
-   static String toString(ProcessingInstruction processingInstruction) {
-      JavaScriptObject jso = GwtReflectionUtils.getPrivateFieldValue(processingInstruction,
-               "jsObject");
-      return jso.toString();
-   }
+    @PatchMethod
+    static String toString(ProcessingInstruction processingInstruction) {
+        JavaScriptObject jso = GwtReflectionUtils.getPrivateFieldValue(processingInstruction,
+                "jsObject");
+        return jso.toString();
+    }
 
 }

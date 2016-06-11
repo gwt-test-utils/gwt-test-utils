@@ -26,19 +26,19 @@ import org.apache.xerces.xni.XMLDocumentHandler;
  * <li>are configured using {@link HTMLConfiguration}</li>
  * <li>activate the tag balancing feature</li>
  * </ul>
- * 
+ *
  * @author Marc Guillemot
  * @version $Id: HTMLTagBalancingListener.java 260 2009-09-02 08:26:01Z mguillem $
  */
 public interface HTMLTagBalancingListener {
-   /**
-    * Notifies that the end element has been ignored.
-    */
-   void ignoredEndElement(QName element, Augmentations augs);
+    /**
+     * Notifies that the end element has been ignored.
+     */
+    void ignoredEndElement(QName element, Augmentations augs);
 
-   /**
-    * Notifies that the start element has been ignored.
-    */
-   void ignoredStartElement(QName elem, XMLAttributes attrs, Augmentations augs);
+    /**
+     * Notifies that the start element has been ignored.
+     */
+    void ignoredStartElement(QName elem, XMLAttributes attrs, Augmentations augs);
 
 }

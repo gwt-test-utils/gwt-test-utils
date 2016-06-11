@@ -7,14 +7,14 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(History.class)
 class HistoryPatcher {
 
-   @PatchMethod
-   static void back() {
-      HistoryImplPatcher.BROWSER_HISTORY.back();
-   }
+    @PatchMethod
+    static void back() {
+        HistoryImplPatcher.BROWSER_HISTORY.back();
+    }
 
-   @PatchMethod
-   static void forward() {
-      HistoryImplPatcher.BROWSER_HISTORY.forward();
-   }
+    @PatchMethod
+    static void forward() {
+        HistoryImplPatcher.BROWSER_HISTORY.forward();
+    }
 
 }

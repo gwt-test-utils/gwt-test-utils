@@ -9,25 +9,25 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(TableSectionElement.class)
 class TableSectionElementPatcher {
 
-   @PatchMethod
-   static void deleteRow(TableSectionElement e, int index) {
-      NodeList<TableRowElement> rows = e.getRows();
+    @PatchMethod
+    static void deleteRow(TableSectionElement e, int index) {
+        NodeList<TableRowElement> rows = e.getRows();
 
-      if (rows.getLength() < 1) {
-         return;
-      }
+        if (rows.getLength() < 1) {
+            return;
+        }
 
-      if (index == -1) {
-         index = rows.getLength() - 1;
-      }
+        if (index == -1) {
+            index = rows.getLength() - 1;
+        }
 
-      TableRowElement rowToDelete = rows.getItem(index);
-      e.removeChild(rowToDelete);
-   }
+        TableRowElement rowToDelete = rows.getItem(index);
+        e.removeChild(rowToDelete);
+    }
 
-   @PatchMethod
-   static NodeList<TableRowElement> getRows(TableSectionElement e) {
-      // deep search
-      return e.getElementsByTagName("tr").cast();
-   }
+    @PatchMethod
+    static NodeList<TableRowElement> getRows(TableSectionElement e) {
+        // deep search
+        return e.getElementsByTagName("tr").cast();
+    }
 }

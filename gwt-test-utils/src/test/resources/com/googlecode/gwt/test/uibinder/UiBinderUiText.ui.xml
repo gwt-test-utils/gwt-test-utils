@@ -1,16 +1,21 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:test='urn:import:com.googlecode.gwt.test.uibinder'>
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+>
 
-	<ui:with field='res'
-		type='com.googlecode.gwt.test.resources.MyClientBundle' />
+    <ui:with field='res'
+             type='com.googlecode.gwt.test.resources.MyClientBundle'/>
 
-	<ui:with field="msgRes"
-		type="com.googlecode.gwt.test.i18n.MyMessages"/>
+    <ui:with field="msgRes"
+             type="com.googlecode.gwt.test.i18n.MyMessages"/>
 
-	<g:HTMLPanel>
-		<g:Label ui:field="label">Text : <ui:text from='{res.textResourceTxt}' /></g:Label>
-		<g:Label ui:field="msgLabel">Text : <ui:text from='{msgRes.orangeColor}' /></g:Label>
-	</g:HTMLPanel>
+    <g:HTMLPanel>
+        <g:Label ui:field="label">Text :
+            <ui:text from='{res.textResourceTxt}'/>
+        </g:Label>
+        <g:Label ui:field="msgLabel">Text :
+            <ui:text from='{msgRes.orangeColor}'/>
+        </g:Label>
+    </g:HTMLPanel>
 
 </ui:UiBinder>

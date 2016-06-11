@@ -4,10 +4,10 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class SimpleJS extends JavaScriptObject {
 
-   protected SimpleJS() {
-   }
+    protected SimpleJS() {
+    }
 
-   public final native String getString() /*-{
-                                          return this.string;
-                                          }-*/;
+    public final native String getString() /*-{
+        return this.string;
+    }-*/;
 }

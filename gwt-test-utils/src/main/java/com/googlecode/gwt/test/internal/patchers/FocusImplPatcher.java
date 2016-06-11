@@ -8,14 +8,14 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(FocusImpl.class)
 class FocusImplPatcher {
 
-   @PatchMethod
-   static void blur(FocusImpl focusImpl, Element element) {
+    @PatchMethod
+    static void blur(FocusImpl focusImpl, Element element) {
 
-   }
+    }
 
-   @PatchMethod
-   static void focus(FocusImpl focusImpl, Element element) {
+    @PatchMethod
+    static void focus(FocusImpl focusImpl, Element element) {
 
-   }
+    }
 
 }

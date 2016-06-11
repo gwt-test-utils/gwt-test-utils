@@ -11,22 +11,22 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class PersonEditor extends Composite implements Editor<Person> {
 
-   interface Binder extends UiBinder<Widget, PersonEditor> {
-   }
+    interface Binder extends UiBinder<Widget, PersonEditor> {
+    }
 
-   interface PersonDriver extends SimpleBeanEditorDriver<Person, PersonEditor> {
-   }
+    interface PersonDriver extends SimpleBeanEditorDriver<Person, PersonEditor> {
+    }
 
-   private static final Binder BINDER = GWT.create(Binder.class);
+    private static final Binder BINDER = GWT.create(Binder.class);
 
-   @UiField
-   AddressEditor address;
-   @UiField
-   TextBox firstName;
-   @UiField
-   TextBox lastName;
+    @UiField
+    AddressEditor address;
+    @UiField
+    TextBox firstName;
+    @UiField
+    TextBox lastName;
 
-   public PersonEditor() {
-      initWidget(BINDER.createAndBindUi(this));
-   }
+    public PersonEditor() {
+        initWidget(BINDER.createAndBindUi(this));
+    }
 }

@@ -8,20 +8,20 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.UIObject;
 
 public class UiBinderWithDom extends UIObject { // Could extend Widget instead
-   interface MyUiBinder extends UiBinder<DivElement, UiBinderWithDom> {
-   }
+    interface MyUiBinder extends UiBinder<DivElement, UiBinderWithDom> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   SpanElement nameSpan;
+    @UiField
+    SpanElement nameSpan;
 
-   public UiBinderWithDom() {
-      // createAndBindUi initializes this.nameSpan
-      setElement(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithDom() {
+        // createAndBindUi initializes this.nameSpan
+        setElement(uiBinder.createAndBindUi(this));
+    }
 
-   public void setName(String name) {
-      nameSpan.setInnerText(name);
-   }
+    public void setName(String name) {
+        nameSpan.setInnerText(name);
+    }
 }

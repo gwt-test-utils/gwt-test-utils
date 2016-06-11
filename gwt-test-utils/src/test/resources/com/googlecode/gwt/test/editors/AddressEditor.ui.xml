@@ -1,12 +1,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
 
-	<g:HTMLPanel>		
-		<g:TextBox ui:field='street'></g:TextBox>
-		<g:TextBox ui:field='zipWithPath'></g:TextBox>
-		<g:TextBox ui:field='city'></g:TextBox>
-		<g:ValueListBox ui:field='stateWithPath'></g:ValueListBox> 
-	</g:HTMLPanel>
+    <g:HTMLPanel>
+        <g:TextBox ui:field='street'></g:TextBox>
+        <g:TextBox ui:field='zipWithPath'></g:TextBox>
+        <g:TextBox ui:field='city'></g:TextBox>
+        <g:ValueListBox ui:field='stateWithPath'></g:ValueListBox>
+    </g:HTMLPanel>
 
 </ui:UiBinder>

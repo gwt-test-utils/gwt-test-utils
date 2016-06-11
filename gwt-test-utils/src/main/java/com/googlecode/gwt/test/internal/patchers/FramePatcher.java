@@ -8,16 +8,16 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(Frame.class)
 class FramePatcher {
 
-   @PatchMethod
-   static String getUrl(Frame frame) {
-      IFrameElement e = frame.getElement().cast();
-      return e.getSrc();
-   }
+    @PatchMethod
+    static String getUrl(Frame frame) {
+        IFrameElement e = frame.getElement().cast();
+        return e.getSrc();
+    }
 
-   @PatchMethod
-   static void setUrl(Frame frame, String url) {
-      IFrameElement e = frame.getElement().cast();
-      e.setSrc(url);
-   }
+    @PatchMethod
+    static void setUrl(Frame frame, String url) {
+        IFrameElement e = frame.getElement().cast();
+        e.setSrc(url);
+    }
 
 }

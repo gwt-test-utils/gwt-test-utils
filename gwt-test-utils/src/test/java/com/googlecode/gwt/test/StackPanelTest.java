@@ -1,83 +1,84 @@
 package com.googlecode.gwt.test;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.googlecode.gwt.test.utils.events.Browser;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class StackPanelTest extends GwtTestTest {
 
-   private int index = -1;
+    private int index = -1;
 
-   @Test
-   public void click() {
-      // Arrange
-      index = -1;
-      StackPanel panel = new StackPanel() {
+    @Test
+    public void click() {
+        // Arrange
+        index = -1;
+        StackPanel panel = new StackPanel() {
 
-         @Override
-         public void showStack(int index) {
-            StackPanelTest.this.index = index;
-         };
-      };
+            @Override
+            public void showStack(int index) {
+                StackPanelTest.this.index = index;
+            }
 
-      panel.add(new Anchor());
-      panel.add(new Anchor());
+            ;
+        };
 
-      // Act
-      Browser.click(panel, 1);
+        panel.add(new Anchor());
+        panel.add(new Anchor());
 
-      // Assert
-      assertEquals(1, index);
-   }
+        // Act
+        Browser.click(panel, 1);
 
-   @Test
-   public void stackPanel() {
-      // Arrange
-      StackPanel panel = new StackPanel();
+        // Assert
+        assertEquals(1, index);
+    }
 
-      // Act
-      panel.add(new Label("Foo"), "foo");
-      Label label = new Label("Bar");
-      panel.add(label, "bar");
-      panel.add(new Label("Baz"), "baz");
+    @Test
+    public void stackPanel() {
+        // Arrange
+        StackPanel panel = new StackPanel();
 
-      // Assert
-      assertEquals(3, panel.getWidgetCount());
-      assertEquals(label, panel.getWidget(1));
-      assertEquals(1, panel.getWidgetIndex(label));
-   }
+        // Act
+        panel.add(new Label("Foo"), "foo");
+        Label label = new Label("Bar");
+        panel.add(label, "bar");
+        panel.add(new Label("Baz"), "baz");
 
-   @Test
-   public void title() {
-      // Arrange
-      StackPanel sp = new StackPanel();
-      // Pre-Assert
-      assertEquals("", sp.getTitle());
+        // Assert
+        assertEquals(3, panel.getWidgetCount());
+        assertEquals(label, panel.getWidget(1));
+        assertEquals(1, panel.getWidgetIndex(label));
+    }
 
-      // Act
-      sp.setTitle("title");
+    @Test
+    public void title() {
+        // Arrange
+        StackPanel sp = new StackPanel();
+        // Pre-Assert
+        assertEquals("", sp.getTitle());
 
-      // Assert
-      assertEquals("title", sp.getTitle());
-   }
+        // Act
+        sp.setTitle("title");
 
-   @Test
-   public void visible() {
-      // Arrange
-      StackPanel sp = new StackPanel();
-      // Pre-Assert
-      assertEquals(true, sp.isVisible());
+        // Assert
+        assertEquals("title", sp.getTitle());
+    }
 
-      // Act
-      sp.setVisible(false);
+    @Test
+    public void visible() {
+        // Arrange
+        StackPanel sp = new StackPanel();
+        // Pre-Assert
+        assertEquals(true, sp.isVisible());
 
-      // Assert
-      assertEquals(false, sp.isVisible());
-   }
+        // Act
+        sp.setVisible(false);
+
+        // Assert
+        assertEquals(false, sp.isVisible());
+    }
 
 }

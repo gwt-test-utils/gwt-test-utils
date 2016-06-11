@@ -1,16 +1,15 @@
 package com.googlecode.gwt.test.jukito;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-
+import com.google.inject.Inject;
+import com.google.inject.Provides;
+import com.googlecode.gwt.test.GwtTestTest;
 import org.jukito.JukitoModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.Inject;
-import com.google.inject.Provides;
-import com.googlecode.gwt.test.GwtTestTest;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Przemysław Gałązka
@@ -19,41 +18,41 @@ import com.googlecode.gwt.test.GwtTestTest;
 @RunWith(JukitoGwtTestRunner.class)
 public class JukitoGwtTestRunnerTest extends GwtTestTest {
 
-   public static class Module extends JukitoModule {
+    public static class Module extends JukitoModule {
 
-      @Override
-      protected void configureTest() {
-      }
+        @Override
+        protected void configureTest() {
+        }
 
-      @Provides
-      @Real
-      IsSuperButton realButton() {
-         return new SupperButtonImpl();
-      }
+        @Provides
+        @Real
+        IsSuperButton realButton() {
+            return new SupperButtonImpl();
+        }
 
-   }
+    }
 
-   @Inject
-   IsSuperButton someMockButton;
+    @Inject
+    IsSuperButton someMockButton;
 
-   @Test
-   public void shouldInjectBoundImplementation(@Real
-   IsSuperButton someRealButton) throws Exception {
-      assertThat(someRealButton, instanceOf(SupperButtonImpl.class));
-   }
+    @Test
+    public void shouldInjectBoundImplementation(@Real
+                                                        IsSuperButton someRealButton) throws Exception {
+        assertThat(someRealButton, instanceOf(SupperButtonImpl.class));
+    }
 
-   @Test
-   public void shouldWorkWithMocks() throws Exception {
-      // -------------------- GIVEN
-      // -------------------------------------------------------------------
+    @Test
+    public void shouldWorkWithMocks() throws Exception {
+        // -------------------- GIVEN
+        // -------------------------------------------------------------------
 
-      // -------------------- WHEN
-      // --------------------------------------------------------------------
-      someMockButton.setVisible(false);
+        // -------------------- WHEN
+        // --------------------------------------------------------------------
+        someMockButton.setVisible(false);
 
-      // -------------------- THEN
-      // --------------------------------------------------------------------
-      verify(someMockButton).setVisible(false);
-   }
+        // -------------------- THEN
+        // --------------------------------------------------------------------
+        verify(someMockButton).setVisible(false);
+    }
 
 }

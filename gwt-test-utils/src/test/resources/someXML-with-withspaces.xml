@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<parent>   
-	<child>child 1</child>
-	<child>    </child>
-	<child>child 3</child>
+<parent>
+    <child>child 1</child>
+    <child></child>
+    <child>child 3</child>
 </parent>

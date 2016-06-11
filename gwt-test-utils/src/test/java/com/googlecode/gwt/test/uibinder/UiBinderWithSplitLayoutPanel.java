@@ -10,33 +10,33 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
 public class UiBinderWithSplitLayoutPanel extends Composite {
 
-   interface UiBinderWithSplitLayoutPanelUiBinder extends
+    interface UiBinderWithSplitLayoutPanelUiBinder extends
             UiBinder<SplitLayoutPanel, UiBinderWithSplitLayoutPanel> {
-   }
+    }
 
-   private static UiBinderWithSplitLayoutPanelUiBinder uiBinder = GWT.create(UiBinderWithSplitLayoutPanelUiBinder.class);
+    private static UiBinderWithSplitLayoutPanelUiBinder uiBinder = GWT.create(UiBinderWithSplitLayoutPanelUiBinder.class);
 
-   @UiField
-   Label centerLabel;
+    @UiField
+    Label centerLabel;
 
-   @UiField
-   Label eastLabel;
+    @UiField
+    Label eastLabel;
 
-   @UiField
-   Label northLabel;
+    @UiField
+    Label northLabel;
 
-   @UiField
-   Label southLabel;
+    @UiField
+    Label southLabel;
 
-   @UiField
-   HTML westHTML;
+    @UiField
+    HTML westHTML;
 
-   public UiBinderWithSplitLayoutPanel() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithSplitLayoutPanel() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public SplitLayoutPanel getLayout() {
-      return (SplitLayoutPanel) getWidget();
-   }
+    public SplitLayoutPanel getLayout() {
+        return (SplitLayoutPanel) getWidget();
+    }
 
 }

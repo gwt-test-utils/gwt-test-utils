@@ -5,13 +5,13 @@ import com.googlecode.gwt.test.internal.junit.AbstractGwtRunnerFactory;
 
 public class GwtSpringRunner extends AbstractGwtRunner {
 
-   public GwtSpringRunner(Class<?> clazz) throws Throwable {
-      super(clazz);
-   }
+    public GwtSpringRunner(Class<?> clazz) throws Throwable {
+        super(clazz);
+    }
 
-   @Override
-   protected AbstractGwtRunnerFactory getRunnerFactory() {
-      return new GwtSpringRunnerFactory();
-   }
+    @Override
+    protected AbstractGwtRunnerFactory getRunnerFactory() {
+        return new GwtSpringRunnerFactory();
+    }
 
 }

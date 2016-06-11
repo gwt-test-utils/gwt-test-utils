@@ -10,17 +10,17 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 @PatchClass(StackPanel.class)
 class StackPanelPatcher {
 
-   @PatchMethod
-   static int findDividerIndex(StackPanel panel, Element child) {
-      WidgetCollection children = GwtReflectionUtils.getPrivateFieldValue(panel, "children");
+    @PatchMethod
+    static int findDividerIndex(StackPanel panel, Element child) {
+        WidgetCollection children = GwtReflectionUtils.getPrivateFieldValue(panel, "children");
 
-      for (int i = 0; i < children.size(); i++) {
-         if (children.get(i).getElement().equals(child)) {
-            return i;
-         }
-      }
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i).getElement().equals(child)) {
+                return i;
+            }
+        }
 
-      return -1;
-   }
+        return -1;
+    }
 
 }

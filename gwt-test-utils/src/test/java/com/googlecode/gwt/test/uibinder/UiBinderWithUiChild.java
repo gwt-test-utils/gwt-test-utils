@@ -6,17 +6,17 @@ import com.google.gwt.user.client.ui.Composite;
 
 public class UiBinderWithUiChild extends Composite {
 
-   interface MyUiBinder extends UiBinder<WidgetWithUiChild, UiBinderWithUiChild> {
-   }
+    interface MyUiBinder extends UiBinder<WidgetWithUiChild, UiBinderWithUiChild> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   public UiBinderWithUiChild() {
-      this.initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithUiChild() {
+        this.initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public WidgetWithUiChild getWidgetWithUiChild() {
-      return (WidgetWithUiChild) getWidget();
-   }
+    public WidgetWithUiChild getWidgetWithUiChild() {
+        return (WidgetWithUiChild) getWidget();
+    }
 
 }

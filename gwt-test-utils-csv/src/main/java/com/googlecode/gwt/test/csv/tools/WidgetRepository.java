@@ -5,21 +5,21 @@ import java.util.Map;
 
 public class WidgetRepository {
 
-   private final Map<String, Object> map = new HashMap<String, Object>();
+    private final Map<String, Object> map = new HashMap<String, Object>();
 
-   public Object addAlias(String alias, Object widget) {
-      return map.put(alias, widget);
-   }
+    public Object addAlias(String alias, Object widget) {
+        return map.put(alias, widget);
+    }
 
-   public void clear() {
-      map.clear();
-   }
+    public void clear() {
+        map.clear();
+    }
 
-   public Object getAlias(String alias) {
-      return map.get(alias);
-   }
+    public Object getAlias(String alias) {
+        return map.get(alias);
+    }
 
-   public Object removeAlias(String alias) {
-      return map.remove(alias);
-   }
+    public Object removeAlias(String alias) {
+        return map.remove(alias);
+    }
 }

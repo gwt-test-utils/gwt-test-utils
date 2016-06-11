@@ -9,26 +9,26 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 public class UiBinderWithTabLayoutPanel extends Composite {
 
-   interface MyUiBinder extends UiBinder<TabLayoutPanel, UiBinderWithTabLayoutPanel> {
-   }
+    interface MyUiBinder extends UiBinder<TabLayoutPanel, UiBinderWithTabLayoutPanel> {
+    }
 
-   private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-   @UiField
-   Label customHeader;
+    @UiField
+    Label customHeader;
 
-   @UiField
-   Label first;
+    @UiField
+    Label first;
 
-   @UiField
-   Label second;
+    @UiField
+    Label second;
 
-   public UiBinderWithTabLayoutPanel() {
-      initWidget(uiBinder.createAndBindUi(this));
-   }
+    public UiBinderWithTabLayoutPanel() {
+        initWidget(uiBinder.createAndBindUi(this));
+    }
 
-   public TabLayoutPanel getPanel() {
-      return (TabLayoutPanel) this.getWidget();
-   }
+    public TabLayoutPanel getPanel() {
+        return (TabLayoutPanel) this.getWidget();
+    }
 
 }

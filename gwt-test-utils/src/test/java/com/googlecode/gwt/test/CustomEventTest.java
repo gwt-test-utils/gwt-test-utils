@@ -1,217 +1,220 @@
 package com.googlecode.gwt.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerManager;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CustomEventTest extends GwtTestTest {
 
-   private static class ItemAddedEvent extends GwtEvent<ItemAddedHandler> {
-      private static final Type<ItemAddedHandler> TYPE = new Type<ItemAddedHandler>();
+    private static class ItemAddedEvent extends GwtEvent<ItemAddedHandler> {
+        private static final Type<ItemAddedHandler> TYPE = new Type<ItemAddedHandler>();
 
-      public static Type<ItemAddedHandler> getType() {
-         return TYPE;
-      }
+        public static Type<ItemAddedHandler> getType() {
+            return TYPE;
+        }
 
-      private final ListItem listItem;
+        private final ListItem listItem;
 
-      public ItemAddedEvent(ListItem listItem) {
-         this.listItem = listItem;
-      }
+        public ItemAddedEvent(ListItem listItem) {
+            this.listItem = listItem;
+        }
 
-      @Override
-      public com.google.gwt.event.shared.GwtEvent.Type<ItemAddedHandler> getAssociatedType() {
-         return TYPE;
-      }
+        @Override
+        public com.google.gwt.event.shared.GwtEvent.Type<ItemAddedHandler> getAssociatedType() {
+            return TYPE;
+        }
 
-      /** @returns The item added to the model */
-      public ListItem getListItem() {
-         return listItem;
-      }
+        /**
+         * @returns The item added to the model
+         */
+        public ListItem getListItem() {
+            return listItem;
+        }
 
-      @Override
-      protected void dispatch(ItemAddedHandler handler) {
-         handler.onItemAdded(this);
-      }
-   }
-   private static interface ItemAddedHandler extends EventHandler {
+        @Override
+        protected void dispatch(ItemAddedHandler handler) {
+            handler.onItemAdded(this);
+        }
+    }
 
-      void onItemAdded(ItemAddedEvent event);
-   }
-   private static class ItemRemovedEvent extends GwtEvent<ItemRemovedHandler> {
-      private static final Type<ItemRemovedHandler> TYPE = new Type<ItemRemovedHandler>();
+    private static interface ItemAddedHandler extends EventHandler {
 
-      public static Type<ItemRemovedHandler> getType() {
-         return TYPE;
-      }
+        void onItemAdded(ItemAddedEvent event);
+    }
 
-      private final ListItem listItem;
+    private static class ItemRemovedEvent extends GwtEvent<ItemRemovedHandler> {
+        private static final Type<ItemRemovedHandler> TYPE = new Type<ItemRemovedHandler>();
 
-      public ItemRemovedEvent(ListItem listItem) {
-         this.listItem = listItem;
-      }
+        public static Type<ItemRemovedHandler> getType() {
+            return TYPE;
+        }
 
-      @Override
-      public com.google.gwt.event.shared.GwtEvent.Type<ItemRemovedHandler> getAssociatedType() {
-         return TYPE;
-      }
+        private final ListItem listItem;
 
-      public ListItem getListItem() {
-         return listItem;
-      }
+        public ItemRemovedEvent(ListItem listItem) {
+            this.listItem = listItem;
+        }
 
-      @Override
-      protected void dispatch(ItemRemovedHandler handler) {
-         handler.onItemRemoved(this);
-      }
-   }
+        @Override
+        public com.google.gwt.event.shared.GwtEvent.Type<ItemRemovedHandler> getAssociatedType() {
+            return TYPE;
+        }
 
-   private static interface ItemRemovedHandler extends EventHandler {
+        public ListItem getListItem() {
+            return listItem;
+        }
 
-      void onItemRemoved(ItemRemovedEvent event);
-   }
+        @Override
+        protected void dispatch(ItemRemovedHandler handler) {
+            handler.onItemRemoved(this);
+        }
+    }
 
-   private static class ListItem {
+    private static interface ItemRemovedHandler extends EventHandler {
 
-      private final String text;
+        void onItemRemoved(ItemRemovedEvent event);
+    }
 
-      public ListItem(String text) {
-         this.text = text;
-      }
+    private static class ListItem {
 
-      @Override
-      public boolean equals(Object obj) {
-         if (this == obj) {
-            return true;
-         }
-         if (obj == null) {
-            return false;
-         }
-         if (getClass() != obj.getClass()) {
-            return false;
-         }
-         ListItem other = (ListItem) obj;
-         if (text == null) {
-            if (other.text != null) {
-               return false;
+        private final String text;
+
+        public ListItem(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
             }
-         } else if (!text.equals(other.text)) {
-            return false;
-         }
-         return true;
-      }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            ListItem other = (ListItem) obj;
+            if (text == null) {
+                if (other.text != null) {
+                    return false;
+                }
+            } else if (!text.equals(other.text)) {
+                return false;
+            }
+            return true;
+        }
 
-      public String getText() {
-         return text;
-      }
+        public String getText() {
+            return text;
+        }
 
-      @Override
-      public int hashCode() {
-         final int prime = 31;
-         int result = 1;
-         result = prime * result + ((text == null) ? 0 : text.hashCode());
-         return result;
-      }
-   }
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((text == null) ? 0 : text.hashCode());
+            return result;
+        }
+    }
 
-   private static class ListModel {
-      private final HandlerManager handlerManager = new HandlerManager(this);
-      private final List<ListItem> items = new ArrayList<ListItem>();
+    private static class ListModel {
+        private final HandlerManager handlerManager = new HandlerManager(this);
+        private final List<ListItem> items = new ArrayList<ListItem>();
 
-      public void addItem(ListItem item) {
-         items.add(item);
-         handlerManager.fireEvent(new ItemAddedEvent(item));
-      }
+        public void addItem(ListItem item) {
+            items.add(item);
+            handlerManager.fireEvent(new ItemAddedEvent(item));
+        }
 
-      public void addItemAddedHandler(ItemAddedHandler handler) {
-         handlerManager.addHandler(ItemAddedEvent.getType(), handler);
-      }
+        public void addItemAddedHandler(ItemAddedHandler handler) {
+            handlerManager.addHandler(ItemAddedEvent.getType(), handler);
+        }
 
-      public void addItemRemovedHandler(ItemRemovedHandler handler) {
-         handlerManager.addHandler(ItemRemovedEvent.getType(), handler);
-      }
+        public void addItemRemovedHandler(ItemRemovedHandler handler) {
+            handlerManager.addHandler(ItemRemovedEvent.getType(), handler);
+        }
 
-      public void removeItem(ListItem item) {
-         items.remove(item);
-         handlerManager.fireEvent(new ItemRemovedEvent(item));
-      }
-   }
+        public void removeItem(ListItem item) {
+            items.remove(item);
+            handlerManager.fireEvent(new ItemRemovedEvent(item));
+        }
+    }
 
-   private int addCount;
-   private ListModel listModel;
-   private int removeCount;
+    private int addCount;
+    private ListModel listModel;
+    private int removeCount;
 
-   @Test
-   public void add() {
-      // Arrange
-      listModel.addItemAddedHandler(new ItemAddedHandler() {
+    @Test
+    public void add() {
+        // Arrange
+        listModel.addItemAddedHandler(new ItemAddedHandler() {
 
-         public void onItemAdded(ItemAddedEvent event) {
-            addCount++;
-            assertEquals("addedItem", event.getListItem().getText());
+            public void onItemAdded(ItemAddedEvent event) {
+                addCount++;
+                assertEquals("addedItem", event.getListItem().getText());
 
-         }
-      });
+            }
+        });
 
-      listModel.addItemRemovedHandler(new ItemRemovedHandler() {
+        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
 
-         public void onItemRemoved(ItemRemovedEvent event) {
-            fail();
-         }
-      });
+            public void onItemRemoved(ItemRemovedEvent event) {
+                fail();
+            }
+        });
 
-      // Act
-      listModel.addItem(new ListItem("addedItem"));
+        // Act
+        listModel.addItem(new ListItem("addedItem"));
 
-      // Assert
-      assertEquals(1, addCount);
-      assertEquals(0, removeCount);
-   }
+        // Assert
+        assertEquals(1, addCount);
+        assertEquals(0, removeCount);
+    }
 
-   @Before
-   public void beforeCustomEventTest() {
-      listModel = new ListModel();
-      addCount = 0;
-      removeCount = 0;
-   }
+    @Before
+    public void beforeCustomEventTest() {
+        listModel = new ListModel();
+        addCount = 0;
+        removeCount = 0;
+    }
 
-   @Test
-   public void remove() {
-      // Arrange
-      final ListItem itemToRemove = new ListItem("itemToRemove");
-      listModel.addItem(itemToRemove);
+    @Test
+    public void remove() {
+        // Arrange
+        final ListItem itemToRemove = new ListItem("itemToRemove");
+        listModel.addItem(itemToRemove);
 
-      listModel.addItemRemovedHandler(new ItemRemovedHandler() {
+        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
 
-         public void onItemRemoved(ItemRemovedEvent event) {
-            removeCount++;
-            assertEquals(itemToRemove, event.getListItem());
-         }
+            public void onItemRemoved(ItemRemovedEvent event) {
+                removeCount++;
+                assertEquals(itemToRemove, event.getListItem());
+            }
 
-      });
+        });
 
-      listModel.addItemAddedHandler(new ItemAddedHandler() {
+        listModel.addItemAddedHandler(new ItemAddedHandler() {
 
-         public void onItemAdded(ItemAddedEvent event) {
-            fail();
+            public void onItemAdded(ItemAddedEvent event) {
+                fail();
 
-         }
-      });
+            }
+        });
 
-      // Act
-      listModel.removeItem(itemToRemove);
+        // Act
+        listModel.removeItem(itemToRemove);
 
-      // Assert
-      assertEquals(1, removeCount);
-   }
+        // Assert
+        assertEquals(1, removeCount);
+    }
 
 }

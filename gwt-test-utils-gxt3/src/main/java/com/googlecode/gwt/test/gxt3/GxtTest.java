@@ -1,11 +1,10 @@
 package com.googlecode.gwt.test.gxt3;
 
-import org.junit.After;
-import org.junit.Before;
-
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.gxt3.internal.handlers.BindingPropertySetCreateHandler;
 import com.googlecode.gwt.test.gxt3.internal.handlers.XtemplatesCreateHandler;
+import org.junit.After;
+import org.junit.Before;
 
 /**
  * <p>
@@ -15,15 +14,15 @@ import com.googlecode.gwt.test.gxt3.internal.handlers.XtemplatesCreateHandler;
  */
 public abstract class GxtTest extends GwtTest {
 
-  @Before
-  public final void setupGxtTest() {
-    addGwtCreateHandler(new BindingPropertySetCreateHandler());
-    addGwtCreateHandler(XtemplatesCreateHandler.get());
-  }
+    @Before
+    public final void setupGxtTest() {
+        addGwtCreateHandler(new BindingPropertySetCreateHandler());
+        addGwtCreateHandler(XtemplatesCreateHandler.get());
+    }
 
-  @After
-  public final void tearDownGxtTest() throws Exception {
-    GxtReset.get().reset();
-  }
+    @After
+    public final void tearDownGxtTest() throws Exception {
+        GxtReset.get().reset();
+    }
 
 }

@@ -7,11 +7,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 public interface WidgetVisitor {
 
-   void visitHasHTML(HasHTML hasHTML, WidgetRepository repository);
+    void visitHasHTML(HasHTML hasHTML, WidgetRepository repository);
 
-   void visitHasName(HasName hasName, WidgetRepository repository);
+    void visitHasName(HasName hasName, WidgetRepository repository);
 
-   void visitHasText(HasText hasText, WidgetRepository repository);
+    void visitHasText(HasText hasText, WidgetRepository repository);
 
-   void visitWidget(Widget widget, WidgetRepository repository);
+    void visitWidget(Widget widget, WidgetRepository repository);
 }

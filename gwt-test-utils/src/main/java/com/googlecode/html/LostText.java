@@ -13,69 +13,68 @@
  */
 package com.googlecode.html;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.xerces.xni.Augmentations;
 import org.apache.xerces.xni.XMLDocumentHandler;
 import org.apache.xerces.xni.XMLString;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Container for text that should be hold and re-feed later like text before &lt;html&gt; that will
  * be re-feed in &lt;body&gt;
- * 
+ *
  * @author Marc Guillemot
- * 
  * @version $Id: LostText.java 226 2009-02-09 20:48:44Z mguillem $
  */
 class LostText {
-   /**
-    * Pair of (text, augmentation)
-    */
-   static class Entry {
-      private Augmentations augs_;
-      private XMLString text_;
+    /**
+     * Pair of (text, augmentation)
+     */
+    static class Entry {
+        private Augmentations augs_;
+        private XMLString text_;
 
-      public Entry(final XMLString text, final Augmentations augs) {
-         final char[] chars = new char[text.length];
-         System.arraycopy(text.ch, text.offset, chars, 0, text.length);
-         text_ = new XMLString(chars, 0, chars.length);
-         if (augs != null)
-            augs_ = new HTMLAugmentations(augs);
-      }
-   }
+        public Entry(final XMLString text, final Augmentations augs) {
+            final char[] chars = new char[text.length];
+            System.arraycopy(text.ch, text.offset, chars, 0, text.length);
+            text_ = new XMLString(chars, 0, chars.length);
+            if (augs != null)
+                augs_ = new HTMLAugmentations(augs);
+        }
+    }
 
-   private final List entries = new ArrayList();
+    private final List entries = new ArrayList();
 
-   /**
-    * Adds some text that need to be re-feed later. The information gets copied.
-    */
-   public void add(final XMLString text, final Augmentations augs) {
-      if (!entries.isEmpty() || text.toString().trim().length() > 0)
-         entries.add(new Entry(text, augs));
-   }
+    /**
+     * Adds some text that need to be re-feed later. The information gets copied.
+     */
+    public void add(final XMLString text, final Augmentations augs) {
+        if (!entries.isEmpty() || text.toString().trim().length() > 0)
+            entries.add(new Entry(text, augs));
+    }
 
-   /**
-    * Indicates if this container contains something
-    * 
-    * @return <code>true</code> if no lost text has been collected
-    */
-   public boolean isEmpty() {
-      return entries.isEmpty();
-   }
+    /**
+     * Indicates if this container contains something
+     *
+     * @return <code>true</code> if no lost text has been collected
+     */
+    public boolean isEmpty() {
+        return entries.isEmpty();
+    }
 
-   /**
-    * Pushes the characters into the {@link XMLDocumentHandler}
-    * 
-    * @param tagBalancer the tag balancer that will receive the events
-    */
-   public void refeed(final XMLDocumentHandler tagBalancer) {
-      for (final Iterator iter = entries.iterator(); iter.hasNext();) {
-         final LostText.Entry entry = (LostText.Entry) iter.next();
-         tagBalancer.characters(entry.text_, entry.augs_);
-      }
-      // not needed anymore once it has been used -> clear to free memory
-      entries.clear();
-   }
+    /**
+     * Pushes the characters into the {@link XMLDocumentHandler}
+     *
+     * @param tagBalancer the tag balancer that will receive the events
+     */
+    public void refeed(final XMLDocumentHandler tagBalancer) {
+        for (final Iterator iter = entries.iterator(); iter.hasNext(); ) {
+            final LostText.Entry entry = (LostText.Entry) iter.next();
+            tagBalancer.characters(entry.text_, entry.augs_);
+        }
+        // not needed anymore once it has been used -> clear to free memory
+        entries.clear();
+    }
 }

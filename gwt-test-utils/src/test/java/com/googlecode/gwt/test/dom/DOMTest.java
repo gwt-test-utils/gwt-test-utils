@@ -1,317 +1,295 @@
 package com.googlecode.gwt.test.dom;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import com.google.gwt.dom.client.AnchorElement;
-import com.google.gwt.dom.client.ButtonElement;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.FieldSetElement;
-import com.google.gwt.dom.client.FormElement;
-import com.google.gwt.dom.client.IFrameElement;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.InputElement;
-import com.google.gwt.dom.client.LabelElement;
-import com.google.gwt.dom.client.LegendElement;
-import com.google.gwt.dom.client.OptionElement;
-import com.google.gwt.dom.client.SelectElement;
-import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.TableCaptionElement;
-import com.google.gwt.dom.client.TableCellElement;
-import com.google.gwt.dom.client.TableColElement;
-import com.google.gwt.dom.client.TableElement;
-import com.google.gwt.dom.client.TableRowElement;
-import com.google.gwt.dom.client.TableSectionElement;
-import com.google.gwt.dom.client.TextAreaElement;
+import com.google.gwt.dom.client.*;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Image;
 import com.googlecode.gwt.test.GwtTestTest;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class DOMTest extends GwtTestTest {
 
-   @Test
-   public void checkImageSrc() {
-      // Arrange
-      Image img = new Image();
-      ImageElement elem = img.getElement().cast();
+    @Test
+    public void checkImageSrc() {
+        // Arrange
+        Image img = new Image();
+        ImageElement elem = img.getElement().cast();
 
-      // Act
-      DOM.setImgSrc(img.getElement(), "http://test/image.gif");
-      String imageSrc = DOM.getImgSrc(img.getElement());
+        // Act
+        DOM.setImgSrc(img.getElement(), "http://test/image.gif");
+        String imageSrc = DOM.getImgSrc(img.getElement());
 
-      // Assert
-      assertEquals("http://test/image.gif", elem.getSrc());
-      assertEquals("http://test/image.gif", imageSrc);
-   }
+        // Assert
+        assertEquals("http://test/image.gif", elem.getSrc());
+        assertEquals("http://test/image.gif", imageSrc);
+    }
 
-   @Test
-   public void createAnchor() {
-      // Act
-      AnchorElement elem = AnchorElement.as(DOM.createAnchor());
+    @Test
+    public void createAnchor() {
+        // Act
+        AnchorElement elem = AnchorElement.as(DOM.createAnchor());
 
-      // Assert
-      assertEquals("a", elem.getTagName());
-   }
+        // Assert
+        assertEquals("a", elem.getTagName());
+    }
 
-   @Test
-   public void createButton() {
-      // Act
-      ButtonElement elem = ButtonElement.as(DOM.createButton());
+    @Test
+    public void createButton() {
+        // Act
+        ButtonElement elem = ButtonElement.as(DOM.createButton());
 
-      // Assert
-      assertEquals("button", elem.getTagName());
-   }
+        // Assert
+        assertEquals("button", elem.getTagName());
+    }
 
-   @Test
-   public void createCaption() {
-      // Act
-      TableCaptionElement elem = TableCaptionElement.as(DOM.createCaption());
+    @Test
+    public void createCaption() {
+        // Act
+        TableCaptionElement elem = TableCaptionElement.as(DOM.createCaption());
 
-      // Assert
-      assertEquals("caption", elem.getTagName());
-   }
+        // Assert
+        assertEquals("caption", elem.getTagName());
+    }
 
-   @Test
-   public void createCol() {
-      // Act
-      TableColElement elem = TableColElement.as(DOM.createCol());
+    @Test
+    public void createCol() {
+        // Act
+        TableColElement elem = TableColElement.as(DOM.createCol());
 
-      // Assert
-      assertEquals("col", elem.getTagName());
-   }
+        // Assert
+        assertEquals("col", elem.getTagName());
+    }
 
-   @Test
-   public void createColGroup() {
-      // Act
-      TableColElement elem = TableColElement.as(DOM.createColGroup());
+    @Test
+    public void createColGroup() {
+        // Act
+        TableColElement elem = TableColElement.as(DOM.createColGroup());
 
-      // Assert
-      assertEquals("colgroup", elem.getTagName());
-   }
+        // Assert
+        assertEquals("colgroup", elem.getTagName());
+    }
 
-   @Test
-   public void createDiv() {
-      // Act
-      DivElement elem = DivElement.as(DOM.createDiv());
+    @Test
+    public void createDiv() {
+        // Act
+        DivElement elem = DivElement.as(DOM.createDiv());
 
-      // Assert
-      assertEquals("div", elem.getTagName());
-   }
+        // Assert
+        assertEquals("div", elem.getTagName());
+    }
 
-   @Test
-   public void createElement() {
-      // Act
-      DivElement elem = DivElement.as(DOM.createElement("div"));
+    @Test
+    public void createElement() {
+        // Act
+        DivElement elem = DivElement.as(DOM.createElement("div"));
 
-      // Assert
-      assertEquals("div", elem.getTagName());
-   }
+        // Assert
+        assertEquals("div", elem.getTagName());
+    }
 
-   @Test
-   public void createFieldSet() {
-      // Act
-      FieldSetElement elem = FieldSetElement.as(DOM.createFieldSet());
+    @Test
+    public void createFieldSet() {
+        // Act
+        FieldSetElement elem = FieldSetElement.as(DOM.createFieldSet());
 
-      // Assert
-      assertEquals("fieldset", elem.getTagName());
-   }
+        // Assert
+        assertEquals("fieldset", elem.getTagName());
+    }
 
-   @Test
-   public void createForm() {
-      // Act
-      FormElement elem = FormElement.as(DOM.createForm());
+    @Test
+    public void createForm() {
+        // Act
+        FormElement elem = FormElement.as(DOM.createForm());
 
-      // Assert
-      assertEquals("form", elem.getTagName());
-   }
+        // Assert
+        assertEquals("form", elem.getTagName());
+    }
 
-   @Test
-   public void createIFrame() {
-      // Act
-      IFrameElement elem = IFrameElement.as(DOM.createIFrame());
+    @Test
+    public void createIFrame() {
+        // Act
+        IFrameElement elem = IFrameElement.as(DOM.createIFrame());
 
-      // Assert
-      assertEquals("iframe", elem.getTagName());
-   }
+        // Assert
+        assertEquals("iframe", elem.getTagName());
+    }
 
-   @Test
-   public void createImg() {
-      // Act
-      ImageElement elem = ImageElement.as(DOM.createImg());
+    @Test
+    public void createImg() {
+        // Act
+        ImageElement elem = ImageElement.as(DOM.createImg());
 
-      // Assert
-      assertEquals("img", elem.getTagName());
-   }
+        // Assert
+        assertEquals("img", elem.getTagName());
+    }
 
-   @Test
-   public void createInputCheck() {
-      // Act
-      InputElement elem = InputElement.as(DOM.createInputCheck());
+    @Test
+    public void createInputCheck() {
+        // Act
+        InputElement elem = InputElement.as(DOM.createInputCheck());
 
-      // Assert
-      assertEquals("input", elem.getTagName());
-      assertEquals("checkbox", elem.getType());
-   }
+        // Assert
+        assertEquals("input", elem.getTagName());
+        assertEquals("checkbox", elem.getType());
+    }
 
-   @Test
-   public void createInputPassword() {
-      // Act
-      InputElement elem = InputElement.as(DOM.createInputPassword());
+    @Test
+    public void createInputPassword() {
+        // Act
+        InputElement elem = InputElement.as(DOM.createInputPassword());
 
-      // Assert
-      assertEquals("input", elem.getTagName());
-      assertEquals("password", elem.getType());
-   }
+        // Assert
+        assertEquals("input", elem.getTagName());
+        assertEquals("password", elem.getType());
+    }
 
-   @Test
-   public void createInputRadio() {
-      // Act
-      InputElement elem = InputElement.as(DOM.createInputRadio("test"));
+    @Test
+    public void createInputRadio() {
+        // Act
+        InputElement elem = InputElement.as(DOM.createInputRadio("test"));
 
-      // Assert
-      assertEquals("input", elem.getTagName());
-      assertEquals("test", elem.getName());
-   }
+        // Assert
+        assertEquals("input", elem.getTagName());
+        assertEquals("test", elem.getName());
+    }
 
-   @Test
-   public void createInputText() {
-      // Act
-      InputElement elem = InputElement.as(DOM.createInputText());
+    @Test
+    public void createInputText() {
+        // Act
+        InputElement elem = InputElement.as(DOM.createInputText());
 
-      // Assert
-      assertEquals("input", elem.getTagName());
-      assertEquals("text", elem.getType());
-   }
+        // Assert
+        assertEquals("input", elem.getTagName());
+        assertEquals("text", elem.getType());
+    }
 
-   @Test
-   public void createLabel() {
-      // Act
-      LabelElement elem = LabelElement.as(DOM.createLabel());
+    @Test
+    public void createLabel() {
+        // Act
+        LabelElement elem = LabelElement.as(DOM.createLabel());
 
-      // Assert
-      assertEquals("label", elem.getTagName());
-   }
+        // Assert
+        assertEquals("label", elem.getTagName());
+    }
 
-   @Test
-   public void createLegend() {
-      // Act
-      LegendElement elem = LegendElement.as(DOM.createLegend());
+    @Test
+    public void createLegend() {
+        // Act
+        LegendElement elem = LegendElement.as(DOM.createLegend());
 
-      // Assert
-      assertEquals("legend", elem.getTagName());
-   }
+        // Assert
+        assertEquals("legend", elem.getTagName());
+    }
 
-   @Test
-   public void createOption() {
-      // Act
-      OptionElement elem = OptionElement.as(DOM.createOption());
+    @Test
+    public void createOption() {
+        // Act
+        OptionElement elem = OptionElement.as(DOM.createOption());
 
-      // Assert
-      assertEquals("option", elem.getTagName());
-   }
+        // Assert
+        assertEquals("option", elem.getTagName());
+    }
 
-   @Test
-   public void createSelect() {
-      // Act
-      SelectElement elem = SelectElement.as(DOM.createSelect());
+    @Test
+    public void createSelect() {
+        // Act
+        SelectElement elem = SelectElement.as(DOM.createSelect());
 
-      // Assert
-      assertEquals("select", elem.getTagName());
-      assertFalse("Simple SelectElement should not be multiple", elem.isMultiple());
-   }
+        // Assert
+        assertEquals("select", elem.getTagName());
+        assertFalse("Simple SelectElement should not be multiple", elem.isMultiple());
+    }
 
-   @Test
-   public void createSelectMultiple() {
-      // Act
-      SelectElement elem = SelectElement.as(DOM.createSelect(true));
+    @Test
+    public void createSelectMultiple() {
+        // Act
+        SelectElement elem = SelectElement.as(DOM.createSelect(true));
 
-      // Assert
-      assertEquals("select", elem.getTagName());
-      assertTrue("SelectElement should be multiple", elem.isMultiple());
-   }
+        // Assert
+        assertEquals("select", elem.getTagName());
+        assertTrue("SelectElement should be multiple", elem.isMultiple());
+    }
 
-   @Test
-   public void createSpan() {
-      // Act
-      SpanElement elem = SpanElement.as(DOM.createSpan());
+    @Test
+    public void createSpan() {
+        // Act
+        SpanElement elem = SpanElement.as(DOM.createSpan());
 
-      // Assert
-      assertEquals("span", elem.getTagName());
-   }
+        // Assert
+        assertEquals("span", elem.getTagName());
+    }
 
-   @Test
-   public void createTable() {
-      // Act
-      TableElement elem = TableElement.as(DOM.createTable());
+    @Test
+    public void createTable() {
+        // Act
+        TableElement elem = TableElement.as(DOM.createTable());
 
-      // Assert
-      assertEquals("table", elem.getTagName());
-   }
+        // Assert
+        assertEquals("table", elem.getTagName());
+    }
 
-   @Test
-   public void createTBody() {
-      // Act
-      TableSectionElement elem = TableSectionElement.as(DOM.createTBody());
+    @Test
+    public void createTBody() {
+        // Act
+        TableSectionElement elem = TableSectionElement.as(DOM.createTBody());
 
-      // Assert
-      assertEquals("tbody", elem.getTagName());
-   }
+        // Assert
+        assertEquals("tbody", elem.getTagName());
+    }
 
-   @Test
-   public void createTD() {
-      // Act
-      TableCellElement elem = TableCellElement.as(DOM.createTD());
+    @Test
+    public void createTD() {
+        // Act
+        TableCellElement elem = TableCellElement.as(DOM.createTD());
 
-      // Assert
-      assertEquals("td", elem.getTagName());
-   }
+        // Assert
+        assertEquals("td", elem.getTagName());
+    }
 
-   @Test
-   public void createTextArea() {
-      // Act
-      TextAreaElement elem = TextAreaElement.as(DOM.createTextArea());
+    @Test
+    public void createTextArea() {
+        // Act
+        TextAreaElement elem = TextAreaElement.as(DOM.createTextArea());
 
-      // Assert
-      assertEquals("textarea", elem.getTagName());
-   }
+        // Assert
+        assertEquals("textarea", elem.getTagName());
+    }
 
-   @Test
-   public void createTFoot() {
-      // Act
-      TableSectionElement elem = TableSectionElement.as(DOM.createTFoot());
+    @Test
+    public void createTFoot() {
+        // Act
+        TableSectionElement elem = TableSectionElement.as(DOM.createTFoot());
 
-      // Assert
-      assertEquals("tfoot", elem.getTagName());
-   }
+        // Assert
+        assertEquals("tfoot", elem.getTagName());
+    }
 
-   @Test
-   public void createTH() {
-      // Act
-      TableCellElement elem = TableCellElement.as(DOM.createTH());
+    @Test
+    public void createTH() {
+        // Act
+        TableCellElement elem = TableCellElement.as(DOM.createTH());
 
-      // Assert
-      assertEquals("th", elem.getTagName());
-   }
+        // Assert
+        assertEquals("th", elem.getTagName());
+    }
 
-   @Test
-   public void createTHead() {
-      // Act
-      TableSectionElement elem = TableSectionElement.as(DOM.createTHead());
+    @Test
+    public void createTHead() {
+        // Act
+        TableSectionElement elem = TableSectionElement.as(DOM.createTHead());
 
-      // Assert
-      assertEquals("thead", elem.getTagName());
-   }
+        // Assert
+        assertEquals("thead", elem.getTagName());
+    }
 
-   @Test
-   public void createTR() {
-      // Act
-      TableRowElement elem = TableRowElement.as(DOM.createTR());
+    @Test
+    public void createTR() {
+        // Act
+        TableRowElement elem = TableRowElement.as(DOM.createTR());
 
-      // Assert
-      assertEquals("tr", elem.getTagName());
-   }
+        // Assert
+        assertEquals("tr", elem.getTagName());
+    }
 
 }

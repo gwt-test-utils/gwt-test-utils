@@ -9,19 +9,19 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 @PatchClass(AbstractHasData.class)
 class AbstractHasDataPatcher {
 
-   @PatchMethod
-   static void adopt(AbstractHasData<?> abstractHasData, Widget child) {
-      GwtReflectionUtils.callPrivateMethod(child, "setParent", abstractHasData);
-   }
+    @PatchMethod
+    static void adopt(AbstractHasData<?> abstractHasData, Widget child) {
+        GwtReflectionUtils.callPrivateMethod(child, "setParent", abstractHasData);
+    }
 
-   @PatchMethod
-   static void doAttach(AbstractHasData<?> abstractHasData, Widget child) {
-      GwtReflectionUtils.callPrivateMethod(child, "onAttach");
-   }
+    @PatchMethod
+    static void doAttach(AbstractHasData<?> abstractHasData, Widget child) {
+        GwtReflectionUtils.callPrivateMethod(child, "onAttach");
+    }
 
-   @PatchMethod
-   static void doDetach(AbstractHasData<?> abstractHasData, Widget child) {
-      GwtReflectionUtils.callPrivateMethod(child, "onDetach");
-   }
+    @PatchMethod
+    static void doDetach(AbstractHasData<?> abstractHasData, Widget child) {
+        GwtReflectionUtils.callPrivateMethod(child, "onDetach");
+    }
 
 }

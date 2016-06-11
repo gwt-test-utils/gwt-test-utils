@@ -1,16 +1,16 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:p="urn:import:com.googlecode.gwt.test.uibinder">
-	<p:WidgetWithUiChild>
-		<p:myuilabel>
-			<g:Label>My first child label</g:Label>
-		</p:myuilabel>
-		<p:myuilabel>
-			<g:Label>My second child label</g:Label>
-		</p:myuilabel>
-		<p:customChild>
-			<g:HTML>My child HTML</g:HTML>
-		</p:customChild>
-	</p:WidgetWithUiChild>
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:p="urn:import:com.googlecode.gwt.test.uibinder">
+    <p:WidgetWithUiChild>
+        <p:myuilabel>
+            <g:Label>My first child label</g:Label>
+        </p:myuilabel>
+        <p:myuilabel>
+            <g:Label>My second child label</g:Label>
+        </p:myuilabel>
+        <p:customChild>
+            <g:HTML>My child HTML</g:HTML>
+        </p:customChild>
+    </p:WidgetWithUiChild>
 </ui:UiBinder> 

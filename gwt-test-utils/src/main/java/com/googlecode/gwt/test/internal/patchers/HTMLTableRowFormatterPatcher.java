@@ -8,9 +8,9 @@ import com.googlecode.gwt.test.patchers.PatchMethod;
 @PatchClass(RowFormatter.class)
 class HTMLTableRowFormatterPatcher {
 
-   @PatchMethod
-   static Element getRow(RowFormatter rowFormatter, Element elem, int row) {
-      return elem.getChildNodes().getItem(row).cast();
-   }
+    @PatchMethod
+    static Element getRow(RowFormatter rowFormatter, Element elem, int row) {
+        return elem.getChildNodes().getItem(row).cast();
+    }
 
 }

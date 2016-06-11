@@ -6,10 +6,10 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("myService")
 public interface MyRemoteService extends RemoteService {
 
-   String myMethod(String param1);
+    String myMethod(String param1);
 
-   MyCustomObject myMethod2(MyCustomObject object);
+    MyCustomObject myMethod2(MyCustomObject object);
 
-   void myMethod3();
+    void myMethod3();
 
 }
