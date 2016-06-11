@@ -192,6 +192,13 @@ class NodePatcher {
     }
 
     @PatchMethod
+    static Node removeAllChildren(Node node) {
+        List<Node> list = JsoUtils.getChildNodeInnerList(node);
+        list.clear();
+        return node;
+    }
+
+    @PatchMethod
     static Node removeChild(Node oldParent, Node oldChild) {
         List<Node> list = JsoUtils.getChildNodeInnerList(oldParent);
 

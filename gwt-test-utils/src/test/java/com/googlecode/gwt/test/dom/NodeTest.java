@@ -6,6 +6,7 @@ import com.googlecode.gwt.test.internal.utils.JsoUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 public class NodeTest extends GwtTestTest {
@@ -308,6 +309,19 @@ public class NodeTest extends GwtTestTest {
         // Assert
         assertEquals("node", textNode.getNodeValue());
         assertEquals("node", textNode.getData());
+    }
+
+    @Test
+    public void removeAllChildren() {
+        // Given
+        n.appendChild(Document.get().createAnchorElement());
+        n.appendChild(Document.get().createDivElement());
+
+        // When
+        n.removeAllChildren();
+
+        // Then
+        assertThat(n.getChildCount()).isEqualTo(0);
     }
 
     @Test
