@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.internal.patchers.dom;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
@@ -17,6 +18,11 @@ class DOMPatcher {
         }
         return null;
 
+    }
+
+    @PatchMethod
+    static boolean isPotential(JavaScriptObject o) {
+        return PotentialElementPatcher.isPotential(o);
     }
 
     @PatchMethod
