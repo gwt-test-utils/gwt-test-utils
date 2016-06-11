@@ -3,11 +3,7 @@ package com.googlecode.gwt.test;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.AnchorElement;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.Button;
-import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,31 +81,22 @@ public class MainGwtTest extends GwtTestTest {
 
     @Test
     public void runAsync() {
-        // Arrange
-        Button b = new Button();
-        b.addClickHandler(new ClickHandler() {
+        // Test
+        GWT.runAsync(new RunAsyncCallback() {
 
-            public void onClick(ClickEvent event) {
-                GWT.runAsync(new RunAsyncCallback() {
+            @Override
+            public void onFailure(Throwable reason) {
+                fail("GWT.runAsync() has called \"onFailure\" callback");
 
-                    public void onFailure(Throwable reason) {
-                        fail("GWT.runAsync() has called \"onFailure\" callback");
+            }
 
-                    }
-
-                    public void onSuccess() {
-                        success = true;
-                    }
-                });
-
+            @Override
+            public void onSuccess() {
+                success = true;
             }
         });
 
-        // Act
-        Browser.click(b);
-
         // Assert
         assertTrue(success);
-
     }
 }
