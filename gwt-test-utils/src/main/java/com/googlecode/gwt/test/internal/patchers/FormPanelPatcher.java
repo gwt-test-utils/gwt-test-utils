@@ -23,7 +23,7 @@ class FormPanelPatcher {
             FormPanelImpl impl = GwtReflectionUtils.getPrivateFieldValue(formPanel, "impl");
             Element synthesizedFrame = GwtReflectionUtils.getPrivateFieldValue(formPanel,
                     "synthesizedFrame");
-            FormPanel.SubmitCompleteEvent completeEvent = createCompleteSubmitEvent(impl.getContents(synthesizedFrame));
+            FormPanel.SubmitCompleteEvent completeEvent = createCompleteSubmitEvent(getResultsHtml(impl, synthesizedFrame));
             formPanel.fireEvent(completeEvent);
         }
 
@@ -40,6 +40,14 @@ class FormPanelPatcher {
                 throw new GwtTestPatchException("Error while trying to instanciate "
                         + SubmitCompleteEvent.class.getName() + " class", e);
             }
+        }
+    }
+
+    private static String getResultsHtml(FormPanelImpl impl, Element synthesizedFrame) {
+        if (synthesizedFrame != null) {
+            return impl.getContents(synthesizedFrame);
+        } else {
+            return null;
         }
     }
 
