@@ -3,7 +3,7 @@
     <groupId>com.googlecode.gwt-test-utils</groupId>
     <artifactId>gwt-test-utils-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.50-SNAPSHOT</version>
+    <version>0.50</version>
     <name>${project.artifactId}</name>
     <description>gwt-test-utils is a Java framework that allows to test GWT client side code in a efficient, easy way
     </description>
@@ -42,7 +42,7 @@
         <connection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</connection>
         <developerConnection>scm:git:git@github.com:gwt-test-utils/gwt-test-utils.git</developerConnection>
         <url>https://github.com/gwt-test-utils/gwt-test-utils</url>
-        <tag>HEAD</tag>
+        <tag>gwt-test-utils-parent-0.50</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
