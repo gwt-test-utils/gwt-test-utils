@@ -31,9 +31,9 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
 * Mocks handling using [Mockito](http://mockito.org/) or [EasyMock](http://easymock.org/)
 * Standard maven-surefire-plugin support for testing with [Maven](http://maven.apache.org/)
 * Support for GWT + [Spring](http://www.springsource.org/) application testing
-* Support for GWT + [Guice](http://code.google.com/p/google-guice/) application testing
-* Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing, with [Jukito](https://code.google.com/p/jukito/) if wanted
-* Support for [JUnitParams](http://code.google.com/p/junitparams/)
+* Support for GWT + [Guice](https://github.com/google/guice) application testing
+* Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing, with [Jukito](https://github.com/ArcBees/Jukito) if wanted
+* Support for [JUnitParams](https://github.com/Pragmatists/JUnitParams)
 * Support for [GXT](http://www.sencha.com/products/gxt/) library (currently only version 2.x, version 3.x is coming !)
 * Complex use-case testing using CSV-based scenarios
 * Extensibility through the use of custom patchs
@@ -53,8 +53,8 @@ Here are the features we are working on, ordered by priority (which is not froze
 
 * Support for [GWT-Bootstrap](https://github.com/gwtbootstrap/gwt-bootstrap)
 * Support for [GXT 3.0](http://www.sencha.com/products/gxt/)
-* Support for [RequestFactory](http://code.google.com/intl/fr-FR/webtoolkit/doc/latest/DevGuideRequestFactory.html)
-* Support for [PowerMock](http://code.google.com/p/powermock/)
+* Support for [RequestFactory](http://www.gwtproject.org/doc/latest/DevGuideRequestFactory.html)
+* Support for [PowerMock](https://github.com/jayway/powermock)
 * Support for [TestNG](http://testng.org/)
 
 In addition, we are daily improving the existing **gwt-test-utils** features. To perfect it, we need your feedback !
