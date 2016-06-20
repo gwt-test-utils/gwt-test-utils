@@ -13,13 +13,13 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void hasStyle() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStyleName("first-style");
         a.addStyleName("second-style");
         a.addStyleName("third-style");
 
-        // Act
+        // When
         try {
             assertThat(a).hasStyle("first-style", "second-style", "third-style");
         } catch (AssertionError e) {
@@ -29,13 +29,13 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void hasStyleAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStyleName("first-style");
         a.addStyleName("second-style");
         a.addStyleName("third-style");
 
-        // Act
+        // When
         try {
             assertThat(a).hasStyle("first-style", "second-style", "thrid-style", "fourth-style");
             fail("AssertionError should be thrown");
@@ -46,11 +46,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void htmlEquals() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setHTML("<h3>Ben Linus</h3>");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).htmlEquals("<h3>Ben Linus</h3>");
         } catch (AssertionError e) {
@@ -60,11 +60,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void htmlEqualsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setHTML("<h3>Ben Linus</h3>");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).htmlEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -76,11 +76,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void htmlEqualsAssertionErrorMessageWithPrefix() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setHTML("<h3>Ben Linus</h3>");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).withPrefix("my prefix").htmlEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -92,11 +92,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void htmlEqualsWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setHTML("<h3>Ben Linus</h3>");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom error message").as("my anchor").htmlEquals(
                     "John Locke");
@@ -108,11 +108,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void htmlEqualsWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setHTML("<h3>Ben Linus</h3>");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").htmlEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -124,11 +124,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void htmlEqualsWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setHTML("<h3>Ben Linus</h3>");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom error message").htmlEquals(
                     "John Locke");
@@ -140,11 +140,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isAttached() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         RootPanel.get().add(a);
 
-        // Act
+        // When
         try {
             assertThat(a).isAttached();
         } catch (AssertionError e) {
@@ -154,10 +154,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isAttachedAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).isAttached();
             fail("AssertionError should be thrown");
@@ -168,10 +168,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isAttachedWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isAttached();
             fail("AssertionError should be thrown");
@@ -182,10 +182,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isAttachedWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").isAttached();
             fail("AssertionError should be thrown");
@@ -196,10 +196,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isAttachedWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isAttached();
             fail("AssertionError should be thrown");
@@ -210,10 +210,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotAttached() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).isNotAttached();
         } catch (AssertionError e) {
@@ -223,11 +223,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotAttachedAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         RootPanel.get().add(a);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).isNotAttached();
             fail("AssertionError should be thrown");
@@ -238,11 +238,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotAttachedWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         RootPanel.get().add(a);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isNotAttached();
             fail("AssertionError should be thrown");
@@ -253,11 +253,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotAttachedWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         RootPanel.get().add(a);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").isNotAttached();
             fail("AssertionError should be thrown");
@@ -268,11 +268,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotAttachedWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         RootPanel.get().add(a);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isNotAttached();
             fail("AssertionError should be thrown");
@@ -283,11 +283,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotVisible() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setVisible(false);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).isNotVisible();
         } catch (AssertionError e) {
@@ -297,10 +297,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotVisibleAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).isNotVisible();
             fail("AssertionError should be thrown");
@@ -311,10 +311,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotVisibleWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isNotVisible();
             fail("AssertionError should be thrown");
@@ -325,10 +325,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotVisibleWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").isNotVisible();
             fail("AssertionError should be thrown");
@@ -339,10 +339,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isNotVisibleWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isNotVisible();
             fail("AssertionError should be thrown");
@@ -353,10 +353,10 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isVisible() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).isVisible();
         } catch (AssertionError e) {
@@ -366,11 +366,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isVisibleAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setVisible(false);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).isVisible();
             fail("AssertionError should be thrown");
@@ -381,11 +381,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isVisibleWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setVisible(false);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isVisible();
             fail("AssertionError should be thrown");
@@ -396,11 +396,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isVisibleWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setVisible(false);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").isVisible();
             fail("AssertionError should be thrown");
@@ -411,11 +411,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void isVisibleWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setVisible(false);
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isVisible();
             fail("AssertionError should be thrown");
@@ -426,12 +426,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void styleNameEquals() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStyleName("first");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).styleNameEquals("first second");
         } catch (AssertionError e) {
@@ -441,12 +441,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void styleNameEqualsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStyleName("first");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).styleNameEquals("not-my-style");
             fail("AssertionError should be thrown");
@@ -458,12 +458,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void styleNameEqualsWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStyleName("first");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).as("my anchor").overridingErrorMessage("custom error message").styleNameEquals(
                     "not-my-style");
@@ -475,12 +475,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void styleNameEqualsWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStyleName("first");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).as("my anchor").styleNameEquals("not-my-style");
             fail("AssertionError should be thrown");
@@ -492,12 +492,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void styleNameEqualsWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStyleName("first");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).overridingErrorMessage("custom error message").styleNameEquals(
                     "not-my-style");
@@ -509,12 +509,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void stylePrimaryNameEquals() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStylePrimaryName("primary");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).stylePrimaryNameEquals("primary");
         } catch (AssertionError e) {
@@ -524,12 +524,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void stylePrimaryNameEqualsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStylePrimaryName("primary");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).stylePrimaryNameEquals("not-my-style");
             fail("AssertionError should be thrown");
@@ -541,12 +541,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void stylePrimaryNameEqualsWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStylePrimaryName("primary");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).as("my anchor").overridingErrorMessage("my custom error").stylePrimaryNameEquals(
                     "not-my-style");
@@ -558,12 +558,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void stylePrimaryNameEqualsWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStylePrimaryName("primary");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).as("my anchor").stylePrimaryNameEquals("not-my-style");
             fail("AssertionError should be thrown");
@@ -575,12 +575,12 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void stylePrimaryNameEqualsWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setStylePrimaryName("primary");
         a.addStyleName("second");
 
-        // Act
+        // When
         try {
             assertThat(a).overridingErrorMessage("my custom error").stylePrimaryNameEquals(
                     "not-my-style");
@@ -592,11 +592,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void textEquals() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setText("Ben Linus");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).textEquals("Ben Linus");
         } catch (AssertionError e) {
@@ -606,11 +606,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void textEqualsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setText("Ben Linus");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).textEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -622,11 +622,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void textEqualsWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setText("Ben Linus");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom error message").as("my anchor").textEquals(
                     "John Locke");
@@ -638,11 +638,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void textEqualsWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setText("Ben Linus");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").textEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -654,11 +654,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void textEqualsWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setText("Ben Linus");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom error message").textEquals(
                     "John Locke");
@@ -670,11 +670,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void titleEquals() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setTitle("Lost 108");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).titleEquals("Lost 108");
         } catch (AssertionError e) {
@@ -684,11 +684,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void titleEqualsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setTitle("Lost 108");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).titleEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -700,11 +700,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void titleEqualsAssertionErrorMessageWithPrefix() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setTitle("Lost 108");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).withPrefix("my prefix").titleEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -716,11 +716,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void titleEqualsWithAsAndCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setTitle("Lost 108");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom error message").as("my anchor").titleEquals(
                     "John Locke");
@@ -732,11 +732,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void titleEqualsWithAsAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setTitle("Lost 108");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).as("my anchor").titleEquals("John Locke");
             fail("AssertionError should be thrown");
@@ -748,11 +748,11 @@ public class WidgetAssertTest extends GwtTestTest {
 
     @Test
     public void titleEqualsWithCustomAssertionErrorMessage() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
         a.setTitle("Lost 108");
 
-        // Act
+        // When
         try {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom error message").titleEquals("John Locke");
             fail("AssertionError should be thrown");

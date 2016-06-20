@@ -5,20 +5,20 @@ import com.googlecode.gwt.test.uibinder.UiConstructorWidget.AnotherType;
 import com.googlecode.gwt.test.uibinder.UiConstructorWidget.Type;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithUiConstructorTest extends GwtTestTest {
 
     @Test
     public void instanciation() throws Exception {
-        // Act
+        // When
         UiBinderWithUiConstructor w = new UiBinderWithUiConstructor();
 
-        // Assert
-        assertEquals(5, w.myWidget.size);
-        assertEquals(Type.T1, w.myWidget.type);
+        // Then
+        assertThat(w.myWidget.size).isEqualTo(5);
+        assertThat(w.myWidget.type).isEqualTo(Type.T1);
 
-        assertEquals(AnotherType.T2, w.myWidget.anotherType);
+        assertThat(w.myWidget.anotherType).isEqualTo(AnotherType.T2);
     }
 
 }

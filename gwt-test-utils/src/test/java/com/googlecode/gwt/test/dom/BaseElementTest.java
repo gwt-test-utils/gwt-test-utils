@@ -6,7 +6,7 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BaseElementTest extends GwtTestTest {
 
@@ -14,23 +14,23 @@ public class BaseElementTest extends GwtTestTest {
 
     @Test
     public void as() {
-        // Act
+        // When
         BaseElement asElement = BaseElement.as(b);
 
-        // Assert
-        assertEquals(b, asElement);
+        // Then
+        assertThat(asElement).isEqualTo(b);
     }
 
     @Test
     public void href() {
-        // Pre-Assert
-        assertEquals("", b.getHref());
+        // Preconditions
+        assertThat(b.getHref()).isEqualTo("");
 
-        // Act
+        // When
         b.setHref("Href");
 
-        // Assert
-        assertEquals("Href", b.getHref());
+        // Then
+        assertThat(b.getHref()).isEqualTo("Href");
     }
 
     @Before
@@ -40,14 +40,14 @@ public class BaseElementTest extends GwtTestTest {
 
     @Test
     public void target() {
-        // Pre-Assert
-        assertEquals("", b.getTarget());
+        // Preconditions
+        assertThat(b.getTarget()).isEqualTo("");
 
-        // Act
+        // When
         b.setTarget("Target");
 
-        // Assert
-        assertEquals("Target", b.getTarget());
+        // Then
+        assertThat(b.getTarget()).isEqualTo("Target");
     }
 
 }

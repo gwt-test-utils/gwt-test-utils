@@ -9,7 +9,7 @@ import com.googlecode.gwt.MockValueChangeHandler;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RadioButtonTest extends GwtTestTest {
 
@@ -17,7 +17,7 @@ public class RadioButtonTest extends GwtTestTest {
 
     @Test
     public void changeName() {
-        // Arrange
+        // Given
         RadioButton rb0 = new RadioButton("myRadioGroup", "foo");
         RootPanel.get().add(rb0);
         MockValueChangeHandler<Boolean> rb0MockChangeHandler = new MockValueChangeHandler<Boolean>();
@@ -28,30 +28,30 @@ public class RadioButtonTest extends GwtTestTest {
         MockValueChangeHandler<Boolean> rb1MockChangeHandler = new MockValueChangeHandler<Boolean>();
         rb1.addValueChangeHandler(rb1MockChangeHandler);
 
-        // Act 1
+        // When 1
         rb0.setName("changedGroup");
         Browser.click(rb0);
 
-        // Assert 1
-        assertTrue(rb0.getValue());
-        assertEquals(1, rb0MockChangeHandler.getCallCount());
+        // Then 1
+        assertThat(rb0.getValue()).isTrue();
+        assertThat(rb0MockChangeHandler.getCallCount()).isEqualTo(1);
 
-        // Act 2
+        // When 2
         rb1.setName("changedGroup");
         Browser.click(rb1);
 
-        assertFalse(rb0.getValue());
-        assertEquals(2, rb0MockChangeHandler.getCallCount());
-        assertFalse(rb0MockChangeHandler.getLast());
+        assertThat(rb0.getValue()).isFalse();
+        assertThat(rb0MockChangeHandler.getCallCount()).isEqualTo(2);
+        assertThat(rb0MockChangeHandler.getLast()).isFalse();
 
-        assertTrue(rb1.getValue());
-        assertEquals(1, rb1MockChangeHandler.getCallCount());
-        assertTrue(rb1MockChangeHandler.getLast());
+        assertThat(rb1.getValue()).isTrue();
+        assertThat(rb1MockChangeHandler.getCallCount()).isEqualTo(1);
+        assertThat(rb1MockChangeHandler.getLast()).isTrue();
     }
 
     @Test
     public void click_ClickHandler() {
-        // Arrange
+        // Given
         tested = false;
         RadioButton r = new RadioButton("myRadioGroup", "foo");
         r.addClickHandler(new ClickHandler() {
@@ -61,20 +61,20 @@ public class RadioButtonTest extends GwtTestTest {
             }
 
         });
-        // Pre-Assert
-        assertEquals(false, tested);
+        // Preconditions
+        assertThat(tested).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(r);
 
-        // Assert
-        assertEquals(true, tested);
-        assertEquals(true, r.getValue());
+        // Then
+        assertThat(tested).isEqualTo(true);
+        assertThat(r.getValue()).isEqualTo(true);
     }
 
     @Test
     public void click_Twice_ClickHandler() {
-        // Arrange
+        // Given
         tested = false;
         RadioButton r1 = new RadioButton("myRadioGroup", "r1");
         RadioButton r2 = new RadioButton("myRadioGroup", "r2");
@@ -93,21 +93,21 @@ public class RadioButtonTest extends GwtTestTest {
             }
 
         });
-        // Pre-Assert
-        assertEquals(false, tested);
+        // Preconditions
+        assertThat(tested).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(r1);
         Browser.click(r1);
 
-        // Assert
-        assertEquals(false, tested);
-        assertEquals(true, r1.getValue());
+        // Then
+        assertThat(tested).isEqualTo(false);
+        assertThat(r1.getValue()).isEqualTo(true);
     }
 
     @Test
     public void clickNotDetachedRadioButton() {
-        // Arrange
+        // Given
         RadioButton rb0 = new RadioButton("myRadioGroup", "foo");
         MockValueChangeHandler<Boolean> rb0MockChangeHandler = new MockValueChangeHandler<Boolean>();
         rb0.addValueChangeHandler(rb0MockChangeHandler);
@@ -116,20 +116,20 @@ public class RadioButtonTest extends GwtTestTest {
         MockValueChangeHandler<Boolean> rb1MockChangeHandler = new MockValueChangeHandler<Boolean>();
         rb1.addValueChangeHandler(rb1MockChangeHandler);
 
-        // Act
+        // When
         Browser.click(rb0);
         Browser.click(rb1);
 
-        // Assert
-        assertTrue(rb0.getValue());
-        assertEquals(1, rb0MockChangeHandler.getCallCount());
-        assertTrue(rb1.getValue());
-        assertEquals(1, rb1MockChangeHandler.getCallCount());
+        // Then
+        assertThat(rb0.getValue()).isTrue();
+        assertThat(rb0MockChangeHandler.getCallCount()).isEqualTo(1);
+        assertThat(rb1.getValue()).isTrue();
+        assertThat(rb1MockChangeHandler.getCallCount()).isEqualTo(1);
     }
 
     @Test
     public void clickOnDetachedRadionButton() {
-        // Arrange
+        // Given
         RadioButton rb0 = new RadioButton("myRadioGroup", "foo");
         rb0.setValue(true);
         RootPanel.get().add(rb0);
@@ -141,58 +141,58 @@ public class RadioButtonTest extends GwtTestTest {
         MockValueChangeHandler<Boolean> rb1MockChangeHandler = new MockValueChangeHandler<Boolean>();
         rb1.addValueChangeHandler(rb1MockChangeHandler);
 
-        // Pre-Assert
-        assertTrue(rb0.getValue());
-        assertEquals(0, rb0MockChangeHandler.getCallCount());
-        assertFalse(rb1.getValue());
-        assertEquals(0, rb1MockChangeHandler.getCallCount());
+        // Preconditions
+        assertThat(rb0.getValue()).isTrue();
+        assertThat(rb0MockChangeHandler.getCallCount()).isEqualTo(0);
+        assertThat(rb1.getValue()).isFalse();
+        assertThat(rb1MockChangeHandler.getCallCount()).isEqualTo(0);
 
-        // Act
+        // When
         RootPanel.get().remove(rb1);
         Browser.click(rb1);
 
-        // Assert
-        assertTrue(rb1.getValue());
-        assertEquals(1, rb1MockChangeHandler.getCallCount());
-        assertTrue(rb0.getValue());
-        assertEquals(0, rb0MockChangeHandler.getCallCount());
+        // Then
+        assertThat(rb1.getValue()).isTrue();
+        assertThat(rb1MockChangeHandler.getCallCount()).isEqualTo(1);
+        assertThat(rb0.getValue()).isTrue();
+        assertThat(rb0MockChangeHandler.getCallCount()).isEqualTo(0);
     }
 
     @Test
     public void html() {
-        // Arrange
+        // Given
         RadioButton rb = new RadioButton("myRadioGroup", "<h1>foo</h1>", true);
-        // Pre-Assert
-        assertEquals("<h1>foo</h1>", rb.getHTML());
+        // Preconditions
+        assertThat(rb.getHTML()).isEqualTo("<h1>foo</h1>");
 
-        // Act
+        // When
         rb.setHTML("<h1>test</h1>");
 
-        // Assert
-        assertEquals("<h1>test</h1>", rb.getHTML());
-        assertEquals(1, rb.getElement().getChild(1).getChildCount());
+        // Then
+        assertThat(rb.getHTML()).isEqualTo("<h1>test</h1>");
+        assertThat(rb.getElement().getChild(1).getChildCount()).isEqualTo(1);
         HeadingElement h1 = rb.getElement().getChild(1).getChild(0).cast();
-        assertEquals("H1", h1.getTagName());
-        assertEquals("test", h1.getInnerText());
+        assertThat(h1.getTagName()).isEqualTo("H1");
+        assertThat(h1.getInnerText()).isEqualTo("test");
     }
 
     @Test
     public void name() {
-        // Arrange
+        // Given
         RadioButton rb = new RadioButton("myRadioGroup", "foo");
-        // Pre-Assert
-        assertEquals("myRadioGroup", rb.getName());
+        // Preconditions
+        assertThat(rb.getName()).isEqualTo("myRadioGroup");
 
-        // Act
+        // When
         rb.setName("name");
 
-        // Assert
-        assertEquals("name", rb.getName());
+        // Then
+        assertThat(rb.getName()).isEqualTo("name");
     }
 
     @Test
     public void radioButton_Group() {
-        // Arrange
+        // Given
         RadioButton rb0 = new RadioButton("myRadioGroup", "foo");
         RootPanel.get().add(rb0);
         MockValueChangeHandler<Boolean> rb0MockChangeHandler = new MockValueChangeHandler<Boolean>();
@@ -208,76 +208,76 @@ public class RadioButtonTest extends GwtTestTest {
         MockValueChangeHandler<Boolean> rb2MockChangeHandler = new MockValueChangeHandler<Boolean>();
         rb2.addValueChangeHandler(rb2MockChangeHandler);
 
-        // Act 1
+        // When 1
         Browser.click(rb1);
 
-        // Assert 1
-        assertEquals(false, rb0.getValue());
-        assertEquals(0, rb0MockChangeHandler.getCallCount());
+        // Then 1
+        assertThat(rb0.getValue()).isEqualTo(false);
+        assertThat(rb0MockChangeHandler.getCallCount()).isEqualTo(0);
 
-        assertEquals(true, rb1.getValue());
-        assertEquals(1, rb1MockChangeHandler.getCallCount());
-        assertTrue(rb1MockChangeHandler.getLast());
+        assertThat(rb1.getValue()).isEqualTo(true);
+        assertThat(rb1MockChangeHandler.getCallCount()).isEqualTo(1);
+        assertThat(rb1MockChangeHandler.getLast()).isTrue();
 
-        assertEquals(false, rb2.getValue());
-        assertEquals(0, rb2MockChangeHandler.getCallCount());
+        assertThat(rb2.getValue()).isEqualTo(false);
+        assertThat(rb2MockChangeHandler.getCallCount()).isEqualTo(0);
 
-        // Act 2
+        // When 2
         Browser.click(rb2);
 
-        // Assert 2
-        assertEquals(false, rb0.getValue());
-        assertEquals(0, rb0MockChangeHandler.getCallCount());
+        // Then 2
+        assertThat(rb0.getValue()).isEqualTo(false);
+        assertThat(rb0MockChangeHandler.getCallCount()).isEqualTo(0);
 
-        assertEquals(false, rb1.getValue());
-        assertEquals(2, rb1MockChangeHandler.getCallCount());
-        assertFalse(rb1MockChangeHandler.getLast());
+        assertThat(rb1.getValue()).isEqualTo(false);
+        assertThat(rb1MockChangeHandler.getCallCount()).isEqualTo(2);
+        assertThat(rb1MockChangeHandler.getLast()).isFalse();
 
-        assertEquals(true, rb2.getValue());
-        assertEquals(1, rb2MockChangeHandler.getCallCount());
-        assertTrue(rb2MockChangeHandler.getLast());
+        assertThat(rb2.getValue()).isEqualTo(true);
+        assertThat(rb2MockChangeHandler.getCallCount()).isEqualTo(1);
+        assertThat(rb2MockChangeHandler.getLast()).isTrue();
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         RadioButton rb = new RadioButton("myRadioGroup", "foo");
-        // Pre-Assert
-        assertEquals("foo", rb.getText());
+        // Preconditions
+        assertThat(rb.getText()).isEqualTo("foo");
 
-        // Act
+        // When
         rb.setText("text");
 
-        // Assert
-        assertEquals("text", rb.getText());
+        // Then
+        assertThat(rb.getText()).isEqualTo("text");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         RadioButton rb = new RadioButton("myRadioGroup", "foo");
-        // Pre-Assert
-        assertEquals("", rb.getTitle());
+        // Preconditions
+        assertThat(rb.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         rb.setTitle("title");
 
-        // Assert
-        assertEquals("title", rb.getTitle());
+        // Then
+        assertThat(rb.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         RadioButton rb = new RadioButton("myRadioGroup", "foo");
-        // Pre-Assert
-        assertEquals(true, rb.isVisible());
+        // Preconditions
+        assertThat(rb.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         rb.setVisible(false);
 
-        // Assert
-        assertEquals(false, rb.isVisible());
+        // Then
+        assertThat(rb.isVisible()).isEqualTo(false);
     }
 
 }

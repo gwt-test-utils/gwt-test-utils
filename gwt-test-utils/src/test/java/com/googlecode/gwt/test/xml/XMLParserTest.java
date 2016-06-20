@@ -12,87 +12,87 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.InputStream;
 import java.io.StringWriter;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class XMLParserTest extends GwtTestTest {
 
     @Test
     public void parse() throws Exception {
-        // Arrange
+        // Given
         String xmlContent = convertXMLFileToString("/someXML.xml");
 
-        // Act
+        // When
         Document document = XMLParser.parse(xmlContent);
 
-        // Assert
+        // Then
         Element documentElement = document.getDocumentElement();
-        assertEquals("beans", documentElement.getTagName());
+        assertThat(documentElement.getTagName()).isEqualTo("beans");
 
         Element beans = (Element) document.getFirstChild();
-        assertEquals("beans", beans.getTagName());
-        assertNull(beans.getNextSibling());
-        assertNull(beans.getPreviousSibling());
+        assertThat(beans.getTagName()).isEqualTo("beans");
+        assertThat(beans.getNextSibling()).isNull();
+        assertThat(beans.getPreviousSibling()).isNull();
 
         Element testBean = document.getElementById("testBean");
         NodeList beanList = document.getElementsByTagName("bean");
 
-        assertEquals(2, beanList.getLength());
-        assertEquals("testBean", beanList.item(0).getAttributes().getNamedItem("id").getNodeValue());
-        assertEquals("bean", testBean.getTagName());
-        assertEquals("bean", testBean.getNodeName());
-        assertEquals("http://www.springframework.org/schema/beans", testBean.getNamespaceURI());
-        assertEquals("org.springframework.beans.TestBean", testBean.getAttribute("class"));
-        assertTrue(testBean.hasAttribute("class"));
-        assertFalse(testBean.hasAttribute("fooAttr"));
+        assertThat(beanList.getLength()).isEqualTo(2);
+        assertThat(beanList.item(0).getAttributes().getNamedItem("id").getNodeValue()).isEqualTo("testBean");
+        assertThat(testBean.getTagName()).isEqualTo("bean");
+        assertThat(testBean.getNodeName()).isEqualTo("bean");
+        assertThat(testBean.getNamespaceURI()).isEqualTo("http://www.springframework.org/schema/beans");
+        assertThat(testBean.getAttribute("class")).isEqualTo("org.springframework.beans.TestBean");
+        assertThat(testBean.hasAttribute("class")).isTrue();
+        assertThat(testBean.hasAttribute("fooAttr")).isFalse();
         Attr classAttr = testBean.getAttributeNode("class");
-        assertEquals("class", classAttr.getName());
-        assertEquals("org.springframework.beans.TestBean", classAttr.getValue());
-        assertEquals("http://www.springframework.org/schema/beans", classAttr.getNamespaceURI());
-        assertEquals("class", classAttr.getNodeName());
+        assertThat(classAttr.getName()).isEqualTo("class");
+        assertThat(classAttr.getValue()).isEqualTo("org.springframework.beans.TestBean");
+        assertThat(classAttr.getNamespaceURI()).isEqualTo("http://www.springframework.org/schema/beans");
+        assertThat(classAttr.getNodeName()).isEqualTo("class");
         // CDATA attribute
         Element ageProperty = (Element) testBean.getChildNodes().item(0);
-        assertEquals(1, ageProperty.getAttributes().getLength());
-        assertEquals("age", ageProperty.getAttribute("name"));
-        assertEquals("<10>", ageProperty.getNodeValue());
+        assertThat(ageProperty.getAttributes().getLength()).isEqualTo(1);
+        assertThat(ageProperty.getAttribute("name")).isEqualTo("age");
+        assertThat(ageProperty.getNodeValue()).isEqualTo("<10>");
         // TODO : pass this assertion
-        // assertEquals("#cdata-section",
+        // ThenEquals("#cdata-section",
         // ageProperty.getFirstChild().getNodeName());
 
         // "spouse" child bean assertions
         NamedNodeMap innerBeanAgePropertyAttributes = beanList.item(1).getChildNodes().item(0).getAttributes();
-        assertEquals("age", innerBeanAgePropertyAttributes.getNamedItem("name").getNodeValue());
-        assertEquals("11", innerBeanAgePropertyAttributes.getNamedItem("value").getNodeValue());
+        assertThat(innerBeanAgePropertyAttributes.getNamedItem("name").getNodeValue()).isEqualTo("age");
+        assertThat(innerBeanAgePropertyAttributes.getNamedItem("value").getNodeValue()).isEqualTo("11");
 
         // bean from "util" namespace
         Element name = (Element) testBean.getNextSibling();
-        assertEquals("property-path", name.getTagName());
-        assertEquals("property-path", name.getNodeName());
-        assertEquals("http://www.springframework.org/schema/util", name.getNamespaceURI());
+        assertThat(name.getTagName()).isEqualTo("property-path");
+        assertThat(name.getNodeName()).isEqualTo("property-path");
+        assertThat(name.getNamespaceURI()).isEqualTo("http://www.springframework.org/schema/util");
 
     }
 
     @Test
     public void parseSimple() {
-        // Arrange
+        // Given
         String simpleXML = "<tags><tag>value</tag></tags>";
 
-        // Act
+        // When
         Document doc = XMLParser.parse(simpleXML);
 
-        // Assert
+        // Then
         NodeList tags = doc.getElementsByTagName("tag");
-        assertEquals("<tag>value</tag>", tags.item(0).toString());
+        assertThat(tags.item(0).toString()).isEqualTo("<tag>value</tag>");
         Text text = (Text) tags.item(0).getChildNodes().item(0);
-        assertEquals("value", text.getData());
-        assertEquals("#text", tags.item(0).getFirstChild().getNodeName());
-        assertEquals("<tags><tag>value</tag></tags>", doc.getDocumentElement().toString());
+        assertThat(text.getData()).isEqualTo("value");
+        assertThat(tags.item(0).getFirstChild().getNodeName()).isEqualTo("#text");
+        assertThat(doc.getDocumentElement().toString()).isEqualTo("<tags><tag>value</tag></tags>");
 
-        assertEquals(doc.getDocumentElement(), tags.item(0).getOwnerDocument().getDocumentElement());
+        assertThat(tags.item(0).getOwnerDocument().getDocumentElement()).isEqualTo(doc.getDocumentElement());
     }
 
     @Test
     public void removeWhitespace() throws Exception {
-        // Arrange
+        // Given
         Document document = XMLParser.createDocument();
         Element child = document.createElement("child");
         child.setNodeValue("     ");
@@ -101,17 +101,17 @@ public class XMLParserTest extends GwtTestTest {
         child2.appendChild(document.createCDATASection("    "));
         document.appendChild(child2);
 
-        // Pre-Assert : empty TextNode should exists
-        assertEquals(1, child.getChildNodes().getLength());
-        assertEquals(1, child2.getChildNodes().getLength());
+        // Preconditions : empty TextNode should exists
+        assertThat(child.getChildNodes().getLength()).isEqualTo(1);
+        assertThat(child2.getChildNodes().getLength()).isEqualTo(1);
 
-        // Act
+        // When
         XMLParser.removeWhitespace(document);
 
-        // Assert
-        assertEquals(0, child.getChildNodes().getLength());
+        // Then
+        assertThat(child.getChildNodes().getLength()).isEqualTo(0);
         // empty cdata is not removed
-        assertEquals(1, child2.getChildNodes().getLength());
+        assertThat(child2.getChildNodes().getLength()).isEqualTo(1);
     }
 
     private String convertXMLFileToString(String fileName) {

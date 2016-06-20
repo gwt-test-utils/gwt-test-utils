@@ -6,7 +6,8 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class FormPanelTest extends GwtTestTest {
 
@@ -16,72 +17,72 @@ public class FormPanelTest extends GwtTestTest {
 
     @Test
     public void add() {
-        // Arrange
+        // Given
         Button b1 = new Button();
         Button b2 = new Button();
-        assertFalse(b1.isAttached());
-        assertFalse(b2.isAttached());
+        assertThat(b1.isAttached()).isFalse();
+        assertThat(b2.isAttached()).isFalse();
 
-        // Act 1
+        // When 1
         form.add(b1);
 
-        // Assert 1
-        assertEquals(b1, form.getWidget());
-        assertTrue(b1.isAttached());
-        assertFalse(b2.isAttached());
+        // Then 1
+        assertThat(form.getWidget()).isEqualTo(b1);
+        assertThat(b1.isAttached()).isTrue();
+        assertThat(b2.isAttached()).isFalse();
 
-        // Act 2
+        // When 2
         try {
             form.add(b2);
             fail("Simple panel can only contain one child widget");
         } catch (Exception e) {
-            // Assert 2
-            assertTrue(e instanceof IllegalStateException);
+            // Then 2
+            assertThat(e instanceof IllegalStateException).isTrue();
         }
     }
 
     @Before
     public void beforeFormPanel() {
         form = new FormPanel();
-        assertFalse(form.isAttached());
+        assertThat(form.isAttached()).isFalse();
         RootPanel.get().add(form);
-        assertTrue(form.isAttached());
+        assertThat(form.isAttached()).isTrue();
     }
 
     @Test
     public void dimensions() {
-        // Act 1
+        // When 1
         form.setHeight("10");
         form.setWidth("20");
-        // Assert 1
-        assertEquals("10", form.getElement().getStyle().getHeight());
-        assertEquals("20", form.getElement().getStyle().getWidth());
+        // Then 1
+        assertThat(form.getElement().getStyle().getHeight()).isEqualTo("10");
+        assertThat(form.getElement().getStyle().getWidth()).isEqualTo("20");
 
-        // Act 2
+        // When 2
         form.setSize("30", "40");
-        // Assert 2
-        assertEquals("40", form.getElement().getStyle().getHeight());
-        assertEquals("30", form.getElement().getStyle().getWidth());
+        // Then 2
+        assertThat(form.getElement().getStyle().getHeight()).isEqualTo("40");
+        assertThat(form.getElement().getStyle().getWidth()).isEqualTo("30");
 
-        // Act 3
+        // When 3
         form.setPixelSize(30, 40);
-        // Assert 3
-        assertEquals("40px", form.getElement().getStyle().getHeight());
-        assertEquals("30px", form.getElement().getStyle().getWidth());
+        // Then 3
+        assertThat(form.getElement().getStyle().getHeight()).isEqualTo("40px");
+        assertThat(form.getElement().getStyle().getWidth()).isEqualTo("30px");
     }
 
     @Test
     public void removeFromParent() {
-        // Act
+        // When
         form.removeFromParent();
 
-        // Assert
-        assertFalse(form.isAttached());
+        // Then
+        assertThat(form.isAttached()).isFalse();
     }
 
     @Test
     public void setup() {
-        // Act
+        // When
         form.setAction("/myFormHandler");
         form.setEncoding(FormPanel.ENCODING_MULTIPART);
 
@@ -90,70 +91,70 @@ public class FormPanelTest extends GwtTestTest {
         form.setStyleName("formStyleName");
         form.addStyleName("addition");
 
-        // Assert
-        assertEquals("/myFormHandler", form.getAction());
-        assertEquals(FormPanel.ENCODING_MULTIPART, form.getEncoding());
-        assertEquals(FormPanel.METHOD_POST, form.getMethod());
-        assertEquals("formTitle", form.getTitle());
-        assertEquals("formStyleName addition", form.getStyleName());
+        // Then
+        assertThat(form.getAction()).isEqualTo("/myFormHandler");
+        assertThat(form.getEncoding()).isEqualTo(FormPanel.ENCODING_MULTIPART);
+        assertThat(form.getMethod()).isEqualTo(FormPanel.METHOD_POST);
+        assertThat(form.getTitle()).isEqualTo("formTitle");
+        assertThat(form.getStyleName()).isEqualTo("formStyleName addition");
     }
 
     @Test
     public void setWidget() {
-        // Arrange
+        // Given
         Button b1 = new Button();
         Button b2 = new Button();
-        assertFalse(b1.isAttached());
-        assertFalse(b2.isAttached());
+        assertThat(b1.isAttached()).isFalse();
+        assertThat(b2.isAttached()).isFalse();
 
-        // Act 1
+        // When 1
         form.setWidget(b1);
 
-        // Assert 1
-        assertEquals(b1, form.getWidget());
-        assertTrue(b1.isAttached());
-        assertFalse(b2.isAttached());
+        // Then 1
+        assertThat(form.getWidget()).isEqualTo(b1);
+        assertThat(b1.isAttached()).isTrue();
+        assertThat(b2.isAttached()).isFalse();
 
-        // Act 2
+        // When 2
         form.setWidget(b2);
 
-        // Assert 2
-        assertEquals(b2, form.getWidget());
-        assertFalse(b1.isAttached());
-        assertTrue(b2.isAttached());
+        // Then 2
+        assertThat(form.getWidget()).isEqualTo(b2);
+        assertThat(b1.isAttached()).isFalse();
+        assertThat(b2.isAttached()).isTrue();
     }
 
     @Test
     public void submit() {
-        // Arrange
+        // Given
         TextBox tb = new TextBox();
         setupFormForSubmitTest(tb);
         submitted = false;
         completeSubmitted = false;
 
-        // Act
+        // When
         form.submit();
 
-        // Assert
-        assertTrue(submitted);
-        assertFalse(completeSubmitted);
+        // Then
+        assertThat(submitted).isTrue();
+        assertThat(completeSubmitted).isFalse();
     }
 
     @Test
     public void submitComplete() {
-        // Arrange
+        // Given
         TextBox tb = new TextBox();
         tb.setText("some text");
         setupFormForSubmitTest(tb);
         submitted = false;
         completeSubmitted = false;
 
-        // Act
+        // When
         form.submit();
 
-        // Assert
-        assertTrue(submitted);
-        assertTrue(completeSubmitted);
+        // Then
+        assertThat(submitted).isTrue();
+        assertThat(completeSubmitted).isTrue();
     }
 
     private void setupFormForSubmitTest(final TextBox tb) {

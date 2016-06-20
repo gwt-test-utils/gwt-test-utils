@@ -5,67 +5,67 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimplePanelTest extends GwtTestTest {
 
     @Test
     public void add() {
-        // Arrange
+        // Given
         SimplePanel panel = new SimplePanel();
         RootPanel.get().add(panel);
-        assertTrue(panel.isAttached());
-        assertNull(panel.getWidget());
+        assertThat(panel.isAttached()).isTrue();
+        assertThat(panel.getWidget()).isNull();
         Button b1 = new Button();
-        assertFalse(b1.isAttached());
-        assertNull(b1.getParent());
+        assertThat(b1.isAttached()).isFalse();
+        assertThat(b1.getParent()).isNull();
 
-        // Act
+        // When
         panel.add(b1);
 
-        // Assert
-        assertTrue(b1.isAttached());
-        assertEquals(panel, b1.getParent());
-        assertEquals(b1, panel.getWidget());
+        // Then
+        assertThat(b1.isAttached()).isTrue();
+        assertThat(b1.getParent()).isEqualTo(panel);
+        assertThat(panel.getWidget()).isEqualTo(b1);
     }
 
     @Test
     public void remove() {
-        // Arrange
+        // Given
         SimplePanel panel = new SimplePanel();
         Button b = new Button();
         panel.add(b);
 
-        // Act & Assert
-        assertTrue(panel.remove(b));
+        // When & Assert
+        assertThat(panel.remove(b)).isTrue();
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         SimplePanel sp = new SimplePanel();
-        // Pre-Assert
-        assertEquals("", sp.getTitle());
+        // Preconditions
+        assertThat(sp.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         sp.setTitle("title");
 
-        // Assert
-        assertEquals("title", sp.getTitle());
+        // Then
+        assertThat(sp.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         SimplePanel sp = new SimplePanel();
-        // Pre-Assert
-        assertEquals(true, sp.isVisible());
+        // Preconditions
+        assertThat(sp.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         sp.setVisible(false);
 
-        // Assert
-        assertEquals(false, sp.isVisible());
+        // Then
+        assertThat(sp.isVisible()).isEqualTo(false);
     }
 
 }

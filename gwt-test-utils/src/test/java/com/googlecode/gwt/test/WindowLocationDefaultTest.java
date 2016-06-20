@@ -3,18 +3,18 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.Window;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WindowLocationDefaultTest extends GwtTestTest {
 
     @Test
     public void defaultPath() {
-        assertEquals("/index.html", Window.Location.getPath());
+        assertThat(Window.Location.getPath()).isEqualTo("/index.html");
     }
 
     @Test
     public void defaultProtocol() {
-        assertEquals("http:", Window.Location.getProtocol());
+        assertThat(Window.Location.getProtocol()).isEqualTo("http:");
     }
 
     @Override

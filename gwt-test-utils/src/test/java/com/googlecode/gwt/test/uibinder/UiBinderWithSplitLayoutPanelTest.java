@@ -7,37 +7,36 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithSplitLayoutPanelTest extends GwtTestTest {
 
     @Test
     public void uiBinderWithSplitLayoutPanel() {
-        // Arrange
+        // Given
         UiBinderWithSplitLayoutPanel panel = new UiBinderWithSplitLayoutPanel();
 
-        // Act
+        // When
         RootLayoutPanel.get().add(panel);
 
-        // Assert
-        assertEquals("North", panel.northLabel.getText());
-        assertEquals("Center", panel.centerLabel.getText());
-        assertEquals("East", panel.eastLabel.getText());
-        assertEquals("South", panel.southLabel.getText());
-        assertEquals("Center", panel.centerLabel.getText());
-        assertEquals(Direction.NORTH, panel.getLayout().getWidgetDirection(panel.northLabel));
-        assertEquals("<ul><li id=\"li-west0\">west0</li><li id=\"li-west1\">west1</li></ul>",
-                panel.westHTML.getHTML());
+        // Then
+        assertThat(panel.northLabel.getText()).isEqualTo("North");
+        assertThat(panel.centerLabel.getText()).isEqualTo("Center");
+        assertThat(panel.eastLabel.getText()).isEqualTo("East");
+        assertThat(panel.southLabel.getText()).isEqualTo("South");
+        assertThat(panel.centerLabel.getText()).isEqualTo("Center");
+        assertThat(panel.getLayout().getWidgetDirection(panel.northLabel)).isEqualTo(Direction.NORTH);
+        assertThat(panel.westHTML.getHTML()).isEqualTo("<ul><li id=\"li-west0\">west0</li><li id=\"li-west1\">west1</li></ul>");
 
         LIElement li0 = panel.westHTML.getElement().getFirstChildElement().getChild(0).cast();
         LIElement li1 = panel.westHTML.getElement().getFirstChildElement().getChild(1).cast();
-        assertEquals("west0", li0.getInnerText());
-        assertEquals("west1", li1.getInnerText());
+        assertThat(li0.getInnerText()).isEqualTo("west0");
+        assertThat(li1.getInnerText()).isEqualTo("west1");
 
-        assertEquals(li0, Document.get().getElementById("li-west0"));
-        assertEquals(li1, Document.get().getElementById("li-west1"));
+        assertThat(Document.get().getElementById("li-west0")).isEqualTo(li0);
+        assertThat(Document.get().getElementById("li-west1")).isEqualTo(li1);
 
-        assertEquals(15, panel.getLayout().getSplitterSize());
+        assertThat(panel.getLayout().getSplitterSize()).isEqualTo(15);
     }
 
 }

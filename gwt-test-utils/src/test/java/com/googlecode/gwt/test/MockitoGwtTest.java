@@ -53,37 +53,37 @@ public class MockitoGwtTest extends GwtTestWithMockito {
 
     @Test
     public void injectGwtMock() {
-        // Arrange
+        // Given
         doReturn("mocked method call").when(remoteService).myMethod("testParam");
 
-        // Act
+        // When
         String myMethod = bean.myMethod("testParam");
 
-        // Assert
+        // Then
         assertThat(myMethod).isEqualTo("mocked method call");
     }
 
     @Test
     public void injectMockitoMock() {
-        // Arrange
+        // Given
         doReturn("mocked bye !").when(contants).goodbye();
 
-        // Act
+        // When
         String goodbye = bean.goodbye();
 
-        // Assert
+        // Then
         assertThat(goodbye).isEqualTo("mocked bye !");
     }
 
     @Test
     public void injectSpy() {
-        // Arrange
+        // Given
         object.setMyField("my field");
 
-        // Act
+        // When
         String myfield = bean.getMyField();
 
-        // Assert
+        // Then
         assertThat(myfield).isEqualTo("my field");
         verify(object).getMyField();
     }

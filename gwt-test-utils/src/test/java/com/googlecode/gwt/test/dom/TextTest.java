@@ -5,20 +5,20 @@ import com.google.gwt.dom.client.Text;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TextTest extends GwtTestTest {
 
     @Test
     public void checkToString() {
-        // Arrange
+        // Given
         Text text = Document.get().createTextNode("some text");
 
-        // Act
+        // When
         String toString = text.toString();
 
-        // Assert
-        assertEquals("'some text'", toString);
+        // Then
+        assertThat(toString).isEqualTo("'some text'");
 
     }
 

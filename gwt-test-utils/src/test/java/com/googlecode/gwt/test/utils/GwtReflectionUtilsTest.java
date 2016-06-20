@@ -2,10 +2,80 @@ package com.googlecode.gwt.test.utils;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GwtReflectionUtilsTest {
+
+    @Test
+    public void callPrivateMethod() {
+        // Given
+        TestBean testBean = new TestBean();
+
+        // When
+        GwtReflectionUtils.callPrivateMethod(testBean, "setString", "my string");
+
+        // Then
+        assertThat(testBean.string).isEqualTo("my string");
+    }
+
+    @Test
+    public void callPrivateMethod_Primitive() {
+        // Given
+        TestBean testBean = new TestBean();
+
+        // When
+        GwtReflectionUtils.callPrivateMethod(testBean, "setBool", true);
+
+        // Then
+        assertThat(testBean.bool).isTrue();
+    }
+
+    @Test
+    public void callPrivateMethod_PrimitiveToWrapperType() {
+        // Given
+        TestBean testBean = new TestBean();
+
+        // When
+        GwtReflectionUtils.callPrivateMethod(testBean, "setBoolObject", true);
+
+        // Then
+        assertThat(testBean.bool).isTrue();
+    }
+
+    @Test
+    public void getPrivateFieldValue() {
+        // Given
+        TestBean testBean = new TestBean();
+        testBean.setString("my string");
+
+        // When
+        String s = GwtReflectionUtils.getPrivateFieldValue(testBean, "string");
+
+        // Then
+        assertThat(s).isEqualTo("my string");
+    }
+
+    @Test
+    public void getPrivateFieldValue_Primitive() {
+        // Given
+        TestBean testBean = new TestBean();
+        testBean.setBool(true);
+
+        // When
+        boolean b = (Boolean) GwtReflectionUtils.getPrivateFieldValue(testBean, "bool");
+
+        // Then
+        assertThat(b).isTrue();
+    }
+
+    @Test
+    public void ok() {
+        // When
+        String c = GwtReflectionUtils.getStaticFieldValue(TestBean.class, "CONST");
+
+        // Then
+        assertThat(c).isEqualTo(TestBean.CONST);
+    }
 
     private static class TestBean {
 
@@ -25,77 +95,6 @@ public class GwtReflectionUtilsTest {
         private void setString(String string) {
             this.string = string;
         }
-    }
-
-    @Test
-    public void callPrivateMethod() {
-        // Arrange
-        TestBean testBean = new TestBean();
-
-        // Act
-        GwtReflectionUtils.callPrivateMethod(testBean, "setString", "my string");
-
-        // Assert
-        assertEquals("my string", testBean.string);
-    }
-
-    @Test
-    public void callPrivateMethod_Primitive() {
-        // Arrange
-        TestBean testBean = new TestBean();
-
-        // Act
-        GwtReflectionUtils.callPrivateMethod(testBean, "setBool", true);
-
-        // Assert
-        assertTrue(testBean.bool);
-    }
-
-    @Test
-    public void callPrivateMethod_PrimitiveToWrapperType() {
-        // Arrange
-        TestBean testBean = new TestBean();
-
-        // Act
-        GwtReflectionUtils.callPrivateMethod(testBean, "setBoolObject", true);
-
-        // Assert
-        assertTrue(testBean.bool);
-    }
-
-    @Test
-    public void getPrivateFieldValue() {
-        // Arrange
-        TestBean testBean = new TestBean();
-        testBean.setString("my string");
-
-        // Act
-        String s = GwtReflectionUtils.getPrivateFieldValue(testBean, "string");
-
-        // Assert
-        assertEquals("my string", s);
-    }
-
-    @Test
-    public void getPrivateFieldValue_Primitive() {
-        // Arrange
-        TestBean testBean = new TestBean();
-        testBean.setBool(true);
-
-        // Act
-        boolean b = (Boolean) GwtReflectionUtils.getPrivateFieldValue(testBean, "bool");
-
-        // Assert
-        assertTrue(b);
-    }
-
-    @Test
-    public void ok() {
-        // Act
-        String c = GwtReflectionUtils.getStaticFieldValue(TestBean.class, "CONST");
-
-        // Assert
-        assertEquals(TestBean.CONST, c);
     }
 
 }

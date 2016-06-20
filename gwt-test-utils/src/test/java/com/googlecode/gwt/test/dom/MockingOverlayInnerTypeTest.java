@@ -12,22 +12,22 @@ public class MockingOverlayInnerTypeTest extends GwtTestTest {
 
     @Test
     public void withEasyMock() {
-        // Act
+        // When
         NativePreviewEvent event = EasyMock.createMock(NativePreviewEvent.class);
 
-        // Assert
+        // Then
         assertThat(event).isNotNull();
     }
 
     @Test
     public void withMockito() {
-        // Arrange
+        // Given
         // see MockNamePatcher
 
-        // Act
+        // When
         NativePreviewEvent event = Mockito.mock(NativePreviewEvent.class);
 
-        // Assert
+        // Then
         assertThat(event).isNotNull();
     }
 

@@ -4,28 +4,27 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithStackLayoutPanelTest extends GwtTestTest {
 
     @Test
     public void uiBinderWithStackLayoutPanel() {
-        // Arrange
+        // Given
         UiBinderWithStackLayoutPanel panel = new UiBinderWithStackLayoutPanel();
 
-        // Act
+        // When
         RootLayoutPanel.get().add(panel);
 
-        // Assert
-        assertEquals("able", panel.first.getText());
-        assertEquals("Custom header", panel.customHeader.getText());
-        assertEquals("baker", panel.second.getText());
-        assertEquals(panel.first, panel.getPanel().getVisibleWidget());
+        // Then
+        assertThat(panel.first.getText()).isEqualTo("able");
+        assertThat(panel.customHeader.getText()).isEqualTo("Custom header");
+        assertThat(panel.second.getText()).isEqualTo("baker");
+        assertThat(panel.getPanel().getVisibleWidget()).isEqualTo(panel.first);
 
-        assertEquals("<b>HTML</b>",
-                panel.getPanel().getHeaderWidget(0).getElement().getInnerHTML());
+        assertThat(panel.getPanel().getHeaderWidget(0).getElement().getInnerHTML()).isEqualTo("<b>HTML</b>");
 
-        assertEquals(panel.customHeader, panel.getPanel().getHeaderWidget(panel.second));
+        assertThat(panel.getPanel().getHeaderWidget(panel.second)).isEqualTo(panel.customHeader);
     }
 
 }

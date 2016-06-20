@@ -4,141 +4,141 @@ import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.user.client.ui.Anchor;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnchorTest extends GwtTestTest {
 
     @Test
     public void absoluteLeft() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Assert
-        assertEquals(0, a.getAbsoluteLeft());
+        // Then
+        assertThat(a.getAbsoluteLeft()).isEqualTo(0);
     }
 
     @Test
     public void absoluteTop() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Assert
-        assertEquals(0, a.getAbsoluteTop());
+        // Then
+        assertThat(a.getAbsoluteTop()).isEqualTo(0);
     }
 
     @Test
     public void href() {
-        // Arrange
+        // Given
         Anchor a = new Anchor("toto", "href");
-        // Pre-Assert
-        assertEquals("toto", a.getText());
-        assertEquals("href", a.getHref());
+        // Preconditions
+        assertThat(a.getText()).isEqualTo("toto");
+        assertThat(a.getHref()).isEqualTo("href");
 
-        // Act
+        // When
         a.setHref("new");
 
-        // Assert
-        assertEquals("new", a.getHref());
+        // Then
+        assertThat(a.getHref()).isEqualTo("new");
     }
 
     @Test
     public void html() {
-        // Arrange
+        // Given
         Anchor a = new Anchor("<h1>foo</h1>", true);
-        assertEquals("<h1>foo</h1>", a.getHTML());
+        assertThat(a.getHTML()).isEqualTo("<h1>foo</h1>");
 
-        // Act
+        // When
         a.setHTML("<h1>test</h1>");
 
-        // Assert
-        assertEquals("<h1>test</h1>", a.getHTML());
-        assertEquals(1, a.getElement().getChildCount());
+        // Then
+        assertThat(a.getHTML()).isEqualTo("<h1>test</h1>");
+        assertThat(a.getElement().getChildCount()).isEqualTo(1);
         HeadingElement h1 = a.getElement().getChild(0).cast();
-        assertEquals("H1", h1.getTagName());
-        assertEquals("test", h1.getInnerText());
+        assertThat(h1.getTagName()).isEqualTo("H1");
+        assertThat(h1.getInnerText()).isEqualTo("test");
     }
 
     @Test
     public void name() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         a.setName("toto");
 
-        // Assert
-        assertEquals("toto", a.getName());
+        // Then
+        assertThat(a.getName()).isEqualTo("toto");
     }
 
     @Test
     public void tabIndex() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         a.setTabIndex(1);
 
-        // Assert
-        assertEquals(1, a.getTabIndex());
+        // Then
+        assertThat(a.getTabIndex()).isEqualTo(1);
     }
 
     @Test
     public void tagName() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Assert
-        assertEquals("a", a.getElement().getTagName());
+        // Then
+        assertThat(a.getElement().getTagName()).isEqualTo("a");
     }
 
     @Test
     public void target() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         a.setTarget("myTarget");
 
-        // Assert
-        assertEquals("myTarget", a.getTarget());
+        // Then
+        assertThat(a.getTarget()).isEqualTo("myTarget");
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         Anchor a = new Anchor("foo");
-        assertEquals("foo", a.getText());
+        assertThat(a.getText()).isEqualTo("foo");
 
-        // Act
+        // When
         a.setText("toto");
 
-        // Assert
-        assertEquals("toto", a.getText());
+        // Then
+        assertThat(a.getText()).isEqualTo("toto");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
 
-        // Act
+        // When
         a.setTitle("title");
 
-        // Assert
-        assertEquals("title", a.getTitle());
+        // Then
+        assertThat(a.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         Anchor a = new Anchor();
-        assertEquals(true, a.isVisible());
+        assertThat(a.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         a.setVisible(false);
 
-        // Assert
-        assertEquals(false, a.isVisible());
+        // Then
+        assertThat(a.isVisible()).isEqualTo(false);
     }
 
 }

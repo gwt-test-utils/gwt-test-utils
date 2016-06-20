@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MyChildChildConstantsTest extends GwtTestTest {
 
@@ -22,18 +22,17 @@ public class MyChildChildConstantsTest extends GwtTestTest {
 
     @Test
     public void childChildConstant() {
-        // Act
+        // When
         SafeHtml hello = childChildConstants.hello();
         String valueWithoutDefaultAnnotationInChild = childChildConstants.valueWithoutDefaultAnnotationInChild();
         String valueWithoutLocale = childChildConstants.valueWithoutLocale();
         String valueWithoutLocaleToBeOverride = childChildConstants.valueWithoutLocaleToBeOverride();
 
-        // Assert
-        assertEquals("Hello english !", hello.asString());
-        assertEquals("Value in child default .properties", valueWithoutDefaultAnnotationInChild);
-        assertEquals("Value from a default .properties file, without locale", valueWithoutLocale);
-        assertEquals("Value overriden by child in default .properties",
-                valueWithoutLocaleToBeOverride);
+        // Then
+        assertThat(hello.asString()).isEqualTo("Hello english !");
+        assertThat(valueWithoutDefaultAnnotationInChild).isEqualTo("Value in child default .properties");
+        assertThat(valueWithoutLocale).isEqualTo("Value from a default .properties file, without locale");
+        assertThat(valueWithoutLocaleToBeOverride).isEqualTo("Value overriden by child in default .properties");
     }
 
 }

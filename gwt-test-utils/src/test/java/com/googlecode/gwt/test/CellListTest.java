@@ -13,16 +13,14 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CellListTest extends GwtTestTest {
 
     private static final List<String> DAYS = Arrays.asList("Sunday", "Monday", "Tuesday",
             "Wednesday", "Thursday", "Friday", "Saturday");
-
-    private CellList<String> cellList;
-
     private final StringBuilder sb = new StringBuilder();
+    private CellList<String> cellList;
 
     @Before
     public void beforeCellListTest() {
@@ -54,15 +52,15 @@ public class CellListTest extends GwtTestTest {
         // Add it to the root panel.
         RootPanel.get().add(cellList);
 
-        // Pre-Assert
-        assertEquals(DAYS.size(), cellList.getRowCount());
-        assertEquals(5, cellList.getVisibleItemCount());
-        assertEquals("Thursday", cellList.getVisibleItem(cellList.getVisibleItemCount() - 1));
+        // Preconditions
+        assertThat(cellList.getRowCount()).isEqualTo(DAYS.size());
+        assertThat(cellList.getVisibleItemCount()).isEqualTo(5);
+        assertThat(cellList.getVisibleItem(cellList.getVisibleItemCount() - 1)).isEqualTo("Thursday");
     }
 
     @Test
     public void selectWithClick() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
 
         final SingleSelectionModel<String> selectionModel = new SingleSelectionModel<String>();
@@ -76,25 +74,25 @@ public class CellListTest extends GwtTestTest {
             }
         });
 
-        // Act 1
+        // When 1
         Browser.click(cellList, "Wednesday");
 
-        // Assert 1
-        assertEquals("selected : Wednesday", sb.toString());
-        assertTrue(cellList.getSelectionModel().isSelected("Wednesday"));
+        // Then 1
+        assertThat(sb.toString()).isEqualTo("selected : Wednesday");
+        assertThat(cellList.getSelectionModel().isSelected("Wednesday")).isTrue();
 
-        // Act 2 : deselect
+        // When 2 : deselect
 
         Browser.click(cellList, "Wednesday");
 
-        // Assert 2
-        assertEquals("selected : Wednesday", sb.toString());
-        assertFalse(cellList.getSelectionModel().isSelected("Wednesday"));
+        // Then 2
+        assertThat(sb.toString()).isEqualTo("selected : Wednesday");
+        assertThat(cellList.getSelectionModel().isSelected("Wednesday")).isFalse();
     }
 
     @Test
     public void selectWithClick_OutOfRange() {
-        // Arrange
+        // Given
         final SingleSelectionModel<String> selectionModel = new SingleSelectionModel<String>();
         cellList.setSelectionModel(selectionModel);
         selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
@@ -108,9 +106,8 @@ public class CellListTest extends GwtTestTest {
 
         Browser.click(cellList, "Saturday");
 
-        // Assert : no trigger because "Saturday" is not visible
-        assertEquals("the item to click is now visible in the targeted CellList instance",
-                sb.toString());
-        assertFalse(cellList.getSelectionModel().isSelected("Saturday"));
+        // Then : no trigger because "Saturday" is not visible
+        assertThat(sb.toString()).isEqualTo("the item to click is now visible in the targeted CellList instance");
+        assertThat(cellList.getSelectionModel().isSelected("Saturday")).isFalse();
     }
 }

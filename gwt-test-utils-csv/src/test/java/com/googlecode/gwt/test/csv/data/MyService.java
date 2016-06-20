@@ -2,7 +2,8 @@ package com.googlecode.gwt.test.csv.data;
 
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @RemoteServiceRelativePath("myService")
 public class MyService implements MyRemoteService {
@@ -15,7 +16,7 @@ public class MyService implements MyRemoteService {
     }
 
     public MyCustomObject myMethod2(MyCustomObject object) {
-        assertEquals("toto", object.myField);
+        assertThat(object.myField).isEqualTo("toto");
 
         object.myField = "titi";
         object.myTransientField = "this will not be serialized";

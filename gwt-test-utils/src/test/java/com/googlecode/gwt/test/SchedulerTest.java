@@ -39,7 +39,7 @@ public class SchedulerTest extends GwtTestTest {
 
     @Test
     public void scheduledCommandOrder() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
 
         Scheduler.get().scheduleEntry(new ScheduledCommand() {
@@ -106,10 +106,10 @@ public class SchedulerTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         getBrowserSimulator().fireLoopEnd();
 
-        // Assert
+        // Then
         assertThat(sb.toString()).isEqualTo(
                 "scheduleFinally1 scheduleEntry1 scheduleDeferred1 scheduleFinally2 scheduleFinally3 scheduleEntry2 scheduleEntry3 scheduleDeferred2 ");
 
@@ -117,7 +117,7 @@ public class SchedulerTest extends GwtTestTest {
 
     @Test
     public void scheduledCommandOrderWithRpcCall() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
         final MyRemoteServiceAsync service = GWT.create(MyRemoteService.class);
 
@@ -215,17 +215,17 @@ public class SchedulerTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         getBrowserSimulator().fireLoopEnd();
 
-        // Assert
+        // Then
         assertThat(sb.toString()).isEqualTo(
                 "scheduleFinally1 scheduleEntry1 scheduleDeferred1 onSuccess1 onSuccess2 scheduleFinally2 scheduleFinally3 scheduleEntry2 scheduleEntry3 scheduleDeferred2 onSuccess3 ");
     }
 
     @Test
     public void scheduleDeferred() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
 
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -236,19 +236,19 @@ public class SchedulerTest extends GwtTestTest {
             }
         });
 
-        // Pre-Assert
+        // Preconditions
         assertThat(sb.toString()).isEmpty();
 
-        // Act
+        // When
         getBrowserSimulator().fireLoopEnd();
 
-        // Assert
+        // Then
         assertThat(sb.toString()).isEqualTo("scheduleDeferred");
     }
 
     @Test
     public void scheduledRepeatingCommandOrder() {
-        // Arrange
+        // Given
         i = j = 0;
         final StringBuilder sb = new StringBuilder();
 
@@ -285,17 +285,17 @@ public class SchedulerTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         getBrowserSimulator().fireLoopEnd();
 
-        // Assert
+        // Then
         assertThat(sb.toString()).isEqualTo(
                 "finally0 subfinally1 entry0 subentry1 finally1 subfinally2 entry1 subentry2 finally2 subfinally3 entry2 subentry3 finally3 subfinally4 entry3 subentry4 ");
     }
 
     @Test
     public void scheduleEntry() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
 
         Scheduler.get().scheduleEntry(new ScheduledCommand() {
@@ -306,19 +306,19 @@ public class SchedulerTest extends GwtTestTest {
             }
         });
 
-        // Pre-Assert
+        // Preconditions
         assertThat(sb.toString()).isEmpty();
 
-        // Act
+        // When
         getBrowserSimulator().fireLoopEnd();
 
-        // Assert
+        // Then
         assertThat(sb.toString()).isEqualTo("scheduleEntry");
     }
 
     @Test
     public void scheduleFinally() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
 
         Scheduler.get().scheduleFinally(new ScheduledCommand() {
@@ -329,19 +329,19 @@ public class SchedulerTest extends GwtTestTest {
             }
         });
 
-        // Pre-Assert
+        // Preconditions
         assertThat(sb.toString()).isEmpty();
 
-        // Act
+        // When
         getBrowserSimulator().fireLoopEnd();
 
-        // Assert
+        // Then
         assertThat(sb.toString()).isEqualTo("scheduleFinally");
     }
 
     @Test
     public void scheduleIncremental() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
         final int COUNT = 2;
 
@@ -355,10 +355,10 @@ public class SchedulerTest extends GwtTestTest {
             }
         };
 
-        // Act
+        // When
         Scheduler.get().scheduleIncremental(command);
 
-        // Assert
+        // Then
         assertThat(sb.toString()).isEqualTo("012");
     }
 }

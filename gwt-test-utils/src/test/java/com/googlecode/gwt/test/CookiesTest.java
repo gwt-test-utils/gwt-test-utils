@@ -3,33 +3,32 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.Cookies;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CookiesTest extends GwtTestTest {
 
     @Test
     public void cookies() {
-        // Pre-Assert
-        assertNull(Cookies.getCookie("test"));
+        // Preconditions
+        assertThat(Cookies.getCookie("test")).isNull();
 
-        // Act 1
+        // When 1
         Cookies.setCookie("test", "test-value");
 
-        // Assert 1
-        assertEquals("test-value", Cookies.getCookie("test"));
+        // Then 1
+        assertThat(Cookies.getCookie("test")).isEqualTo("test-value");
 
-        // Act 2
+        // When 2
         Cookies.removeCookie("test");
 
-        // Assert 2
-        assertNull(Cookies.getCookie("test"));
+        // Then 2
+        assertThat(Cookies.getCookie("test")).isNull();
     }
 
     @Test
     public void removeCookieWhenItDoesNotExist() {
         Cookies.removeCookie("test");
-        assertNull(Cookies.getCookie("test"));
+        assertThat(Cookies.getCookie("test")).isNull();
     }
 
 }

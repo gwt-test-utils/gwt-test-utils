@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("deprecation")
 public class ButtonTest extends GwtTestTest {
@@ -29,25 +29,23 @@ public class ButtonTest extends GwtTestTest {
 
     @Test
     public void checkToString() {
-        // Arrange
+        // Given
         b.setHTML("test button");
         b.setEnabled(false);
         b.setFocus(false);
         b.setAccessKey('h');
         b.setStyleName("my-style");
 
-        // Act
+        // When
         String toString = b.toString();
 
-        // Assert
-        assertEquals(
-                "<button type=\"button\" class=\"my-style\" disabled=\"\" accessKey=\"h\">test button</button>",
-                toString);
+        // Then
+        assertThat(toString).isEqualTo("<button type=\"button\" class=\"my-style\" disabled=\"\" accessKey=\"h\">test button</button>");
     }
 
     @Test
     public void click_ClickHandler() {
-        // Arrange
+        // Given
         // add a handler to test the click
         b.addClickHandler(new ClickHandler() {
 
@@ -57,19 +55,19 @@ public class ButtonTest extends GwtTestTest {
 
         });
 
-        // Pre-Assert
-        assertEquals("", b.getHTML());
+        // Preconditions
+        assertThat(b.getHTML()).isEqualTo("");
 
-        // Act
+        // When
         b.click();
 
-        // Assert
-        assertEquals("clicked", b.getHTML());
+        // Then
+        assertThat(b.getHTML()).isEqualTo("clicked");
     }
 
     @Test
     public void click_ClickListener() {
-        // Arrange
+        // Given
         b.addClickListener(new ClickListener() {
 
             public void onClick(Widget sender) {
@@ -78,109 +76,109 @@ public class ButtonTest extends GwtTestTest {
             }
         });
 
-        // Pre-Assert
-        assertEquals("", b.getHTML());
+        // Preconditions
+        assertThat(b.getHTML()).isEqualTo("");
 
-        // Act
+        // When
         b.click();
 
-        // Assert
-        assertEquals("clicked", b.getHTML());
+        // Then
+        assertThat(b.getHTML()).isEqualTo("clicked");
     }
 
     @Test
     public void enabled() {
-        // Pre-Assert
-        assertEquals(true, b.isEnabled());
+        // Preconditions
+        assertThat(b.isEnabled()).isEqualTo(true);
 
-        // Act
+        // When
         b.setEnabled(false);
 
-        // Assert
-        assertEquals(false, b.isEnabled());
+        // Then
+        assertThat(b.isEnabled()).isEqualTo(false);
     }
 
     @Test
     public void html() {
-        // Pre-Assert
-        assertEquals("", b.getHTML());
+        // Preconditions
+        assertThat(b.getHTML()).isEqualTo("");
 
-        // Act
+        // When
         b.setHTML("test-html");
 
-        // Assert
-        assertEquals("test-html", b.getHTML());
+        // Then
+        assertThat(b.getHTML()).isEqualTo("test-html");
     }
 
     @Test
     public void styleName() {
-        // Pre-Assert
-        assertEquals("gwt-Button", b.getStyleName());
+        // Preconditions
+        assertThat(b.getStyleName()).isEqualTo("gwt-Button");
 
-        // Act
+        // When
         b.setStyleName("test-button-style");
 
-        // Assert
-        assertEquals("test-button-style", b.getStyleName());
+        // Then
+        assertThat(b.getStyleName()).isEqualTo("test-button-style");
     }
 
     @Test
     public void stylePrimaryName() {
-        // Act
+        // When
         b.setStylePrimaryName("test-button-styleP");
 
-        // Assert
-        assertEquals("test-button-styleP", b.getStylePrimaryName());
+        // Then
+        assertThat(b.getStylePrimaryName()).isEqualTo("test-button-styleP");
     }
 
     @Test
     public void text() {
-        // Act
+        // When
         b.setText("toto");
 
-        // Assert
-        assertEquals("toto", b.getText());
+        // Then
+        assertThat(b.getText()).isEqualTo("toto");
     }
 
     @Test
     public void title() {
-        // Act
+        // When
         b.setTitle("title");
 
-        // Assert
-        assertEquals("title", b.getTitle());
+        // Then
+        assertThat(b.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Pre-Assert
-        assertEquals(true, b.isVisible());
+        // Preconditions
+        assertThat(b.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         b.setVisible(false);
 
-        // Assert
-        assertEquals(false, b.isVisible());
+        // Then
+        assertThat(b.isVisible()).isEqualTo(false);
     }
 
     @Test
     public void wrap() {
-        // Arrange
+        // Given
         ButtonElement element = Document.get().createPushButtonElement();
         element.setTabIndex(3);
         Document.get().getBody().appendChild(element);
 
-        // Act
+        // When
         Button b = Button.wrap(element);
 
-        // Assert 1
-        assertEquals(3, b.getTabIndex());
+        // Then 1
+        assertThat(b.getTabIndex()).isEqualTo(3);
 
-        // Act 2
+        // When 2
         b.setTabIndex(1);
 
-        // Assert 2
-        assertEquals(1, element.getTabIndex());
+        // Then 2
+        assertThat(element.getTabIndex()).isEqualTo(1);
     }
 
 }

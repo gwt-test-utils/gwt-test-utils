@@ -7,8 +7,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TabPanelTest extends GwtTestTest {
 
@@ -16,19 +15,19 @@ public class TabPanelTest extends GwtTestTest {
 
     @Test
     public void deck() {
-        // Arrange
+        // Given
         TabPanel tp = createTabPanel();
 
-        // Act
+        // When
         tp.selectTab(2);
 
-        // Assert
-        assertEquals(2, tp.getDeckPanel().getVisibleWidget());
+        // Then
+        assertThat(tp.getDeckPanel().getVisibleWidget()).isEqualTo(2);
     }
 
     @Test
     public void selection() {
-        // Arrange
+        // Given
         TabPanel tp = createTabPanel();
 
         tp.addSelectionHandler(new SelectionHandler<Integer>() {
@@ -37,69 +36,69 @@ public class TabPanelTest extends GwtTestTest {
                 selectedTabIndex = event.getSelectedItem();
             }
         });
-        // Pre-Assert
-        assertEquals(-1, selectedTabIndex);
+        // Preconditions
+        assertThat(selectedTabIndex).isEqualTo(-1);
 
-        // Act
+        // When
         tp.selectTab(1);
 
-        // Assert
-        assertEquals(1, selectedTabIndex);
+        // Then
+        assertThat(selectedTabIndex).isEqualTo(1);
     }
 
     @Test
     public void tabPanel() {
-        // Arrange
+        // Given
         TabPanel tp = createTabPanel();
 
-        // Act
+        // When
         Widget w = tp.getWidget(1);
 
-        // Assert
-        assertTrue(w instanceof HTML);
+        // Then
+        assertThat(w instanceof HTML).isTrue();
         HTML html = (HTML) w;
-        assertEquals("Bar", html.getHTML());
+        assertThat(html.getHTML()).isEqualTo("Bar");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         TabPanel tp = new TabPanel();
-        // Pre-Assert
-        assertEquals("", tp.getTitle());
+        // Preconditions
+        assertThat(tp.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         tp.setTitle("title");
 
-        // Assert
-        assertEquals("title", tp.getTitle());
+        // Then
+        assertThat(tp.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         TabPanel tp = new TabPanel();
-        // Pre-Assert
-        assertEquals(true, tp.isVisible());
+        // Preconditions
+        assertThat(tp.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         tp.setVisible(false);
 
-        // Assert
-        assertEquals(false, tp.isVisible());
+        // Then
+        assertThat(tp.isVisible()).isEqualTo(false);
     }
 
     @Test
     public void widgetIndex() {
-        // Arrange
+        // Given
         TabPanel tp = new TabPanel();
         Widget widget0 = new HTML("Foo");
         tp.add(widget0, "foo");
         Widget widget1 = new HTML("Bar");
         tp.add(widget1, "bar");
 
-        // Act & Assert
-        assertEquals(1, tp.getWidgetIndex(widget1));
+        // When & Assert
+        assertThat(tp.getWidgetIndex(widget1)).isEqualTo(1);
     }
 
     private TabPanel createTabPanel() {

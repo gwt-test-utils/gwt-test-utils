@@ -9,7 +9,6 @@ import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("deprecation")
 public class FlexTableTest extends GwtTestTest {
@@ -18,7 +17,7 @@ public class FlexTableTest extends GwtTestTest {
 
     @Test
     public void click_ClickHandler_NestedWidget() {
-        // Arrange
+        // Given
         clicked = false;
         FlexTable t = new FlexTable();
 
@@ -33,19 +32,19 @@ public class FlexTableTest extends GwtTestTest {
         // add the button
         t.setWidget(0, 0, b);
 
-        // Pre-Assert
-        assertEquals(false, clicked);
+        // Preconditions
+        assertThat(clicked).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(t.getWidget(0, 0));
 
-        // Assert
-        assertEquals(true, clicked);
+        // Then
+        assertThat(clicked).isEqualTo(true);
     }
 
     @Test
     public void click_ClickkListener_NestedWidget() {
-        // Arrange
+        // Given
         clicked = false;
         FlexTable t = new FlexTable();
 
@@ -60,31 +59,31 @@ public class FlexTableTest extends GwtTestTest {
         // add the button
         t.setWidget(0, 0, b);
 
-        // Pre-Assert
-        assertEquals(false, clicked);
+        // Preconditions
+        assertThat(clicked).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(t.getWidget(0, 0));
 
-        // Assert
-        assertEquals(true, clicked);
+        // Then
+        assertThat(clicked).isEqualTo(true);
     }
 
     @Test
     public void html() {
-        // Arrange
+        // Given
         FlexTable t = new FlexTable();
 
-        // Act
+        // When
         t.setHTML(1, 1, "<h1>test</h1>");
 
-        // Assert
-        assertEquals("<h1>test</h1>", t.getHTML(1, 1));
+        // Then
+        assertThat(t.getHTML(1, 1)).isEqualTo("<h1>test</h1>");
         Element e = t.getCellFormatter().getElement(1, 1);
-        assertEquals(1, e.getChildCount());
+        assertThat(e.getChildCount()).isEqualTo(1);
         HeadingElement h1 = e.getChild(0).cast();
-        assertEquals("H1", h1.getTagName());
-        assertEquals("test", h1.getInnerText());
+        assertThat(h1.getTagName()).isEqualTo("H1");
+        assertThat(h1.getInnerText()).isEqualTo("test");
     }
 
     @Test
@@ -120,48 +119,48 @@ public class FlexTableTest extends GwtTestTest {
         // ...and set it's column span so that it takes up the whole row.
         t.getFlexCellFormatter().setColSpan(1, 0, 3);
 
-        // Assert
-        assertEquals(3, t.getRowCount());
-        assertEquals("bottom-right corner", t.getText(2, 2));
-        assertEquals(b, t.getWidget(1, 0));
+        // Then
+        assertThat(t.getRowCount()).isEqualTo(3);
+        assertThat(t.getText(2, 2)).isEqualTo("bottom-right corner");
+        assertThat(t.getWidget(1, 0)).isSameAs(b);
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         FlexTable t = new FlexTable();
 
-        // Act
+        // When
         t.setText(1, 1, "text");
 
-        // Assert
-        assertEquals("text", t.getText(1, 1));
+        // Then
+        assertThat(t.getText(1, 1)).isEqualTo("text");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         FlexTable t = new FlexTable();
 
-        // Act
+        // When
         t.setTitle("title");
 
-        // Assert
-        assertEquals("title", t.getTitle());
+        // Then
+        assertThat(t.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         FlexTable t = new FlexTable();
-        // Pre-Assert
-        assertEquals(true, t.isVisible());
+        // Preconditions
+        assertThat(t.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         t.setVisible(false);
 
-        // Assert
-        assertEquals(false, t.isVisible());
+        // Then
+        assertThat(t.isVisible()).isEqualTo(false);
     }
 
 }

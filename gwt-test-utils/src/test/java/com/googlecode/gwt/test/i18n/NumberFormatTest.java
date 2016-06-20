@@ -6,54 +6,54 @@ import org.junit.Test;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberFormatTest extends GwtTestTest {
 
     @Test
     public void numberFormat_Fr() throws Exception {
-        // Arrange
+        // Given
         setLocale(Locale.FRENCH);
 
-        // Act & Assert
-        assertEquals("10,00 €", NumberFormat.getCurrencyFormat().format(10));
-        assertEquals("3,142", NumberFormat.getDecimalFormat().format(3.1416));
+        // When & Assert
+        assertThat(NumberFormat.getCurrencyFormat().format(10)).isEqualTo("10,00 €");
+        assertThat(NumberFormat.getDecimalFormat().format(3.1416)).isEqualTo("3,142");
     }
 
     @Test
     public void numberFormat_SpecificPattern() {
-        // Arrange
+        // Given
         setLocale(Locale.FRENCH);
         NumberFormat numberFormat = NumberFormat.getFormat("0000000000");
 
-        // Act
+        // When
         String numberString = numberFormat.format(1234);
 
-        // Assert
-        assertEquals("0000001234", numberString);
+        // Then
+        assertThat(numberString).isEqualTo("0000001234");
     }
 
     @Test
     public void numberFormat_SpecificPatternWithDouble() {
-        // Arrange
+        // Given
         setLocale(Locale.FRENCH);
         NumberFormat numberFormat = NumberFormat.getFormat("0000000000");
 
-        // Act
+        // When
         String numberString = numberFormat.format(42147482);
 
-        // Assert
-        assertEquals("0042147482", numberString);
+        // Then
+        assertThat(numberString).isEqualTo("0042147482");
     }
 
     @Test
     public void numberFormat_Us() {
-        // Arrange
+        // Given
         setLocale(Locale.ENGLISH);
 
-        // Act & Assert
-        assertEquals("$10.00", NumberFormat.getCurrencyFormat().format(10));
-        assertEquals("3.142", NumberFormat.getDecimalFormat().format(3.1416));
+        // When & Assert
+        assertThat(NumberFormat.getCurrencyFormat().format(10)).isEqualTo("$10.00");
+        assertThat(NumberFormat.getDecimalFormat().format(3.1416)).isEqualTo("3.142");
     }
 
 }

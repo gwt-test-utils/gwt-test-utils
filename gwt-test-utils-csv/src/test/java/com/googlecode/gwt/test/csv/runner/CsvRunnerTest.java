@@ -9,12 +9,12 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.junit.Assert.*;
 
 public class CsvRunnerTest {
 
     class A {
 
+        @SuppressWarnings("unused")
         public String zzz = "zzz";
 
         @SuppressWarnings("unused")
@@ -50,60 +50,47 @@ public class CsvRunnerTest {
 
         @CsvMethod
         void meth0() {
-            assertTrue(true);
+            assertThat(true).isTrue();
         }
 
         @CsvMethod
         void meth1(String p0) {
-            assertEquals("p0", p0);
+            assertThat(p0).isEqualTo("p0");
         }
 
         @CsvMethod
         void meth2(String p0, String p1) {
-            assertEquals("p0", p0);
-            assertEquals("p1", p1);
+            assertThat(p0).isEqualTo("p0");
+            assertThat(p1).isEqualTo("p1");
         }
 
         @CsvMethod
         void meth3(String p0, String p1, String p2) {
-            assertEquals("p0", p0);
-            assertEquals("p1", p1);
-            assertEquals("p2", p2);
+            assertThat(p0).isEqualTo("p0");
+            assertThat(p1).isEqualTo("p1");
+            assertThat(p2).isEqualTo("p2");
         }
 
         @CsvMethod
         void methArray0(String[] p) {
-            assertEquals(3, p.length);
-            assertEquals("p0", p[0]);
-            assertEquals("p1", p[1]);
-            assertEquals("p2", p[2]);
-
+            assertThat(p).containsSequence("p0", "p1", "p2");
         }
 
         @CsvMethod
         void methArray1(String a, String[] p) {
-            assertEquals("a", a);
-            assertEquals(3, p.length);
-            assertEquals("p0", p[0]);
-            assertEquals("p1", p[1]);
-            assertEquals("p2", p[2]);
+            assertThat(a).isEqualTo("a");
+            assertThat(p).containsSequence("p0", "p1", "p2");
         }
 
         @CsvMethod
         void methVar0(String... p) {
-            assertEquals(3, p.length);
-            assertEquals("p0", p[0]);
-            assertEquals("p1", p[1]);
-            assertEquals("p2", p[2]);
+            assertThat(p).containsSequence("p0", "p1", "p2");
         }
 
         @CsvMethod
         void methVar1(String a, String... p) {
-            assertEquals("a", a);
-            assertEquals(3, p.length);
-            assertEquals("p0", p[0]);
-            assertEquals("p1", p[1]);
-            assertEquals("p2", p[2]);
+            assertThat(a).isEqualTo("a");
+            assertThat(p).containsSequence("p0", "p1", "p2");
         }
 
         @CsvMethod
@@ -141,7 +128,7 @@ public class CsvRunnerTest {
         private final List<SimiliWidget> list;
 
         public SimiliWidget(String id, String label) {
-            this.list = new ArrayList<SimiliWidget>();
+            this.list = new ArrayList<>();
             this.id = id;
             this.label = label;
         }
@@ -194,7 +181,7 @@ public class CsvRunnerTest {
     private final CsvRunner runner = new CsvRunner(new HasCsvTestExecutionHandlers() {
 
         public List<CsvTestExecutionHandler> getCsvTestExecutionHandlers() {
-            return new ArrayList<CsvTestExecutionHandler>();
+            return new ArrayList<>();
         }
     });
 
@@ -212,69 +199,59 @@ public class CsvRunnerTest {
     @Test
     public void getInList() {
         SimiliWidgetContainer root = getList();
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/widget(2)")));
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/widget[label=child3]")));
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/widget[getLabel=child3]")));
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/widget[id=child3Id]")));
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/list[id=child3Id]")));
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/getCurrentlist[id=child3Id]")));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget(2)"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[label=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[getLabel=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/list[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/getCurrentlist[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
     }
 
     @Test
     public void getInListRecurse() {
         SimiliWidgetContainer root = getList();
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/widget[label/toString=child3]")));
-        assertTrue(root.getWidget().list.get(2) == runner.getNodeValue(root,
-                Node.parse("/widget/widget[labelWithParam(a)/toString=child3]")));
-        assertTrue(root.getWidget().list.get(2).id == runner.getNodeValue(root,
-                Node.parse("/widget/widget[label/toString=child3]/id")));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[labelWithParam(a)/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]/id"))).isSameAs(root.getWidget().list.get(2).id);
     }
 
     @Test
     public void getMap() {
-        assertEquals("b", runner.getNodeValue(o, Node.parse("/map[a]")));
-        assertEquals("d", runner.getNodeValue(o, Node.parse("/map[c]")));
+        assertThat(runner.getNodeValue(o, Node.parse("/map[a]"))).isEqualTo("b");
+        assertThat(runner.getNodeValue(o, Node.parse("/map[c]"))).isEqualTo("d");
     }
 
     @Test
     public void getMapNotFound() {
-        assertNull(runner.getNodeValue(o, Node.parse("/map[b]")));
+        assertThat(runner.getNodeValue(o, Node.parse("/map[b]"))).isNull();
     }
 
     @Test
     public void getter() {
-        assertEquals("public", runner.getNodeValue(o, Node.parse("/public")));
-        assertEquals("public", runner.getNodeValue(o, Node.parse("/getpublic")));
-        assertEquals("private", runner.getNodeValue(o, Node.parse("/private")));
-        assertEquals("zz", runner.getNodeValue(o, Node.parse("/zz")));
-        assertEquals("zzz", runner.getNodeValue(o, Node.parse("/zzz")));
-        assertEquals("zzz", runner.getNodeValue(o, Node.parse("/me/ME/getMe/zzz")));
-        assertNotNull("zz", runner.getNodeValue(o, Node.parse("/toString")));
+        assertThat(runner.getNodeValue(o, Node.parse("/public"))).isEqualTo("public");
+        assertThat(runner.getNodeValue(o, Node.parse("/getpublic"))).isEqualTo("public");
+        assertThat(runner.getNodeValue(o, Node.parse("/private"))).isEqualTo("private");
+        assertThat(runner.getNodeValue(o, Node.parse("/zz"))).isEqualTo("zz");
+        assertThat(runner.getNodeValue(o, Node.parse("/zzz"))).isEqualTo("zzz");
+        assertThat(runner.getNodeValue(o, Node.parse("/me/ME/getMe/zzz"))).isEqualTo("zzz");
     }
 
     @Test
     public void getterDerived() {
-        assertEquals("zz", runner.getNodeValue(oo, Node.parse("/zz")));
-        assertEquals("zzz", runner.getNodeValue(oo, Node.parse("/zzz")));
+        assertThat(runner.getNodeValue(oo, Node.parse("/zz"))).isEqualTo("zz");
+        assertThat(runner.getNodeValue(oo, Node.parse("/zzz"))).isEqualTo("zzz");
     }
 
     @Test
     public void getWidget() {
-        assertEquals("toto", runner.getNodeValue(o, Node.parse("/getWidget(toto)")));
-        assertEquals("toto", runner.getNodeValue(o, Node.parse("/WIDGET(toto)")));
+        assertThat(runner.getNodeValue(o, Node.parse("/getWidget(toto)"))).isEqualTo("toto");
+        assertThat(runner.getNodeValue(o, Node.parse("/WIDGET(toto)"))).isEqualTo("toto");
     }
 
     @Test
     public void getWidgetInt() {
-        assertEquals("0", runner.getNodeValue(o, Node.parse("/getWidgetInt(0)")));
-        assertEquals("12", runner.getNodeValue(o, Node.parse("/getWidgetInt(12)")));
+        assertThat(runner.getNodeValue(o, Node.parse("/getWidgetInt(0)"))).isEqualTo("0");
+        assertThat(runner.getNodeValue(o, Node.parse("/getWidgetInt(12)"))).isEqualTo("12");
     }
 
     @Test

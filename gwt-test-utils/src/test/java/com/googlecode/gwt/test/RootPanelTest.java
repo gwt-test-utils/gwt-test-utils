@@ -4,30 +4,30 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RootPanelTest extends GwtTestTest {
 
     @Test
     public void add() {
-        // Arrange
+        // Given
         Label label = new Label();
-        assertFalse(label.isAttached());
+        assertThat(label.isAttached()).isFalse();
 
-        // Act
+        // When
         RootPanel.get().add(label);
 
-        // Assert
-        assertEquals(label, RootPanel.get().getWidget(0));
-        assertTrue(label.isAttached());
+        // Then
+        assertThat(RootPanel.get().getWidget(0)).isEqualTo(label);
+        assertThat(label.isAttached()).isTrue();
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void init() {
-        // Pre-Assert
-        assertEquals(0, RootPanel.get().getWidgetCount());
+        // Preconditions
+        assertThat(RootPanel.get().getWidgetCount()).isEqualTo(0);
 
-        // Act
+        // When
         RootPanel.get().getWidget(0);
     }
 

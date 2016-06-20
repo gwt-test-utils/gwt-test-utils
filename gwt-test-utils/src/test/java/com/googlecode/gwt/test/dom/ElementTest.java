@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ElementTest extends GwtTestTest {
 
@@ -18,14 +18,14 @@ public class ElementTest extends GwtTestTest {
 
     @Test
     public void attribute() {
-        // Pre-Assert
-        assertEquals("", e.getAttribute("input"));
+        // Preconditions
+        assertThat(e.getAttribute("input")).isEqualTo("");
 
-        // Act
+        // When
         e.setAttribute("input", "text");
 
-        // Assert
-        assertEquals("text", e.getAttribute("input"));
+        // Then
+        assertThat(e.getAttribute("input")).isEqualTo("text");
     }
 
     @Before
@@ -35,29 +35,29 @@ public class ElementTest extends GwtTestTest {
 
     @Test
     public void cast_OK() {
-        // Act
+        // When
         DivElement casted = e.cast();
 
-        // Assert
-        assertNotNull(casted);
+        // Then
+        assertThat(casted).isNotNull();
     }
 
     @Test
     public void checkHashCode() {
-        // Arrange
+        // Given
         Map<Element, String> map = new HashMap<Element, String>();
 
-        // Act
+        // When
         map.put(e, "a string value");
         map.put(e, "this value should have overrided the first one");
 
-        // Assert
-        assertEquals("this value should have overrided the first one", map.get(e));
+        // Then
+        assertThat(map.get(e)).isEqualTo("this value should have overrided the first one");
     }
 
     @Test
     public void checkToString() {
-        // Arrange
+        // Given
         DivElement div = Document.get().createDivElement();
         div.setAttribute("someAttr", "myVal");
         div.getStyle().setBackgroundColor("black");
@@ -65,50 +65,48 @@ public class ElementTest extends GwtTestTest {
         div.getStyle().setProperty("backgroundColor", "white");
         div.setInnerHTML("<span>in span</span> out span");
 
-        // Act
+        // When
         String html = div.toString();
 
-        // Assert
-        assertEquals(
-                "<div someattr=\"myVal\" style=\"float: left; background-color: white; \"><span>in span</span> out span</div>",
-                html);
+        // Then
+        assertThat(html).isEqualTo("<div someattr=\"myVal\" style=\"float: left; background-color: white; \"><span>in span</span> out span</div>");
 
     }
 
     @Test
     public void className() {
-        // Act 1
+        // When 1
         e.setClassName("testClass");
 
-        // Assert 1
-        assertEquals("testClass", e.getClassName());
-        assertEquals("testClass", e.getAttribute("class"));
-        assertEquals("testClass", e.getAttribute("CLASS"));
-        assertEquals("", e.getAttribute("className"));
-        assertEquals("", e.getAttribute("CLASSNAME"));
-        assertNull(e.getPropertyString("class"));
-        assertNull(e.getPropertyString("CLASS"));
-        assertEquals("testClass", e.getPropertyString("className"));
-        assertNull(e.getPropertyString("CLASSNAME"));
+        // Then 1
+        assertThat(e.getClassName()).isEqualTo("testClass");
+        assertThat(e.getAttribute("class")).isEqualTo("testClass");
+        assertThat(e.getAttribute("CLASS")).isEqualTo("testClass");
+        assertThat(e.getAttribute("className")).isEqualTo("");
+        assertThat(e.getAttribute("CLASSNAME")).isEqualTo("");
+        assertThat(e.getPropertyString("class")).isNull();
+        assertThat(e.getPropertyString("CLASS")).isNull();
+        assertThat(e.getPropertyString("className")).isEqualTo("testClass");
+        assertThat(e.getPropertyString("CLASSNAME")).isNull();
 
-        // Act 2
+        // When 2
         e.addClassName("addon");
 
-        // Assert 2
-        assertEquals("testClass addon", e.getClassName());
-        assertEquals("testClass addon", e.getAttribute("class"));
+        // Then 2
+        assertThat(e.getClassName()).isEqualTo("testClass addon");
+        assertThat(e.getAttribute("class")).isEqualTo("testClass addon");
 
-        // Act 3
+        // When 3
         e.setAttribute("class", "override");
 
-        // Assert 3
-        assertEquals("override", e.getClassName());
-        assertEquals("override", e.getAttribute("class"));
+        // Then 3
+        assertThat(e.getClassName()).isEqualTo("override");
+        assertThat(e.getAttribute("class")).isEqualTo("override");
     }
 
     @Test
     public void clone_Deep() {
-        // Arrange
+        // Given
         e.setTitle("title");
         e.setPropertyBoolean("bool", true);
 
@@ -116,22 +114,21 @@ public class ElementTest extends GwtTestTest {
         child.setTitle("child");
         e.appendChild(child);
 
-        // Act
+        // When
         DivElement newNode = e.cloneNode(true).cast();
 
-        // Assert
-        assertEquals("title", newNode.getTitle());
-        assertNull("Cloned element's parent should be null", newNode.getParentNode());
-        assertEquals(true, newNode.getPropertyBoolean("bool"));
-        assertEquals("Deep cloned element should have child nodes", 1,
-                newNode.getChildNodes().getLength());
-        assertTrue(child != newNode.getChildNodes().getItem(0));
-        assertEquals(1, e.getChildNodes().getLength());
+        // Then
+        assertThat(newNode.getTitle()).isEqualTo("title");
+        assertThat(newNode.getParentNode()).as("Cloned element's parent should be null").isNull();
+        assertThat(newNode.getPropertyBoolean("bool")).isEqualTo(true);
+        assertThat(newNode.getChildNodes().getLength()).isEqualTo(1);
+        assertThat(child != newNode.getChildNodes().getItem(0)).isTrue();
+        assertThat(e.getChildNodes().getLength()).isEqualTo(1);
     }
 
     @Test
     public void clone_NotDeep() {
-        // Arrange
+        // Given
         e.setTitle("title");
         e.setPropertyBoolean("bool", true);
 
@@ -139,73 +136,72 @@ public class ElementTest extends GwtTestTest {
         child.setTitle("child");
         e.appendChild(child);
 
-        // Act
+        // When
         DivElement newNode = e.cloneNode(false).cast();
 
-        // Assert
-        assertEquals("title", newNode.getTitle());
-        assertNull("Cloned element's parent should be null", newNode.getParentNode());
-        assertEquals(true, newNode.getPropertyBoolean("bool"));
-        assertEquals("Not deep cloned element should not have child nodes", 0,
-                newNode.getChildNodes().getLength());
-        assertEquals(1, e.getChildNodes().getLength());
+        // Then
+        assertThat(newNode.getTitle()).isEqualTo("title");
+        assertThat(newNode.getParentNode()).as("Cloned element's parent should be null").isNull();
+        assertThat(newNode.getPropertyBoolean("bool")).isEqualTo(true);
+        assertThat(newNode.getChildNodes().getLength()).isEqualTo(0);
+        assertThat(e.getChildNodes().getLength()).isEqualTo(1);
     }
 
     @Test
     public void dir() {
-        // Act
+        // When
         e.setDir("dir");
 
-        // Assert
-        assertEquals("dir", e.getDir());
+        // Then
+        assertThat(e.getDir()).isEqualTo("dir");
     }
 
     @Test
     public void domImplementation() {
-        // Arrange
+        // Given
         e.setAttribute("test", "testAttr");
 
-        // Assert getAttribute() is case insensitive
-        assertEquals("testAttr", e.getAttribute("test"));
-        assertEquals("testAttr", e.getAttribute("Test"));
+        // Then getAttribute() is case insensitive
+        assertThat(e.getAttribute("test")).isEqualTo("testAttr");
+        assertThat(e.getAttribute("Test")).isEqualTo("testAttr");
 
-        // Assert hasAttribute is case insensitive
-        assertTrue(e.hasAttribute("teST"));
+        // Then hasAttribute is case insensitive
+        assertThat(e.hasAttribute("teST")).isTrue();
 
-        // Assert removeAttribute is case insensitve
+        // Then removeAttribute is case insensitve
         e.removeAttribute("tEst");
-        assertEquals("", e.getAttribute("test"));
-        assertFalse(e.hasAttribute("teST"));
+        assertThat(e.getAttribute("test")).isEqualTo("");
+        assertThat(e.hasAttribute("teST")).isFalse();
 
-        // Assert "non standard" DOM properties returns 'undefined' for String,
+        // Then "non standard" DOM properties returns 'undefined' for String,
         // Object and JSO
-        assertNull(e.getPropertyString("test"));
-        assertFalse(e.getPropertyBoolean("test"));
-        assertEquals(0, e.getPropertyInt("test"));
-        assertEquals(new Double(0.0), (Double) e.getPropertyDouble("test"));
-        assertNull(e.getPropertyObject("test"));
-        assertNull(e.getPropertyJSO("test"));
+        assertThat(e.getPropertyString("test")).isNull();
+        assertThat(e.getPropertyBoolean("test")).isFalse();
+        assertThat(e.getPropertyInt("test")).isEqualTo(0);
+        assertThat((Double) e.getPropertyDouble("test")).isEqualTo(new Double(0.0));
+        assertThat(e.getPropertyObject("test")).isNull();
+        assertThat(e.getPropertyJSO("test")).isNull();
 
-        // Assert "standard" DOM properties returns "" for String
-        assertEquals("", e.getPropertyString("className"));
-        assertNull(e.getPropertyString("classnamE"));
+        // Then "standard" DOM properties returns "" for String
+        assertThat(e.getPropertyString("className")).isEqualTo("");
+        assertThat(e.getPropertyString("classnamE")).isNull();
 
         e.setPropertyString("className", "testClass");
-        assertEquals("testClass", e.getPropertyString("className"));
+        assertThat(e.getPropertyString("className")).isEqualTo("testClass");
         // Special case "class" and "className"
-        assertNull(e.getPropertyString("class"));
-        assertEquals("testClass", e.getAttribute("class"));
-        assertEquals("", e.getAttribute("CLASSNAME"));
-        assertNull(e.getPropertyString("CLASSNAME"));
+        assertThat(e.getPropertyString("class")).isNull();
+        assertThat(e.getAttribute("class")).isEqualTo("testClass");
+        assertThat(e.getAttribute("CLASSNAME")).isEqualTo("");
+        assertThat(e.getPropertyString("CLASSNAME")).isNull();
 
-        // Assert on Style JSO
-        assertEquals("", e.getAttribute("style")); // prints ""
-        assertEquals("", e.getPropertyString("style"));
+        // Then on Style JSO
+        assertThat(e.getAttribute("style")).isEqualTo(""); // prints ""
+        assertThat(e.getPropertyString("style")).isEqualTo("");
     }
 
     @Test
     public void getElementByTagName() {
-        // Arrange
+        // Given
         AnchorElement ae0 = Document.get().createAnchorElement();
         AnchorElement ae1 = Document.get().createAnchorElement();
         ButtonElement be = Document.get().createPushButtonElement();
@@ -213,31 +209,31 @@ public class ElementTest extends GwtTestTest {
         e.appendChild(ae1);
         e.appendChild(be);
 
-        // Act
+        // When
         NodeList<Element> anchorList = e.getElementsByTagName("a");
         NodeList<Element> buttonList = e.getElementsByTagName("button");
         NodeList<Element> allList = e.getElementsByTagName("*");
 
-        // Assert
-        assertEquals(2, anchorList.getLength());
-        assertEquals(ae0, anchorList.getItem(0));
-        assertEquals(ae1, anchorList.getItem(1));
+        // Then
+        assertThat(anchorList.getLength()).isEqualTo(2);
+        assertThat(anchorList.getItem(0)).isEqualTo(ae0);
+        assertThat(anchorList.getItem(1)).isEqualTo(ae1);
 
-        assertEquals(1, buttonList.getLength());
-        assertEquals(be, buttonList.getItem(0));
+        assertThat(buttonList.getLength()).isEqualTo(1);
+        assertThat(buttonList.getItem(0)).isEqualTo(be);
 
-        assertEquals(3, allList.getLength());
-        assertEquals(ae0, allList.getItem(0));
-        assertEquals(ae1, allList.getItem(1));
-        assertEquals(be, allList.getItem(2));
+        assertThat(allList.getLength()).isEqualTo(3);
+        assertThat(allList.getItem(0)).isEqualTo(ae0);
+        assertThat(allList.getItem(1)).isEqualTo(ae1);
+        assertThat(allList.getItem(2)).isEqualTo(be);
     }
 
     @Test
     public void getFirstChildElement() {
-        // Pre-Assert
-        assertNull(e.getFirstChildElement());
+        // Preconditions
+        assertThat(e.getFirstChildElement()).isNull();
 
-        // Arrange
+        // Given
         Node node = Document.get().createTextNode("test");
         ButtonElement be0 = Document.get().createPushButtonElement();
         ButtonElement be1 = Document.get().createPushButtonElement();
@@ -245,16 +241,16 @@ public class ElementTest extends GwtTestTest {
         e.appendChild(be0);
         e.appendChild(be1);
 
-        // Act & Assert
-        assertEquals(be0, e.getFirstChildElement());
+        // When & Assert
+        assertThat(e.getFirstChildElement()).isEqualTo(be0);
     }
 
     @Test
     public void getNextSiblingElement() {
-        // Pre-Assert
-        assertNull(e.getNextSiblingElement());
+        // Preconditions
+        assertThat(e.getNextSiblingElement()).isNull();
 
-        // Arrange
+        // Given
         ButtonElement be0 = Document.get().createPushButtonElement();
         ButtonElement be1 = Document.get().createPushButtonElement();
         e.appendChild(be0);
@@ -262,245 +258,243 @@ public class ElementTest extends GwtTestTest {
         e.appendChild(be1);
         e.appendChild(JsoUtils.newText("test2", Document.get()));
 
-        // Act & Assert
-        assertEquals(be1, be0.getNextSiblingElement());
-        assertNull(be1.getNextSiblingElement());
+        // When & Assert
+        assertThat(be0.getNextSiblingElement()).isEqualTo(be1);
+        assertThat(be1.getNextSiblingElement()).isNull();
     }
 
     @Test
     public void getOffset() {
-        // Arrange
+        // Given
         Element parent = Document.get().createElement("a");
         parent.appendChild(e);
 
-        // Act & Assert
-        assertEquals(0, e.getOffsetHeight());
-        assertEquals(0, e.getOffsetLeft());
-        assertEquals(0, e.getOffsetTop());
-        assertEquals(0, e.getOffsetWidth());
-        assertEquals(parent, e.getOffsetParent());
+        // When & Assert
+        assertThat(e.getOffsetHeight()).isEqualTo(0);
+        assertThat(e.getOffsetLeft()).isEqualTo(0);
+        assertThat(e.getOffsetTop()).isEqualTo(0);
+        assertThat(e.getOffsetWidth()).isEqualTo(0);
+        assertThat(e.getOffsetParent()).isEqualTo(parent);
     }
 
     @Test
     public void getParentElement() {
-        // Arrange
+        // Given
         Element otherParent = Document.get().createDivElement();
         Element child = Document.get().createBaseElement();
         e.appendChild(child);
 
-        // Act and assert
-        assertEquals(e, child.getParentElement());
+        // When and assert
+        assertThat(child.getParentElement()).isEqualTo(e);
 
-        // Act 2
+        // When 2
         otherParent.appendChild(child);
 
-        // Assert 2
-        assertFalse(
-                "Child nodes list should be empty since the only child has been attached to another parent node",
-                e.hasChildNodes());
+        // Then 2
+        assertThat(e.hasChildNodes()).isFalse();
     }
 
     @Test
     public void hasAttribute() {
-        // Arrange
+        // Given
         e.setAttribute("myAttr", "value");
 
-        // Act & Assert
-        assertTrue(e.hasAttribute("myAttr"));
+        // When & Assert
+        assertThat(e.hasAttribute("myAttr")).isTrue();
     }
 
     @Test
     public void id() {
-        // Act 1
+        // When 1
         e.setId("myId");
 
-        // Assert 1
-        assertEquals("myId", e.getId());
-        assertEquals("myId", e.getAttribute("id"));
+        // Then 1
+        assertThat(e.getId()).isEqualTo("myId");
+        assertThat(e.getAttribute("id")).isEqualTo("myId");
 
-        // Act 2
+        // When 2
         e.setAttribute("id", "updatedId");
 
-        // Assert 2
-        assertEquals("updatedId", e.getId());
-        assertEquals("updatedId", e.getAttribute("id"));
+        // Then 2
+        assertThat(e.getId()).isEqualTo("updatedId");
+        assertThat(e.getAttribute("id")).isEqualTo("updatedId");
     }
 
     @Test
     public void innerHTML() {
-        // Act
+        // When
         e.setInnerHTML("<h1>test</h1>");
 
-        // Assert
-        assertEquals("<h1>test</h1>", e.getInnerHTML());
-        assertEquals(1, e.getChildCount());
+        // Then
+        assertThat(e.getInnerHTML()).isEqualTo("<h1>test</h1>");
+        assertThat(e.getChildCount()).isEqualTo(1);
         HeadingElement h1 = e.getChild(0).cast();
-        assertEquals("H1", h1.getTagName());
-        assertEquals("test", h1.getInnerText());
+        assertThat(h1.getTagName()).isEqualTo("H1");
+        assertThat(h1.getInnerText()).isEqualTo("test");
     }
 
     @Test
     public void innerText() {
-        // Act
+        // When
         e.setInnerText("myText");
 
-        // Assert
-        assertEquals("myText", e.getInnerText());
+        // Then
+        assertThat(e.getInnerText()).isEqualTo("myText");
     }
 
     @Test
     public void isOrHasChild() {
-        // Arrange
+        // Given
         AnchorElement child = Document.get().createAnchorElement();
         e.appendChild(child);
         AnchorElement notAChild = Document.get().createAnchorElement();
 
-        // Act & Assert
-        assertTrue(e.isOrHasChild(e));
-        assertTrue(e.isOrHasChild(child));
-        assertFalse(e.isOrHasChild(notAChild));
+        // When & Assert
+        assertThat(e.isOrHasChild(e)).isTrue();
+        assertThat(e.isOrHasChild(child)).isTrue();
+        assertThat(e.isOrHasChild(notAChild)).isFalse();
     }
 
     @Test
     public void lang() {
-        // Act
+        // When
         e.setLang("myLang");
 
-        // Assert
-        assertEquals("myLang", e.getLang());
+        // Then
+        assertThat(e.getLang()).isEqualTo("myLang");
     }
 
     @Test
     public void propertyBoolean_False() {
-        // Act
+        // When
         e.setPropertyBoolean("prop", false);
 
-        // Assert
-        assertFalse(e.getPropertyBoolean("prop"));
+        // Then
+        assertThat(e.getPropertyBoolean("prop")).isFalse();
     }
 
     @Test
     public void propertyBoolean_True() {
-        // Pre-Assert
-        assertFalse(e.getPropertyBoolean("prop"));
-        // Act
+        // Preconditions
+        assertThat(e.getPropertyBoolean("prop")).isFalse();
+        // When
         e.setPropertyBoolean("prop", true);
 
-        // Assert
-        assertTrue(e.getPropertyBoolean("prop"));
+        // Then
+        assertThat(e.getPropertyBoolean("prop")).isTrue();
     }
 
     @Test
     public void propertyDouble() {
-        // Pre-Assert
-        assertEquals(new Double(0), (Double) e.getPropertyDouble("prop"));
+        // Preconditions
+        assertThat((Double) e.getPropertyDouble("prop")).isEqualTo(new Double(0));
 
-        // Act
+        // When
         e.setPropertyDouble("prop", 23);
 
-        // Assert
-        assertEquals(new Double(23), (Double) e.getPropertyDouble("prop"));
+        // Then
+        assertThat((Double) e.getPropertyDouble("prop")).isEqualTo(new Double(23));
     }
 
     @Test
     public void propertyInt() {
-        // Pre-Assert
-        assertEquals(0, e.getPropertyInt("prop"));
+        // Preconditions
+        assertThat(e.getPropertyInt("prop")).isEqualTo(0);
 
-        // Act
+        // When
         e.setPropertyInt("prop", 2);
 
-        // Assert
-        assertEquals(2, e.getPropertyInt("prop"));
+        // Then
+        assertThat(e.getPropertyInt("prop")).isEqualTo(2);
     }
 
     @Test
     public void propertyString() {
-        // Pre-Assert
-        assertNull(e.getPropertyString("prop"));
+        // Preconditions
+        assertThat(e.getPropertyString("prop")).isNull();
 
-        // Act
+        // When
         e.setPropertyString("prop", "test");
 
-        // Assert
-        assertEquals("test", e.getPropertyString("prop"));
+        // Then
+        assertThat(e.getPropertyString("prop")).isEqualTo("test");
     }
 
     @Test
     public void removeAttribute() {
-        // Arrange
+        // Given
         e.setAttribute("test", "value");
 
-        // Act
+        // When
         e.removeAttribute("Test");
 
-        // Assert
-        assertEquals("Removed attribute should return emptyString", "", e.getAttribute("test"));
+        // Then
+        assertThat(e.getAttribute("test")).as("Removed attribute should return emptyString").isEqualTo("");
     }
 
     @Test
     public void scrollLeft() {
-        // Pre-Assert
-        assertEquals(0, e.getScrollLeft());
+        // Preconditions
+        assertThat(e.getScrollLeft()).isEqualTo(0);
 
-        // Act
+        // When
         e.setScrollLeft(3);
 
-        // Assert
-        assertEquals(3, e.getScrollLeft());
+        // Then
+        assertThat(e.getScrollLeft()).isEqualTo(3);
     }
 
     @Test
     public void scrollTop() {
-        // Pre-Assert
-        assertEquals(0, e.getScrollTop());
+        // Preconditions
+        assertThat(e.getScrollTop()).isEqualTo(0);
 
-        // Act
+        // When
         e.setScrollTop(3);
-        assertEquals(3, e.getScrollTop());
+        assertThat(e.getScrollTop()).isEqualTo(3);
     }
 
     @Test
     public void style() {
-        // Act
+        // When
         e.getStyle().setProperty("test", "value");
 
-        // Assert
-        assertEquals("value", e.getStyle().getProperty("test"));
+        // Then
+        assertThat(e.getStyle().getProperty("test")).isEqualTo("value");
     }
 
     @Test
     public void tagName() {
-        // Act & Assert
-        assertEquals("div", e.getTagName());
-        assertEquals("", e.getAttribute("tagName"));
-        assertEquals("", e.getAttribute("TAGNAME"));
-        assertEquals("DIV", e.getPropertyString("tagName"));
-        assertNull(e.getPropertyString("TAGNAME"));
+        // When & Assert
+        assertThat(e.getTagName()).isEqualTo("div");
+        assertThat(e.getAttribute("tagName")).isEqualTo("");
+        assertThat(e.getAttribute("TAGNAME")).isEqualTo("");
+        assertThat(e.getPropertyString("tagName")).isEqualTo("DIV");
+        assertThat(e.getPropertyString("TAGNAME")).isNull();
     }
 
     @Test
     public void title() {
-        // Pre-Assert
-        assertEquals("", e.getTitle());
-        assertEquals("", e.getAttribute("title"));
-        assertEquals("", e.getAttribute("titLe"));
-        assertEquals("", e.getPropertyString("title"));
-        assertNull(e.getPropertyString("titLe"));
-        assertNull(e.getPropertyObject("title"));
-        assertNull(e.getPropertyObject("titLe"));
+        // Preconditions
+        assertThat(e.getTitle()).isEqualTo("");
+        assertThat(e.getAttribute("title")).isEqualTo("");
+        assertThat(e.getAttribute("titLe")).isEqualTo("");
+        assertThat(e.getPropertyString("title")).isEqualTo("");
+        assertThat(e.getPropertyString("titLe")).isNull();
+        assertThat(e.getPropertyObject("title")).isNull();
+        assertThat(e.getPropertyObject("titLe")).isNull();
 
-        // Act
+        // When
         e.setTitle("MyTitle");
 
-        // Assert
-        assertEquals("MyTitle", e.getTitle());
-        assertEquals("MyTitle", e.getAttribute("title"));
-        assertEquals("MyTitle", e.getAttribute("titLe"));
-        assertEquals("MyTitle", e.getPropertyString("title"));
-        assertNull(e.getPropertyString("titLe"));
-        assertEquals("MyTitle", e.getPropertyObject("title"));
-        assertNull(e.getPropertyObject("titLe"));
+        // Then
+        assertThat(e.getTitle()).isEqualTo("MyTitle");
+        assertThat(e.getAttribute("title")).isEqualTo("MyTitle");
+        assertThat(e.getAttribute("titLe")).isEqualTo("MyTitle");
+        assertThat(e.getPropertyString("title")).isEqualTo("MyTitle");
+        assertThat(e.getPropertyString("titLe")).isNull();
+        assertThat(e.getPropertyObject("title")).isEqualTo("MyTitle");
+        assertThat(e.getPropertyObject("titLe")).isNull();
     }
 
 }

@@ -6,7 +6,7 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnchorElementTest extends GwtTestTest {
 
@@ -14,23 +14,23 @@ public class AnchorElementTest extends GwtTestTest {
 
     @Test
     public void accessKey() {
-        // Pre-Assert
-        assertEquals("", a.getAccessKey());
+        // Preconditions
+        assertThat(a.getAccessKey()).isEqualTo("");
 
-        // Act
+        // When
         a.setAccessKey("k");
 
-        // Assert
-        assertEquals("k", a.getAccessKey());
+        // Then
+        assertThat(a.getAccessKey()).isEqualTo("k");
     }
 
     @Test
     public void as() {
-        // Act
+        // When
         AnchorElement asElement = AnchorElement.as(a);
 
-        // Assert
-        assertEquals(a, asElement);
+        // Then
+        assertThat(asElement).isEqualTo(a);
     }
 
     @Test
@@ -47,26 +47,26 @@ public class AnchorElementTest extends GwtTestTest {
 
     @Test
     public void href() {
-        // Pre-Assert
-        assertEquals("", a.getHref());
+        // Preconditions
+        assertThat(a.getHref()).isEqualTo("");
 
-        // Act
+        // When
         a.setHref("Href");
 
-        // Assert
-        assertEquals("Href", a.getHref());
+        // Then
+        assertThat(a.getHref()).isEqualTo("Href");
     }
 
     @Test
     public void hreflang() {
-        // Pre-Assert
-        assertEquals("", a.getHreflang());
+        // Preconditions
+        assertThat(a.getHreflang()).isEqualTo("");
 
-        // Act
+        // When
         a.setHreflang("Href");
 
-        // Assert
-        assertEquals("Href", a.getHreflang());
+        // Then
+        assertThat(a.getHreflang()).isEqualTo("Href");
     }
 
     @Before
@@ -76,61 +76,61 @@ public class AnchorElementTest extends GwtTestTest {
 
     @Test
     public void name() {
-        // Pre-Assert
-        assertEquals("", a.getName());
+        // Preconditions
+        assertThat(a.getName()).isEqualTo("");
 
-        // Act
+        // When
         a.setName("Name");
 
-        // Assert
-        assertEquals("Name", a.getName());
+        // Then
+        assertThat(a.getName()).isEqualTo("Name");
     }
 
     @Test
     public void rel() {
-        // Pre-Assert
-        assertEquals("", a.getRel());
+        // Preconditions
+        assertThat(a.getRel()).isEqualTo("");
 
-        // Act
+        // When
         a.setRel("Rel");
 
-        // Assert
-        assertEquals("Rel", a.getRel());
+        // Then
+        assertThat(a.getRel()).isEqualTo("Rel");
     }
 
     @Test
     public void tabIndex() {
-        // Pre-Assert
-        assertEquals(0, a.getTabIndex());
+        // Preconditions
+        assertThat(a.getTabIndex()).isEqualTo(0);
 
-        // Act
+        // When
         a.setTabIndex(4);
 
-        // Assert
-        assertEquals(4, a.getTabIndex());
+        // Then
+        assertThat(a.getTabIndex()).isEqualTo(4);
     }
 
     @Test
     public void target() {
-        // Pre-Assert
-        assertEquals("", a.getTarget());
+        // Preconditions
+        assertThat(a.getTarget()).isEqualTo("");
 
-        // Act
+        // When
         a.setTarget("Target");
 
-        // Assert
-        assertEquals("Target", a.getTarget());
+        // Then
+        assertThat(a.getTarget()).isEqualTo("Target");
     }
 
     @Test
     public void type() {
-        // Pre-Assert
-        assertEquals("", a.getType());
+        // Preconditions
+        assertThat(a.getType()).isEqualTo("");
 
-        // Act
+        // When
         a.setType("Type");
 
-        // Assert
-        assertEquals("Type", a.getType());
+        // Then
+        assertThat(a.getType()).isEqualTo("Type");
     }
 }

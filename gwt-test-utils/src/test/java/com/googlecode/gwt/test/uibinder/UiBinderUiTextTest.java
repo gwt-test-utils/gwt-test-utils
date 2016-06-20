@@ -9,14 +9,14 @@ public class UiBinderUiTextTest extends GwtTestTest {
 
     @Test
     public void checkUiText() {
-        // Arrange
+        // Given
         String expectedText = "Hello gwt-test-utils !\r\nThis is a test with a simple text file";
         String expectedTextFromMessages = "orange";
 
-        // Act
+        // When
         UiBinderUiText widget = new UiBinderUiText();
 
-        // Assert
+        // Then
         assertThat(widget.label).textEquals(expectedText);
         assertThat(widget.msgLabel).textEquals(expectedTextFromMessages);
     }

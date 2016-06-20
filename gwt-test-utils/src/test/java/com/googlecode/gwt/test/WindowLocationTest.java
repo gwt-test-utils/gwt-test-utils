@@ -5,133 +5,132 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WindowLocationTest extends GwtTestTest {
 
     @Test
     public void assign() {
-        // Act
+        // When
         Location.assign("http://assign.location.com");
 
-        // Assert
-        assertEquals("http:", Location.getProtocol());
-        assertEquals("assign.location.com", Location.getHostName());
-        assertEquals("80", Location.getPort());
-        assertEquals("assign.location.com:80", Location.getHost());
-        assertEquals("http://assign.location.com", Location.getHref());
+        // Then
+        assertThat(Location.getProtocol()).isEqualTo("http:");
+        assertThat(Location.getHostName()).isEqualTo("assign.location.com");
+        assertThat(Location.getPort()).isEqualTo("80");
+        assertThat(Location.getHost()).isEqualTo("assign.location.com:80");
+        assertThat(Location.getHref()).isEqualTo("http://assign.location.com");
     }
 
     @Test
     public void getHash() {
-        // Act
+        // When
         String hash = Window.Location.getHash();
 
-        // Assert
-        assertEquals("", hash);
+        // Then
+        assertThat(hash).isEqualTo("");
     }
 
     @Test
     public void getHashWhenHistoryTokenHasBeenSet() {
-        // Arrange
+        // Given
         History.newItem("myToken");
 
-        // Act
+        // When
         String hash = Window.Location.getHash();
 
-        // Assert
-        assertEquals("#myToken", hash);
+        // Then
+        assertThat(hash).isEqualTo("#myToken");
     }
 
     @Test
     public void getHref() {
-        // Act
+        // When
         String href = Window.Location.getHref();
 
-        // Assert
-        assertEquals("http://127.0.0.1:8888/WindowLocationTest.html", href);
+        // Then
+        assertThat(href).isEqualTo("http://127.0.0.1:8888/WindowLocationTest.html");
     }
 
     @Test
     public void getHrefWhenHistoryTokenHasBeenSet() {
-        // Arrange
+        // Given
         History.newItem("myToken");
-        // Act
+        // When
         String href = Window.Location.getHref();
 
-        // Assert
-        assertEquals("http://127.0.0.1:8888/WindowLocationTest.html#myToken", href);
+        // Then
+        assertThat(href).isEqualTo("http://127.0.0.1:8888/WindowLocationTest.html#myToken");
     }
 
     @Test
     public void getParameter() {
-        // Act
+        // When
         String parameter = Window.Location.getParameter("test");
 
-        // Assert
-        assertNull(parameter);
+        // Then
+        assertThat(parameter).isNull();
     }
 
     @Test
     public void getPath() {
-        // Act
+        // When
         String path = Window.Location.getPath();
 
-        // Assert
-        assertEquals("/WindowLocationTest.html", path);
+        // Then
+        assertThat(path).isEqualTo("/WindowLocationTest.html");
     }
 
     @Test
     public void getPathWhenHistoryTokenHasBeenSet() {
-        // Arrange
+        // Given
         History.newItem("myToken");
 
-        // Act
+        // When
         String path = Window.Location.getPath();
 
-        // Assert
-        assertEquals("/WindowLocationTest.html", path);
+        // Then
+        assertThat(path).isEqualTo("/WindowLocationTest.html");
     }
 
     @Test
     public void getPort() {
-        // Act
+        // When
         String port = Window.Location.getPort();
 
-        // Assert
-        assertEquals("8888", port);
+        // Then
+        assertThat(port).isEqualTo("8888");
     }
 
     @Test
     public void getProtocol() {
-        // Act
+        // When
         String protocol = Window.Location.getProtocol();
 
-        // Assert
-        assertEquals("http:", protocol);
+        // Then
+        assertThat(protocol).isEqualTo("http:");
     }
 
     @Test
     public void getQueryString() {
-        // Act
+        // When
         String queryString = Window.Location.getQueryString();
 
-        // Assert
-        assertEquals("", queryString);
+        // Then
+        assertThat(queryString).isEqualTo("");
     }
 
     @Test
     public void replace() {
-        // Act
+        // When
         Location.replace("http://replace.location.com");
 
-        // Assert
-        assertEquals("http:", Location.getProtocol());
-        assertEquals("replace.location.com", Location.getHostName());
-        assertEquals("80", Location.getPort());
-        assertEquals("replace.location.com:80", Location.getHost());
-        assertEquals("http://replace.location.com", Location.getHref());
+        // Then
+        assertThat(Location.getProtocol()).isEqualTo("http:");
+        assertThat(Location.getHostName()).isEqualTo("replace.location.com");
+        assertThat(Location.getPort()).isEqualTo("80");
+        assertThat(Location.getHost()).isEqualTo("replace.location.com:80");
+        assertThat(Location.getHref()).isEqualTo("http://replace.location.com");
     }
 
     @Override

@@ -8,7 +8,8 @@ import org.junit.Test;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
+
 
 public class MyConstantsWithLookupTest extends GwtTestTest {
 
@@ -21,10 +22,10 @@ public class MyConstantsWithLookupTest extends GwtTestTest {
 
     @Test
     public void defaultValues() {
-        // Arrange
+        // Given
         String expectedErrorMessage = "No matching property \"goodbye\" for Constants class [com.googlecode.gwt.test.i18n.MyConstantsWithLookup]. Please check the corresponding properties files or use @DefaultStringValue";
 
-        // Act 1
+        // When 1
         String hello = constants.hello();
         String[] stringArray = constants.stringArray();
         Map<String, String> map = constants.map();
@@ -42,42 +43,42 @@ public class MyConstantsWithLookupTest extends GwtTestTest {
         float getFloat = constants.getFloat("functionFloat");
         boolean getBoolean = constants.getBoolean("functionBoolean");
 
-        // Assert
-        assertEquals("hello from @DefaultStringValue", hello);
-        assertEquals(2, stringArray.length);
-        assertEquals("default0", stringArray[0]);
-        assertEquals("default1", stringArray[1]);
-        assertEquals("defaultMap1", map.get("map1"));
-        assertEquals("defaultMap2", map.get("map2"));
+        // Then
+        assertThat(hello).isEqualTo("hello from @DefaultStringValue");
+        assertThat(stringArray.length).isEqualTo(2);
+        assertThat(stringArray[0]).isEqualTo("default0");
+        assertThat(stringArray[1]).isEqualTo("default1");
+        assertThat(map.get("map1")).isEqualTo("defaultMap1");
+        assertThat(map.get("map2")).isEqualTo("defaultMap2");
 
-        assertEquals(6, functionInt);
-        assertEquals(6.6, functionDouble, 0);
-        assertEquals((float) 6.66, functionFloat, 0);
-        assertTrue(functionBoolean);
+        assertThat(functionInt).isEqualTo(6);
+        assertThat(functionDouble).isCloseTo(6.6, within(0.0));
+        assertThat(functionFloat).isCloseTo((float) 6.66, within(new Float(0)));
+        assertThat(functionBoolean).isTrue();
 
         // MyConstantsWithLookup specific methods assertions
-        assertEquals(hello, getString);
-        assertEquals(stringArray.length, getStringArray.length);
-        assertEquals(stringArray[0], getStringArray[0]);
-        assertEquals(stringArray[1], getStringArray[1]);
+        assertThat(getString).isEqualTo(hello);
+        assertThat(getStringArray.length).isEqualTo(stringArray.length);
+        assertThat(getStringArray[0]).isEqualTo(stringArray[0]);
+        assertThat(getStringArray[1]).isEqualTo(stringArray[1]);
 
-        assertEquals(map.size(), getMap.size());
-        assertEquals(map.get("hello"), getMap.get("hello"));
-        assertEquals(map.get("goodbye"), getMap.get("goodbye"));
-        assertEquals(map.get("noCorrespondance"), getMap.get("noCorrespondance"));
+        assertThat(getMap.size()).isEqualTo(map.size());
+        assertThat(getMap.get("hello")).isEqualTo(map.get("hello"));
+        assertThat(getMap.get("goodbye")).isEqualTo(map.get("goodbye"));
+        assertThat(getMap.get("noCorrespondance")).isEqualTo(map.get("noCorrespondance"));
 
-        assertEquals(functionInt, getInt);
-        assertEquals(functionDouble, getDouble, 0);
-        assertEquals(functionFloat, getFloat, 0);
-        assertEquals(functionBoolean, getBoolean);
+        assertThat(getInt).isEqualTo(functionInt);
+        assertThat(getDouble).isCloseTo(functionDouble, within(new Double(0)));
+        assertThat(getFloat).isCloseTo(functionFloat, within(new Float(0)));
+        assertThat(getBoolean).isEqualTo(functionBoolean);
 
-        // Act 2 : no @DefaultStringValue
+        // When 2 : no @DefaultStringValue
         try {
             constants.goodbye();
             fail("i18n patching mechanism should throw an exception if no locale and no @DefaultStringValue is set");
         } catch (Exception e) {
-            // Assert 2
-            assertEquals(expectedErrorMessage, e.getMessage());
+            // Then 2
+            assertThat(e.getMessage()).isEqualTo(expectedErrorMessage);
         }
     }
 
@@ -85,7 +86,7 @@ public class MyConstantsWithLookupTest extends GwtTestTest {
     public void specialChars() {
         setLocale(Locale.FRENCH);
 
-        // Act
+        // When
         String hello = constants.hello();
         String goodbye = constants.goodbye();
         String[] stringArray = constants.stringArray();
@@ -104,43 +105,43 @@ public class MyConstantsWithLookupTest extends GwtTestTest {
         float getFloat = constants.getFloat("functionFloat");
         boolean getBoolean = constants.getBoolean("functionBoolean");
 
-        // Assert
-        assertEquals("Bonjour", hello);
-        assertEquals("Au revoir et un caractère qui pue", goodbye);
+        // Then
+        assertThat(hello).isEqualTo("Bonjour");
+        assertThat(goodbye).isEqualTo("Au revoir et un caractère qui pue");
 
-        assertEquals(3, stringArray.length);
-        assertEquals("un", stringArray[0]);
-        assertEquals("deux", stringArray[1]);
-        assertEquals("trois", stringArray[2]);
+        assertThat(stringArray.length).isEqualTo(3);
+        assertThat(stringArray[0]).isEqualTo("un");
+        assertThat(stringArray[1]).isEqualTo("deux");
+        assertThat(stringArray[2]).isEqualTo("trois");
 
-        assertEquals(4, map.size());
-        assertEquals("Bonjour", map.get("hello"));
-        assertEquals("Au revoir et un caractère qui pue", map.get("goodbye"));
-        assertEquals("premiere valeur de la map", map.get("map1"));
-        assertEquals("seconde valeur de la map", map.get("map2"));
-        assertNull(map.get("map3"));
+        assertThat(map).hasSize(4);
+        assertThat(map.get("hello")).isEqualTo("Bonjour");
+        assertThat(map.get("goodbye")).isEqualTo("Au revoir et un caractère qui pue");
+        assertThat(map.get("map1")).isEqualTo("premiere valeur de la map");
+        assertThat(map.get("map2")).isEqualTo("seconde valeur de la map");
+        assertThat(map.get("map3")).isNull();
 
-        assertEquals(4, functionInt);
-        assertEquals(4.4, functionDouble, 0);
-        assertEquals((float) 5.55, functionFloat, 0);
-        assertTrue(functionBoolean);
+        assertThat(functionInt).isEqualTo(4);
+        assertThat(functionDouble).isCloseTo(4.4, within(new Double(0)));
+        assertThat(functionFloat).isCloseTo((float) 5.55, within(new Float(0)));
+        assertThat(functionBoolean).isTrue();
 
         // MyConstantsWithLookup specific methods assertions
-        assertEquals(hello, getString);
-        assertEquals(stringArray.length, getStringArray.length);
-        assertEquals(stringArray[0], getStringArray[0]);
-        assertEquals(stringArray[1], getStringArray[1]);
-        assertEquals(stringArray[2], getStringArray[2]);
+        assertThat(getString).isEqualTo(hello);
+        assertThat(getStringArray.length).isEqualTo(stringArray.length);
+        assertThat(getStringArray[0]).isEqualTo(stringArray[0]);
+        assertThat(getStringArray[1]).isEqualTo(stringArray[1]);
+        assertThat(getStringArray[2]).isEqualTo(stringArray[2]);
 
-        assertEquals(map.size(), getMap.size());
-        assertEquals(map.get("hello"), getMap.get("hello"));
-        assertEquals(map.get("goodbye"), getMap.get("goodbye"));
-        assertEquals(map.get("noCorrespondance"), getMap.get("noCorrespondance"));
+        assertThat(getMap.size()).isEqualTo(map.size());
+        assertThat(getMap.get("hello")).isEqualTo(map.get("hello"));
+        assertThat(getMap.get("goodbye")).isEqualTo(map.get("goodbye"));
+        assertThat(getMap.get("noCorrespondance")).isEqualTo(map.get("noCorrespondance"));
 
-        assertEquals(functionInt, getInt);
-        assertEquals(functionDouble, getDouble, 0);
-        assertEquals(functionFloat, getFloat, 0);
-        assertEquals(functionBoolean, getBoolean);
+        assertThat(getInt).isEqualTo(functionInt);
+        assertThat(getDouble).isCloseTo(functionDouble, within(new Double(0)));
+        assertThat(getFloat).isCloseTo(functionFloat, within(new Float(0)));
+        assertThat(getBoolean).isEqualTo(functionBoolean);
     }
 
 }

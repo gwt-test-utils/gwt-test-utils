@@ -12,20 +12,13 @@ import com.googlecode.gwt.test.utils.events.EventBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CompositeTest extends GwtTestTest {
-
-    private class MyComposite extends Composite {
-        MyComposite(Label label) {
-            initWidget(label);
-        }
-    }
 
     private Composite composite;
     private int compositeCount;
     private Label label;
-
     private int labelCount;
 
     @Before
@@ -40,17 +33,17 @@ public class CompositeTest extends GwtTestTest {
 
     @Test
     public void click_Wrapped() {
-        // Arrange
+        // Given
         label.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
                 labelCount++;
 
-                assertEquals(label, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(label);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
 
                 // composite handler should be trigger first
-                assertEquals(labelCount, compositeCount);
+                assertThat(compositeCount).isEqualTo(labelCount);
             }
         });
 
@@ -59,30 +52,30 @@ public class CompositeTest extends GwtTestTest {
             public void onClick(ClickEvent event) {
                 compositeCount++;
 
-                assertEquals(composite, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(composite);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
             }
 
         }, ClickEvent.getType());
 
-        // Act
+        // When
         Browser.click(label);
 
-        // Assert
-        assertEquals(1, labelCount);
-        assertEquals(1, compositeCount);
+        // Then
+        assertThat(labelCount).isEqualTo(1);
+        assertThat(compositeCount).isEqualTo(1);
     }
 
     @Test
     public void click_Wrapper() {
-        // Arrange
+        // Given
         label.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
                 labelCount++;
 
-                assertEquals(label, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(label);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
             }
         });
 
@@ -91,33 +84,33 @@ public class CompositeTest extends GwtTestTest {
             public void onClick(ClickEvent event) {
                 compositeCount++;
 
-                assertEquals(composite, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(composite);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
 
                 // composite handler should be trigger first
-                assertEquals(labelCount + 1, compositeCount);
+                assertThat(compositeCount).isEqualTo(labelCount + 1);
             }
 
         }, ClickEvent.getType());
 
-        // Act
+        // When
         Browser.click(composite);
 
-        // Assert
-        assertEquals(1, labelCount);
-        assertEquals(1, compositeCount);
+        // Then
+        assertThat(labelCount).isEqualTo(1);
+        assertThat(compositeCount).isEqualTo(1);
     }
 
     @Test
     public void fireNativeEvent_Wrapped() {
-        // Arrange
+        // Given
         label.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
                 labelCount++;
 
-                assertEquals(label, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(label);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
             }
         });
 
@@ -126,33 +119,33 @@ public class CompositeTest extends GwtTestTest {
             public void onClick(ClickEvent event) {
                 compositeCount++;
 
-                assertEquals(composite, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(composite);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
             }
 
         }, ClickEvent.getType());
 
         Event clickEvent = EventBuilder.create(Event.ONCLICK).build();
 
-        // Act
+        // When
         DomEvent.fireNativeEvent(clickEvent, label, label.getElement());
 
-        // Assert
-        assertEquals(1, labelCount);
-        assertEquals(0, compositeCount);
+        // Then
+        assertThat(labelCount).isEqualTo(1);
+        assertThat(compositeCount).isEqualTo(0);
 
     }
 
     @Test
     public void fireNativeEvent_Wrapper() {
-        // Arrange
+        // Given
         label.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
                 labelCount++;
 
-                assertEquals(label, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(label);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
             }
         });
 
@@ -161,21 +154,27 @@ public class CompositeTest extends GwtTestTest {
             public void onClick(ClickEvent event) {
                 compositeCount++;
 
-                assertEquals(composite, event.getSource());
-                assertEquals(label.getElement(), event.getRelativeElement());
+                assertThat(event.getSource()).isEqualTo(composite);
+                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
             }
 
         }, ClickEvent.getType());
 
         Event clickEvent = EventBuilder.create(Event.ONCLICK).build();
 
-        // Act
+        // When
         DomEvent.fireNativeEvent(clickEvent, composite, composite.getElement());
 
-        // Assert
-        assertEquals(0, labelCount);
-        assertEquals(1, compositeCount);
+        // Then
+        assertThat(labelCount).isEqualTo(0);
+        assertThat(compositeCount).isEqualTo(1);
 
+    }
+
+    private class MyComposite extends Composite {
+        MyComposite(Label label) {
+            initWidget(label);
+        }
     }
 
 }

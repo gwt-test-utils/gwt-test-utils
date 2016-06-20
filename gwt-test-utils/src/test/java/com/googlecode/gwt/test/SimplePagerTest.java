@@ -6,7 +6,7 @@ public class SimplePagerTest extends GwtTestTest {
 
     @Test
     public void simplePager() {
-        // // Arrange
+        // // Given
         // // Create a CellList.
         // CellList<String> cellList = new CellList<String>(new TextCell());
         //
@@ -24,10 +24,10 @@ public class SimplePagerTest extends GwtTestTest {
         // // Set the cellList as the display.
         // pager.setDisplay(cellList);
         //
-        // // Act
+        // // When
         //
-        // // Assert
-        // assertNotNull(pager);
+        // // Then
+        // ThenNotNull(pager);
     }
 
 }

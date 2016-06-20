@@ -4,32 +4,30 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class HTMLPanelTest extends GwtTestTest {
 
     @Test
     public void getElementById() {
-        // Arrange
+        // Given
         HTMLPanel panel = new HTMLPanel("<div id=\"childDiv\" class=\"myClass\">some text</div>");
 
-        // Act
+        // When
         DivElement childDiv = panel.getElementById("childDiv").cast();
 
-        // Assert
-        assertEquals("myClass", childDiv.getClassName());
-        assertEquals("some text", childDiv.getInnerText());
+        // Then
+        assertThat(childDiv.getClassName()).isEqualTo("myClass");
+        assertThat(childDiv.getInnerText()).isEqualTo("some text");
     }
 
     @Test
     public void getInnerHTML() {
-        // Arrange
+        // Given
         HTMLPanel panel = new HTMLPanel(
                 "<p>you can <b>test</b><a href=\"somelink\">here</a> and everything will be different</p>");
 
-        // Act & Assert
-        assertEquals(
-                "<p>you can <b>test</b><a href=\"somelink\">here</a> and everything will be different</p>",
-                panel.getElement().getInnerHTML());
+        // When & Assert
+        assertThat(panel.getElement().getInnerHTML()).isEqualTo("<p>you can <b>test</b><a href=\"somelink\">here</a> and everything will be different</p>");
     }
 }

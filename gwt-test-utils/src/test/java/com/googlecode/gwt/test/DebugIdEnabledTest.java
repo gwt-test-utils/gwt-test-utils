@@ -3,7 +3,7 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.ui.Button;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DebugIdEnabledTest extends GwtTestTest {
 
@@ -14,14 +14,14 @@ public class DebugIdEnabledTest extends GwtTestTest {
 
     @Test
     public void ensureDebugId_Enabled() {
-        // Arrange
+        // Given
         Button b = new Button();
 
-        // Act
+        // When
         b.ensureDebugId("myDebugId");
 
-        // Assert
-        assertEquals("gwt-debug-myDebugId", b.getElement().getId());
+        // Then
+        assertThat(b.getElement().getId()).isEqualTo("gwt-debug-myDebugId");
     }
 
 }

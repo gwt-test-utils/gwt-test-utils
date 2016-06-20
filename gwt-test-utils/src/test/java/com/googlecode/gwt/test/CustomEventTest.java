@@ -9,22 +9,99 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class CustomEventTest extends GwtTestTest {
 
+    private int addCount;
+    private ListModel listModel;
+    private int removeCount;
+
+    @Test
+    public void add() {
+        // Given
+        listModel.addItemAddedHandler(new ItemAddedHandler() {
+
+            public void onItemAdded(ItemAddedEvent event) {
+                addCount++;
+                assertThat(event.getListItem().getText()).isEqualTo("addedItem");
+
+            }
+        });
+
+        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
+
+            public void onItemRemoved(ItemRemovedEvent event) {
+                fail("should not be called");
+            }
+        });
+
+        // When
+        listModel.addItem(new ListItem("addedItem"));
+
+        // Then
+        assertThat(addCount).isEqualTo(1);
+        assertThat(removeCount).isEqualTo(0);
+    }
+
+    @Before
+    public void beforeCustomEventTest() {
+        listModel = new ListModel();
+        addCount = 0;
+        removeCount = 0;
+    }
+
+    @Test
+    public void remove() {
+        // Given
+        final ListItem itemToRemove = new ListItem("itemToRemove");
+        listModel.addItem(itemToRemove);
+
+        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
+
+            public void onItemRemoved(ItemRemovedEvent event) {
+                removeCount++;
+                assertThat(event.getListItem()).isEqualTo(itemToRemove);
+            }
+
+        });
+
+        listModel.addItemAddedHandler(new ItemAddedHandler() {
+
+            public void onItemAdded(ItemAddedEvent event) {
+                fail("should not be called");
+
+            }
+        });
+
+        // When
+        listModel.removeItem(itemToRemove);
+
+        // Then
+        assertThat(removeCount).isEqualTo(1);
+    }
+
+    private static interface ItemAddedHandler extends EventHandler {
+
+        void onItemAdded(ItemAddedEvent event);
+    }
+
+    private static interface ItemRemovedHandler extends EventHandler {
+
+        void onItemRemoved(ItemRemovedEvent event);
+    }
+
     private static class ItemAddedEvent extends GwtEvent<ItemAddedHandler> {
         private static final Type<ItemAddedHandler> TYPE = new Type<ItemAddedHandler>();
-
-        public static Type<ItemAddedHandler> getType() {
-            return TYPE;
-        }
-
         private final ListItem listItem;
 
         public ItemAddedEvent(ListItem listItem) {
             this.listItem = listItem;
+        }
+
+        public static Type<ItemAddedHandler> getType() {
+            return TYPE;
         }
 
         @Override
@@ -45,22 +122,16 @@ public class CustomEventTest extends GwtTestTest {
         }
     }
 
-    private static interface ItemAddedHandler extends EventHandler {
-
-        void onItemAdded(ItemAddedEvent event);
-    }
-
     private static class ItemRemovedEvent extends GwtEvent<ItemRemovedHandler> {
         private static final Type<ItemRemovedHandler> TYPE = new Type<ItemRemovedHandler>();
-
-        public static Type<ItemRemovedHandler> getType() {
-            return TYPE;
-        }
-
         private final ListItem listItem;
 
         public ItemRemovedEvent(ListItem listItem) {
             this.listItem = listItem;
+        }
+
+        public static Type<ItemRemovedHandler> getType() {
+            return TYPE;
         }
 
         @Override
@@ -76,11 +147,6 @@ public class CustomEventTest extends GwtTestTest {
         protected void dispatch(ItemRemovedHandler handler) {
             handler.onItemRemoved(this);
         }
-    }
-
-    private static interface ItemRemovedHandler extends EventHandler {
-
-        void onItemRemoved(ItemRemovedEvent event);
     }
 
     private static class ListItem {
@@ -147,74 +213,6 @@ public class CustomEventTest extends GwtTestTest {
             items.remove(item);
             handlerManager.fireEvent(new ItemRemovedEvent(item));
         }
-    }
-
-    private int addCount;
-    private ListModel listModel;
-    private int removeCount;
-
-    @Test
-    public void add() {
-        // Arrange
-        listModel.addItemAddedHandler(new ItemAddedHandler() {
-
-            public void onItemAdded(ItemAddedEvent event) {
-                addCount++;
-                assertEquals("addedItem", event.getListItem().getText());
-
-            }
-        });
-
-        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
-
-            public void onItemRemoved(ItemRemovedEvent event) {
-                fail();
-            }
-        });
-
-        // Act
-        listModel.addItem(new ListItem("addedItem"));
-
-        // Assert
-        assertEquals(1, addCount);
-        assertEquals(0, removeCount);
-    }
-
-    @Before
-    public void beforeCustomEventTest() {
-        listModel = new ListModel();
-        addCount = 0;
-        removeCount = 0;
-    }
-
-    @Test
-    public void remove() {
-        // Arrange
-        final ListItem itemToRemove = new ListItem("itemToRemove");
-        listModel.addItem(itemToRemove);
-
-        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
-
-            public void onItemRemoved(ItemRemovedEvent event) {
-                removeCount++;
-                assertEquals(itemToRemove, event.getListItem());
-            }
-
-        });
-
-        listModel.addItemAddedHandler(new ItemAddedHandler() {
-
-            public void onItemAdded(ItemAddedEvent event) {
-                fail();
-
-            }
-        });
-
-        // Act
-        listModel.removeItem(itemToRemove);
-
-        // Assert
-        assertEquals(1, removeCount);
     }
 
 }

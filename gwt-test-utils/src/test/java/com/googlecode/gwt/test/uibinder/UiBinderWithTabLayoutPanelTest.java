@@ -4,27 +4,24 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithTabLayoutPanelTest extends GwtTestTest {
 
     @Test
     public void uiBinderWithTabLayoutPanel() {
-        // Arrange
+        // Given
         UiBinderWithTabLayoutPanel panel = new UiBinderWithTabLayoutPanel();
 
-        // Act
+        // When
         RootLayoutPanel.get().add(panel);
 
-        // Assert
-        assertEquals("able", panel.first.getText());
-        assertEquals("Custom header", panel.customHeader.getText());
-        assertEquals("baker", panel.second.getText());
-
-        assertEquals("<b>HTML</b>",
-                panel.getPanel().getTabWidget(0).getElement().getInnerHTML());
-
-        assertEquals(panel.customHeader, panel.getPanel().getTabWidget(panel.second));
+        // Then
+        assertThat(panel.first.getText()).isEqualTo("able");
+        assertThat(panel.customHeader.getText()).isEqualTo("Custom header");
+        assertThat(panel.second.getText()).isEqualTo("baker");
+        assertThat(panel.getPanel().getTabWidget(0).getElement().getInnerHTML()).isEqualTo("<b>HTML</b>");
+        assertThat(panel.getPanel().getTabWidget(panel.second)).isEqualTo(panel.customHeader);
 
     }
 

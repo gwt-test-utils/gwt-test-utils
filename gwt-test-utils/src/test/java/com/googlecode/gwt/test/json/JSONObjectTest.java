@@ -5,14 +5,13 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.within;
 
 public class JSONObjectTest extends GwtTestTest {
 
     @Test
     public void containsKey() {
-        // Arrange
+        // Given
         String json = "{\"string\": \"json string\", \"int\": 3.0}";
         JSONObject o = JSONParser.parseStrict(json).isObject();
 
@@ -25,10 +24,10 @@ public class JSONObjectTest extends GwtTestTest {
 
     @Test
     public void parseLenient() {
-        // Arrange
+        // Given
         String json = "{string: 'json string', \"int\": 3, float: 3.1415, \"bool\": true, 'array': [1, 33.7, \"l33t\"], \"object\": {\"int\": 4, \"array\": [5, 6, 7]}}";
 
-        // Act
+        // When
         JSONObject o = JSONParser.parseLenient(json).isObject();
         JSONString string = (JSONString) o.get("string");
         JSONNumber number = (JSONNumber) o.get("int");
@@ -37,27 +36,27 @@ public class JSONObjectTest extends GwtTestTest {
         JSONArray array = (JSONArray) o.get("array");
         JSONObject object = (JSONObject) o.get("object");
 
-        // Assert
-        assertEquals("json string", string.stringValue());
-        assertEquals(3.0, number.doubleValue(), 0);
-        assertEquals(3.1415, fl.doubleValue(), 0);
-        assertTrue(bool.booleanValue());
+        // Then
+        assertThat(string.stringValue()).isEqualTo("json string");
+        assertThat(number.doubleValue()).isCloseTo(3.0, within(new Double(0)));
+        assertThat(fl.doubleValue()).isCloseTo(3.1415, within(new Double(0)));
+        assertThat(bool.booleanValue()).isTrue();
         // array
-        assertEquals(1.0, ((JSONNumber) array.get(0)).doubleValue(), 0);
-        assertEquals(33.7, ((JSONNumber) array.get(1)).doubleValue(), 0);
-        assertEquals("l33t", ((JSONString) array.get(2)).stringValue());
+        assertThat(((JSONNumber) array.get(0)).doubleValue()).isCloseTo(1.0, within(new Double(0)));
+        assertThat(((JSONNumber) array.get(1)).doubleValue()).isCloseTo(33.7, within(new Double(0)));
+        assertThat(((JSONString) array.get(2)).stringValue()).isEqualTo("l33t");
         // object
-        assertEquals(4.0, ((JSONNumber) object.get("int")).doubleValue(), 0);
-        assertEquals(3, ((JSONArray) object.get("array")).size());
+        assertThat(((JSONNumber) object.get("int")).doubleValue()).isCloseTo(4.0, within(new Double(0)));
+        assertThat(((JSONArray) object.get("array")).size()).isEqualTo(3);
 
     }
 
     @Test
     public void parseStrict() {
-        // Arrange
+        // Given
         String json = "{\"string\": \"json string\", \"int\": 3.0, \"float\": 3.1415, \"bool\": true, \"array\": [1, 33.7, \"l33t\"], \"object\": {\"int\": 4, \"array\": [5, 6, 7]}}";
 
-        // Act
+        // When
         JSONObject o = JSONParser.parseStrict(json).isObject();
         JSONString string = (JSONString) o.get("string");
         JSONNumber number = (JSONNumber) o.get("int");
@@ -66,23 +65,21 @@ public class JSONObjectTest extends GwtTestTest {
         JSONArray array = (JSONArray) o.get("array");
         JSONObject object = (JSONObject) o.get("object");
 
-        // Assert
-        assertEquals("json string", string.stringValue());
-        assertEquals(3.0, number.doubleValue(), 0);
-        assertEquals(3.1415, fl.doubleValue(), 0);
-        assertTrue(bool.booleanValue());
+        // Then
+        assertThat(string.stringValue()).isEqualTo("json string");
+        assertThat(number.doubleValue()).isCloseTo(3.0, within(new Double(0)));
+        assertThat(fl.doubleValue()).isCloseTo(3.1415, within(new Double(0)));
+        assertThat(bool.booleanValue()).isTrue();
         // array
-        assertEquals(1.0, ((JSONNumber) array.get(0)).doubleValue(), 0);
-        assertEquals(33.7, ((JSONNumber) array.get(1)).doubleValue(), 0);
-        assertEquals("l33t", ((JSONString) array.get(2)).stringValue());
+        assertThat(((JSONNumber) array.get(0)).doubleValue()).isCloseTo(1.0, within(new Double(0)));
+        assertThat(((JSONNumber) array.get(1)).doubleValue()).isCloseTo(33.7, within(new Double(0)));
+        assertThat(((JSONString) array.get(2)).stringValue()).isEqualTo("l33t");
         // object
-        assertEquals(4.0, ((JSONNumber) object.get("int")).doubleValue(), 0);
-        assertEquals(3, ((JSONArray) object.get("array")).size());
+        assertThat(((JSONNumber) object.get("int")).doubleValue()).isCloseTo(4.0, within(new Double(0)));
+        assertThat(((JSONArray) object.get("array")).size()).isEqualTo(3);
 
         // toString
-        assertEquals(
-                "{\"string\":\"json string\", \"int\":3, \"float\":3.1415, \"bool\":true, \"array\":[1,33.7,\"l33t\"], \"object\":{\"int\":4, \"array\":[5,6,7]}}",
-                o.toString());
+        assertThat(o.toString()).isEqualTo("{\"string\":\"json string\", \"int\":3, \"float\":3.1415, \"bool\":true, \"array\":[1,33.7,\"l33t\"], \"object\":{\"int\":4, \"array\":[5,6,7]}}");
 
     }
 

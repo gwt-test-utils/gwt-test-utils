@@ -11,13 +11,13 @@ public class JUnitParamsGwtTest extends GwtTestTest {
     @Test
     @Parameters({"John, text : John", "Loke, text : Loke"})
     public void junitParams(String textToSet, String textToAssert) throws Exception {
-        // Arrange
+        // Given
         JUnitParamsWidget w = new JUnitParamsWidget();
 
-        // Act
+        // When
         w.setText(textToSet);
 
-        // Assert
+        // Then
         assertThat(w.getText()).isEqualTo(textToAssert);
     }
 

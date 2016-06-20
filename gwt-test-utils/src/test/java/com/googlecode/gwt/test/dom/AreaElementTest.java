@@ -6,7 +6,7 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AreaElementTest extends GwtTestTest {
 
@@ -14,59 +14,59 @@ public class AreaElementTest extends GwtTestTest {
 
     @Test
     public void accessKey() {
-        // Pre-Assert
-        assertEquals("", a.getAccessKey());
+        // Preconditions
+        assertThat(a.getAccessKey()).isEqualTo("");
 
-        // Act
+        // When
         a.setAccessKey("k");
 
-        // Assert
-        assertEquals("k", a.getAccessKey());
+        // Then
+        assertThat(a.getAccessKey()).isEqualTo("k");
     }
 
     @Test
     public void alt() {
-        // Pre-Assert
-        assertEquals("", a.getAlt());
+        // Preconditions
+        assertThat(a.getAlt()).isEqualTo("");
 
-        // Act
+        // When
         a.setAlt("Alt");
 
-        // Assert
-        assertEquals("Alt", a.getAlt());
+        // Then
+        assertThat(a.getAlt()).isEqualTo("Alt");
     }
 
     @Test
     public void as() {
-        // Act
+        // When
         AreaElement asElement = AreaElement.as(a);
 
-        // Assert
-        assertEquals(a, asElement);
+        // Then
+        assertThat(asElement).isEqualTo(a);
     }
 
     @Test
     public void coords() {
-        // Pre-Assert
-        assertEquals("", a.getCoords());
+        // Preconditions
+        assertThat(a.getCoords()).isEqualTo("");
 
-        // Act
+        // When
         a.setCoords("Coords");
 
-        // Assert
-        assertEquals("Coords", a.getCoords());
+        // Then
+        assertThat(a.getCoords()).isEqualTo("Coords");
     }
 
     @Test
     public void href() {
-        // Pre-Assert
-        assertEquals("", a.getHref());
+        // Preconditions
+        assertThat(a.getHref()).isEqualTo("");
 
-        // Act
+        // When
         a.setHref("Href");
 
-        // Assert
-        assertEquals("Href", a.getHref());
+        // Then
+        assertThat(a.getHref()).isEqualTo("Href");
     }
 
     @Before
@@ -76,38 +76,38 @@ public class AreaElementTest extends GwtTestTest {
 
     @Test
     public void shape() {
-        // Pre-Assert
-        assertEquals("", a.getShape());
+        // Preconditions
+        assertThat(a.getShape()).isEqualTo("");
 
-        // Act
+        // When
         a.setShape("Shape");
 
-        // Assert
-        assertEquals("Shape", a.getShape());
+        // Then
+        assertThat(a.getShape()).isEqualTo("Shape");
     }
 
     @Test
     public void tabIndex() {
-        // Pre-Assert
-        assertEquals(0, a.getTabIndex());
+        // Preconditions
+        assertThat(a.getTabIndex()).isEqualTo(0);
 
-        // Act
+        // When
         a.setTabIndex(4);
 
-        // Assert
-        assertEquals(4, a.getTabIndex());
+        // Then
+        assertThat(a.getTabIndex()).isEqualTo(4);
     }
 
     @Test
     public void target() {
-        // Pre-Assert
-        assertEquals("", a.getTarget());
+        // Preconditions
+        assertThat(a.getTarget()).isEqualTo("");
 
-        // Act
+        // When
         a.setTarget("Target");
 
-        // Assert
-        assertEquals("Target", a.getTarget());
+        // Then
+        assertThat(a.getTarget()).isEqualTo("Target");
     }
 
 }

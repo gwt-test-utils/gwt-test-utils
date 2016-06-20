@@ -6,156 +6,155 @@ import com.google.gwt.user.client.ui.Image;
 import com.googlecode.gwt.test.resources.MyClientBundle;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ImageTest extends GwtTestTest {
 
     @Test
     public void constructor() {
-        // Arrange
+        // Given
         ImageResource imageRessource = MyClientBundle.INSTANCE.imageResource();
 
-        // Act
+        // When
         Image i = new Image(imageRessource);
 
-        // Assert
-        assertEquals("http://127.0.0.1:8888/gwt_test_utils_module/imageResource.gif", i.getUrl());
-        assertEquals(0, i.getOriginLeft());
-        assertEquals(0, i.getOriginTop());
-        assertEquals(0, i.getWidth());
-        assertEquals(0, i.getHeight());
+        // Then
+        assertThat(i.getUrl()).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/imageResource.gif");
+        assertThat(i.getOriginLeft()).isEqualTo(0);
+        assertThat(i.getOriginTop()).isEqualTo(0);
+        assertThat(i.getWidth()).isEqualTo(0);
+        assertThat(i.getHeight()).isEqualTo(0);
     }
 
     @Test
     public void getElement() {
-        // Assert
+        // Then
         Image i = new Image();
 
-        // Act
+        // When
         Element e = i.getElement();
 
-        assertNotNull(e);
-        assertEquals("img", e.getTagName());
+        assertThat(e).isNotNull();
+        assertThat(e.getTagName()).isEqualTo("img");
     }
 
     @Test
     public void height() {
-        // Arrange
+        // Given
         Image i = new Image();
 
-        // Act
+        // When
         i.setHeight("20");
 
-        // Assert
-        assertEquals(20, i.getHeight());
+        // Then
+        assertThat(i.getHeight()).isEqualTo(20);
     }
 
     @Test
     public void height_Em() {
-        // Arrange
+        // Given
         Image i = new Image();
 
-        // Act
+        // When
         i.setHeight("20em");
 
-        // Assert
-        assertEquals(20, i.getHeight());
+        // Then
+        assertThat(i.getHeight()).isEqualTo(20);
     }
 
     @Test
     public void height_Px() {
-        // Arrange
+        // Given
         Image i = new Image();
-        // Pre-Assert
-        assertEquals(0, i.getHeight());
+        // Preconditions
+        assertThat(i.getHeight()).isEqualTo(0);
 
-        // Act
+        // When
         i.setHeight("20px");
 
-        // Assert
-        assertEquals(20, i.getHeight());
+        // Then
+        assertThat(i.getHeight()).isEqualTo(20);
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         Image i = new Image();
 
-        // Act
+        // When
         i.setTitle("title");
 
-        // Assert
-        assertEquals("title", i.getTitle());
+        // Then
+        assertThat(i.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void url() {
-        // Arrange
+        // Given
         Image i = new Image("http://my-url");
-        // Pre-Assert
-        assertEquals("http://my-url", i.getUrl());
+        // Preconditions
+        assertThat(i.getUrl()).isEqualTo("http://my-url");
 
-        // Act
+        // When
         i.setUrl("newURL");
 
-        // Assert
-        assertEquals("newURL", i.getUrl());
+        // Then
+        assertThat(i.getUrl()).isEqualTo("newURL");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         Image i = new Image();
-        // Pre-Assert
-        assertEquals(true, i.isVisible());
+        // Preconditions
+        assertThat(i.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         i.setVisible(false);
 
-        // Assert
-        assertEquals(false, i.isVisible());
+        // Then
+        assertThat(i.isVisible()).isEqualTo(false);
     }
 
     @Test
     public void width() {
-        // Arrange
+        // Given
         Image i = new Image();
-        // Pre-Assert
-        assertEquals(0, i.getWidth());
+        // Preconditions
+        assertThat(i.getWidth()).isEqualTo(0);
 
-        // Act
+        // When
         i.setWidth("20");
 
-        // Assert
-        assertEquals(20, i.getWidth());
+        // Then
+        assertThat(i.getWidth()).isEqualTo(20);
     }
 
     @Test
     public void width_Em() {
         Image i = new Image();
-        // Pre-Assert
-        assertEquals(0, i.getWidth());
+        // Preconditions
+        assertThat(i.getWidth()).isEqualTo(0);
 
-        // Act
+        // When
         i.setWidth("20em");
 
-        // Assert
-        assertEquals(20, i.getWidth());
+        // Then
+        assertThat(i.getWidth()).isEqualTo(20);
     }
 
     @Test
     public void width_Px() {
-        // Arrange
+        // Given
         Image i = new Image();
-        // Pre-Assert
-        assertEquals(0, i.getWidth());
+        // Preconditions
+        assertThat(i.getWidth()).isEqualTo(0);
 
-        // Act
+        // When
         i.setWidth("20px");
 
-        // Assert
-        assertEquals(20, i.getWidth());
+        // Then
+        assertThat(i.getWidth()).isEqualTo(20);
     }
 
 }

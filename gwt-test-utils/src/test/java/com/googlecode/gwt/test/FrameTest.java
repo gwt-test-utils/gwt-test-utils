@@ -3,34 +3,34 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.ui.Frame;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FrameTest extends GwtTestTest {
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         Frame f = new Frame();
 
-        // Act
+        // When
         f.setTitle("title");
 
-        // Assert
-        assertEquals("title", f.getTitle());
+        // Then
+        assertThat(f.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void url() {
-        // Arrange
+        // Given
         Frame f = new Frame("url");
-        // Pre-Assert
-        assertEquals("url", f.getUrl());
+        // Preconditions
+        assertThat(f.getUrl()).isEqualTo("url");
 
-        // Act
+        // When
         f.setUrl("newURL");
 
-        // Assert
-        assertEquals("newURL", f.getUrl());
+        // Then
+        assertThat(f.getUrl()).isEqualTo("newURL");
     }
 
 }

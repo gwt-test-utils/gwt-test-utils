@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LayoutPanelTest extends GwtTestTest {
 
@@ -18,22 +18,22 @@ public class LayoutPanelTest extends GwtTestTest {
 
     @Test
     public void add() {
-        // Arrange
+        // Given
         Button b = new Button();
-        assertFalse(b.isAttached());
+        assertThat(b.isAttached()).isFalse();
 
-        // Act
+        // When
         panel.add(b);
 
-        // Assert
-        assertEquals(3, panel.getWidgetCount());
-        assertEquals(b, panel.getWidget(2));
-        assertTrue(b.isAttached());
+        // Then
+        assertThat(panel.getWidgetCount()).isEqualTo(3);
+        assertThat(panel.getWidget(2)).isEqualTo(b);
+        assertThat(b.isAttached()).isTrue();
     }
 
     @Test
     public void animate() {
-        // Arrange
+        // Given
         AnimationCallback callback = new AnimationCallback() {
 
             public void onAnimationComplete() {
@@ -45,11 +45,11 @@ public class LayoutPanelTest extends GwtTestTest {
             }
         };
 
-        // Act
+        // When
         panel.animate(4, callback);
 
-        // Assert
-        assertTrue(onAnimationComplete);
+        // Then
+        assertThat(onAnimationComplete).isTrue();
     }
 
     @Before
@@ -57,15 +57,15 @@ public class LayoutPanelTest extends GwtTestTest {
         onAnimationComplete = false;
 
         panel = new LayoutPanel();
-        assertFalse(panel.isAttached());
+        assertThat(panel.isAttached()).isFalse();
 
         // Attach the LayoutPanel to the RootLayoutPanel. The latter will listen
         // for
         // resize events on the window to ensure that its children are informed of
         // possible size changes.
         RootLayoutPanel.get().add(panel);
-        assertTrue(panel.isAttached());
-        assertEquals(0, panel.getWidgetCount());
+        assertThat(panel.isAttached()).isTrue();
+        assertThat(panel.getWidgetCount()).isEqualTo(0);
 
         // Attach two child widgets to a LayoutPanel, laying them out
         // horizontally,
@@ -77,21 +77,21 @@ public class LayoutPanelTest extends GwtTestTest {
         panel.setWidgetLeftWidth(childOne, 0, Unit.PCT, 50, Unit.PCT);
         panel.setWidgetRightWidth(childTwo, 0, Unit.PCT, 50, Unit.PCT);
 
-        assertEquals(2, panel.getWidgetCount());
+        assertThat(panel.getWidgetCount()).isEqualTo(2);
     }
 
     @Test
     public void getWidgetContainerElement() {
-        // Arrange
+        // Given
         FlowPanel fp1 = new FlowPanel();
         panel.add(fp1);
         Element fp1Element = fp1.getElement();
 
-        // Act
+        // When
         Element fp1Container = panel.getWidgetContainerElement(fp1);
 
-        // Assert
-        assertEquals(fp1Element, fp1Container.getFirstChildElement());
+        // Then
+        assertThat(fp1Container.getFirstChildElement()).isEqualTo(fp1Element);
     }
 
 }

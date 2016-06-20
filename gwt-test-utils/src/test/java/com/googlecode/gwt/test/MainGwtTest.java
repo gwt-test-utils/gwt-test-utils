@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.fail;
 
 public class MainGwtTest extends GwtTestTest {
 
@@ -30,53 +30,53 @@ public class MainGwtTest extends GwtTestTest {
 
     @Test
     public void create() {
-        // Act
+        // When
         AnchorElement e = GWT.create(AnchorElement.class);
 
-        // Assert
+        // Then
         assertThat(e).isNotNull();
     }
 
     @Test
     public void getHostPageBase() {
-        // Act & Assert
-        assertEquals("http://127.0.0.1:8888/", GWT.getHostPageBaseURL());
+        // When & Assert
+        assertThat(GWT.getHostPageBaseURL()).isEqualTo("http://127.0.0.1:8888/");
     }
 
     @Test
     public void getModuleBaseURL() {
-        // Act & Assert
-        assertEquals("http://127.0.0.1:8888/gwt_test_utils_module/", GWT.getModuleBaseURL());
+        // When & Assert
+        assertThat(GWT.getModuleBaseURL()).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/");
     }
 
     @Test
     public void getVersion() {
-        // Act & Assert
-        assertEquals("GWT by gwt-test-utils", GWT.getVersion());
+        // When & Assert
+        assertThat(GWT.getVersion()).isEqualTo("GWT by gwt-test-utils");
     }
 
     @Test
     public void initialiseOccursBeforeTheJUnitInitialisationOfTheClass() {
-        // Act & Assert
-        assertEquals("mer. 24 nov.", sToday);
+        // When & Assert
+        assertThat(sToday).isEqualTo("mer. 24 nov.");
     }
 
     @Test
     public void isClient() {
-        // Act & Assert
-        assertTrue(GWT.isClient());
+        // When & Assert
+        assertThat(GWT.isClient()).isTrue();
     }
 
     @Test
     public void isScript() {
-        // Act & Assert
-        assertFalse(GWT.isScript());
+        // When & Assert
+        assertThat(GWT.isScript()).isFalse();
     }
 
     @Test
     public void moduleName() {
-        // Act & Assert
-        assertEquals("gwt_test_utils_module", GWT.getModuleName());
+        // When & Assert
+        assertThat(GWT.getModuleName()).isEqualTo("gwt_test_utils_module");
     }
 
     @Test
@@ -96,7 +96,7 @@ public class MainGwtTest extends GwtTestTest {
             }
         });
 
-        // Assert
-        assertTrue(success);
+        // Then
+        assertThat(success).isTrue();
     }
 }

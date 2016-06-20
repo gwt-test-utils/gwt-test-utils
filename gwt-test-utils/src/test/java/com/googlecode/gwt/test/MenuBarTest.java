@@ -7,10 +7,11 @@ import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MenuBarTest extends GwtTestTest {
 
+    private boolean called = false;
     Command cmd = new Command() {
 
         public void execute() {
@@ -19,135 +20,133 @@ public class MenuBarTest extends GwtTestTest {
 
     };
 
-    private boolean called = false;
-
     @Test
     public void addItem() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
 
-        // Act
+        // When
         MenuItem item0 = bar.addItem("test0", cmd);
         MenuItem item1 = bar.addItem("test1", cmd);
 
-        // Assert
-        assertEquals(0, bar.getItemIndex(item0));
-        assertEquals(1, bar.getItemIndex(item1));
-        assertEquals(bar, item0.getParentMenu());
-        assertEquals(bar, item1.getParentMenu());
+        // Then
+        assertThat(bar.getItemIndex(item0)).isEqualTo(0);
+        assertThat(bar.getItemIndex(item1)).isEqualTo(1);
+        assertThat(item0.getParentMenu()).isEqualTo(bar);
+        assertThat(item1.getParentMenu()).isEqualTo(bar);
     }
 
     @Test
     public void addSeparator() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
         bar.addItem("test0", cmd);
 
-        // Act
+        // When
         MenuItemSeparator separator = bar.addSeparator();
         bar.addItem("test1", cmd);
 
-        // Assert
-        assertEquals(1, bar.getSeparatorIndex(separator));
+        // Then
+        assertThat(bar.getSeparatorIndex(separator)).isEqualTo(1);
     }
 
     @Test
     public void animationEnabled() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
 
-        // Act
+        // When
         bar.setAnimationEnabled(true);
 
-        // Assert
-        assertEquals(true, bar.isAnimationEnabled());
+        // Then
+        assertThat(bar.isAnimationEnabled()).isEqualTo(true);
     }
 
     @Test
     public void autoOpen() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
 
-        // Act
+        // When
         bar.setAutoOpen(false);
 
-        // Assert
-        assertEquals(false, bar.getAutoOpen());
+        // Then
+        assertThat(bar.getAutoOpen()).isEqualTo(false);
     }
 
     @Test
     public void click() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
         MenuItem item = bar.addItem("item", cmd);
-        // Pre-Assert
-        assertEquals(false, called);
+        // Preconditions
+        assertThat(called).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(bar, item);
 
-        // Assert
-        assertEquals(true, called);
+        // Then
+        assertThat(called).isEqualTo(true);
     }
 
     @Test
     public void constructor_Complex() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
         MenuBar subMenuBar = new MenuBar();
         MenuItem item = new MenuItem("item", false, subMenuBar);
         bar.addItem(item);
         item.setCommand(cmd);
-        // Pre-Assert
-        assertEquals(false, called);
+        // Preconditions
+        assertThat(called).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(bar, item);
 
-        // Assert
-        assertEquals(true, called);
+        // Then
+        assertThat(called).isEqualTo(true);
     }
 
     @Test
     public void removeItem() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
         MenuItem item0 = bar.addItem("test0", cmd);
         MenuItem item1 = bar.addItem("test1", cmd);
 
-        // Act
+        // When
         bar.removeItem(item0);
 
-        // Assert
-        assertEquals(0, bar.getItemIndex(item1));
+        // Then
+        assertThat(bar.getItemIndex(item1)).isEqualTo(0);
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
-        // Pre-Assert
-        assertEquals("", bar.getTitle());
+        // Preconditions
+        assertThat(bar.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         bar.setTitle("title");
 
-        // Assert
-        assertEquals("title", bar.getTitle());
+        // Then
+        assertThat(bar.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         MenuBar bar = new MenuBar();
-        // Pre-Assert
-        assertEquals(true, bar.isVisible());
+        // Preconditions
+        assertThat(bar.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         bar.setVisible(false);
 
-        // Assert
-        assertEquals(false, bar.isVisible());
+        // Then
+        assertThat(bar.isVisible()).isEqualTo(false);
     }
 
 }

@@ -17,14 +17,14 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Before
     public void beforeJsArrayIntegerTest() {
-        // Arrange
+        // Given
         jsArrayMixed = JavaScriptObject.createArray().cast();
         assertThat(jsArrayMixed.length()).isEqualTo(0);
 
-        // Act
+        // When
         jsArrayMixed.set(4, true);
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(5);
         assertThat(jsArrayMixed.getBoolean(3)).isFalse();
         assertThat(jsArrayMixed.getString(3)).isNull();
@@ -35,59 +35,59 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Test
     public void getStringElement() {
-        // Arrange
+        // Given
         AnchorElement anchor = Document.get().createAnchorElement();
         anchor.setHref("http://lost.com");
         jsArrayMixed.set(2, anchor);
 
-        // Act
+        // When
         String elementToString = jsArrayMixed.getString(2);
 
-        // Assert
+        // Then
         assertThat(elementToString).isEqualTo("<a href=\"http://lost.com\"></a>");
     }
 
     @Test
     public void getStringJSON() {
-        // Arrange
+        // Given
         JavaScriptObject json = JsonUtils.safeEval("{test: true}");
         jsArrayMixed.set(2, json);
 
-        // Act
+        // When
         String elementToString = jsArrayMixed.getString(2);
 
-        // Assert
+        // Then
         assertThat(elementToString).isEqualTo("{ \"test\": true }");
     }
 
     @Test
     public void join() {
-        // Act
+        // When
         String join = jsArrayMixed.join();
 
-        // Assert
+        // Then
         assertThat(join).isEqualTo(",,,,true");
     }
 
     @Test
     public void join_AfterResize() {
-        // Arrange
+        // Given
         jsArrayMixed.setLength(3);
 
-        // Act
+        // When
         String join = jsArrayMixed.join();
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(3);
         assertThat(join).isEqualTo(",,");
     }
 
     @Test
     public void push() {
-        // Act
+        // When
         jsArrayMixed.push("pushed");
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(6);
         assertThat(jsArrayMixed.join()).isEqualTo(",,,,true,pushed");
         assertThat(jsArrayMixed.getString(jsArrayMixed.length() - 1)).isEqualTo("pushed");
@@ -95,13 +95,13 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Test
     public void shiftBoolean() {
-        // Arrange
+        // Given
         jsArrayMixed.set(0, true);
 
-        // Act
+        // When
         boolean shift = jsArrayMixed.shiftBoolean();
 
-        // Assert
+        // Then
         assertThat(shift).isTrue();
         assertThat(jsArrayMixed.length()).isEqualTo(4);
         assertThat(jsArrayMixed.join()).isEqualTo(",,,true");
@@ -109,13 +109,13 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Test
     public void shiftInteger() {
-        // Arrange
+        // Given
         jsArrayMixed.set(0, 4);
 
-        // Act
+        // When
         double shift = jsArrayMixed.shiftNumber();
 
-        // Assert
+        // Then
         assertThat(shift).isEqualTo(4);
         assertThat(jsArrayMixed.length()).isEqualTo(4);
         assertThat(jsArrayMixed.join()).isEqualTo(",,,true");
@@ -123,14 +123,14 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Test
     public void shiftObject() {
-        // Arrange
+        // Given
         JavaScriptObject jso = JavaScriptObject.createObject();
         jsArrayMixed.set(0, jso);
 
-        // Act
+        // When
         JavaScriptObject shift = jsArrayMixed.shiftObject();
 
-        // Assert
+        // Then
         assertThat(shift).isEqualTo(jso);
         assertThat(jsArrayMixed.length()).isEqualTo(4);
         assertThat(jsArrayMixed.join()).isEqualTo(",,,true");
@@ -138,13 +138,13 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Test
     public void shiftString() {
-        // Arrange
+        // Given
         jsArrayMixed.set(0, "shifted");
 
-        // Act
+        // When
         String shift = jsArrayMixed.shiftString();
 
-        // Assert
+        // Then
         assertThat(shift).isEqualTo("shifted");
         assertThat(jsArrayMixed.length()).isEqualTo(4);
         assertThat(jsArrayMixed.join()).isEqualTo(",,,true");
@@ -152,13 +152,13 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Test
     public void unboundedGet_Returns0() {
-        // Act
+        // When
         boolean unboundedBoolean = jsArrayMixed.getBoolean(100);
         String unboundedString = jsArrayMixed.getString(100);
         double unboundedDouble = jsArrayMixed.getNumber(100);
         JavaScriptObject unboundedObject = jsArrayMixed.getObject(100);
 
-        // Assert
+        // Then
         assertThat(unboundedBoolean).isFalse();
         assertThat(unboundedString).isNull();
         assertThat(unboundedDouble).isEqualTo(0);
@@ -167,57 +167,57 @@ public class JsArrayMixedTest extends GwtTestTest {
 
     @Test
     public void unshiftBoolean() {
-        // Act
+        // When
         jsArrayMixed.unshift(true);
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(6);
         assertThat(jsArrayMixed.join()).isEqualTo("true,,,,,true");
     }
 
     @Test
     public void unshiftElement() {
-        // Arrange
+        // Given
         AnchorElement anchor = Document.get().createAnchorElement();
         anchor.setHref("http://lost.com");
 
-        // Act
+        // When
         jsArrayMixed.unshift(anchor);
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(6);
         assertThat(jsArrayMixed.join()).isEqualTo("<a href=\"http://lost.com\"></a>,,,,,true");
     }
 
     @Test
     public void unshiftJSON() {
-        // Arrange
+        // Given
         JavaScriptObject json = JsonUtils.safeEval("{test: true}");
 
-        // Act
+        // When
         jsArrayMixed.unshift(json);
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(6);
         assertThat(jsArrayMixed.join()).isEqualTo("{ \"test\": true },,,,,true");
     }
 
     @Test
     public void unshiftNumber() {
-        // Act
+        // When
         jsArrayMixed.unshift(23);
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(6);
         assertThat(jsArrayMixed.join()).isEqualTo("23.0,,,,,true");
     }
 
     @Test
     public void unshiftString() {
-        // Act
+        // When
         jsArrayMixed.unshift("unshifted");
 
-        // Assert
+        // Then
         assertThat(jsArrayMixed.length()).isEqualTo(6);
         assertThat(jsArrayMixed.join()).isEqualTo("unshifted,,,,,true");
     }

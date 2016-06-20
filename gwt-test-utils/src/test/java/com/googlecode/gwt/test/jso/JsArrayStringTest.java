@@ -6,8 +6,7 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsArrayStringTest extends GwtTestTest {
 
@@ -15,81 +14,81 @@ public class JsArrayStringTest extends GwtTestTest {
 
     @Before
     public void beforeJsArrayStringTest() {
-        // Arrange
+        // Given
         jsArrayString = JavaScriptObject.createArray().cast();
-        assertEquals(0, jsArrayString.length());
+        assertThat(jsArrayString.length()).isEqualTo(0);
 
-        // Act
+        // When
         jsArrayString.set(4, "test");
 
-        // Assert
-        assertEquals(5, jsArrayString.length());
-        assertNull(jsArrayString.get(3));
+        // Then
+        assertThat(jsArrayString.length()).isEqualTo(5);
+        assertThat(jsArrayString.get(3)).isNull();
     }
 
     @Test
     public void join() {
-        // Act
+        // When
         String join = jsArrayString.join();
 
-        // Assert
-        assertEquals(",,,,test", join);
+        // Then
+        assertThat(join).isEqualTo(",,,,test");
     }
 
     @Test
     public void join_AfterResize() {
-        // Arrange
+        // Given
         jsArrayString.setLength(3);
 
-        // Act
+        // When
         String join = jsArrayString.join();
 
-        // Assert
-        assertEquals(",,", join);
-        assertEquals(3, jsArrayString.length());
+        // Then
+        assertThat(join).isEqualTo(",,");
+        assertThat(jsArrayString.length()).isEqualTo(3);
     }
 
     @Test
     public void push() {
-        // Act
+        // When
         jsArrayString.push("pushed");
 
-        // Assert
-        assertEquals(",,,,test,pushed", jsArrayString.join());
-        assertEquals(6, jsArrayString.length());
-        assertEquals("pushed", jsArrayString.get(jsArrayString.length() - 1));
+        // Then
+        assertThat(jsArrayString.join()).isEqualTo(",,,,test,pushed");
+        assertThat(jsArrayString.length()).isEqualTo(6);
+        assertThat(jsArrayString.get(jsArrayString.length() - 1)).isEqualTo("pushed");
     }
 
     @Test
     public void shift() {
-        // Arrange
+        // Given
         jsArrayString.set(0, "toshift");
 
-        // Act
+        // When
         String shift = jsArrayString.shift();
 
-        // Assert
-        assertEquals("toshift", shift);
-        assertEquals(4, jsArrayString.length());
-        assertEquals(",,,test", jsArrayString.join());
+        // Then
+        assertThat(shift).isEqualTo("toshift");
+        assertThat(jsArrayString.length()).isEqualTo(4);
+        assertThat(jsArrayString.join()).isEqualTo(",,,test");
     }
 
     @Test
     public void unboundedGet_ReturnsNull() {
-        // Act
+        // When
         String unbounded = jsArrayString.get(100);
 
-        // Assert
-        assertNull(unbounded);
+        // Then
+        assertThat(unbounded).isNull();
     }
 
     @Test
     public void unshift() {
-        // Act
+        // When
         jsArrayString.unshift("tounshift");
 
-        // Assert
-        assertEquals(6, jsArrayString.length());
-        assertEquals("tounshift,,,,,test", jsArrayString.join());
+        // Then
+        assertThat(jsArrayString.length()).isEqualTo(6);
+        assertThat(jsArrayString.join()).isEqualTo("tounshift,,,,,test");
     }
 }

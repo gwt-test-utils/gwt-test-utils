@@ -10,13 +10,13 @@ public class HtmlBuilderTest extends GwtTestTest {
 
     @Test
     public void divWithCamelCaseStyle() throws Exception {
-        // Arrange
+        // Given
         HtmlDivBuilder divBuilder = HtmlBuilderFactory.get().createDivBuilder();
 
-        // Act
+        // When
         divBuilder.style().trustedProperty("propertyName", "my value");
 
-        // assert
+        // Then
         assertThat(divBuilder.asSafeHtml().asString()).isEqualTo(
                 "<div style=\"property-name:my value;\"></div>");
     }

@@ -6,13 +6,13 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithCellWidgetTest extends GwtTestTest {
 
     @Test
     public void uiBinderWithCellWidget() {
-        // Act
+        // When
 
         // never happen GwtTestUiBinderException
         UiBinderWithCellWidget uiPanel = GWT.create(UiBinderWithCellWidget.class);
@@ -20,8 +20,8 @@ public class UiBinderWithCellWidgetTest extends GwtTestTest {
         // RowCountChangeEvent will fire
         uiPanel.table.setRowData(Arrays.asList("1", "2"));
 
-        // Assert
-        assertEquals(2, uiPanel.rowCount);
+        // Then
+        assertThat(uiPanel.rowCount).isEqualTo(2);
 
     }
 

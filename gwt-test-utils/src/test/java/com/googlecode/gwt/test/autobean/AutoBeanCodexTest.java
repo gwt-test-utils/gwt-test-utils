@@ -17,20 +17,20 @@ public class AutoBeanCodexTest extends GwtTestTest {
 
     @Test
     public void deserializeFromJson() {
-        // Arrange
+        // Given
         String json = "{\"address\":{},\"name\":\"John Locke\"}";
 
-        // Act
+        // When
         AutoBean<Person> bean = AutoBeanCodex.decode(myFactory, Person.class, json);
 
-        // Assert
+        // Then
         assertThat(bean.as().getAddress()).isNotNull();
         assertThat(bean.as().getName()).isEqualTo("John Locke");
     }
 
     @Test
     public void serializeToJsonWithAutoBeanUtils() {
-        // Arrange
+        // Given
         Person person = myFactory.person().as();
         person.setName("John Locke");
         Address address = myFactory.address().as();
@@ -38,10 +38,10 @@ public class AutoBeanCodexTest extends GwtTestTest {
         // Retrieve the AutoBean controller
         AutoBean<Person> bean = AutoBeanUtils.getAutoBean(person);
 
-        // Act
+        // When
         String json = AutoBeanCodex.encode(bean).getPayload();
 
-        // Assert
+        // Then
         assertThat(json).isEqualTo("{\"address\":{},\"name\":\"John Locke\"}");
     }
 

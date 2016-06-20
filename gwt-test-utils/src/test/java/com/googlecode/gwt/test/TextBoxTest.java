@@ -11,61 +11,55 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TextBoxTest extends GwtTestTest {
 
-    private class KeyPressEventData {
-
-        public char charCode;
-        public int keyCode;
-    }
-
     @Test
     public void getCursorPos() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
         t.setText("myText");
         GwtReflectionUtils.setPrivateFieldValue(t, "attached", true);
 
-        // Act
+        // When
         t.setCursorPos(2);
 
-        // Assert
-        assertEquals(2, t.getCursorPos());
+        // Then
+        assertThat(t.getCursorPos()).isEqualTo(2);
     }
 
     @Test
     public void maxLength() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
-        // Pre-Assert
-        assertEquals(0, t.getMaxLength());
+        // Preconditions
+        assertThat(t.getMaxLength()).isEqualTo(0);
 
-        // Act
+        // When
         t.setMaxLength(10);
 
-        // Assert
-        assertEquals(10, t.getMaxLength());
+        // Then
+        assertThat(t.getMaxLength()).isEqualTo(10);
     }
 
     @Test
     public void name() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
-        // Pre-Assert
-        assertEquals("", t.getName());
+        // Preconditions
+        assertThat(t.getName()).isEqualTo("");
 
-        // Act
+        // When
         t.setName("name");
 
-        // Assert
-        assertEquals("name", t.getName());
+        // Then
+        assertThat(t.getName()).isEqualTo("name");
     }
 
     @Test
     public void pressKey() {
-        // Arrange
+        // Given
         final List<KeyPressEventData> events = new ArrayList<KeyPressEventData>();
         TextBox tb = new TextBox();
 
@@ -79,105 +73,111 @@ public class TextBoxTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         Browser.fillText(tb, "gael");
 
-        // Assert
-        assertEquals("gael", tb.getValue());
-        assertEquals(4, events.size());
-        assertEquals('g', events.get(0).charCode);
-        assertEquals(103, events.get(0).keyCode);
-        assertEquals('a', events.get(1).charCode);
-        assertEquals(97, events.get(1).keyCode);
-        assertEquals('e', events.get(2).charCode);
-        assertEquals(101, events.get(2).keyCode);
-        assertEquals('l', events.get(3).charCode);
-        assertEquals(108, events.get(3).keyCode);
+        // Then
+        assertThat(tb.getValue()).isEqualTo("gael");
+        assertThat(events).hasSize(4);
+        assertThat(events.get(0).charCode).isEqualTo('g');
+        assertThat(events.get(0).keyCode).isEqualTo(103);
+        assertThat(events.get(1).charCode).isEqualTo('a');
+        assertThat(events.get(1).keyCode).isEqualTo(97);
+        assertThat(events.get(2).charCode).isEqualTo('e');
+        assertThat(events.get(2).keyCode).isEqualTo(101);
+        assertThat(events.get(3).charCode).isEqualTo('l');
+        assertThat(events.get(3).keyCode).isEqualTo(108);
     }
 
     @Test
     public void selectAll() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
         t.setValue("0123456789");
         RootPanel.get().add(t);
 
-        // Act
+        // When
         t.selectAll();
 
-        // Assert
-        assertEquals(10, t.getSelectionLength());
-        assertEquals("0123456789", t.getSelectedText());
+        // Then
+        assertThat(t.getSelectionLength()).isEqualTo(10);
+        assertThat(t.getSelectedText()).isEqualTo("0123456789");
     }
 
     @Test
     public void selectionRange() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
         t.setValue("0123456789");
         RootPanel.get().add(t);
 
-        // Act
+        // When
         t.setSelectionRange(4, 3);
 
-        // Assert
-        assertEquals(3, t.getSelectionLength());
-        assertEquals("456", t.getSelectedText());
+        // Then
+        assertThat(t.getSelectionLength()).isEqualTo(3);
+        assertThat(t.getSelectedText()).isEqualTo("456");
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
-        // Pre-Assert
-        assertEquals("", t.getText());
+        // Preconditions
+        assertThat(t.getText()).isEqualTo("");
 
-        // Act
+        // When
         t.setText("text");
 
-        // Assert
-        assertEquals("text", t.getText());
+        // Then
+        assertThat(t.getText()).isEqualTo("text");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
-        // Pre-Assert
-        assertEquals("", t.getTitle());
+        // Preconditions
+        assertThat(t.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         t.setTitle("title");
 
-        // Assert
-        assertEquals("title", t.getTitle());
+        // Then
+        assertThat(t.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void value() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
-        // Pre-Assert
-        assertEquals("", t.getValue());
+        // Preconditions
+        assertThat(t.getValue()).isEqualTo("");
 
-        // Act
+        // When
         t.setValue("value");
 
-        // Assert
-        assertEquals("value", t.getValue());
+        // Then
+        assertThat(t.getValue()).isEqualTo("value");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         TextBox t = new TextBox();
-        // Pre-Assert
-        assertEquals(true, t.isVisible());
+        // Preconditions
+        assertThat(t.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         t.setVisible(false);
 
-        // Assert
-        assertEquals(false, t.isVisible());
+        // Then
+        assertThat(t.isVisible()).isEqualTo(false);
+    }
+
+    private class KeyPressEventData {
+
+        public char charCode;
+        public int keyCode;
     }
 }

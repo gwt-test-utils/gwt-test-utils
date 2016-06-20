@@ -7,7 +7,7 @@ import com.googlecode.gwt.test.utils.events.Browser.BrowserErrorHandler;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CheckBoxTest extends GwtTestTest {
 
@@ -27,140 +27,139 @@ public class CheckBoxTest extends GwtTestTest {
 
     @Test
     public void checked() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox();
-        // Pre-Assert
-        assertEquals(false, cb.getValue());
+        // Preconditions
+        assertThat(cb.getValue()).isEqualTo(false);
 
-        // Act
+        // When
         cb.setValue(true);
 
-        // Assert
-        assertEquals(true, cb.getValue());
+        // Then
+        assertThat(cb.getValue()).isEqualTo(true);
     }
 
     @Test
     public void click() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox();
-        // Pre-Assert
-        assertFalse(cb.getValue());
+        // Preconditions
+        assertThat(cb.getValue()).isFalse();
 
-        // Act 1
+        // When 1
         Browser.click(cb);
 
-        // Assert 1
-        assertTrue(cb.getValue());
-        assertEquals("", errorStringBuilder.toString());
+        // Then 1
+        assertThat(cb.getValue()).isTrue();
+        assertThat(errorStringBuilder.toString()).isEqualTo("");
 
-        // Act 2
+        // When 2
         Browser.click(cb);
 
-        // Assert 2
-        assertFalse(cb.getValue());
-        assertEquals("", errorStringBuilder.toString());
+        // Then 2
+        assertThat(cb.getValue()).isFalse();
+        assertThat(errorStringBuilder.toString()).isEqualTo("");
     }
 
     @Test
     public void click_disabled() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox();
         cb.setEnabled(false);
 
-        // Act
+        // When
         Browser.click(cb);
 
-        // Assert
-        assertFalse(cb.getValue());
-        assertTrue(errorStringBuilder.toString().startsWith(
-                "Cannot dispatch 'mouseover' event : the targeted element has to be enabled : <span class=\"gwt-CheckBox gwt-CheckBox-disabled\"><input type=\"checkbox\""));
+        // Then
+        assertThat(cb.getValue()).isFalse();
+        assertThat(errorStringBuilder).startsWith("Cannot dispatch 'mouseover' event : the targeted element has to be enabled : <span class=\"gwt-CheckBox gwt-CheckBox-disabled\"><input type=\"checkbox\"");
     }
 
     @Test
     public void formValue() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox();
-        // Pre-Assert
-        assertEquals("on", cb.getFormValue());
+        // Preconditions
+        assertThat(cb.getFormValue()).isEqualTo("on");
 
-        // Act
+        // When
         cb.setFormValue("whatever");
 
-        // Assert
-        assertEquals("whatever", cb.getFormValue());
+        // Then
+        assertThat(cb.getFormValue()).isEqualTo("whatever");
 
     }
 
     @Test
     public void html() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox("<h1>foo</h1>", true);
-        // Pre-Assert
-        assertEquals("<h1>foo</h1>", cb.getHTML());
+        // Preconditions
+        assertThat(cb.getHTML()).isEqualTo("<h1>foo</h1>");
 
-        // Act
+        // When
         cb.setHTML("<h1>test</h1>");
 
-        // Assert
-        assertEquals("<h1>test</h1>", cb.getHTML());
-        assertEquals(1, cb.getElement().getChild(1).getChildCount());
+        // Then
+        assertThat(cb.getHTML()).isEqualTo("<h1>test</h1>");
+        assertThat(cb.getElement().getChild(1).getChildCount()).isEqualTo(1);
         HeadingElement h1 = cb.getElement().getChild(1).getChild(0).cast();
-        assertEquals("H1", h1.getTagName());
-        assertEquals("test", h1.getInnerText());
+        assertThat(h1.getTagName()).isEqualTo("H1");
+        assertThat(h1.getInnerText()).isEqualTo("test");
     }
 
     @Test
     public void name() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox();
-        // Pre-Assert
-        assertEquals("", cb.getName());
+        // Preconditions
+        assertThat(cb.getName()).isEqualTo("");
 
-        // Act
+        // When
         cb.setName("name");
 
-        // Assert
-        assertEquals("name", cb.getName());
+        // Then
+        assertThat(cb.getName()).isEqualTo("name");
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox("foo");
-        // Pre-Assert
-        assertEquals("foo", cb.getText());
+        // Preconditions
+        assertThat(cb.getText()).isEqualTo("foo");
 
-        // Act
+        // When
         cb.setText("text");
 
-        // Assert
-        assertEquals("text", cb.getText());
+        // Then
+        assertThat(cb.getText()).isEqualTo("text");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox();
-        // Pre-Assert
-        assertEquals("", cb.getTitle());
+        // Preconditions
+        assertThat(cb.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         cb.setTitle("title");
-        assertEquals("title", cb.getTitle());
+        assertThat(cb.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         CheckBox cb = new CheckBox();
-        // Pre-Assert
-        assertEquals(true, cb.isVisible());
+        // Preconditions
+        assertThat(cb.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         cb.setVisible(false);
 
-        // Assert
-        assertEquals(false, cb.isVisible());
+        // Then
+        assertThat(cb.isVisible()).isEqualTo(false);
     }
 
 }

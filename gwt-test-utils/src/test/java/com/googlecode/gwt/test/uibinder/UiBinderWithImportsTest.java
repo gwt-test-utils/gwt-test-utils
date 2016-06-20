@@ -7,71 +7,67 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithImportsTest extends GwtTestTest {
 
     @Test
     public void dateLabel_customFormat() {
-        // Arrange
+        // Given
         UiBinderWithImports view = new UiBinderWithImports();
         Calendar cal = new GregorianCalendar();
         cal.set(2011, 10, 18);
         Date date = cal.getTime();
 
-        // Act
+        // When
         view.myDateLabel3.setValue(date);
 
-        // assert
-        assertEquals("Fri 18 Nov", view.myDateLabel3.getElement().getInnerHTML());
+        // Then
+        assertThat(view.myDateLabel3.getElement().getInnerHTML()).isEqualTo("Fri 18 Nov");
     }
 
     @Test
     public void dateLabel_importedFormat() {
-        // Arrange
+        // Given
         UiBinderWithImports view = new UiBinderWithImports();
         Calendar cal = new GregorianCalendar();
         cal.set(2011, 10, 18);
         Date date = cal.getTime();
 
-        // Act
+        // When
         view.myDateLabel2.setValue(date);
 
-        // assert
-        assertEquals("2011 Nov 18", view.myDateLabel2.getElement().getInnerHTML());
+        // Then
+        assertThat(view.myDateLabel2.getElement().getInnerHTML()).isEqualTo("2011 Nov 18");
     }
 
     @Test
     public void dateLabel_predefinedFormat() {
-        // Arrange
+        // Given
 
         UiBinderWithImports view = new UiBinderWithImports();
         Calendar cal = new GregorianCalendar();
         cal.set(2011, 10, 18);
         Date date = cal.getTime();
 
-        // Act
+        // When
         view.myDateLabel.setValue(date);
 
-        // assert
-//      assertEquals("Friday, 2011 November 18", view.myDateLabel.getElement().getInnerHTML());
+        // Then
+//      assertThat(view.myDateLabel.getElement().getInnerHTML()).isEqualTo("Friday, 2011 November 18");
         // TODO(gael) fix this properly!
-        assertEquals("2011 November 18, Friday", view.myDateLabel.getElement().getInnerHTML());
+        assertThat(view.myDateLabel.getElement().getInnerHTML()).isEqualTo("2011 November 18, Friday");
     }
 
     @Test
     public void testImports() {
-        // Act
+        // When
         UiBinderWithImports view = new UiBinderWithImports();
 
-        // Assert
-        assertEquals("single import value : Foo", view.singleConstantImport.getText());
-
-        assertEquals("first contant : Bar, second constant : Baz",
-                view.multipleConstantsImport.getText());
-
-        assertEquals("first enum value : ENUM_1, second enum value : ENUM_2",
-                view.enumImport.getText());
+        // Then
+        assertThat(view.singleConstantImport.getText()).isEqualTo("single import value : Foo");
+        assertThat(view.multipleConstantsImport.getText()).isEqualTo("first contant : Bar, second constant : Baz");
+        assertThat(view.enumImport.getText()).isEqualTo("first enum value : ENUM_1, second enum value : ENUM_2");
     }
 
 }

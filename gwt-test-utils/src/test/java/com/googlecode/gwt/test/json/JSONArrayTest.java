@@ -6,51 +6,50 @@ import com.google.gwt.json.client.JSONString;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JSONArrayTest extends GwtTestTest {
 
     @Test
     public void addElements() {
-        // Arrange
+        // Given
         JSONArray jsonArray = new JSONArray();
         JSONString string = new JSONString("myString");
         JSONBoolean bool = JSONBoolean.getInstance(true);
-        // Pre-Assert
-        assertEquals(0, jsonArray.size());
+        // Preconditions
+        assertThat(jsonArray.size()).isEqualTo(0);
 
-        // Act
+        // When
         jsonArray.set(0, string);
         jsonArray.set(1, bool);
 
-        // Assert
-        assertEquals(2, jsonArray.size());
-        assertEquals(string, jsonArray.get(0));
-        assertEquals(bool, jsonArray.get(1));
-        assertNull(jsonArray.get(2));
-        assertNull(jsonArray.get(-1));
+        // Then
+        assertThat(jsonArray.size()).isEqualTo(2);
+        assertThat(jsonArray.get(0)).isEqualTo(string);
+        assertThat(jsonArray.get(1)).isEqualTo(bool);
+        assertThat(jsonArray.get(2)).isNull();
+        assertThat(jsonArray.get(-1)).isNull();
     }
 
     @Test
     public void addElements_unbounded() {
-        // Arrange
+        // Given
         JSONArray jsonArray = new JSONArray();
         JSONString string = new JSONString("myString");
         JSONBoolean bool = JSONBoolean.getInstance(true);
-        // Pre-Assert
-        assertEquals(0, jsonArray.size());
+        // Preconditions
+        assertThat(jsonArray.size()).isEqualTo(0);
 
-        // Act
+        // When
         jsonArray.set(0, string);
         jsonArray.set(2, bool);
 
-        // Assert
-        assertEquals(3, jsonArray.size());
-        assertEquals(string, jsonArray.get(0));
-        assertNull(jsonArray.get(1));
-        assertEquals(bool, jsonArray.get(2));
-        assertNull(jsonArray.get(3));
+        // Then
+        assertThat(jsonArray.size()).isEqualTo(3);
+        assertThat(jsonArray.get(0)).isEqualTo(string);
+        assertThat(jsonArray.get(1)).isNull();
+        assertThat(jsonArray.get(2)).isEqualTo(bool);
+        assertThat(jsonArray.get(3)).isNull();
     }
 
 }

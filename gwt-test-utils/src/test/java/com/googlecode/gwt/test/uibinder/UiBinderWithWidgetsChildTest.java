@@ -5,57 +5,55 @@ import com.googlecode.gwt.test.GwtTestTest;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithWidgetsChildTest extends GwtTestTest {
 
     @Test
     public void click_UiHandler() {
-        // Arrange
+        // Given
         UiBinderWithWidgetsChild w = new UiBinderWithWidgetsChild("gael", "eric");
 
-        // Pre-Assert
-        assertEquals(1, w.listBox.getVisibleItemCount());
+        // Preconditions
+        assertThat(w.listBox.getVisibleItemCount()).isEqualTo(1);
 
-        // Act
+        // When
         Browser.click(w.button);
 
-        // Assert
-        assertEquals(2, w.listBox.getVisibleItemCount());
+        // Then
+        assertThat(w.listBox.getVisibleItemCount()).isEqualTo(2);
     }
 
     @Test
     public void uiObjectTag() {
-        // Arrange
+        // Given
         UiBinderWithWidgetsChild w = new UiBinderWithWidgetsChild("gael", "eric");
 
-        // Act
+        // When
         RootPanel.get().add(w);
 
-        // Assert
-        assertEquals(1, w.listBox.getVisibleItemCount());
+        // Then
+        assertThat(w.listBox.getVisibleItemCount()).isEqualTo(1);
 
-        assertEquals("my provided label", w.providedLabel.getText());
-        assertEquals("custom text setup in ui.xml", w.providedLabel.getCustomText());
-        assertEquals("my provided string", w.providedLabel.providedString);
-        assertEquals("disabled", w.providedLabel.getStyleName());
+        assertThat(w.providedLabel.getText()).isEqualTo("my provided label");
+        assertThat(w.providedLabel.getCustomText()).isEqualTo("custom text setup in ui.xml");
+        assertThat(w.providedLabel.providedString).isEqualTo("my provided string");
+        assertThat(w.providedLabel.getStyleName()).isEqualTo("disabled");
 
-        assertEquals("my UiFactory label", w.uiFactoryLabel.getText());
-        assertEquals("custom text setup in ui.xml", w.uiFactoryLabel.getCustomText());
-        assertEquals("gael", w.uiFactoryLabel.uiFactoryString);
+        assertThat(w.uiFactoryLabel.getText()).isEqualTo("my UiFactory label");
+        assertThat(w.uiFactoryLabel.getCustomText()).isEqualTo("custom text setup in ui.xml");
+        assertThat(w.uiFactoryLabel.uiFactoryString).isEqualTo("gael");
 
-        assertEquals("my UiConstructor label", w.uiConstructorLabel.getText());
-        assertEquals("custom text setup in ui.xml", w.uiConstructorLabel.getCustomText());
-        assertEquals("uiConstructor property", w.uiConstructorLabel.uiConstructorLabel);
+        assertThat(w.uiConstructorLabel.getText()).isEqualTo("my UiConstructor label");
+        assertThat(w.uiConstructorLabel.getCustomText()).isEqualTo("custom text setup in ui.xml");
+        assertThat(w.uiConstructorLabel.uiConstructorLabel).isEqualTo("uiConstructor property");
 
-        // Assertion on inner style
-        assertEquals("style", w.style.getName());
-        assertEquals(
-                ".redBox {background-color: pink;border: 1px solid red;}.enabled {color: black;}.disabled {color: gray;}",
-                w.style.getText());
+        // Thenion on inner style
+        assertThat(w.style.getName()).isEqualTo("style");
+        assertThat(w.style.getText()).isEqualTo(".redBox {background-color: pink;border: 1px solid red;}.enabled {color: black;}.disabled {color: gray;}");
 
         // override by child assertion
-        assertEquals("override by child", w.pushButton.getText());
+        assertThat(w.pushButton.getText()).isEqualTo("override by child");
 
     }
 

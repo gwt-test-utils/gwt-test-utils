@@ -7,8 +7,7 @@ import org.jukito.JukitoModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -18,27 +17,13 @@ import static org.mockito.Mockito.verify;
 @RunWith(JukitoGwtTestRunner.class)
 public class JukitoGwtTestRunnerTest extends GwtTestTest {
 
-    public static class Module extends JukitoModule {
-
-        @Override
-        protected void configureTest() {
-        }
-
-        @Provides
-        @Real
-        IsSuperButton realButton() {
-            return new SupperButtonImpl();
-        }
-
-    }
-
     @Inject
     IsSuperButton someMockButton;
 
     @Test
     public void shouldInjectBoundImplementation(@Real
                                                         IsSuperButton someRealButton) throws Exception {
-        assertThat(someRealButton, instanceOf(SupperButtonImpl.class));
+        assertThat(someRealButton).isInstanceOf(SupperButtonImpl.class);
     }
 
     @Test
@@ -53,6 +38,20 @@ public class JukitoGwtTestRunnerTest extends GwtTestTest {
         // -------------------- THEN
         // --------------------------------------------------------------------
         verify(someMockButton).setVisible(false);
+    }
+
+    public static class Module extends JukitoModule {
+
+        @Override
+        protected void configureTest() {
+        }
+
+        @Provides
+        @Real
+        IsSuperButton realButton() {
+            return new SupperButtonImpl();
+        }
+
     }
 
 }

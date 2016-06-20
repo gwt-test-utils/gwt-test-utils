@@ -9,106 +9,106 @@ public class StorageTest extends GwtTestTest {
 
     @Test
     public void clearLocalStorage() {
-        // Arrange
+        // Given
         Storage local = Storage.getLocalStorageIfSupported();
         local.setItem("test", "my test");
         local.setItem("test2", "my test 2");
 
-        // Pre-Assert
+        // Preconditions
         assertThat(local.getLength()).isEqualTo(2);
 
-        // Act
+        // When
         local.clear();
 
-        // Assert
+        // Then
         assertThat(local.getLength()).isEqualTo(0);
     }
 
     @Test
     public void clearSessionStorage() {
-        // Arrange
+        // Given
         Storage session = Storage.getSessionStorageIfSupported();
         session.setItem("test", "my test");
         session.setItem("test2", "my test 2");
 
-        // Pre-Assert
+        // Preconditions
         assertThat(session.getLength()).isEqualTo(2);
 
-        // Act
+        // When
         session.clear();
 
-        // Assert
+        // Then
         assertThat(session.getLength()).isEqualTo(0);
     }
 
     @Test
     public void getLenghtLocalStorage() {
-        // Arrange
+        // Given
         Storage local = Storage.getLocalStorageIfSupported();
         local.setItem("test", "my test");
         local.setItem("test", "my test bis");
         local.setItem("test2", "my test 2");
 
-        // Act
+        // When
         int length = local.getLength();
 
-        // Assert
+        // Then
         assertThat(length).isEqualTo(2);
     }
 
     @Test
     public void getLengthSessionStorage() {
-        // Arrange
+        // Given
         Storage session = Storage.getSessionStorageIfSupported();
         session.setItem("test", "my test");
         session.setItem("test", "my test bis");
         session.setItem("test2", "my test 2");
 
-        // Act
+        // When
         int length = session.getLength();
 
-        // Assert
+        // Then
         assertThat(length).isEqualTo(2);
     }
 
     @Test
     public void itemLocalStorage() {
-        // Arrange
+        // Given
         Storage local = Storage.getLocalStorageIfSupported();
 
-        // Act
+        // When
         local.setItem("test", "my test");
 
-        // Assert
+        // Then
         assertThat(local.getItem("test")).isEqualTo("my test");
     }
 
     @Test
     public void itemSessionStorage() {
-        // Arrange
+        // Given
         Storage session = Storage.getSessionStorageIfSupported();
 
-        // Act
+        // When
         session.setItem("test", "my test");
 
-        // Assert
+        // Then
         assertThat(session.getItem("test")).isEqualTo("my test");
     }
 
     @Test
     public void keyLocalStorage() {
-        // Arrange
+        // Given
         Storage local = Storage.getLocalStorageIfSupported();
         local.setItem("test0", "my test 0");
         local.setItem("test1", "my test 1");
         local.setItem("test2", "my test 2");
 
-        // Act
+        // When
         String key0 = local.key(0);
         String key1 = local.key(1);
         String key2 = local.key(2);
 
-        // Assert
+        // Then
         assertThat(key0).isEqualTo("test0");
         assertThat(key1).isEqualTo("test1");
         assertThat(key2).isEqualTo("test2");
@@ -116,18 +116,18 @@ public class StorageTest extends GwtTestTest {
 
     @Test
     public void keySessionStorage() {
-        // Arrange
+        // Given
         Storage session = Storage.getSessionStorageIfSupported();
         session.setItem("test0", "my test 0");
         session.setItem("test1", "my test 1");
         session.setItem("test2", "my test 2");
 
-        // Act
+        // When
         String key0 = session.key(0);
         String key1 = session.key(1);
         String key2 = session.key(2);
 
-        // Assert
+        // Then
         assertThat(key0).isEqualTo("test0");
         assertThat(key1).isEqualTo("test1");
         assertThat(key2).isEqualTo("test2");
@@ -135,49 +135,49 @@ public class StorageTest extends GwtTestTest {
 
     @Test
     public void localStorage() {
-        // Arrange
+        // Given
         setLocalStorageSupported(false);
 
-        // Act & Assert
+        // When & Assert
         assertThat(Storage.isLocalStorageSupported()).isFalse();
 
-        // Arrange 2
+        // Given 2
         setLocalStorageSupported(true);
 
-        // Act & Assert 2
+        // When & Assert 2
         assertThat(Storage.isLocalStorageSupported()).isTrue();
     }
 
     @Test
     public void localStorageIsSupportedByDefault() {
-        // Act
+        // When
         boolean supported = Storage.isLocalStorageSupported();
 
-        // Assert
+        // Then
         assertThat(supported).isTrue();
     }
 
     @Test
     public void sessionStorage() {
-        // Arrange
+        // Given
         setSessionStorageSupported(false);
 
-        // Act & Assert
+        // When & Assert
         assertThat(Storage.isSessionStorageSupported()).isFalse();
 
-        // Arrange 2
+        // Given 2
         setSessionStorageSupported(true);
 
-        // Act & Assert 2
+        // When & Assert 2
         assertThat(Storage.isSessionStorageSupported()).isTrue();
     }
 
     @Test
     public void sessionStorageIsSupportedByDefault() {
-        // Act
+        // When
         boolean supported = Storage.isSessionStorageSupported();
 
-        // Assert
+        // Then
         assertThat(supported).isTrue();
     }
 

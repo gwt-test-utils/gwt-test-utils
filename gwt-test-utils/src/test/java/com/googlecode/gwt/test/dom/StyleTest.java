@@ -5,69 +5,69 @@ import com.google.gwt.dom.client.Style.*;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.Button;
 import com.googlecode.gwt.test.GwtTestTest;
-import com.googlecode.gwt.test.utils.WidgetUtils;
+import com.googlecode.gwt.test.assertions.GwtAssertions;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StyleTest extends GwtTestTest {
 
     @Test
     public void checkFloat() {
-        // Arrange
+        // Given
         Button button = new Button();
         Style style = button.getElement().getStyle();
 
-        // Act 1
+        // When 1
         style.setFloat(Style.Float.RIGHT);
 
-        // Assert 1
-        assertEquals(Style.Float.RIGHT.getCssName(), style.getProperty("float"));
-        assertEquals("float: right; ", button.getElement().getAttribute("style"));
+        // Then 1
+        assertThat(style.getProperty("float")).isEqualTo(Style.Float.RIGHT.getCssName());
+        assertThat(button.getElement().getAttribute("style")).isEqualTo("float: right; ");
 
-        // Act 2
+        // When 2
         style.clearFloat();
 
-        // Assert 2
-        assertEquals("", style.getProperty("float"));
-        assertEquals("", button.getElement().getAttribute("style"));
+        // Then 2
+        assertThat(style.getProperty("float")).isEqualTo("");
+        assertThat(button.getElement().getAttribute("style")).isEqualTo("");
     }
 
     @Test
     public void opacity() {
-        // Arrange
+        // Given
         Button button = new Button();
         Style style = button.getElement().getStyle();
 
-        // Act 1
+        // When 1
         style.setOpacity(1.0);
 
-        // Assert 1
-        assertEquals("1", style.getOpacity());
-        assertEquals("opacity: 1; ", button.getElement().getAttribute("style"));
+        // Then 1
+        assertThat(style.getOpacity()).isEqualTo("1");
+        assertThat(button.getElement().getAttribute("style")).isEqualTo("opacity: 1; ");
 
-        // Act 2
+        // When 2
         style.setOpacity(0.94);
 
-        // Assert 2
-        assertEquals("0.94", style.getOpacity());
-        assertEquals("opacity: 0.94; ", button.getElement().getAttribute("style"));
+        // Then 2
+        assertThat(style.getOpacity()).isEqualTo("0.94");
+        assertThat(button.getElement().getAttribute("style")).isEqualTo("opacity: 0.94; ");
 
-        // Act 3
+        // When 3
         style.clearOpacity();
-        assertEquals("", button.getElement().getAttribute("style"));
+        assertThat(button.getElement().getAttribute("style")).isEqualTo("");
 
-        // Assert 3
-        assertEquals("", style.getOpacity());
+        // Then 3
+        assertThat(style.getOpacity()).isEqualTo("");
     }
 
     @Test
     public void properties() {
-        // Arrange
+        // Given
         Button button = new Button();
         Style style = button.getElement().getStyle();
 
-        // Act 1
+        // When 1
         style.setBackgroundColor("black");
         style.setBackgroundImage("/img.png");
         style.setBorderColor("blue");
@@ -105,47 +105,45 @@ public class StyleTest extends GwtTestTest {
         style.setWidth(3.5, Style.Unit.PX);
         style.setZIndex(1000);
 
-        // Assert 1
-        assertEquals(
-                "background-color: black; background-image: /img.png; border-color: blue; border-bottom-width: 1em; border-left-width: 1em; border-right-width: 1em; border-top-width: 1em; bottom: 4px; color: red; cursor: e-resize; float: left; display: inline-block; font-size: 10.5cm; font-style: normal; font-weight: bold; height: 3.1pc; left: 40in; list-style-type: circle; margin: 30.5%; margin-bottom: 29pt; margin-left: 47ex; margin-right: 3mm; margin-top: 10.3cm; overflow: scroll; padding: 10px; padding-bottom: 11px; padding-left: 12px; padding-right: 13px; padding-top: 14px; position: relative; string: stringvalue; double-unit: 17.2cm; right: 13.4cm; text-decoration: overline; top: 7.77pc; vertical-align: middle; visibility: visible; width: 3.5px; z-index: 1000; ",
-                button.getElement().getAttribute("style"));
-        assertEquals("black", style.getBackgroundColor());
-        assertEquals("/img.png", style.getBackgroundImage());
-        assertEquals("blue", style.getBorderColor());
-        assertEquals("1em", style.getBorderWidth());
-        assertEquals("4px", style.getBottom());
-        assertEquals("red", style.getColor());
-        assertEquals(Style.Cursor.E_RESIZE.getCssName(), style.getCursor());
-        assertEquals(Display.INLINE_BLOCK.getCssName(), style.getDisplay());
-        assertEquals("10.5cm", style.getFontSize());
-        assertEquals(Style.FontStyle.NORMAL.getCssName(), style.getFontStyle());
-        assertEquals(Style.FontWeight.BOLD.getCssName(), style.getFontWeight());
-        assertEquals("3.1pc", style.getHeight());
-        assertEquals("40in", style.getLeft());
-        assertEquals(ListStyleType.CIRCLE.getCssName(), style.getListStyleType());
-        assertEquals("30.5%", style.getMargin());
-        assertEquals("29pt", style.getMarginBottom());
-        assertEquals("47ex", style.getMarginLeft());
-        assertEquals("3mm", style.getMarginRight());
-        assertEquals("10.3cm", style.getMarginTop());
-        assertEquals(Overflow.SCROLL.getCssName(), style.getOverflow());
-        assertEquals("10px", style.getPadding());
-        assertEquals("11px", style.getPaddingBottom());
-        assertEquals("12px", style.getPaddingLeft());
-        assertEquals("13px", style.getPaddingRight());
-        assertEquals("14px", style.getPaddingTop());
-        assertEquals(Position.RELATIVE.getCssName(), style.getPosition());
-        assertEquals("stringvalue", style.getProperty("string"));
-        assertEquals("17.2cm", style.getProperty("doubleUnit"));
-        assertEquals("13.4cm", style.getRight());
-        assertEquals(TextDecoration.OVERLINE.getCssName(), style.getTextDecoration());
-        assertEquals("7.77pc", style.getTop());
-        assertEquals(VerticalAlign.MIDDLE.getCssName(), style.getVerticalAlign());
-        assertEquals(Visibility.VISIBLE.getCssName(), style.getVisibility());
-        assertEquals("3.5px", style.getWidth());
-        assertEquals("1000", style.getZIndex());
+        // Then 1
+        assertThat(button.getElement().getAttribute("style")).isEqualTo("background-color: black; background-image: /img.png; border-color: blue; border-bottom-width: 1em; border-left-width: 1em; border-right-width: 1em; border-top-width: 1em; bottom: 4px; color: red; cursor: e-resize; float: left; display: inline-block; font-size: 10.5cm; font-style: normal; font-weight: bold; height: 3.1pc; left: 40in; list-style-type: circle; margin: 30.5%; margin-bottom: 29pt; margin-left: 47ex; margin-right: 3mm; margin-top: 10.3cm; overflow: scroll; padding: 10px; padding-bottom: 11px; padding-left: 12px; padding-right: 13px; padding-top: 14px; position: relative; string: stringvalue; double-unit: 17.2cm; right: 13.4cm; text-decoration: overline; top: 7.77pc; vertical-align: middle; visibility: visible; width: 3.5px; z-index: 1000; ");
+        assertThat(style.getBackgroundColor()).isEqualTo("black");
+        assertThat(style.getBackgroundImage()).isEqualTo("/img.png");
+        assertThat(style.getBorderColor()).isEqualTo("blue");
+        assertThat(style.getBorderWidth()).isEqualTo("1em");
+        assertThat(style.getBottom()).isEqualTo("4px");
+        assertThat(style.getColor()).isEqualTo("red");
+        assertThat(style.getCursor()).isEqualTo(Style.Cursor.E_RESIZE.getCssName());
+        assertThat(style.getDisplay()).isEqualTo(Display.INLINE_BLOCK.getCssName());
+        assertThat(style.getFontSize()).isEqualTo("10.5cm");
+        assertThat(style.getFontStyle()).isEqualTo(Style.FontStyle.NORMAL.getCssName());
+        assertThat(style.getFontWeight()).isEqualTo(Style.FontWeight.BOLD.getCssName());
+        assertThat(style.getHeight()).isEqualTo("3.1pc");
+        assertThat(style.getLeft()).isEqualTo("40in");
+        assertThat(style.getListStyleType()).isEqualTo(ListStyleType.CIRCLE.getCssName());
+        assertThat(style.getMargin()).isEqualTo("30.5%");
+        assertThat(style.getMarginBottom()).isEqualTo("29pt");
+        assertThat(style.getMarginLeft()).isEqualTo("47ex");
+        assertThat(style.getMarginRight()).isEqualTo("3mm");
+        assertThat(style.getMarginTop()).isEqualTo("10.3cm");
+        assertThat(style.getOverflow()).isEqualTo(Overflow.SCROLL.getCssName());
+        assertThat(style.getPadding()).isEqualTo("10px");
+        assertThat(style.getPaddingBottom()).isEqualTo("11px");
+        assertThat(style.getPaddingLeft()).isEqualTo("12px");
+        assertThat(style.getPaddingRight()).isEqualTo("13px");
+        assertThat(style.getPaddingTop()).isEqualTo("14px");
+        assertThat(style.getPosition()).isEqualTo(Position.RELATIVE.getCssName());
+        assertThat(style.getProperty("string")).isEqualTo("stringvalue");
+        assertThat(style.getProperty("doubleUnit")).isEqualTo("17.2cm");
+        assertThat(style.getRight()).isEqualTo("13.4cm");
+        assertThat(style.getTextDecoration()).isEqualTo(TextDecoration.OVERLINE.getCssName());
+        assertThat(style.getTop()).isEqualTo("7.77pc");
+        assertThat(style.getVerticalAlign()).isEqualTo(VerticalAlign.MIDDLE.getCssName());
+        assertThat(style.getVisibility()).isEqualTo(Visibility.VISIBLE.getCssName());
+        assertThat(style.getWidth()).isEqualTo("3.5px");
+        assertThat(style.getZIndex()).isEqualTo("1000");
 
-        // Act2
+        // When2
         style.clearBackgroundColor();
         style.clearBackgroundImage();
         style.clearBorderColor();
@@ -182,102 +180,100 @@ public class StyleTest extends GwtTestTest {
         style.clearWidth();
         style.clearZIndex();
 
-        // Assert 2
+        // Then 2
         // the only style we didn't remove in the test
-        assertEquals("vertical-align: middle; ", button.getElement().getAttribute("style"));
-        assertEquals("", style.getBackgroundColor());
-        assertEquals("", style.getBackgroundImage());
-        assertEquals("", style.getBorderColor());
-        assertEquals("", style.getBorderWidth());
-        assertEquals("", style.getBottom());
-        assertEquals("", style.getColor());
-        assertEquals("", style.getCursor());
-        assertEquals("", style.getDisplay());
-        assertEquals("", style.getFontSize());
-        assertEquals("", style.getFontStyle());
-        assertEquals("", style.getFontWeight());
-        assertEquals("", style.getHeight());
-        assertEquals("", style.getLeft());
-        assertEquals("", style.getListStyleType());
-        assertEquals("", style.getMargin());
-        assertEquals("", style.getMarginBottom());
-        assertEquals("", style.getMarginLeft());
-        assertEquals("", style.getMarginRight());
-        assertEquals("", style.getMarginTop());
-        assertEquals("", style.getOverflow());
-        assertEquals("", style.getPadding());
-        assertEquals("", style.getPaddingBottom());
-        assertEquals("", style.getPaddingLeft());
-        assertEquals("", style.getPaddingRight());
-        assertEquals("", style.getPaddingTop());
-        assertEquals("", style.getPosition());
-        assertEquals("", style.getProperty("string"));
-        assertEquals("", style.getProperty("doubleUnit"));
-        assertEquals("", style.getRight());
-        assertEquals("", style.getTextDecoration());
-        assertEquals("", style.getTop());
-        assertEquals("", style.getVisibility());
-        assertEquals("", style.getWidth());
-        assertEquals("", style.getZIndex());
+        assertThat(button.getElement().getAttribute("style")).isEqualTo("vertical-align: middle; ");
+        assertThat(style.getBackgroundColor()).isEqualTo("");
+        assertThat(style.getBackgroundImage()).isEqualTo("");
+        assertThat(style.getBorderColor()).isEqualTo("");
+        assertThat(style.getBorderWidth()).isEqualTo("");
+        assertThat(style.getBottom()).isEqualTo("");
+        assertThat(style.getColor()).isEqualTo("");
+        assertThat(style.getCursor()).isEqualTo("");
+        assertThat(style.getDisplay()).isEqualTo("");
+        assertThat(style.getFontSize()).isEqualTo("");
+        assertThat(style.getFontStyle()).isEqualTo("");
+        assertThat(style.getFontWeight()).isEqualTo("");
+        assertThat(style.getHeight()).isEqualTo("");
+        assertThat(style.getLeft()).isEqualTo("");
+        assertThat(style.getListStyleType()).isEqualTo("");
+        assertThat(style.getMargin()).isEqualTo("");
+        assertThat(style.getMarginBottom()).isEqualTo("");
+        assertThat(style.getMarginLeft()).isEqualTo("");
+        assertThat(style.getMarginRight()).isEqualTo("");
+        assertThat(style.getMarginTop()).isEqualTo("");
+        assertThat(style.getOverflow()).isEqualTo("");
+        assertThat(style.getPadding()).isEqualTo("");
+        assertThat(style.getPaddingBottom()).isEqualTo("");
+        assertThat(style.getPaddingLeft()).isEqualTo("");
+        assertThat(style.getPaddingRight()).isEqualTo("");
+        assertThat(style.getPaddingTop()).isEqualTo("");
+        assertThat(style.getPosition()).isEqualTo("");
+        assertThat(style.getProperty("string")).isEqualTo("");
+        assertThat(style.getProperty("doubleUnit")).isEqualTo("");
+        assertThat(style.getRight()).isEqualTo("");
+        assertThat(style.getTextDecoration()).isEqualTo("");
+        assertThat(style.getTop()).isEqualTo("");
+        assertThat(style.getVisibility()).isEqualTo("");
+        assertThat(style.getWidth()).isEqualTo("");
+        assertThat(style.getZIndex()).isEqualTo("");
 
     }
 
     @Test
     public void style_empty() {
-        // Arrange
+        // Given
         Button button = new Button();
         Style style = button.getElement().getStyle();
 
-        // Act
-        assertEquals("", style.getBackgroundColor());
-        assertEquals("", style.getBackgroundImage());
-        assertEquals("", style.getBorderColor());
-        assertEquals("", style.getBorderWidth());
-        assertEquals("", style.getBottom());
-        assertEquals("", style.getColor());
-        assertEquals("", style.getCursor());
-        assertEquals("", style.getDisplay());
-        assertEquals("", style.getFontSize());
-        assertEquals("", style.getFontStyle());
-        assertEquals("", style.getFontWeight());
-        assertEquals("", style.getHeight());
-        assertEquals("", style.getLeft());
-        assertEquals("", style.getListStyleType());
-        assertEquals("", style.getMargin());
-        assertEquals("", style.getMarginBottom());
-        assertEquals("", style.getMarginLeft());
-        assertEquals("", style.getMarginRight());
-        assertEquals("", style.getMarginTop());
-        assertEquals("", style.getOpacity());
-        assertEquals("", style.getOverflow());
-        assertEquals("", style.getPadding());
-        assertEquals("", style.getPaddingBottom());
-        assertEquals("", style.getPaddingLeft());
-        assertEquals("", style.getPaddingRight());
-        assertEquals("", style.getPaddingTop());
-        assertEquals("", style.getPosition());
-        assertEquals("", style.getProperty("empty"));
-        assertEquals("", style.getRight());
-        assertEquals("", style.getTextDecoration());
-        assertEquals("", style.getTop());
-        assertEquals("", style.getVerticalAlign());
-        assertEquals("", style.getVisibility());
-        assertEquals("", style.getWidth());
-        assertEquals("", style.getZIndex());
+        // When
+        assertThat(style.getBackgroundColor()).isEqualTo("");
+        assertThat(style.getBackgroundImage()).isEqualTo("");
+        assertThat(style.getBorderColor()).isEqualTo("");
+        assertThat(style.getBorderWidth()).isEqualTo("");
+        assertThat(style.getBottom()).isEqualTo("");
+        assertThat(style.getColor()).isEqualTo("");
+        assertThat(style.getCursor()).isEqualTo("");
+        assertThat(style.getDisplay()).isEqualTo("");
+        assertThat(style.getFontSize()).isEqualTo("");
+        assertThat(style.getFontStyle()).isEqualTo("");
+        assertThat(style.getFontWeight()).isEqualTo("");
+        assertThat(style.getHeight()).isEqualTo("");
+        assertThat(style.getLeft()).isEqualTo("");
+        assertThat(style.getListStyleType()).isEqualTo("");
+        assertThat(style.getMargin()).isEqualTo("");
+        assertThat(style.getMarginBottom()).isEqualTo("");
+        assertThat(style.getMarginLeft()).isEqualTo("");
+        assertThat(style.getMarginRight()).isEqualTo("");
+        assertThat(style.getMarginTop()).isEqualTo("");
+        assertThat(style.getOpacity()).isEqualTo("");
+        assertThat(style.getOverflow()).isEqualTo("");
+        assertThat(style.getPadding()).isEqualTo("");
+        assertThat(style.getPaddingBottom()).isEqualTo("");
+        assertThat(style.getPaddingLeft()).isEqualTo("");
+        assertThat(style.getPaddingRight()).isEqualTo("");
+        assertThat(style.getPaddingTop()).isEqualTo("");
+        assertThat(style.getPosition()).isEqualTo("");
+        assertThat(style.getProperty("empty")).isEqualTo("");
+        assertThat(style.getRight()).isEqualTo("");
+        assertThat(style.getTextDecoration()).isEqualTo("");
+        assertThat(style.getTop()).isEqualTo("");
+        assertThat(style.getVerticalAlign()).isEqualTo("");
+        assertThat(style.getVisibility()).isEqualTo("");
+        assertThat(style.getWidth()).isEqualTo("");
+        assertThat(style.getZIndex()).isEqualTo("");
     }
 
     @Test
     public void styles() {
-        // Arrange
+        // Given
         Button b = new Button();
         b.setStylePrimaryName("toto");
         b.addStyleName("tata");
         b.addStyleName("titi");
 
-        // Act & Asserts
-        assertEquals("toto", b.getStylePrimaryName());
-        assertEquals(true, WidgetUtils.hasStyle(b, "tata"));
-        assertEquals(true, WidgetUtils.hasStyle(b, "titi"));
-        assertEquals(true, WidgetUtils.hasStyle(b, "toto"));
+        // When & Asserts
+        assertThat(b.getStylePrimaryName()).isEqualTo("toto");
+        GwtAssertions.assertThat(b).hasStyle("tata", "titi", "toto");
     }
 }

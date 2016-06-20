@@ -4,22 +4,22 @@ import com.google.gwt.user.client.ui.HTML;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithUiChildTest extends GwtTestTest {
 
     @Test
     public void instanciation() {
-        // Act
+        // When
         UiBinderWithUiChild w = new UiBinderWithUiChild();
 
-        // Assert
-        assertEquals(2, w.getWidgetWithUiChild().labelCount());
-        assertEquals("My first child label", w.getWidgetWithUiChild().getLabel(0).getText());
-        assertEquals("My second child label", w.getWidgetWithUiChild().getLabel(1).getText());
-        assertEquals(1, w.getWidgetWithUiChild().customWidgetCount());
+        // Then
+        assertThat(w.getWidgetWithUiChild().labelCount()).isEqualTo(2);
+        assertThat(w.getWidgetWithUiChild().getLabel(0).getText()).isEqualTo("My first child label");
+        assertThat(w.getWidgetWithUiChild().getLabel(1).getText()).isEqualTo("My second child label");
+        assertThat(w.getWidgetWithUiChild().customWidgetCount()).isEqualTo(1);
         HTML html = (HTML) w.getWidgetWithUiChild().getCustomChild(0);
-        assertEquals("My child HTML", html.getHTML());
+        assertThat(html.getHTML()).isEqualTo("My child HTML");
     }
 
 }

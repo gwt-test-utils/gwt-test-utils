@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
-import static org.junit.Assert.assertEquals;
 
 @GwtModule("com.googlecode.gwt.test.GwtTestUtils")
 @ContextConfiguration(locations = {"classpath:com/googlecode/gwt/test/spring/applicationContext-test.xml"}, loader = GwtTestContextLoader.class)
@@ -21,13 +20,13 @@ public class SimpleGwtSpringTest extends GwtSpringTest {
 
     @Test
     public void rpcCall() {
-        // Arrange
+        // Given
         success = false;
         MyObject object = new MyObject("my field initialized during test setup");
 
         MyServiceAsync myService = GWT.create(MyService.class);
 
-        // Act
+        // When
         myService.update(object, new AsyncCallback<MyObject>() {
 
             public void onFailure(Throwable caught) {
@@ -35,27 +34,24 @@ public class SimpleGwtSpringTest extends GwtSpringTest {
             }
 
             public void onSuccess(MyObject result) {
-                // Assert 2
-                assertEquals("updated field by server side code", result.getMyField());
-                assertEquals("transient field", result.getMyTransientField());
+                // Then 2
+                assertThat(result.getMyField()).isEqualTo("updated field by server side code");
+                assertThat(result.getMyTransientField()).isEqualTo("transient field");
 
-                assertEquals("A single child object should have been instanciate in server code", 1,
-                        result.getMyChildObjects().size());
-                assertEquals("this is a child !", result.getMyChildObjects().get(0).getMyChildField());
-                assertEquals("child object transient field",
-                        result.getMyChildObjects().get(0).getMyChildTransientField());
+                assertThat(result.getMyChildObjects()).hasSize(1);
+                assertThat(result.getMyChildObjects().get(0).getMyChildField()).isEqualTo("this is a child !");
+                assertThat(result.getMyChildObjects().get(0).getMyChildTransientField()).isEqualTo("child object transient field");
 
-                assertEquals("the field inherited from the parent has been updated !",
-                        result.getMyChildObjects().get(0).getMyField());
-                assertEquals("transient field", result.getMyChildObjects().get(0).getMyTransientField());
+                assertThat(result.getMyChildObjects().get(0).getMyField()).isEqualTo("the field inherited from the parent has been updated !");
+                assertThat(result.getMyChildObjects().get(0).getMyTransientField()).isEqualTo("transient field");
                 success = true;
             }
         });
 
-        // Assert 1
+        // Then 1
         assertThat(success).isFalse();
         getBrowserSimulator().fireLoopEnd();
-        // Assert 3
+        // Then 3
         assertThat(success).isTrue();
     }
 

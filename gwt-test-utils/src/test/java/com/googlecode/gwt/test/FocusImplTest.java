@@ -6,12 +6,12 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FocusImplTest extends GwtTestTest {
 
-    private Element e;
     private final FocusImpl focusImpl = FocusImpl.getFocusImplForWidget();
+    private Element e;
 
     @Before
     public void beforeFocusImplTest() {
@@ -26,11 +26,11 @@ public class FocusImplTest extends GwtTestTest {
 
     @Test
     public void createFocusable() {
-        // Act
+        // When
         Element elem = focusImpl.createFocusable();
 
-        // Assert
-        assertEquals("div", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("div");
     }
 
     @Test
@@ -41,11 +41,11 @@ public class FocusImplTest extends GwtTestTest {
 
     @Test
     public void tabIndex() {
-        // Act
+        // When
         focusImpl.setTabIndex(e, 3);
 
-        // Assert
-        assertEquals(3, focusImpl.getTabIndex(e));
+        // Then
+        assertThat(focusImpl.getTabIndex(e)).isEqualTo(3);
     }
 
 }

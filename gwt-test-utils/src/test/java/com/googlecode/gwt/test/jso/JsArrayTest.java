@@ -8,8 +8,7 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsArrayTest extends GwtTestTest {
 
@@ -17,88 +16,88 @@ public class JsArrayTest extends GwtTestTest {
 
     @Before
     public void beforeJsArrayStringTest() {
-        // Arrange
+        // Given
         jsArray = JavaScriptObject.createObject().cast();
-        assertEquals(0, jsArray.length());
+        assertThat(jsArray.length()).isEqualTo(0);
 
-        // Act
+        // When
         jsArray.set(4, Document.get().createAnchorElement());
 
-        // Assert
-        assertEquals(5, jsArray.length());
-        assertNull(jsArray.get(3));
+        // Then
+        assertThat(jsArray.length()).isEqualTo(5);
+        assertThat(jsArray.get(3)).isNull();
     }
 
     @Test
     public void join() {
-        // Act
+        // When
         String join = jsArray.join();
 
-        // Assert
-        assertEquals(",,,,<a></a>", join);
+        // Then
+        assertThat(join).isEqualTo(",,,,<a></a>");
     }
 
     @Test
     public void join_AfterResize() {
-        // Arrange
+        // Given
         jsArray.setLength(3);
 
-        // Act
+        // When
         String join = jsArray.join();
 
-        // Assert
-        assertEquals(",,", join);
-        assertEquals(3, jsArray.length());
+        // Then
+        assertThat(join).isEqualTo(",,");
+        assertThat(jsArray.length()).isEqualTo(3);
     }
 
     @Test
     public void push() {
-        // Arrange
+        // Given
         Element h1 = Document.get().createHElement(1);
-        // Act
+        // When
         jsArray.push(h1);
 
-        // Assert
-        assertEquals(",,,,<a></a>,<h1></h1>", jsArray.join());
-        assertEquals(6, jsArray.length());
-        assertEquals(h1, jsArray.get(jsArray.length() - 1));
+        // Then
+        assertThat(jsArray.join()).isEqualTo(",,,,<a></a>,<h1></h1>");
+        assertThat(jsArray.length()).isEqualTo(6);
+        assertThat(jsArray.get(jsArray.length() - 1)).isEqualTo(h1);
     }
 
     @Test
     public void shift() {
-        // Arrange
+        // Given
         Element h1 = Document.get().createHElement(1);
         jsArray.set(0, h1);
 
-        // Act
+        // When
         Element shift = jsArray.shift();
 
-        // Assert
-        assertEquals(h1, shift);
-        assertEquals(4, jsArray.length());
-        assertEquals(",,,<a></a>", jsArray.join());
+        // Then
+        assertThat(shift).isEqualTo(h1);
+        assertThat(jsArray.length()).isEqualTo(4);
+        assertThat(jsArray.join()).isEqualTo(",,,<a></a>");
     }
 
     @Test
     public void unboundedGet_ReturnsNull() {
-        // Act
+        // When
         Element unbounded = jsArray.get(100);
 
-        // Assert
-        assertNull(unbounded);
+        // Then
+        assertThat(unbounded).isNull();
     }
 
     @Test
     public void unshift() {
-        // Arrange
+        // Given
         Element h1 = Document.get().createHElement(1);
 
-        // Act
+        // When
         jsArray.unshift(h1);
 
-        // Assert
-        assertEquals(6, jsArray.length());
-        assertEquals("<h1></h1>,,,,,<a></a>", jsArray.join());
+        // Then
+        assertThat(jsArray.length()).isEqualTo(6);
+        assertThat(jsArray.join()).isEqualTo("<h1></h1>,,,,,<a></a>");
     }
 
 }

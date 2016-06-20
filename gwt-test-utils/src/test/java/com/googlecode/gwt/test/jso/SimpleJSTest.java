@@ -11,16 +11,16 @@ public class SimpleJSTest extends GwtTestTest {
 
     @Test
     public void setNotPatchedProperty() {
-        // Arrange
+        // Given
         JavaScriptObject jso = JavaScriptObject.createObject();
         // SimpleJS.getString() native method by default will try to get "string" property in
         // gwt-test-utils's related PropertyContainer
         JavaScriptObjects.setProperty(jso, "string", "my string for testing");
 
-        // Act
+        // When
         SimpleJS simpleJs = jso.cast();
 
-        // Assert
+        // Then
         assertThat(simpleJs.getString()).isEqualTo("my string for testing");
     }
 

@@ -3,72 +3,71 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.Window.Navigator;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class NavigatorTest extends GwtTestTest {
 
     @Test
     public void getAppCodeName() {
-        // Act
+        // When
         String appCodeName = Navigator.getAppCodeName();
 
-        // Assert
-        assertNotNull(appCodeName);
+        // Then
+        assertThat(appCodeName).isNotNull();
     }
 
     @Test
     public void getAppName() {
-        // Act
+        // When
         String appName = Navigator.getAppName();
 
-        // Assert
-        assertNotNull(appName);
+        // Then
+        assertThat(appName).isNotNull();
     }
 
     @Test
     public void getAppVersion() {
-        // Act
+        // When
         String appVersion = Navigator.getAppVersion();
 
-        // Assert
-        assertNotNull(appVersion);
+        // Then
+        assertThat(appVersion).isNotNull();
     }
 
     @Test
     public void getPlatform() {
-        // Act
+        // When
         String platform = Navigator.getPlatform();
 
-        // Assert
-        assertNotNull(platform);
+        // Then
+        assertThat(platform).isNotNull();
     }
 
     @Test
     public void getUserAgent() {
-        // Act
+        // When
         String userAgent = Navigator.getUserAgent();
 
-        // Assert
-        assertNotNull(userAgent);
+        // Then
+        assertThat(userAgent).isNotNull();
     }
 
     @Test
     public void isCookiesEnabled() {
-        // Act
+        // When
         boolean isCookiesEnabled = Navigator.isCookieEnabled();
 
-        // Assert
-        assertTrue(isCookiesEnabled);
+        // Then
+        assertThat(isCookiesEnabled).isTrue();
     }
 
     @Test
     public void isJavaEnabled() {
-        // Act
+        // When
         boolean isJavaEnabled = Navigator.isJavaEnabled();
 
-        // Assert
-        assertTrue(isJavaEnabled);
+        // Then
+        assertThat(isJavaEnabled).isTrue();
     }
 
 }

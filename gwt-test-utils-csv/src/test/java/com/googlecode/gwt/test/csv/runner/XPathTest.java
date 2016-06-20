@@ -3,106 +3,98 @@ package com.googlecode.gwt.test.csv.runner;
 import com.googlecode.gwt.test.finder.Node;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class XPathTest {
 
     @Test
     public void testA() {
-        assertEquals("/toto", processString("/toto").toString());
-        assertEquals("/t", processString("/t").toString());
+        assertThat(processString("/toto").toString()).isEqualTo("/toto");
+        assertThat(processString("/t").toString()).isEqualTo("/t");
     }
 
     @Test
     public void testB() {
-        assertEquals("/toto/tata/tete/titi", processString("/toto/tata/tete/titi").toString());
-        assertEquals("/t(a,)", processString("/t(a)").toString());
+        assertThat(processString("/toto/tata/tete/titi").toString()).isEqualTo("/toto/tata/tete/titi");
+        assertThat(processString("/t(a)").toString()).isEqualTo("/t(a,)");
     }
 
     @Test
     public void testC() {
-        assertEquals("/a(b ,)", processString("/a(b )").toString());
+        assertThat(processString("/a(b )").toString()).isEqualTo("/a(b ,)");
     }
 
     @Test
     public void testD() {
-        assertEquals("/toto(aa bb,zz,)/titi/toto",
-                processString("/toto(aa bb,zz)/titi/toto").toString());
+        assertThat(processString("/toto(aa bb,zz)/titi/toto").toString()).isEqualTo("/toto(aa bb,zz,)/titi/toto");
     }
 
     @Test
     public void testE() {
-        assertEquals("/toto/tata{zyy}", processString("/toto/tata[zyy]").toString());
+        assertThat(processString("/toto/tata[zyy]").toString()).isEqualTo("/toto/tata{zyy}");
     }
 
     @Test
     public void testErrorA() {
-        assertNull(processString("/toto("));
+        assertThat(processString("/toto(")).isNull();
     }
 
     @Test
     public void testErrorB() {
-        assertNull(processString("/toto(a,)"));
+        assertThat(processString("/toto(a,)")).isNull();
     }
 
     @Test
     public void testErrorC() {
-        assertNull(processString("/toto/"));
+        assertThat(processString("/toto/")).isNull();
     }
 
     @Test
     public void testErrorD() {
-        assertNull(processString("/toto//"));
+        assertThat(processString("/toto//")).isNull();
     }
 
     @Test
     public void testF() {
-        assertEquals("/toto/tata{zz yy}", processString("/toto/tata[zz yy]").toString());
+        assertThat(processString("/toto/tata[zz yy]").toString()).isEqualTo("/toto/tata{zz yy}");
     }
 
     @Test
     public void testG() {
-        assertEquals("/toto/tata[/aa=zz yy]", processString("/toto/tata[aa=zz yy]").toString());
+        assertThat(processString("/toto/tata[aa=zz yy]").toString()).isEqualTo("/toto/tata[/aa=zz yy]");
     }
 
     @Test
     public void testH() {
-        assertEquals("/toto/tata[/aa/zz(b,)/toto=zz yy]",
-                processString("/toto/tata[aa/zz(b)/toto=zz yy]").toString());
+        assertThat(processString("/toto/tata[aa/zz(b)/toto=zz yy]").toString()).isEqualTo("/toto/tata[/aa/zz(b,)/toto=zz yy]");
     }
-
-    // @Test
-    // public void testErrorA() {
-    // assertNull(processString("toto"));
-    // }
 
     @Test
     public void testI() {
-        assertEquals("/toto/tata[/aa/zz[/b=2]/toto=zz yy]",
-                processString("/toto/tata[aa/zz[b=2]/toto=zz yy]").toString());
+        assertThat(processString("/toto/tata[aa/zz[b=2]/toto=zz yy]").toString()).isEqualTo("/toto/tata[/aa/zz[/b=2]/toto=zz yy]");
     }
 
     @Test
     public void testInteg() {
-        assertNotNull(processString("/view/paymentView/nextValidationButton"));
-        assertNotNull(processString("/view/contractChooserPanel/stackPanel/widget(0)/contractTypesAnchors[OC00000002048]"));
-        assertNotNull(processString("/view/configuratorStackPanel/widget[title=TV - 1 erreurs]"));
-        assertNotNull(processString("/view/configuratorStackPanel/widget[title=TV - 1 erreur(s)]"));
-        assertNotNull(processString("/view/configuratorStackPanel/widget[title=TV - 1 erreur(s)]/widget[widget(0)/text=Décodeur HauteDef Enregistreur]/widget(1)"));
-        assertNotNull(processString("/view/configurationGrid/parametersGrid/widgetMap/widgetList[text=portal.contrats.OC00000002048]"));
+        assertThat(processString("/view/paymentView/nextValidationButton")).isNotNull();
+        assertThat(processString("/view/contractChooserPanel/stackPanel/widget(0)/contractTypesAnchors[OC00000002048]")).isNotNull();
+        assertThat(processString("/view/configuratorStackPanel/widget[title=TV - 1 erreurs]")).isNotNull();
+        assertThat(processString("/view/configuratorStackPanel/widget[title=TV - 1 erreur(s)]")).isNotNull();
+        assertThat(processString("/view/configuratorStackPanel/widget[title=TV - 1 erreur(s)]/widget[widget(0)/text=Décodeur HauteDef Enregistreur]/widget(1)")).isNotNull();
+        assertThat(processString("/view/configurationGrid/parametersGrid/widgetMap/widgetList[text=portal.contrats.OC00000002048]")).isNotNull();
     }
 
     @Test
     public void testJ() {
-        assertNull(processString("/_toto"));
-        assertNotNull(processString("/toto"));
+        assertThat(processString("/_toto")).isNull();
+        assertThat(processString("/toto")).isNotNull();
     }
 
     @Test
     public void testK() {
-        assertNull(processString("/à"));
-        assertNotNull(processString("/toto(à)"));
-        assertEquals("/toto(àéèê,)", processString("/toto(àéèê)").toString());
+        assertThat(processString("/à")).isNull();
+        assertThat(processString("/toto(à)")).isNotNull();
+        assertThat(processString("/toto(àéèê)").toString()).isEqualTo("/toto(àéèê,)");
     }
 
     private Node processString(String s) {

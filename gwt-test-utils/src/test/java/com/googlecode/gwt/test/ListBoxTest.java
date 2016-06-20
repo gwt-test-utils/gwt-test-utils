@@ -3,141 +3,141 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.ui.ListBox;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ListBoxTest extends GwtTestTest {
 
     @Test
     public void clear() {
-        // Arrange
+        // Given
         ListBox listBox = getListBox();
-        assertEquals(2, listBox.getVisibleItemCount());
+        assertThat(listBox.getVisibleItemCount()).isEqualTo(2);
         listBox.setSelectedIndex(1);
 
-        // Act
+        // When
         listBox.clear();
 
-        // Assert
-        assertEquals(-1, listBox.getSelectedIndex());
-        assertEquals(0, listBox.getItemCount());
+        // Then
+        assertThat(listBox.getSelectedIndex()).isEqualTo(-1);
+        assertThat(listBox.getItemCount()).isEqualTo(0);
     }
 
     @SuppressWarnings("deprecation")
     @Test
     public void isMultipleSelect() {
-        // Arrange
+        // Given
         ListBox listBox = new ListBox(false);
-        // Pre-Assert
-        assertEquals(false, listBox.isMultipleSelect());
+        // Preconditions
+        assertThat(listBox.isMultipleSelect()).isEqualTo(false);
 
-        // Act
+        // When
         listBox.setMultipleSelect(true);
 
-        // Assert
-        assertEquals(true, listBox.isMultipleSelect());
+        // Then
+        assertThat(listBox.isMultipleSelect()).isEqualTo(true);
     }
 
     @Test
     public void listBox() {
-        // Arrange
+        // Given
         ListBox listBox = getListBox();
 
-        // Act & Assert
-        assertEquals(2, listBox.getVisibleItemCount());
-        assertEquals(2, listBox.getItemCount());
-        assertEquals("item 0", listBox.getItemText(0));
-        assertEquals("item 1", listBox.getItemText(1));
+        // When & Assert
+        assertThat(listBox.getVisibleItemCount()).isEqualTo(2);
+        assertThat(listBox.getItemCount()).isEqualTo(2);
+        assertThat(listBox.getItemText(0)).isEqualTo("item 0");
+        assertThat(listBox.getItemText(1)).isEqualTo("item 1");
     }
 
     @Test
     public void name() {
-        // Arrange
+        // Given
         ListBox listBox = new ListBox(false);
 
-        // Act
+        // When
         listBox.setName("name");
 
-        // Assert
-        assertEquals("name", listBox.getName());
+        // Then
+        assertThat(listBox.getName()).isEqualTo("name");
     }
 
     @Test
     public void removeItem() {
-        // Arrange
+        // Given
         ListBox listBox = getListBox();
-        // Pre-Assert
-        assertEquals(2, listBox.getVisibleItemCount());
+        // Preconditions
+        assertThat(listBox.getVisibleItemCount()).isEqualTo(2);
 
-        // Act
+        // When
         listBox.removeItem(0);
 
-        // Assert
-        assertEquals(1, listBox.getVisibleItemCount());
-        assertEquals("item 1", listBox.getItemText(0));
+        // Then
+        assertThat(listBox.getVisibleItemCount()).isEqualTo(1);
+        assertThat(listBox.getItemText(0)).isEqualTo("item 1");
     }
 
     @Test
     public void selected() {
-        // Arrange
+        // Given
         ListBox listBox = getListBox();
 
-        // Act
+        // When
         listBox.setSelectedIndex(1);
 
-        // Assert
-        assertEquals("item 1", listBox.getItemText(listBox.getSelectedIndex()));
+        // Then
+        assertThat(listBox.getItemText(listBox.getSelectedIndex())).isEqualTo("item 1");
     }
 
     @Test
     public void selectedIndex() {
-        // Arrange
+        // Given
         ListBox listBox = getListBox();
-        // Pre-Assert
-        assertEquals(-1, listBox.getSelectedIndex());
+        // Preconditions
+        assertThat(listBox.getSelectedIndex()).isEqualTo(-1);
 
-        // Act
+        // When
         listBox.setSelectedIndex(1);
 
-        // Assert
-        assertEquals(1, listBox.getSelectedIndex());
+        // Then
+        assertThat(listBox.getSelectedIndex()).isEqualTo(1);
     }
 
     @Test
     public void tabIndex() {
-        // Arrange
+        // Given
         ListBox listBox = new ListBox(false);
 
-        // Act
+        // When
         listBox.setTabIndex(2);
 
-        // Assert
-        assertEquals(2, listBox.getTabIndex());
+        // Then
+        assertThat(listBox.getTabIndex()).isEqualTo(2);
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         ListBox listBox = new ListBox(false);
 
-        // Act
+        // When
         listBox.setTitle("title");
 
-        // Assert
-        assertEquals("title", listBox.getTitle());
+        // Then
+        assertThat(listBox.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         ListBox listBox = new ListBox(false);
-        // Pre-Assert
-        assertEquals(true, listBox.isVisible());
+        // Preconditions
+        assertThat(listBox.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         listBox.setVisible(false);
 
-        // Assert
-        assertEquals(false, listBox.isVisible());
+        // Then
+        assertThat(listBox.isVisible()).isEqualTo(false);
     }
 
     private ListBox getListBox() {

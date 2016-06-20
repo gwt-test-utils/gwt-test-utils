@@ -7,74 +7,73 @@ import com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithMozilla;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class CustomDeferredBindingTest extends GwtTestTest {
 
     @Test
     public void create_generateWith() {
-        // Act
+        // When
         IGenerateWith generated = GWT.create(IGenerateWith.class);
 
-        // Assert
+        // Then
         assertThat(generated.getClass().getName()).isEqualTo("com.slazzer.MyGeneratedClass");
         assertThat(generated.getMessage()).isEqualTo("generated with MyGenerator class");
     }
 
     @Test
     public void create_replaceWith_Default() {
-        // Act
+        // When
         IReplaceWith replaceWith = GWT.create(IReplaceWith.class);
 
-        // Assert
-        assertTrue(replaceWith instanceof ReplaceWithDefault);
+        // Then
+        assertThat(replaceWith instanceof ReplaceWithDefault).isTrue();
     }
 
     @Test
     public void create_replaceWith_gecko() {
-        // Arrange
+        // Given
         addClientProperty("user.agent", "gecko");
 
-        // Act
+        // When
         IReplaceWith replaceWith = GWT.create(IReplaceWith.class);
 
-        // Assert
-        assertTrue(replaceWith instanceof ReplaceWithMozilla);
+        // Then
+        assertThat(replaceWith instanceof ReplaceWithMozilla).isTrue();
     }
 
     @Test
     public void create_replaceWith_gecko1_8() {
-        // Arrange
+        // Given
         addClientProperty("user.agent", "gecko1_8");
 
-        // Act
+        // When
         IReplaceWith replaceWith = GWT.create(IReplaceWith.class);
 
-        // Assert
-        assertTrue(replaceWith instanceof ReplaceWithMozilla);
+        // Then
+        assertThat(replaceWith instanceof ReplaceWithMozilla).isTrue();
     }
 
     @Test
     public void create_replaceWith_ie6() {
-        // Arrange
+        // Given
         addClientProperty("user.agent", "ie6");
 
-        // Act
+        // When
         IReplaceWith replaceWith = GWT.create(IReplaceWith.class);
 
-        // Assert
-        assertTrue(replaceWith instanceof ReplaceWithIE);
+        // Then
+        assertThat(replaceWith instanceof ReplaceWithIE).isTrue();
     }
 
     @Test
     public void create_replaceWith_ie8() {
-        // Arrange
+        // Given
         addClientProperty("user.agent", "ie8");
 
-        // Act
+        // When
         IReplaceWith replaceWith = GWT.create(IReplaceWith.class);
 
-        // Assert
-        assertTrue(replaceWith instanceof ReplaceWithDefault);
+        // Then
+        assertThat(replaceWith instanceof ReplaceWithDefault).isTrue();
     }
 }

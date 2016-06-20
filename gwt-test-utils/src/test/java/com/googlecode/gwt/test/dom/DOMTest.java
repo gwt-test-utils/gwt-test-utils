@@ -6,290 +6,290 @@ import com.google.gwt.user.client.ui.Image;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DOMTest extends GwtTestTest {
 
     @Test
     public void checkImageSrc() {
-        // Arrange
+        // Given
         Image img = new Image();
         ImageElement elem = img.getElement().cast();
 
-        // Act
+        // When
         DOM.setImgSrc(img.getElement(), "http://test/image.gif");
         String imageSrc = DOM.getImgSrc(img.getElement());
 
-        // Assert
-        assertEquals("http://test/image.gif", elem.getSrc());
-        assertEquals("http://test/image.gif", imageSrc);
+        // Then
+        assertThat(elem.getSrc()).isEqualTo("http://test/image.gif");
+        assertThat(imageSrc).isEqualTo("http://test/image.gif");
     }
 
     @Test
     public void createAnchor() {
-        // Act
+        // When
         AnchorElement elem = AnchorElement.as(DOM.createAnchor());
 
-        // Assert
-        assertEquals("a", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("a");
     }
 
     @Test
     public void createButton() {
-        // Act
+        // When
         ButtonElement elem = ButtonElement.as(DOM.createButton());
 
-        // Assert
-        assertEquals("button", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("button");
     }
 
     @Test
     public void createCaption() {
-        // Act
+        // When
         TableCaptionElement elem = TableCaptionElement.as(DOM.createCaption());
 
-        // Assert
-        assertEquals("caption", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("caption");
     }
 
     @Test
     public void createCol() {
-        // Act
+        // When
         TableColElement elem = TableColElement.as(DOM.createCol());
 
-        // Assert
-        assertEquals("col", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("col");
     }
 
     @Test
     public void createColGroup() {
-        // Act
+        // When
         TableColElement elem = TableColElement.as(DOM.createColGroup());
 
-        // Assert
-        assertEquals("colgroup", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("colgroup");
     }
 
     @Test
     public void createDiv() {
-        // Act
+        // When
         DivElement elem = DivElement.as(DOM.createDiv());
 
-        // Assert
-        assertEquals("div", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("div");
     }
 
     @Test
     public void createElement() {
-        // Act
+        // When
         DivElement elem = DivElement.as(DOM.createElement("div"));
 
-        // Assert
-        assertEquals("div", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("div");
     }
 
     @Test
     public void createFieldSet() {
-        // Act
+        // When
         FieldSetElement elem = FieldSetElement.as(DOM.createFieldSet());
 
-        // Assert
-        assertEquals("fieldset", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("fieldset");
     }
 
     @Test
     public void createForm() {
-        // Act
+        // When
         FormElement elem = FormElement.as(DOM.createForm());
 
-        // Assert
-        assertEquals("form", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("form");
     }
 
     @Test
     public void createIFrame() {
-        // Act
+        // When
         IFrameElement elem = IFrameElement.as(DOM.createIFrame());
 
-        // Assert
-        assertEquals("iframe", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("iframe");
     }
 
     @Test
     public void createImg() {
-        // Act
+        // When
         ImageElement elem = ImageElement.as(DOM.createImg());
 
-        // Assert
-        assertEquals("img", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("img");
     }
 
     @Test
     public void createInputCheck() {
-        // Act
+        // When
         InputElement elem = InputElement.as(DOM.createInputCheck());
 
-        // Assert
-        assertEquals("input", elem.getTagName());
-        assertEquals("checkbox", elem.getType());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("input");
+        assertThat(elem.getType()).isEqualTo("checkbox");
     }
 
     @Test
     public void createInputPassword() {
-        // Act
+        // When
         InputElement elem = InputElement.as(DOM.createInputPassword());
 
-        // Assert
-        assertEquals("input", elem.getTagName());
-        assertEquals("password", elem.getType());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("input");
+        assertThat(elem.getType()).isEqualTo("password");
     }
 
     @Test
     public void createInputRadio() {
-        // Act
+        // When
         InputElement elem = InputElement.as(DOM.createInputRadio("test"));
 
-        // Assert
-        assertEquals("input", elem.getTagName());
-        assertEquals("test", elem.getName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("input");
+        assertThat(elem.getName()).isEqualTo("test");
     }
 
     @Test
     public void createInputText() {
-        // Act
+        // When
         InputElement elem = InputElement.as(DOM.createInputText());
 
-        // Assert
-        assertEquals("input", elem.getTagName());
-        assertEquals("text", elem.getType());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("input");
+        assertThat(elem.getType()).isEqualTo("text");
     }
 
     @Test
     public void createLabel() {
-        // Act
+        // When
         LabelElement elem = LabelElement.as(DOM.createLabel());
 
-        // Assert
-        assertEquals("label", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("label");
     }
 
     @Test
     public void createLegend() {
-        // Act
+        // When
         LegendElement elem = LegendElement.as(DOM.createLegend());
 
-        // Assert
-        assertEquals("legend", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("legend");
     }
 
     @Test
     public void createOption() {
-        // Act
+        // When
         OptionElement elem = OptionElement.as(DOM.createOption());
 
-        // Assert
-        assertEquals("option", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("option");
     }
 
     @Test
     public void createSelect() {
-        // Act
+        // When
         SelectElement elem = SelectElement.as(DOM.createSelect());
 
-        // Assert
-        assertEquals("select", elem.getTagName());
-        assertFalse("Simple SelectElement should not be multiple", elem.isMultiple());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("select");
+        assertThat(elem.isMultiple()).as("Simple SelectElement should not be multiple").isFalse();
     }
 
     @Test
     public void createSelectMultiple() {
-        // Act
+        // When
         SelectElement elem = SelectElement.as(DOM.createSelect(true));
 
-        // Assert
-        assertEquals("select", elem.getTagName());
-        assertTrue("SelectElement should be multiple", elem.isMultiple());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("select");
+        assertThat(elem.isMultiple()).as("SelectElement should be multiple").isTrue();
     }
 
     @Test
     public void createSpan() {
-        // Act
+        // When
         SpanElement elem = SpanElement.as(DOM.createSpan());
 
-        // Assert
-        assertEquals("span", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("span");
     }
 
     @Test
     public void createTable() {
-        // Act
+        // When
         TableElement elem = TableElement.as(DOM.createTable());
 
-        // Assert
-        assertEquals("table", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("table");
     }
 
     @Test
     public void createTBody() {
-        // Act
+        // When
         TableSectionElement elem = TableSectionElement.as(DOM.createTBody());
 
-        // Assert
-        assertEquals("tbody", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("tbody");
     }
 
     @Test
     public void createTD() {
-        // Act
+        // When
         TableCellElement elem = TableCellElement.as(DOM.createTD());
 
-        // Assert
-        assertEquals("td", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("td");
     }
 
     @Test
     public void createTextArea() {
-        // Act
+        // When
         TextAreaElement elem = TextAreaElement.as(DOM.createTextArea());
 
-        // Assert
-        assertEquals("textarea", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("textarea");
     }
 
     @Test
     public void createTFoot() {
-        // Act
+        // When
         TableSectionElement elem = TableSectionElement.as(DOM.createTFoot());
 
-        // Assert
-        assertEquals("tfoot", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("tfoot");
     }
 
     @Test
     public void createTH() {
-        // Act
+        // When
         TableCellElement elem = TableCellElement.as(DOM.createTH());
 
-        // Assert
-        assertEquals("th", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("th");
     }
 
     @Test
     public void createTHead() {
-        // Act
+        // When
         TableSectionElement elem = TableSectionElement.as(DOM.createTHead());
 
-        // Assert
-        assertEquals("thead", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("thead");
     }
 
     @Test
     public void createTR() {
-        // Act
+        // When
         TableRowElement elem = TableRowElement.as(DOM.createTR());
 
-        // Assert
-        assertEquals("tr", elem.getTagName());
+        // Then
+        assertThat(elem.getTagName()).isEqualTo("tr");
     }
 
 }

@@ -11,25 +11,13 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CellTableTest extends GwtTestTest {
-
-    // A simple data type that represents a contact.
-    private static class Contact {
-        private final String address;
-        private final String name;
-
-        public Contact(String name, String address) {
-            this.name = name;
-            this.address = address;
-        }
-    }
 
     // The list of data to display.
     private static List<Contact> CONTACTS = Arrays.asList(new Contact("Gael", "666 Evil"),
             new Contact("John", "123 Fourth Road"), new Contact("Mary", "222 Lancer Lane"));
-
     private CellTable<Contact> table;
 
     @Before
@@ -67,14 +55,14 @@ public class CellTableTest extends GwtTestTest {
 
         table.setVisibleRange(0, 2);
 
-        // Pre-Assert
-        assertEquals(3, table.getRowCount());
-        assertEquals(2, table.getVisibleItemCount());
+        // Preconditions
+        assertThat(table.getRowCount()).isEqualTo(3);
+        assertThat(table.getVisibleItemCount()).isEqualTo(2);
     }
 
     @Test
     public void click() {
-        // Arrange
+        // Given
         final StringBuilder sb = new StringBuilder();
 
         // Add a selection model to handle user selection.
@@ -89,19 +77,30 @@ public class CellTableTest extends GwtTestTest {
             }
         });
 
-        // Act 1
+        // When 1
         Browser.click(table, CONTACTS.get(0));
 
-        // Assert 1
-        assertEquals("Gael : 666 Evil", sb.toString());
-        assertTrue(table.getSelectionModel().isSelected(CONTACTS.get(0)));
+        // Then 1
+        assertThat(sb.toString()).isEqualTo("Gael : 666 Evil");
+        assertThat(table.getSelectionModel().isSelected(CONTACTS.get(0))).isTrue();
 
-        // Act 2 : deselect
+        // When 2 : deselect
         Browser.click(table, CONTACTS.get(0));
 
-        // Assert 2
-        assertEquals("Gael : 666 Evil", sb.toString());
-        assertFalse(table.getSelectionModel().isSelected(CONTACTS.get(0)));
+        // Then 2
+        assertThat(sb.toString()).isEqualTo("Gael : 666 Evil");
+        assertThat(table.getSelectionModel().isSelected(CONTACTS.get(0))).isFalse();
 
+    }
+
+    // A simple data type that represents a contact.
+    private static class Contact {
+        private final String address;
+        private final String name;
+
+        public Contact(String name, String address) {
+            this.name = name;
+            this.address = address;
+        }
     }
 }

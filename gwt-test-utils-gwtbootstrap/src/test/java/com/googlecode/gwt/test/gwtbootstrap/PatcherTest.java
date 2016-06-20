@@ -116,22 +116,22 @@ public class PatcherTest extends GwtTestWithMockito {
         modal.addHideHandler(hideHandler);
         modal.addHiddenHandler(hiddenHandler);
 
-        assertFalse(modal.isVisible());
+        assertThat(modal.isVisible()).isFalse();
 
         modal.show();
-        assertTrue(modal.isVisible());
+        assertThat(modal.isVisible()).isTrue();
 
         verify(showHandler).onShow(any(ShowEvent.class));
         verify(shownHandler).onShown(any(ShownEvent.class));
 
         modal.hide();
-        assertFalse(modal.isVisible());
+        assertThat(modal.isVisible()).isFalse();
 
         verify(hideHandler).onHide(any(HideEvent.class));
         verify(hiddenHandler).onHidden(any(HiddenEvent.class));
 
         modal.toggle();
-        assertTrue(modal.isVisible());
+        assertThat(modal.isVisible()).isTrue();
 
         // for unsetHandlerFunctions
         modal.setDynamicSafe(true);

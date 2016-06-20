@@ -17,29 +17,29 @@ public class GwtInstanceTest extends GwtTestTest {
 
     @Test
     public void objectWithHTML() {
-        // Arrange
+        // Given
         HTML html = new HTML();
         html.setHTML("<h2> my HTML</h2>");
         RootPanel.get().add(html);
 
-        // Act & Assert
+        // When & Assert
         assertThat(object("<h2> my HTML</h2>").ofType(HTML.class)).isSameAs(html);
     }
 
     @Test
     public void objectWithId() {
-        // Arrange
+        // Given
         Anchor anchor = new Anchor();
         anchor.getElement().setAttribute("id", "my-anchor-id");
         RootPanel.get().add(anchor);
 
-        // Act & Assert
+        // When & Assert
         assertThat(object("my-anchor-id").ofType(Anchor.class)).isSameAs(anchor);
     }
 
     @Test
     public void objectWithNodeFinder() {
-        // Arrange
+        // Given
         ComplexPanel panel = new FlowPanel();
         RootPanel.get().add(panel);
 
@@ -51,30 +51,30 @@ public class GwtInstanceTest extends GwtTestTest {
             }
         });
 
-        // Act & Assert
+        // When & Assert
         assertThat(object("/root/widget(0)").ofType(ComplexPanel.class)).isSameAs(panel);
     }
 
     @Test
     public void objectWithText() {
-        // Arrange
+        // Given
         Label label = new Label();
         label.setText("my label text");
         RootPanel.get().add(label);
 
-        // Act & Assert
+        // When & Assert
         assertThat(object("my label text").ofType(Label.class)).isSameAs(label);
     }
 
     @Test
     public void throwsClassCastExpectionWhenNotExpectedType() {
-        // Arrange
+        // Given
         Anchor anchor = new Anchor();
         anchor.getElement().setAttribute("id", "my-anchor-id");
         RootPanel.get().add(anchor);
 
         try {
-            // Act
+            // When
             object("my-anchor-id").ofType(CellTable.class);
             failBecauseExceptionWasNotThrown(ClassCastException.class);
         } catch (ClassCastException e) {
@@ -86,7 +86,7 @@ public class GwtInstanceTest extends GwtTestTest {
     @Test
     public void throwsNullPointerExceptionWhenNull() {
         try {
-            // Act
+            // When
             object("my-not-existing-anchor-id").ofType(Anchor.class);
             failBecauseExceptionWasNotThrown(NullPointerException.class);
         } catch (NullPointerException e) {

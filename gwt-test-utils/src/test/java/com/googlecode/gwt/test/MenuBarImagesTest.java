@@ -7,8 +7,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar.MenuBarImages;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("deprecation")
 public class MenuBarImagesTest extends GwtTestTest {
@@ -17,53 +16,48 @@ public class MenuBarImagesTest extends GwtTestTest {
 
     @Test
     public void checkToString() {
-        // Arrange
+        // Given
         AbstractImagePrototype proto = menuBarImages.menuBarSubMenuIcon();
 
-        // Act & Assert
-        assertNotNull(proto.toString());
+        // When & Assert
+        assertThat(proto.toString()).isNotNull();
     }
 
     @Test
     public void createElement() {
-        // Arrange
+        // Given
         AbstractImagePrototype proto = menuBarImages.menuBarSubMenuIcon();
 
-        // Act
+        // When
         ImagePrototypeElement element = proto.createElement();
 
-        // Assert
-        assertEquals("IMG", element.getTagName());
-        assertEquals(
-                "<img onload=\"this.__gwtLastUnhandledEvent=\"load\";\" src=\"http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif\" style=\"width: 0px; height: 0px; background:url(http://127.0.0.1: 8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px; \" border=\"0\"></img>",
-                element.toString());
+        // Then
+        assertThat(element.getTagName()).isEqualTo("IMG");
+        assertThat(element.toString()).isEqualTo("<img onload=\"this.__gwtLastUnhandledEvent=\"load\";\" src=\"http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif\" style=\"width: 0px; height: 0px; background:url(http://127.0.0.1: 8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px; \" border=\"0\"></img>");
     }
 
     @Test
     public void createImage() {
-        // Arrange
+        // Given
         AbstractImagePrototype proto = menuBarImages.menuBarSubMenuIcon();
 
-        // Act
+        // When
         Image image = proto.createImage();
 
-        // Assert
-        assertEquals("http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif",
-                image.getUrl());
+        // Then
+        assertThat(image.getUrl()).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif");
     }
 
     @Test
     public void getHTML() {
-        // Arrange
+        // Given
         AbstractImagePrototype proto = menuBarImages.menuBarSubMenuIcon();
 
-        // Act
+        // When
         String html = proto.getHTML();
 
-        // Assert
-        assertEquals(
-                "<img onload='this.__gwtLastUnhandledEvent=\"load\";' src='http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif' style='width:0.0px;height:0.0px;background:url(http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px;' border='0'>",
-                html);
+        // Then
+        assertThat(html).isEqualTo("<img onload='this.__gwtLastUnhandledEvent=\"load\";' src='http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif' style='width:0.0px;height:0.0px;background:url(http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px;' border='0'>");
     }
 
 }

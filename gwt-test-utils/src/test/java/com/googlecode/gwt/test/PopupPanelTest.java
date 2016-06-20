@@ -4,81 +4,80 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 public class PopupPanelTest extends GwtTestTest {
 
     @Test
     public void autoHideEnabled() {
-        // Arrange
+        // Given
         PopupPanel popupPanel = new PopupPanel(true);
-        // Pre-Assert
-        assertTrue(popupPanel.isAutoHideEnabled());
+        // Preconditions
+        assertThat(popupPanel.isAutoHideEnabled()).isTrue();
 
-        // Act
+        // When
         popupPanel.setAutoHideEnabled(false);
 
-        // Assert
-        assertFalse(popupPanel.isAutoHideEnabled());
+        // Then
+        assertThat(popupPanel.isAutoHideEnabled()).isFalse();
     }
 
     @Test
     public void center() {
-        // Arrange
+        // Given
         PopupPanel popup = new PopupPanel();
         popup.setAnimationEnabled(true);
 
-        // Act
+        // When
         popup.center();
 
-        // Assert
-        assertEquals(0, popup.getOffsetHeight());
-        assertEquals(0, popup.getOffsetWidth());
+        // Then
+        assertThat(popup.getOffsetHeight()).isEqualTo(0);
+        assertThat(popup.getOffsetWidth()).isEqualTo(0);
     }
 
     @Test
     public void show() {
-        // Arrange
+        // Given
         PopupPanel popup = new PopupPanel();
-        // Pre-Assert
+        // Preconditions
         assertThat(popup.isVisible()).isTrue();
         assertThat(popup.isShowing()).isFalse();
 
-        // Act
+        // When
         popup.show();
 
-        // Assert
-        assertTrue(popup.isShowing());
+        // Then
+        assertThat(popup.isShowing()).isTrue();
     }
 
     @Test
     public void showGlass() {
-        // Arrange
+        // Given
         PopupPanel popup = new PopupPanel();
         popup.setGlassEnabled(true);
-        // Pre-Assert
+        // Preconditions
         assertThat(popup.isShowing()).isFalse();
 
-        // Act
+        // When
         popup.show();
 
-        // Assert
+        // Then
         assertThat(popup.isShowing()).isTrue();
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         PopupPanel popup = new PopupPanel();
-        // Pre-Assert
+        // Preconditions
         assertThat(popup.isVisible()).isTrue();
 
-        // Act
+        // When
         popup.setVisible(false);
 
-        // Assert
+        // Then
         assertThat(popup.isVisible()).isFalse();
-        assertEquals("hidden", popup.getElement().getStyle().getProperty("visibility"));
+        assertThat(popup.getElement().getStyle().getProperty("visibility")).isEqualTo("hidden");
     }
 
 }

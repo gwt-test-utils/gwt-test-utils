@@ -6,104 +6,104 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ComplexPanelTest extends GwtTestTest {
 
     @Test
     public void add() {
-        // Arrange
+        // Given
         ComplexPanel panel = new FlowPanel();
         RootPanel.get().add(panel);
-        assertTrue(panel.isAttached());
-        assertEquals(0, panel.getWidgetCount());
+        assertThat(panel.isAttached()).isTrue();
+        assertThat(panel.getWidgetCount()).isEqualTo(0);
         Button b1 = new Button();
-        assertFalse(b1.isAttached());
-        assertNull(b1.getParent());
+        assertThat(b1.isAttached()).isFalse();
+        assertThat(b1.getParent()).isNull();
 
-        // Act
+        // When
         panel.add(b1);
 
-        // Assert
-        assertTrue(b1.isAttached());
-        assertEquals(panel, b1.getParent());
-        assertEquals(1, panel.getWidgetCount());
-        assertEquals(b1, panel.getWidget(0));
-        assertEquals(0, panel.getWidgetIndex(b1));
+        // Then
+        assertThat(b1.isAttached()).isTrue();
+        assertThat(b1.getParent()).isEqualTo(panel);
+        assertThat(panel.getWidgetCount()).isEqualTo(1);
+        assertThat(panel.getWidget(0)).isEqualTo(b1);
+        assertThat(panel.getWidgetIndex(b1)).isEqualTo(0);
     }
 
     @Test
     public void count() {
-        // Arrange
+        // Given
         ComplexPanel panel = new FlowPanel();
         panel.add(new Button());
         panel.add(new Button());
 
-        // Act & Assert
-        assertEquals(2, panel.getWidgetCount());
+        // When & Assert
+        assertThat(panel.getWidgetCount()).isEqualTo(2);
     }
 
     @Test
     public void remove() {
-        // Arrange
+        // Given
         ComplexPanel panel = new FlowPanel();
         Button b = new Button();
         panel.add(b);
-        // Pre-Assert
-        assertEquals(1, panel.getWidgetCount());
-        assertEquals(panel, b.getParent());
+        // Preconditions
+        assertThat(panel.getWidgetCount()).isEqualTo(1);
+        assertThat(b.getParent()).isEqualTo(panel);
 
-        // Act
+        // When
         panel.remove(b);
 
-        // Assert
-        assertEquals(0, panel.getWidgetCount());
-        assertNull(b.getParent());
+        // Then
+        assertThat(panel.getWidgetCount()).isEqualTo(0);
+        assertThat(b.getParent()).isNull();
     }
 
     @Test
     public void remove_ByIndex() {
-        // Arrange
+        // Given
         ComplexPanel panel = new FlowPanel();
         Button b0 = new Button();
         panel.add(b0);
         Button b1 = new Button();
         panel.add(b1);
 
-        // Act
+        // When
         panel.remove(1);
 
-        // Assert
-        assertEquals(1, panel.getWidgetCount());
-        assertEquals(b0, panel.getWidget(0));
-        assertEquals(panel, b0.getParent());
-        assertNull(b1.getParent());
+        // Then
+        assertThat(panel.getWidgetCount()).isEqualTo(1);
+        assertThat(panel.getWidget(0)).isEqualTo(b0);
+        assertThat(b0.getParent()).isEqualTo(panel);
+        assertThat(b1.getParent()).isNull();
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         ComplexPanel panel = new FlowPanel();
 
-        // Act
+        // When
         panel.setTitle("title");
 
-        // Assert
-        assertEquals("title", panel.getTitle());
+        // Then
+        assertThat(panel.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         ComplexPanel panel = new FlowPanel();
-        // Pre-Assert
-        assertEquals(true, panel.isVisible());
+        // Preconditions
+        assertThat(panel.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         panel.setVisible(false);
 
-        // Assert
-        assertEquals(false, panel.isVisible());
+        // Then
+        assertThat(panel.isVisible()).isEqualTo(false);
     }
 
 }

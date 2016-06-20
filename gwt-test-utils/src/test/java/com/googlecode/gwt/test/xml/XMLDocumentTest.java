@@ -4,47 +4,47 @@ import com.google.gwt.xml.client.*;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class XMLDocumentTest extends GwtTestTest {
 
     @Test
     public void createCDATASection() {
-        // Arrange
+        // Given
         Document document = XMLParser.createDocument();
 
-        // Act
+        // When
         CDATASection cdata = document.createCDATASection("my cdata Value");
 
-        // Assert
-        assertEquals("my cdata Value", cdata.getData());
-        assertEquals(document.getDocumentElement(), cdata.getOwnerDocument().getDocumentElement());
+        // Then
+        assertThat(cdata.getData()).isEqualTo("my cdata Value");
+        assertThat(cdata.getOwnerDocument().getDocumentElement()).isEqualTo(document.getDocumentElement());
     }
 
     @Test
     public void createElement() {
-        // Arrange
+        // Given
         Document document = XMLParser.createDocument();
 
-        // Act
+        // When
         Element element = document.createElement("elem");
 
-        // Assert
-        assertEquals("elem", element.getTagName());
-        assertEquals(document.getDocumentElement(), element.getOwnerDocument().getDocumentElement());
+        // Then
+        assertThat(element.getTagName()).isEqualTo("elem");
+        assertThat(element.getOwnerDocument().getDocumentElement()).isEqualTo(document.getDocumentElement());
     }
 
     @Test
     public void createTextNode() {
-        // Arrange
+        // Given
         Document document = XMLParser.createDocument();
 
-        // Act
+        // When
         Text text = document.createTextNode("my text");
 
-        // Assert
-        assertEquals("my text", text.getData());
-        assertEquals(document.getDocumentElement(), text.getOwnerDocument().getDocumentElement());
+        // Then
+        assertThat(text.getData()).isEqualTo("my text");
+        assertThat(text.getOwnerDocument().getDocumentElement()).isEqualTo(document.getDocumentElement());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class XMLDocumentTest extends GwtTestTest {
         e.appendChild(document.createTextNode("SomeTextNode"));
         document.appendChild(e);
 
-        assertEquals("<ThisIsATest>SomeTextNode</ThisIsATest>", document.toString());
+        assertThat(document.toString()).isEqualTo("<ThisIsATest>SomeTextNode</ThisIsATest>");
     }
 
 }

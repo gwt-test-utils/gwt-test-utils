@@ -6,8 +6,7 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PushButtonTest extends GwtTestTest {
 
@@ -15,7 +14,7 @@ public class PushButtonTest extends GwtTestTest {
 
     @Test
     public void click() {
-        // Arrange
+        // Given
         clicked = false;
 
         final PushButton b = new PushButton("Up", "Down");
@@ -27,15 +26,15 @@ public class PushButtonTest extends GwtTestTest {
             }
         });
 
-        // Pre-Assert
-        assertEquals("Up", b.getText());
+        // Preconditions
+        assertThat(b.getText()).isEqualTo("Up");
 
-        // Act
+        // When
         Browser.click(b);
 
-        // Assert
-        assertTrue("PushButton onClick was not triggered", clicked);
-        assertEquals("Up", b.getText());
+        // Then
+        assertThat(clicked).as("PushButton onClick was not triggered").isTrue();
+        assertThat(b.getText()).isEqualTo("Up");
     }
 
 }

@@ -3,21 +3,20 @@ package com.googlecode.gwt.test;
 import com.googlecode.gwt.test.internal.utils.ArrayUtils;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArrayUtilTest {
 
     @Test
     public void contains() {
-        // Arrange
+        // Given
         String[] strings = new String[]{"test1", "test2", "test3"};
 
-        // Act & Assert
-        assertTrue(ArrayUtils.contains(strings, "test1"));
-        assertTrue(ArrayUtils.contains(strings, "test2"));
-        assertTrue(ArrayUtils.contains(strings, "test3"));
-        assertFalse(ArrayUtils.contains(strings, "test4"));
+        // When & Assert
+        assertThat(ArrayUtils.contains(strings, "test1")).isTrue();
+        assertThat(ArrayUtils.contains(strings, "test2")).isTrue();
+        assertThat(ArrayUtils.contains(strings, "test3")).isTrue();
+        assertThat(ArrayUtils.contains(strings, "test4")).isFalse();
     }
 
 }

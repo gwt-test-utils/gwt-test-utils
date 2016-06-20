@@ -5,32 +5,32 @@ import com.google.gwt.dom.client.Element;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GwtDomUtilsTest extends GwtTestTest {
 
     @Test
     public void setClientHeight() {
-        // Arrange
+        // Given
         Element e = Document.get().createAnchorElement();
 
-        // Act
+        // When
         GwtDomUtils.setClientHeight(e, 4);
 
-        // Assert
-        assertEquals(4, e.getClientHeight());
+        // Then
+        assertThat(e.getClientHeight()).isEqualTo(4);
     }
 
     @Test
     public void setClientWidth() {
-        // Arrange
+        // Given
         Element e = Document.get().createAnchorElement();
 
-        // Act
+        // When
         GwtDomUtils.setClientWidth(e, 4);
 
-        // Assert
-        assertEquals(4, e.getClientWidth());
+        // Then
+        assertThat(e.getClientWidth()).isEqualTo(4);
     }
 
 }

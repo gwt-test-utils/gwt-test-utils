@@ -8,16 +8,17 @@ import com.google.gwt.user.client.ui.Tree.Resources;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class ClientBundleTest extends GwtTestTest {
 
     @Test
     public void cssResource() {
-        // Arrange
+        // Given
         MyCssResource cssResource = MyClientBundle.INSTANCE.cssResource();
 
-        // Act
+        // When
         String name = cssResource.getName();
         String testStyle = cssResource.testStyle();
         String testStyleWithHover = cssResource.testStyleWithHover();
@@ -26,54 +27,50 @@ public class ClientBundleTest extends GwtTestTest {
         String constantValue = cssResource.testConstant();
         String toString = cssResource.toString();
 
-        // Assert
-        assertEquals("cssResource", name);
-        assertEquals("testStyle", testStyle);
-        assertEquals("testStyleWithHover", testStyleWithHover);
-        assertEquals("testStyleOnSpecificElement", testStyleOnSpecificElement);
-        assertEquals("testStyleOnSpecificStyle", testStyleOnSpecificStyle);
-        assertEquals("constant-value", constantValue);
-        assertEquals(
-                "com.googlecode.gwt.test.internal.resources.CssResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.cssResource()'",
-                toString);
-        assertEquals(cssResource, MyClientBundle.INSTANCE.cssResource());
+        // Then
+        assertThat(name).isEqualTo("cssResource");
+        assertThat(testStyle).isEqualTo("testStyle");
+        assertThat(testStyleWithHover).isEqualTo("testStyleWithHover");
+        assertThat(testStyleOnSpecificElement).isEqualTo("testStyleOnSpecificElement");
+        assertThat(testStyleOnSpecificStyle).isEqualTo("testStyleOnSpecificStyle");
+        assertThat(constantValue).isEqualTo("constant-value");
+        assertThat(toString).isEqualTo("com.googlecode.gwt.test.internal.resources.CssResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.cssResource()'");
+        assertThat(MyClientBundle.INSTANCE.cssResource()).isEqualTo(cssResource);
     }
 
     @Test
     public void cssResourceEnsureInjected() {
-        // Arrange
+        // Given
         MyCssResource testCssResource = MyClientBundle.INSTANCE.cssResource();
 
-        // Act & Assert
-        assertTrue(testCssResource.ensureInjected());
-        assertFalse(testCssResource.ensureInjected());
+        // When & Assert
+        assertThat(testCssResource.ensureInjected()).isTrue();
+        assertThat(testCssResource.ensureInjected()).isFalse();
     }
 
     @Test
     public void dataResource() {
-        // Arrange
+        // Given
         DataResource testDataResource = MyClientBundle.INSTANCE.dataResource();
 
-        // Act
+        // When
         String name = testDataResource.getName();
         String url = testDataResource.getSafeUri().asString();
         String toString = testDataResource.toString();
 
-        // Assert
-        assertEquals("dataResource", name);
-        assertEquals("http://127.0.0.1:8888/gwt_test_utils_module/textResourceXml.xml", url);
-        assertEquals(
-                "com.googlecode.gwt.test.internal.resources.DataResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.dataResource()'",
-                toString);
-        assertEquals(testDataResource, MyClientBundle.INSTANCE.dataResource());
+        // Then
+        assertThat(name).isEqualTo("dataResource");
+        assertThat(url).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/textResourceXml.xml");
+        assertThat(toString).isEqualTo("com.googlecode.gwt.test.internal.resources.DataResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.dataResource()'");
+        assertThat(MyClientBundle.INSTANCE.dataResource()).isEqualTo(testDataResource);
     }
 
     @Test
     public void imageResource() {
-        // Arrange
+        // Given
         ImageResource testImageResource = MyClientBundle.INSTANCE.imageResource();
 
-        // Act
+        // When
         String name = testImageResource.getName();
         String url = testImageResource.getSafeUri().asString();
         int heigh = testImageResource.getHeight();
@@ -82,54 +79,52 @@ public class ClientBundleTest extends GwtTestTest {
         int top = testImageResource.getTop();
         String toString = testImageResource.toString();
 
-        // Assert
-        assertEquals("imageResource", name);
-        assertEquals("http://127.0.0.1:8888/gwt_test_utils_module/imageResource.gif", url);
-        assertEquals(0, heigh);
-        assertEquals(0, left);
-        assertEquals(0, width);
-        assertEquals(0, top);
-        assertEquals(
-                "com.googlecode.gwt.test.internal.resources.ImageResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.imageResource()'",
-                toString);
-        assertEquals(testImageResource, MyClientBundle.INSTANCE.imageResource());
+        // Then
+        assertThat(name).isEqualTo("imageResource");
+        assertThat(url).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/imageResource.gif");
+        assertThat(heigh).isEqualTo(0);
+        assertThat(left).isEqualTo(0);
+        assertThat(width).isEqualTo(0);
+        assertThat(top).isEqualTo(0);
+        assertThat(toString).isEqualTo("com.googlecode.gwt.test.internal.resources.ImageResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.imageResource()'");
+        assertThat(MyClientBundle.INSTANCE.imageResource()).isEqualTo(testImageResource);
     }
 
     @Test
     public void imageResource_FromGwtAPI() {
-        // Arrange
+        // Given
         Resources treeResources = GWT.create(Resources.class);
 
-        // Act
+        // When
         String name = treeResources.treeOpen().getName();
         String url = treeResources.treeLeaf().getSafeUri().asString();
 
-        // Assert
-        assertEquals("treeOpen", name);
-        assertEquals("http://127.0.0.1:8888/gwt_test_utils_module/treeLeaf.gif", url);
+        // Then
+        assertThat(name).isEqualTo("treeOpen");
+        assertThat(url).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/treeLeaf.gif");
     }
 
     @Test
     public void imageResource_ShouldThrowExceptionWhenMultipleMatchingResourceFile() {
-        // Arrange
+        // Given
         String expectedMessage = "Too many ImageResource files found for method 'com.googlecode.gwt.test.resources.MyClientBundle.doubleShouldThrowException()'";
         try {
-            // Act
+            // When
             MyClientBundle.INSTANCE.doubleShouldThrowException();
             fail("An exception should have been thrown since there are multiple matching file for the tested ClientBundle method");
         } catch (Exception e) {
-            // Assert
-            assertEquals(expectedMessage, e.getMessage());
+            // Then
+            assertThat(e.getMessage()).isEqualTo(expectedMessage);
         }
 
     }
 
     @Test
     public void multipleFileResource() {
-        // Arrange
+        // Given
         MultipleFileCssResource multipleFileCssResource = MyClientBundle.INSTANCE.multipleFileCssResource();
 
-        // Act
+        // When
         String name = multipleFileCssResource.getName();
         String testStyle = multipleFileCssResource.testStyle();
         String testStyleWithHover = multipleFileCssResource.testStyleWithHover();
@@ -140,27 +135,25 @@ public class ClientBundleTest extends GwtTestTest {
         String addedConstantValue = multipleFileCssResource.addedConstant();
         String toString = multipleFileCssResource.toString();
 
-        // Assert
-        assertEquals("multipleFileCssResource", name);
-        assertEquals("testStyle", testStyle);
-        assertEquals("testStyleWithHover", testStyleWithHover);
-        assertEquals("testStyleOnSpecificElement", testStyleOnSpecificElement);
-        assertEquals("testStyleOnSpecificStyle", testStyleOnSpecificStyle);
-        assertEquals("addedStyle", addedStyle);
-        assertEquals("constant-value", constantValue);
-        assertEquals("added-constant-value", addedConstantValue);
-        assertEquals(
-                "com.googlecode.gwt.test.internal.resources.CssResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.multipleFileCssResource()'",
-                toString);
-        assertEquals(multipleFileCssResource, MyClientBundle.INSTANCE.multipleFileCssResource());
+        // Then
+        assertThat(name).isEqualTo("multipleFileCssResource");
+        assertThat(testStyle).isEqualTo("testStyle");
+        assertThat(testStyleWithHover).isEqualTo("testStyleWithHover");
+        assertThat(testStyleOnSpecificElement).isEqualTo("testStyleOnSpecificElement");
+        assertThat(testStyleOnSpecificStyle).isEqualTo("testStyleOnSpecificStyle");
+        assertThat(addedStyle).isEqualTo("addedStyle");
+        assertThat(constantValue).isEqualTo("constant-value");
+        assertThat(addedConstantValue).isEqualTo("added-constant-value");
+        assertThat(toString).isEqualTo("com.googlecode.gwt.test.internal.resources.CssResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.multipleFileCssResource()'");
+        assertThat(MyClientBundle.INSTANCE.multipleFileCssResource()).isEqualTo(multipleFileCssResource);
     }
 
     @Test
     public void rootClasspathImg() {
-        // Arrange
+        // Given
         ImageResource rootClasspathImg = MyClientBundle.INSTANCE.rootClasspathImg();
 
-        // Act
+        // When
         String name = rootClasspathImg.getName();
         String url = rootClasspathImg.getSafeUri().asString();
         int heigh = rootClasspathImg.getHeight();
@@ -169,71 +162,65 @@ public class ClientBundleTest extends GwtTestTest {
         int top = rootClasspathImg.getTop();
         String toString = rootClasspathImg.toString();
 
-        // Assert
-        assertEquals("rootClasspathImg", name);
-        assertEquals("http://127.0.0.1:8888/gwt_test_utils_module/root-classpath-img.png", url);
-        assertEquals(0, heigh);
-        assertEquals(0, left);
-        assertEquals(0, width);
-        assertEquals(0, top);
-        assertEquals(
-                "com.googlecode.gwt.test.internal.resources.ImageResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.rootClasspathImg()'",
-                toString);
-        assertEquals(rootClasspathImg, MyClientBundle.INSTANCE.rootClasspathImg());
+        // Then
+        assertThat(name).isEqualTo("rootClasspathImg");
+        assertThat(url).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/root-classpath-img.png");
+        assertThat(heigh).isEqualTo(0);
+        assertThat(left).isEqualTo(0);
+        assertThat(width).isEqualTo(0);
+        assertThat(top).isEqualTo(0);
+        assertThat(toString).isEqualTo("com.googlecode.gwt.test.internal.resources.ImageResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.rootClasspathImg()'");
+        assertThat(MyClientBundle.INSTANCE.rootClasspathImg()).isEqualTo(rootClasspathImg);
     }
 
     @Test
     public void textResource_FromGwtAPI() {
-        // Arrange
+        // Given
         com.google.gwt.user.client.impl.WindowImplIE.Resources treeResources = GWT.create(com.google.gwt.user.client.impl.WindowImplIE.Resources.class);
 
-        // Act
+        // When
         String name = treeResources.initWindowCloseHandler().getName();
         String text = treeResources.initWindowCloseHandler().getText();
 
-        // Assert
-        assertEquals("initWindowCloseHandler", name);
-        assertTrue(text.startsWith("function __gwt_initWindowCloseHandler(beforeunload, unload) {"));
+        // Then
+        assertThat(name).isEqualTo("initWindowCloseHandler");
+        assertThat(text.startsWith("function __gwt_initWindowCloseHandler(beforeunload, unload) {")).isTrue();
     }
 
     @Test
     public void textResource_Txt() {
-        // Arrange
+        // Given
         TextResource textResource = MyClientBundle.INSTANCE.textResourceTxt();
         String expectedText = "Hello gwt-test-utils !\r\nThis is a test with a simple text file";
 
-        // Act
+        // When
         String name = textResource.getName();
         String text = textResource.getText();
         String toString = textResource.toString();
 
-        // Assert
-        assertEquals("textResourceTxt", name);
-        assertEquals(expectedText, text);
-        assertEquals(
-                "com.googlecode.gwt.test.internal.resources.TextResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.textResourceTxt()'",
-                toString);
-        assertEquals(textResource, MyClientBundle.INSTANCE.textResourceTxt());
+        // Then
+        assertThat(name).isEqualTo("textResourceTxt");
+        assertThat(text).isEqualTo(expectedText);
+        assertThat(toString).isEqualTo("com.googlecode.gwt.test.internal.resources.TextResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.textResourceTxt()'");
+        assertThat(MyClientBundle.INSTANCE.textResourceTxt()).isEqualTo(textResource);
     }
 
     @Test
     public void textResource_Xml() {
-        // Arrange
+        // Given
         TextResource textResource = MyClientBundle.INSTANCE.textResourceXml();
         String expectedText = "<gwt-test-utils>\r\n    <test>this is a test</test>\r\n</gwt-test-utils>";
 
-        // Act
+        // When
         String name = textResource.getName();
         String text = textResource.getText();
         String toString = textResource.toString();
 
-        // Assert
-        assertEquals("textResourceXml", name);
-        assertEquals(expectedText, text);
-        assertEquals(
-                "com.googlecode.gwt.test.internal.resources.TextResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.textResourceXml()'",
-                toString);
-        assertEquals(textResource, MyClientBundle.INSTANCE.textResourceXml());
+        // Then
+        assertThat(name).isEqualTo("textResourceXml");
+        assertThat(text).isEqualTo(expectedText);
+        assertThat(toString).isEqualTo("com.googlecode.gwt.test.internal.resources.TextResourceCallback generated for 'com.googlecode.gwt.test.resources.MyClientBundle.textResourceXml()'");
+        assertThat(MyClientBundle.INSTANCE.textResourceXml()).isEqualTo(textResource);
     }
 
 }

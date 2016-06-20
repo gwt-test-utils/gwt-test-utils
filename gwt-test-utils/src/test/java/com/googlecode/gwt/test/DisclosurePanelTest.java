@@ -3,48 +3,48 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisclosurePanelTest extends GwtTestTest {
 
     @Test
     public void style() {
-        // Arrange
+        // Given
         DisclosurePanel dp = new DisclosurePanel();
-        // Pre-Assert
-        assertEquals("gwt-DisclosurePanel gwt-DisclosurePanel-closed", dp.getStyleName());
+        // Preconditions
+        assertThat(dp.getStyleName()).isEqualTo("gwt-DisclosurePanel gwt-DisclosurePanel-closed");
 
-        // Act
+        // When
         dp.setOpen(true);
 
-        // Assert
-        assertEquals("gwt-DisclosurePanel gwt-DisclosurePanel-open", dp.getStyleName());
+        // Then
+        assertThat(dp.getStyleName()).isEqualTo("gwt-DisclosurePanel gwt-DisclosurePanel-open");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         DisclosurePanel dp = new DisclosurePanel();
 
-        // Act
+        // When
         dp.setTitle("title");
 
-        // Assert
-        assertEquals("title", dp.getTitle());
+        // Then
+        assertThat(dp.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         DisclosurePanel dp = new DisclosurePanel();
-        // Pre-Assert
-        assertEquals(true, dp.isVisible());
+        // Preconditions
+        assertThat(dp.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         dp.setVisible(false);
 
-        // Assert
-        assertEquals(false, dp.isVisible());
+        // Then
+        assertThat(dp.isVisible()).isEqualTo(false);
     }
 
 }

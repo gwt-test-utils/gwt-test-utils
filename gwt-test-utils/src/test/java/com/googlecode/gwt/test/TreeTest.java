@@ -10,8 +10,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TreeTest extends GwtTestTest {
 
@@ -25,34 +24,34 @@ public class TreeTest extends GwtTestTest {
 
     @Test
     public void addItem() {
-        // Act
+        // When
         tree.addItem(new SafeHtmlBuilder().appendEscaped("parent2").toSafeHtml());
 
-        // Assert
-        assertEquals(2, tree.getItemCount());
-        assertEquals("parent2", tree.getItem(1).getHTML());
+        // Then
+        assertThat(tree.getItemCount()).isEqualTo(2);
+        assertThat(tree.getItem(1).getHTML()).isEqualTo("parent2");
     }
 
     @Test
     public void addSubItem() {
-        // Act
+        // When
         tree.getItem(0).addItem(new SafeHtmlBuilder().appendEscaped("item3").toSafeHtml());
 
-        // Assert
-        assertEquals(4, tree.getItem(0).getChildCount());
-        assertEquals(item0, tree.getItem(0).getChild(0));
-        assertEquals(item1, tree.getItem(0).getChild(1));
-        assertEquals(item2, tree.getItem(0).getChild(2));
-        assertEquals("item3", tree.getItem(0).getChild(3).getHTML());
+        // Then
+        assertThat(tree.getItem(0).getChildCount()).isEqualTo(4);
+        assertThat(tree.getItem(0).getChild(0)).isEqualTo(item0);
+        assertThat(tree.getItem(0).getChild(1)).isEqualTo(item1);
+        assertThat(tree.getItem(0).getChild(2)).isEqualTo(item2);
+        assertThat(tree.getItem(0).getChild(3).getHTML()).isEqualTo("item3");
     }
 
     @Test
     public void animationEnabled() {
-        // Act
+        // When
         tree.setAnimationEnabled(true);
 
-        // Assert
-        assertEquals(true, tree.isAnimationEnabled());
+        // Then
+        assertThat(tree.isAnimationEnabled()).isEqualTo(true);
     }
 
     @Before
@@ -72,7 +71,7 @@ public class TreeTest extends GwtTestTest {
         // Add it to the root panel.
         RootPanel.get().add(tree);
 
-        assertTrue(tree.isVisible());
+        assertThat(tree.isVisible()).isTrue();
 
         clickedTreeItem = null;
 
@@ -80,27 +79,27 @@ public class TreeTest extends GwtTestTest {
 
     @Test
     public void removeItem() {
-        // Act
+        // When
         tree.removeItem(parent);
 
-        // Assert
-        assertEquals(0, tree.getItemCount());
+        // Then
+        assertThat(tree.getItemCount()).isEqualTo(0);
     }
 
     @Test
     public void removeSubItem() {
-        // Act
+        // When
         tree.getItem(0).removeItem(item0);
 
-        // Assert
-        assertEquals(2, tree.getItem(0).getChildCount());
-        assertEquals(item1, tree.getItem(0).getChild(0));
-        assertEquals(item2, tree.getItem(0).getChild(1));
+        // Then
+        assertThat(tree.getItem(0).getChildCount()).isEqualTo(2);
+        assertThat(tree.getItem(0).getChild(0)).isEqualTo(item1);
+        assertThat(tree.getItem(0).getChild(1)).isEqualTo(item2);
     }
 
     @Test
     public void selected() {
-        // Arrange
+        // Given
         tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 
             public void onSelection(SelectionEvent<TreeItem> event) {
@@ -108,18 +107,18 @@ public class TreeTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         tree.setSelectedItem(item1);
         TreeItem selected = tree.getSelectedItem();
 
-        // Assert
-        assertEquals(item1, clickedTreeItem);
-        assertEquals(item1, selected);
+        // Then
+        assertThat(clickedTreeItem).isEqualTo(item1);
+        assertThat(selected).isEqualTo(item1);
     }
 
     @Test
     public void selectedOnFocusWidget() {
-        // Arrange
+        // Given
         tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 
             public void onSelection(SelectionEvent<TreeItem> event) {
@@ -127,34 +126,34 @@ public class TreeTest extends GwtTestTest {
             }
         });
 
-        // Act on item2 which wrap a Checkbox
+        // When on item2 which wrap a Checkbox
         tree.setSelectedItem(item2);
         TreeItem selected = tree.getSelectedItem();
 
-        // Assert
-        assertEquals(item2, clickedTreeItem);
-        assertEquals(item2, selected);
+        // Then
+        assertThat(clickedTreeItem).isEqualTo(item2);
+        assertThat(selected).isEqualTo(item2);
     }
 
     @Test
     public void title() {
-        // Act
+        // When
         tree.setTitle("title");
 
-        // Assert
-        assertEquals("title", tree.getTitle());
+        // Then
+        assertThat(tree.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Pre-Assert
-        assertEquals(true, tree.isVisible());
+        // Preconditions
+        assertThat(tree.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         tree.setVisible(false);
 
-        // Assert
-        assertEquals(false, tree.isVisible());
+        // Then
+        assertThat(tree.isVisible()).isEqualTo(false);
     }
 
 }

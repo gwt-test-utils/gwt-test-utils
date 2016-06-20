@@ -20,32 +20,32 @@ public class TableRowElementTest extends GwtTestTest {
 
     @Test
     public void deleteCell() {
-        // Arrange
+        // Given
         TableCellElement td0 = Document.get().createTDElement();
         tr.appendChild(td0);
         TableCellElement td1 = Document.get().createTDElement();
         tr.appendChild(td1);
 
-        // Act
+        // When
         tr.deleteCell(0);
 
-        // Assert
+        // Then
         assertThat(tr.getChildCount()).isEqualTo(1);
         assertThat(tr.getChild(0)).isEqualTo(td1);
     }
 
     @Test
     public void insertCell() {
-        // Arrange
+        // Given
         TableCellElement td0 = Document.get().createTDElement();
         tr.appendChild(td0);
         TableCellElement td1 = Document.get().createTDElement();
         tr.appendChild(td1);
 
-        // Act
+        // When
         TableCellElement insert = tr.insertCell(1);
 
-        // Assert
+        // Then
         assertThat(tr.getChildCount()).isEqualTo(3);
         assertThat(tr.getChild(0)).isEqualTo(td0);
         assertThat(tr.getChild(1)).isEqualTo(insert);

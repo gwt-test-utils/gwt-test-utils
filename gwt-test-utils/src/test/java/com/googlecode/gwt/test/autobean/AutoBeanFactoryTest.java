@@ -43,42 +43,42 @@ public class AutoBeanFactoryTest extends GwtTestTest {
 
     @Test
     public void createComplex() {
-        // Act
+        // When
         Person person = myFactory.person().as();
         Address address = myFactory.create(Address.class).as();
         person.setAddress(address);
 
-        // Assert
+        // Then
         assertThat(person.getAddress()).isEqualTo(address);
         assertThat(person.getName()).isNull();
     }
 
     @Test
     public void createFromExisting() {
-        // Arrange
+        // Given
         Person person = new PersonImpl();
         person.setName("Benjamin Linus");
         Address address = new AddressImpl();
         person.setAddress(address);
 
-        // Act
+        // When
         AutoBean<Person> bean = myFactory.create(Person.class, person);
 
-        // Act
+        // When
         String json = AutoBeanCodex.encode(bean).getPayload();
 
-        // Assert
+        // Then
         assertThat(person.getName()).isEqualTo("Benjamin Linus");
         assertThat(person.getAddress()).isEqualTo(address);
     }
 
     @Test
     public void createSimple() {
-        // Act
+        // When
         Person person = myFactory.person().as();
         person.setName("John Locke");
 
-        // Assert
+        // Then
         assertThat(person.getName()).isEqualTo("John Locke");
         assertThat(person.getAddress()).isNull();
     }

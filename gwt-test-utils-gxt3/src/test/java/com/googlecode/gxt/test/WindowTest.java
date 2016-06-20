@@ -13,8 +13,7 @@ import com.sencha.gxt.widget.core.client.event.ShowEvent.ShowHandler;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WindowTest extends GwtGxtTest {
 
@@ -29,11 +28,11 @@ public class WindowTest extends GwtGxtTest {
 
     @Test
     public void activate() {
-        // Arrange
+        // Given
         window.addActivateHandler(new ActivateHandler<Window>() {
 
             public void onActivate(ActivateEvent<Window> event) {
-                assertEquals(window, event.getItem());
+                assertThat(event.getItem()).isEqualTo(window);
                 activate = true;
             }
 
@@ -41,11 +40,11 @@ public class WindowTest extends GwtGxtTest {
 
         window.show();
 
-        // Act
+        // When
         window.setActive(true);
 
-        // Assert
-        assertTrue(activate);
+        // Then
+        assertThat(activate).isTrue();
     }
 
     @Before
@@ -63,91 +62,91 @@ public class WindowTest extends GwtGxtTest {
 
     @Test
     public void deactivate() {
-        // Arrange
+        // Given
         window.addDeactivateHandler(new DeactivateHandler<Window>() {
 
             public void onDeactivate(DeactivateEvent<Window> event) {
-                assertEquals(window, event.getItem());
+                assertThat(event.getItem()).isEqualTo(window);
                 deactivate = true;
             }
         });
 
         window.show();
 
-        // Act
+        // When
         window.setActive(false);
 
-        // Assert
-        assertTrue(deactivate);
+        // Then
+        assertThat(deactivate).isTrue();
     }
 
     @Test
     public void hide() {
-        // Arrange
+        // Given
         window.addHideHandler(new HideHandler() {
 
             public void onHide(HideEvent event) {
-                assertEquals(window, event.getSource());
+                assertThat(event.getSource()).isEqualTo(window);
                 hide = true;
             }
         });
 
         window.show();
 
-        // Act
+        // When
         window.hide();
 
-        // Assert
-        assertTrue(hide);
+        // Then
+        assertThat(hide).isTrue();
     }
 
     @Test
     public void maximize() {
-        // Arrange
+        // Given
         window.addMaximizeHandler(new MaximizeHandler() {
 
             public void onMaximize(MaximizeEvent event) {
-                assertEquals(window, event.getSource());
+                assertThat(event.getSource()).isEqualTo(window);
                 maximize = true;
             }
         });
 
         window.show();
 
-        // Act
+        // When
         window.maximize();
 
-        // Assert
-        assertTrue(maximize);
+        // Then
+        assertThat(maximize).isTrue();
     }
 
     @Test
     public void minimize() {
-        // Arrange
+        // Given
         window.addMinimizeHandler(new MinimizeHandler() {
 
             public void onMinimize(MinimizeEvent event) {
-                assertEquals(window, event.getSource());
+                assertThat(event.getSource()).isEqualTo(window);
                 minimize = true;
             }
         });
 
         window.show();
 
-        // Act
+        // When
         window.minimize();
 
-        // Assert
-        assertTrue(minimize);
+        // Then
+        assertThat(minimize).isTrue();
     }
 
     @Test
     public void restore() {
-        // Arrange
+        // Given
         window.addRestoreHandler(new RestoreHandler() {
 
             public void onRestore(RestoreEvent event) {
-                assertEquals(window, event.getSource());
+                assertThat(event.getSource()).isEqualTo(window);
                 restore = true;
             }
         });
@@ -155,29 +154,29 @@ public class WindowTest extends GwtGxtTest {
         window.show();
         window.maximize();
 
-        // Act
+        // When
         window.restore();
 
-        // Assert
-        assertTrue(restore);
+        // Then
+        assertThat(restore).isTrue();
     }
 
     @Test
     public void show() {
-        // Arrange
+        // Given
         window.addShowHandler(new ShowHandler() {
 
             public void onShow(ShowEvent event) {
-                assertEquals(window, event.getSource());
+                assertThat(event.getSource()).isEqualTo(window);
                 show = true;
             }
         });
 
-        // Act
+        // When
         window.show();
 
-        // Assert
-        assertTrue(show);
+        // Then
+        assertThat(show).isTrue();
     }
 
 }

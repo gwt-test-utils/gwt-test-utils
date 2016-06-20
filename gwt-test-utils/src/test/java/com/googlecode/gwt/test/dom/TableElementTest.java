@@ -5,8 +5,7 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TableElementTest extends GwtTestTest {
 
@@ -20,43 +19,43 @@ public class TableElementTest extends GwtTestTest {
     @Test
     public void caption() {
         // Pre Assert
-        assertNull(e.getCaption());
-        assertEquals(0, e.getChildCount());
+        assertThat(e.getCaption()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(0);
 
-        // Arrange
+        // Given
         e.createTHead();
         e.createTFoot();
 
-        // Act
+        // When
         TableCaptionElement caption = e.createCaption();
 
-        // Assert
-        assertEquals(caption, e.getCaption());
-        assertEquals("caption", caption.getTagName());
-        assertEquals(3, e.getChildCount());
+        // Then
+        assertThat(e.getCaption()).isEqualTo(caption);
+        assertThat(caption.getTagName()).isEqualTo("caption");
+        assertThat(e.getChildCount()).isEqualTo(3);
         // caption should be inserted at first rank
-        assertEquals(caption, e.getChild(0));
+        assertThat(e.getChild(0)).isEqualTo(caption);
 
-        // Act 2
+        // When 2
         e.deleteCaption();
-        assertNull(e.getCaption());
-        assertEquals(2, e.getChildCount());
-        assertEquals("thead", e.getChild(0).getNodeName());
+        assertThat(e.getCaption()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(2);
+        assertThat(e.getChild(0).getNodeName()).isEqualTo("thead");
     }
 
     @Test
     public void completeTest() {
-        // Act 1
+        // When 1
         TableRowElement r0 = Document.get().createTRElement();
         r0.setId("r0");
         e.appendChild(r0);
 
         e.createTHead();
 
-        // Assert 1
-        assertEquals("<table><thead></thead><tr id=\"r0\"></tr></table>", e.toString());
+        // Then 1
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tr id=\"r0\"></tr></table>");
 
-        // Act 2
+        // When 2
         Element tbody1 = Document.get().createTBodyElement();
         tbody1.setId("tbody1");
         e.appendChild(tbody1);
@@ -64,52 +63,42 @@ public class TableElementTest extends GwtTestTest {
         tbody2.setId("tbody2");
         e.appendChild(tbody2);
 
-        // Assert 2
-        assertEquals(
-                "<table><thead></thead><tr id=\"r0\"></tr><tbody id=\"tbody1\"></tbody><tbody id=\"tbody2\"></tbody></table>",
-                e.toString());
+        // Then 2
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tr id=\"r0\"></tr><tbody id=\"tbody1\"></tbody><tbody id=\"tbody2\"></tbody></table>");
 
-        // Act 3
+        // When 3
         TableRowElement r1 = e.insertRow(0);
         r1.setId("r1");
         TableRowElement r2 = e.insertRow(0);
         r2.setId("r2");
 
-        // Assert 3
-        assertEquals(
-                "<table><thead></thead><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"></tbody><tbody id=\"tbody2\"></tbody></table>",
-                e.toString());
+        // Then 3
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"></tbody><tbody id=\"tbody2\"></tbody></table>");
 
-        // Act 4
+        // When 4
         TableRowElement trBody1 = Document.get().createTRElement();
         trBody1.setId("trBody1");
         tbody1.appendChild(trBody1);
 
-        // Assert 4
-        assertEquals(
-                "<table><thead></thead><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"><tr id=\"trBody1\"></tr></tbody><tbody id=\"tbody2\"></tbody></table>",
-                e.toString());
+        // Then 4
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"><tr id=\"trBody1\"></tr></tbody><tbody id=\"tbody2\"></tbody></table>");
 
-        // Act 5
+        // When 5
         TableSectionElement tfoot = e.createTFoot();
         tfoot.setId("tfoot");
 
-        // Assert 5
-        assertEquals(
-                "<table><thead></thead><tfoot id=\"tfoot\"></tfoot><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"><tr id=\"trBody1\"></tr></tbody><tbody id=\"tbody2\"></tbody></table>",
-                e.toString());
+        // Then 5
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tfoot id=\"tfoot\"></tfoot><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"><tr id=\"trBody1\"></tr></tbody><tbody id=\"tbody2\"></tbody></table>");
 
-        // Act 6
+        // When 6
         TableRowElement lastRow = e.insertRow(4);
         lastRow.setId("lastRow");
 
-        // Assert 6
-        assertEquals(
-                "<table><thead></thead><tfoot id=\"tfoot\"></tfoot><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"><tr id=\"trBody1\"></tr><tr id=\"lastRow\"></tr></tbody><tbody id=\"tbody2\"></tbody></table>",
-                e.toString());
+        // Then 6
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tfoot id=\"tfoot\"></tfoot><tr id=\"r2\"></tr><tr id=\"r1\"></tr><tr id=\"r0\"></tr><tbody id=\"tbody1\"><tr id=\"trBody1\"></tr><tr id=\"lastRow\"></tr></tbody><tbody id=\"tbody2\"></tbody></table>");
 
-        assertEquals(7, e.getChildCount());
-        assertEquals(5, e.getRows().getLength());
+        assertThat(e.getChildCount()).isEqualTo(7);
+        assertThat(e.getRows().getLength()).isEqualTo(5);
     }
 
     @Test
@@ -119,31 +108,31 @@ public class TableElementTest extends GwtTestTest {
         Element tbody2 = Document.get().createTBodyElement();
         e.appendChild(tbody1);
         e.appendChild(tbody2);
-        assertEquals(2, e.getChildCount());
+        assertThat(e.getChildCount()).isEqualTo(2);
 
-        // Act
+        // When
         NodeList<TableSectionElement> tbodies = e.getTBodies();
 
-        // Assert
-        assertEquals(2, tbodies.getLength());
-        assertEquals(tbody1, tbodies.getItem(0));
-        assertEquals(tbody2, tbodies.getItem(1));
+        // Then
+        assertThat(tbodies.getLength()).isEqualTo(2);
+        assertThat(tbodies.getItem(0)).isEqualTo(tbody1);
+        assertThat(tbodies.getItem(1)).isEqualTo(tbody2);
     }
 
     @Test
     public void insertRowEmptyTable() {
-        // Act
+        // When
         TableRowElement r0 = e.insertRow(0);
 
-        // Assert
-        assertEquals(1, e.getChildCount());
-        assertEquals("tbody", e.getChild(0).getNodeName());
-        assertEquals(r0, e.getChild(0).getChild(0));
+        // Then
+        assertThat(e.getChildCount()).isEqualTo(1);
+        assertThat(e.getChild(0).getNodeName()).isEqualTo("tbody");
+        assertThat(e.getChild(0).getChild(0)).isEqualTo(r0);
     }
 
     @Test
     public void rows() {
-        // Arrange
+        // Given
         e.createTHead();
         e.createTFoot();
 
@@ -163,111 +152,108 @@ public class TableElementTest extends GwtTestTest {
         td4.setInnerText("4");
         tr2.appendChild(td4);
 
-        // Act
+        // When
         e.appendChild(tr1);
         e.appendChild(tr2);
 
-        // Assert
-        assertEquals(2, e.getRows().getLength());
-        assertEquals(tr1, e.getRows().getItem(0));
-        assertEquals(4, e.getChildCount());
-        assertEquals(
-                "<table><thead></thead><tfoot></tfoot><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>",
-                e.toString());
+        // Then
+        assertThat(e.getRows().getLength()).isEqualTo(2);
+        assertThat(e.getRows().getItem(0)).isEqualTo(tr1);
+        assertThat(e.getChildCount()).isEqualTo(4);
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tfoot></tfoot><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>");
 
-        // Act 2
+        // When 2
         e.deleteRow(0);
 
-        // Assert 2
-        assertEquals(1, e.getRows().getLength());
-        assertEquals(tr2, e.getRows().getItem(0));
-        assertEquals(3, e.getChildCount());
-        assertEquals("<table><thead></thead><tfoot></tfoot><tr><td>3</td><td>4</td></tr></table>",
-                e.toString());
+        // Then 2
+        assertThat(e.getRows().getLength()).isEqualTo(1);
+        assertThat(e.getRows().getItem(0)).isEqualTo(tr2);
+        assertThat(e.getChildCount()).isEqualTo(3);
+        assertThat(e.toString()).isEqualTo("<table><thead></thead><tfoot></tfoot><tr><td>3</td><td>4</td></tr></table>");
     }
 
     @Test
     public void tfoot() {
         // Pre Assert
-        assertNull(e.getTFoot());
-        assertEquals(0, e.getChildCount());
+        assertThat(e.getTFoot()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(0);
 
-        // Act
+        // When
         TableSectionElement tfoot = e.createTFoot();
 
-        // Assert
-        assertEquals(tfoot, e.getTFoot());
-        assertEquals("tfoot", tfoot.getTagName());
-        assertEquals(1, e.getChildCount());
-        assertEquals(tfoot, e.getChild(0));
+        // Then
+        assertThat(e.getTFoot()).isEqualTo(tfoot);
+        assertThat(tfoot.getTagName()).isEqualTo("tfoot");
+        assertThat(e.getChildCount()).isEqualTo(1);
+        assertThat(e.getChild(0)).isEqualTo(tfoot);
 
-        // Act 2
+        // When 2
         e.deleteTFoot();
 
-        // Assert2
-        assertNull(e.getTFoot());
-        assertEquals(0, e.getChildCount());
+        // Then2
+        assertThat(e.getTFoot()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(0);
 
-        // Act 3
+        // When 3
         TableSectionElement newTFoot = Document.get().createTFootElement();
         newTFoot.setInnerText("new");
         e.setTFoot(newTFoot);
 
-        // Assert 3
-        assertEquals(newTFoot, e.getTFoot());
-        assertEquals("tfoot", newTFoot.getTagName());
-        assertEquals(1, e.getChildCount());
-        assertEquals(newTFoot, e.getChild(0));
-        assertEquals("<table><tfoot>new</tfoot></table>", e.toString());
+        // Then 3
+        assertThat(e.getTFoot()).isEqualTo(newTFoot);
+        assertThat(newTFoot.getTagName()).isEqualTo("tfoot");
+        assertThat(e.getChildCount()).isEqualTo(1);
+        assertThat(e.getChild(0)).isEqualTo(newTFoot);
+        assertThat(e.toString()).isEqualTo("<table><tfoot>new</tfoot></table>");
 
-        // Act 4
+        // When 4
         e.setTFoot(null);
 
-        // Assert 4
-        assertNull(e.getTFoot());
-        assertEquals(0, e.getChildCount());
+        // Then 4
+        assertThat(e.getTFoot()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(0);
     }
 
     @Test
     public void thead() {
         // Pre Assert
-        assertNull(e.getTHead());
-        assertEquals(0, e.getChildCount());
+        assertThat(e.getTHead()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(0);
 
-        // Act
+        // When
         TableSectionElement thead = e.createTHead();
 
-        // Assert
-        assertEquals(thead, e.getTHead());
-        assertEquals("thead", thead.getTagName());
-        assertEquals(1, e.getChildCount());
-        assertEquals(thead, e.getChild(0));
+        // Then
+        assertThat(e.getTHead()).isEqualTo(thead);
+        assertThat(thead.getTagName()).isEqualTo("thead");
+        assertThat(e.getChildCount()).isEqualTo(1);
+        assertThat(e.getChild(0)).isEqualTo(thead);
 
-        // Act 2
+        // When 2
         e.deleteTHead();
 
-        // Assert 2
-        assertNull(e.getTHead());
-        assertEquals(0, e.getChildCount());
+        // Then 2
+        assertThat(e.getTHead()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(0);
 
-        // Act 3
+        // When 3
         TableSectionElement newTHead = Document.get().createTHeadElement();
         newTHead.setInnerText("new");
         e.setTHead(newTHead);
 
-        // Assert 3
-        assertEquals(newTHead, e.getTHead());
-        assertEquals("thead", newTHead.getTagName());
-        assertEquals(1, e.getChildCount());
-        assertEquals(newTHead, e.getChild(0));
-        assertEquals("<table><thead>new</thead></table>", e.toString());
+        // Then 3
+        assertThat(e.getTHead()).isEqualTo(newTHead);
+        assertThat(newTHead.getTagName()).isEqualTo("thead");
+        assertThat(e.getChildCount()).isEqualTo(1);
+        assertThat(e.getChild(0)).isEqualTo(newTHead);
+        assertThat(e.toString()).isEqualTo("<table><thead>new</thead></table>");
 
-        // Act 4
+        // When 4
         e.setTHead(null);
 
-        // Assert 4
-        assertNull(e.getTHead());
-        assertEquals(0, e.getChildCount());
+        // Then 4
+        assertThat(e.getTHead()).isNull();
+        assertThat(e.getChildCount()).isEqualTo(0);
     }
 
 }

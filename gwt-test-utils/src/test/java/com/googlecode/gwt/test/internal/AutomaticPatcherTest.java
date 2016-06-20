@@ -5,7 +5,7 @@ import com.googlecode.gwt.test.internal.MyClassToPatch.MyInnerClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AutomaticPatcherTest extends GwtTestTest {
 
@@ -18,16 +18,14 @@ public class AutomaticPatcherTest extends GwtTestTest {
 
     @Test
     public void checkPatchWithInnerClassAndMultiplePatchers() throws Exception {
-        // Arrange
+        // Given
         MyInnerClass innerObject = new MyInnerClass("innerOjbectForUnitTest");
 
-        // Act
+        // When
         String result = instance.myStringMethod(innerObject);
 
-        // Assert
-        assertEquals(
-                "myStringMethod has been patched by override patcher : patched by MyInnerClassOverridePatcher : new field added in overrided init",
-                result);
+        // Then
+        assertThat(result).isEqualTo("myStringMethod has been patched by override patcher : patched by MyInnerClassOverridePatcher : new field added in overrided init");
     }
 
 }

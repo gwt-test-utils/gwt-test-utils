@@ -3,64 +3,64 @@ package com.googlecode.gwt.test;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PasswordTextBoxTest extends GwtTestTest {
 
     @Test
     public void name() {
-        // Arrange
+        // Given
         PasswordTextBox ptb = new PasswordTextBox();
-        // Pre-Assert
-        assertEquals("", ptb.getName());
+        // Preconditions
+        assertThat(ptb.getName()).isEqualTo("");
 
-        // Act
+        // When
         ptb.setName("name");
 
-        // Assert
-        assertEquals("name", ptb.getName());
+        // Then
+        assertThat(ptb.getName()).isEqualTo("name");
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         PasswordTextBox ptb = new PasswordTextBox();
-        // Pre-Assert
-        assertEquals("", ptb.getText());
+        // Preconditions
+        assertThat(ptb.getText()).isEqualTo("");
 
-        // Act
+        // When
         ptb.setText("text");
 
-        // Assert
-        assertEquals("text", ptb.getText());
+        // Then
+        assertThat(ptb.getText()).isEqualTo("text");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         PasswordTextBox ptb = new PasswordTextBox();
-        // Pre-Assert
-        assertEquals("", ptb.getTitle());
+        // Preconditions
+        assertThat(ptb.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         ptb.setTitle("title");
 
-        // Assert
-        assertEquals("title", ptb.getTitle());
+        // Then
+        assertThat(ptb.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         PasswordTextBox ptb = new PasswordTextBox();
-        // Pre-Assert
-        assertEquals(true, ptb.isVisible());
+        // Preconditions
+        assertThat(ptb.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         ptb.setVisible(false);
 
-        // Assert
-        assertEquals(false, ptb.isVisible());
+        // Then
+        assertThat(ptb.isVisible()).isEqualTo(false);
     }
 
 }

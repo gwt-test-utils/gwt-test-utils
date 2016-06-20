@@ -5,14 +5,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.GwtTestTest;
 import com.googlecode.gwt.test.gin.Injectors.*;
 import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
-import static org.junit.Assert.*;
 
 public class GInjectorCreateHandlerTest extends GwtTestTest {
 
@@ -37,37 +35,37 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
 
     @Test
     public void shouldBindAndServe() {
-        // Arrange
+        // Given
         Gin1Injector injector1 = GWT.create(Gin1Injector.class);
 
-        // Act
+        // When
         Virtual v = injector1.virtual();
 
-        // Assert
-        assertEquals(Impl.class, v.getClass());
-        assertSame(v, injector1.virtual());
+        // Then
+        assertThat(v.getClass()).isEqualTo(Impl.class);
+        assertThat(injector1.virtual()).isSameAs(v);
     }
 
     @Test
     public void shouldFallbackToGwtCreate() {
-        // Arrange
+        // Given
         Gin2Injector injector2 = GWT.create(Gin2Injector.class);
 
-        // Act
+        // When
         Virtual virtual = injector2.virtual();
         SomeServiceAsync service = injector2.service();
 
-        // Assert
-        assertEquals(Impl2.class, virtual.getClass());
-        Assert.assertNotSame(virtual, injector2.virtual());
-        assertNotNull(service);
+        // Then
+        assertThat(virtual.getClass()).isEqualTo(Impl2.class);
+        assertThat(injector2.virtual()).isNotSameAs(virtual);
+        assertThat(service).isNotNull();
     }
 
     @Test
     public void shouldInstanciateAsyncProvider() {
         Gin8Injector injector8 = GWT.create(Gin8Injector.class);
 
-        // Act
+        // When
         injector8.classWithAsyncProvider().onSuccess(new AsyncCallback<Impl2>() {
 
             public void onFailure(Throwable caught) {
@@ -85,14 +83,14 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
     @Ignore
     @Test
     public void shouldInstanciateClassWithAssistedInjection() {
-        // Arrange
+        // Given
         Gin9Injector injector9 = GWT.create(Gin9Injector.class);
 
-        // Act
+        // When
         ClassWithAssistedInjection o = injector9.assistedInjectFactory().newClassWithAssistedInjection(
                 "my assisted string");
 
-        // Assert
+        // Then
         assertThat(o.assistedString).isEqualTo("my assisted string");
         assertThat(o.virtual).isInstanceOf(Impl2.class);
 
@@ -100,65 +98,65 @@ public class GInjectorCreateHandlerTest extends GwtTestTest {
 
     @Test
     public void shouldInstanciateSingletonOnce() {
-        // Arrange
+        // Given
         Gin5Injector injector5 = GWT.create(Gin5Injector.class);
 
-        // Act
+        // When
         Impl impl = injector5.singletonImpl();
         Virtual virtual = injector5.singletonVirtual();
 
-        // Assert
-        assertSame(impl, virtual);
+        // Then
+        assertThat(virtual).isSameAs(impl);
     }
 
     @Test
     public void shouldInstanciateUsingProvidesMethod() {
-        // Arrange
+        // Given
         Gin6Injector injector6 = GWT.create(Gin6Injector.class);
 
-        // Act
+        // When
         Impl3 wrapper = injector6.wrapper();
 
-        // Assert
-        assertEquals(injector6.singletonImpl(), wrapper.wrapped);
+        // Then
+        assertThat(wrapper.wrapped).isEqualTo(injector6.singletonImpl());
     }
 
     @Test
     public void shouldInstantiateComplexObjectGraphs() {
-        // Arrange
+        // Given
         Gin2Injector injector2 = GWT.create(Gin2Injector.class);
 
-        // Act
+        // When
         VirtualMore more = injector2.virtualMore();
 
-        // Assert
-        assertEquals(ImplMore.class, more.getClass());
+        // Then
+        assertThat(more.getClass()).isEqualTo(ImplMore.class);
     }
 
     @Test
     public void shouldInstantiateConcreteComplexObjectGraphs() {
-        // Arrange
+        // Given
         Gin3Injector injector3 = GWT.create(Gin3Injector.class);
 
-        // Act
+        // When
         ImplMore more = injector3.implMore();
 
-        // Assert
-        assertEquals(Impl2.class, more.core.getClass());
-        assertNotNull(((Impl2) more.core).messages);
+        // Then
+        assertThat(more.core.getClass()).isEqualTo(Impl2.class);
+        assertThat(((Impl2) more.core).messages).isNotNull();
     }
 
     @Test
     public void shouldInstantiateEeagerSingleton() {
-        // Arrange
+        // Given
         Gin7Injector injector7 = GWT.create(Gin7Injector.class);
 
-        // Act
+        // When
         Impl2 impl2 = injector7.eagerSingleton();
 
-        // Assert
+        // Then
         assertThat(impl2).isNotNull();
-        assertNotNull(impl2.messages);
+        assertThat(impl2.messages).isNotNull();
     }
 
     /**

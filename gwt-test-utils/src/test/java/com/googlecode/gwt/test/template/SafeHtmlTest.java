@@ -6,7 +6,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SafeHtmlTest extends GwtTestTest {
 
@@ -14,15 +14,15 @@ public class SafeHtmlTest extends GwtTestTest {
 
     @Test
     public void template() {
-        // Arrange
+        // Given
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
         builder.appendEscaped("this is a test");
 
-        // Act
+        // When
         SafeHtml result = TEMPLATE.div(builder.toSafeHtml());
 
-        // Assert
-        assertEquals("<div style=\"outline:none;\">this is a test</div>", result.asString());
+        // Then
+        assertThat(result.asString()).isEqualTo("<div style=\"outline:none;\">this is a test</div>");
     }
 
 }

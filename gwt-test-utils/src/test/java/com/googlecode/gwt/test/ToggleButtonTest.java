@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ToggleButtonTest extends GwtTestTest {
 
@@ -15,7 +15,7 @@ public class ToggleButtonTest extends GwtTestTest {
 
     @Test
     public void click() {
-        // Arrange
+        // Given
         final ToggleButton toggleButton = new ToggleButton("Up", "Down");
 
         // needs to be attached
@@ -29,23 +29,22 @@ public class ToggleButtonTest extends GwtTestTest {
             }
         });
 
-        // Pre-Assert
-        assertFalse("ToggleButton should not be toggled by default", toggleButton.isDown());
-        assertEquals("Up", toggleButton.getText());
+        // Preconditions
+        assertThat(toggleButton.isDown()).as("ToggleButton should not be toggled by default").isFalse();
+        assertThat(toggleButton.getText()).isEqualTo("Up");
 
-        // Act
+        // When
         Browser.click(toggleButton);
 
-        // Assert
-        assertTrue("ToggleButton onClick was not triggered", clicked);
-        assertTrue("ToggleButton should be toggled after being clicked once", toggleButton.isDown());
-        assertEquals("Down", toggleButton.getText());
+        // Then
+        assertThat(clicked).as("ToggleButton onClick was not triggered").isTrue();
+        assertThat(toggleButton.isDown()).as("ToggleButton should be toggled after being clicked once").isTrue();
+        assertThat(toggleButton.getText()).isEqualTo("Down");
 
-        // Act 2
+        // When 2
         Browser.click(toggleButton);
-        assertFalse("ToggleButton should not be toggled after being clicked twice",
-                toggleButton.isDown());
-        assertEquals("Up", toggleButton.getText());
+        assertThat(toggleButton.isDown()).as("ToggleButton should not be toggled after being clicked twice").isFalse();
+        assertThat(toggleButton.getText()).isEqualTo("Up");
     }
 
 }

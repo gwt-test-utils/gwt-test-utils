@@ -2,57 +2,48 @@ package com.googlecode.gwt.test;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.Window;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class WindowTest extends GwtTestTest {
+@GwtModule("com.googlecode.gwt.test.GwtTestUtils")
+public class WindowTest extends GwtTestWithMockito {
 
-    private final WindowOperationsHandler mockedHandler = EasyMock.createStrictMock(WindowOperationsHandler.class);
-    ;
+    @Mock
+    private WindowOperationsHandler mockedHandler;
 
     @Test
     public void alert() {
-        // Arrange
-        mockedHandler.alert(EasyMock.eq("this is an alert"));
-        EasyMock.expectLastCall();
-        EasyMock.replay(mockedHandler);
-
-        // Act
+        // When
         Window.alert("this is an alert");
 
-        // Assert
-        EasyMock.verify(mockedHandler);
+        // Then
+        verify(mockedHandler).alert("this is an alert");
     }
 
     @Before
     public void beforeWindowTest() {
-        EasyMock.reset(mockedHandler);
-
         setWindowOperationsHandler(mockedHandler);
     }
 
     @Test
     public void confirm() {
-        // Arrange
-        mockedHandler.confirm(EasyMock.eq("this is a confirmation"));
-        EasyMock.expectLastCall().andReturn(true);
-        EasyMock.replay(mockedHandler);
+        // Given
+        when(mockedHandler.confirm("this is a confirmation")).thenReturn(true);
 
-        // Act
+        // When
         boolean result = Window.confirm("this is a confirmation");
 
-        // Assert
-        EasyMock.verify(mockedHandler);
-        assertTrue(result);
+        // Then
+        assertThat(result).isTrue();
     }
 
     @Test
     public void emptyMethods() {
-        // Act & Assert
+        // When & Assert
         Window.enableScrolling(true);
         Window.moveBy(1, 2);
         Window.moveTo(3, 4);
@@ -63,71 +54,58 @@ public class WindowTest extends GwtTestTest {
 
     @Test
     public void margin() {
-        // Arrange
+        // Given
         Document.get().getBody().setAttribute("style", "");
 
-        // Act
+        // When
         Window.setMargin("13px");
 
-        // Assert
-        assertEquals("13px", Document.get().getBody().getStyle().getMargin());
-        assertEquals("margin: 13px; ", Document.get().getBody().getAttribute("style"));
+        // Then
+        assertThat(Document.get().getBody().getStyle().getMargin()).isEqualTo("13px");
+        assertThat(Document.get().getBody().getAttribute("style")).isEqualTo("margin: 13px; ");
     }
 
     @Test
     public void open() {
-        // Arrange
-        mockedHandler.open(EasyMock.eq("url"), EasyMock.eq("name"), EasyMock.eq("features"));
-        EasyMock.expectLastCall();
-        EasyMock.replay(mockedHandler);
-
-        // Act
+        // When
         Window.open("url", "name", "features");
 
-        // Assert
-        EasyMock.verify(mockedHandler);
+        // Then
+        verify(mockedHandler).open("url", "name", "features");
     }
 
     @Test
     public void print() {
-        // Arrange
-        mockedHandler.print();
-        EasyMock.expectLastCall();
-        EasyMock.replay(mockedHandler);
-
-        // Act
+        // When
         Window.print();
 
-        // Assert
-        EasyMock.verify(mockedHandler);
+        // Then
+        verify(mockedHandler).print();
     }
 
     @Test
     public void prompt() {
-        // Arrange
-        mockedHandler.prompt(EasyMock.eq("prompt message"), EasyMock.eq("initial value"));
-        EasyMock.expectLastCall().andReturn("mocked message");
-        EasyMock.replay(mockedHandler);
+        // Given
+        when(mockedHandler.prompt("prompt message", "initial value")).thenReturn("mocked message");
 
-        // Act
+        // When
         String result = Window.prompt("prompt message", "initial value");
 
-        // Assert
-        EasyMock.verify(mockedHandler);
-        assertEquals("mocked message", result);
+        // Then
+        assertThat(result).isEqualTo("mocked message");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         Document.get().setTitle("arranged title");
 
-        // Act
+        // When
         Window.setTitle("my title");
 
-        // Assert
-        assertEquals("my title", Window.getTitle());
-        assertEquals("my title", Document.get().getTitle());
+        // Then
+        assertThat(Window.getTitle()).isEqualTo("my title");
+        assertThat(Document.get().getTitle()).isEqualTo("my title");
     }
 
 }

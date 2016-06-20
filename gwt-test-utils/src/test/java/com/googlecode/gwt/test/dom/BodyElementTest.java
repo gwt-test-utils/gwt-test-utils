@@ -6,7 +6,7 @@ import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BodyElementTest extends GwtTestTest {
 
@@ -14,11 +14,11 @@ public class BodyElementTest extends GwtTestTest {
 
     @Test
     public void as() {
-        // Act
+        // When
         BodyElement asElement = BodyElement.as(b);
 
-        // Assert
-        assertEquals(b, asElement);
+        // Then
+        assertThat(asElement).isEqualTo(b);
     }
 
     @Before

@@ -6,14 +6,13 @@ import com.googlecode.gwt.test.editors.PersonEditor.PersonDriver;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PersonEditorTest extends GwtTestTest {
 
     @Test
     public void editEmptyBean() {
-        // Arrange
+        // Given
         Person Person = new Person();
         PersonEditor editor = new PersonEditor();
         PersonDriver driver = GWT.create(PersonDriver.class);
@@ -22,19 +21,19 @@ public class PersonEditorTest extends GwtTestTest {
         // Test
         driver.edit(Person);
 
-        // Assert
-        assertEquals("", editor.firstName.getValue());
-        assertEquals("", editor.lastName.getValue());
+        // Then
+        assertThat(editor.firstName.getValue()).isEqualTo("");
+        assertThat(editor.lastName.getValue()).isEqualTo("");
 
-        assertEquals("", editor.address.street().getValue());
-        assertEquals("", editor.address.zipWithPathEditor().getValue());
-        assertEquals("", editor.address.city.getValue());
-        assertNull(editor.address.stateWithPath.getValue());
+        assertThat(editor.address.street().getValue()).isEqualTo("");
+        assertThat(editor.address.zipWithPathEditor().getValue()).isEqualTo("");
+        assertThat(editor.address.city.getValue()).isEqualTo("");
+        assertThat(editor.address.stateWithPath.getValue()).isNull();
     }
 
     @Test
     public void editFilledBean() {
-        // Arrange
+        // Given
         Person person = Person.createFilledPerson();
 
         PersonEditor editor = new PersonEditor();
@@ -44,19 +43,19 @@ public class PersonEditorTest extends GwtTestTest {
         // Test
         driver.edit(person);
 
-        // Assert
-        assertEquals("John", editor.firstName.getValue());
-        assertEquals("Locke", editor.lastName.getValue());
+        // Then
+        assertThat(editor.firstName.getValue()).isEqualTo("John");
+        assertThat(editor.lastName.getValue()).isEqualTo("Locke");
 
-        assertEquals("Avenue des Champs Elysées", editor.address.street().getValue());
-        assertEquals("75008", editor.address.zipWithPathEditor().getValue());
-        assertEquals("Paris", editor.address.city.getValue());
-        assertEquals("France", editor.address.stateWithPath.getValue());
+        assertThat(editor.address.street().getValue()).isEqualTo("Avenue des Champs Elysées");
+        assertThat(editor.address.zipWithPathEditor().getValue()).isEqualTo("75008");
+        assertThat(editor.address.city.getValue()).isEqualTo("Paris");
+        assertThat(editor.address.stateWithPath.getValue()).isEqualTo("France");
     }
 
     @Test
     public void flushWithData() {
-        // Arrange
+        // Given
         Person person = new Person();
         PersonEditor editor = new PersonEditor();
         PersonDriver driver = GWT.create(PersonDriver.class);
@@ -64,7 +63,7 @@ public class PersonEditorTest extends GwtTestTest {
         // Start editing
         driver.edit(person);
 
-        // Act : edit widget
+        // When : edit widget
         Browser.fillText(editor.firstName, "John");
         Browser.fillText(editor.lastName, "Locke");
         Browser.fillText(editor.address.street(), "Avenue des Champs Elysées");
@@ -74,14 +73,14 @@ public class PersonEditorTest extends GwtTestTest {
         editor.address.stateWithPath.setValue("France", true);
         driver.flush();
 
-        // Assert
-        assertEquals("John", person.getFirstName());
-        assertEquals("Locke", person.getLastName());
+        // Then
+        assertThat(person.getFirstName()).isEqualTo("John");
+        assertThat(person.getLastName()).isEqualTo("Locke");
 
-        assertEquals("Avenue des Champs Elysées", person.getAddress().getStreet());
-        assertEquals("75008", person.getAddress().getZip());
-        assertEquals("Paris", person.getAddress().getCity());
-        assertEquals("France", person.getAddress().getState());
+        assertThat(person.getAddress().getStreet()).isEqualTo("Avenue des Champs Elysées");
+        assertThat(person.getAddress().getZip()).isEqualTo("75008");
+        assertThat(person.getAddress().getCity()).isEqualTo("Paris");
+        assertThat(person.getAddress().getState()).isEqualTo("France");
     }
 
 }

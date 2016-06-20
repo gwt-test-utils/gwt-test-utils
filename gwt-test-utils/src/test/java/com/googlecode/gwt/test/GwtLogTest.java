@@ -4,7 +4,7 @@ import com.google.gwt.core.client.GWT;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GwtLogTest extends GwtTestTest {
 
@@ -26,16 +26,16 @@ public class GwtLogTest extends GwtTestTest {
 
     @Test
     public void log() {
-        // Arrange
+        // Given
         message = null;
         t = null;
         Throwable throwable = new Exception("test");
 
-        // Act
+        // When
         GWT.log("toto", throwable);
 
-        // Assert
-        assertEquals("toto", message);
-        assertEquals(throwable, t);
+        // Then
+        assertThat(message).isEqualTo("toto");
+        assertThat(t).isEqualTo(throwable);
     }
 }

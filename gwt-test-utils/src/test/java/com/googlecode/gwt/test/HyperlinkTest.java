@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class HyperlinkTest extends GwtTestTest {
 
@@ -15,22 +15,22 @@ public class HyperlinkTest extends GwtTestTest {
 
     @Test
     public void checkVisible() {
-        // Act
+        // When
         Hyperlink link = new Hyperlink();
-        // Pre-Assert
-        assertEquals(true, link.isVisible());
+        // Preconditions
+        assertThat(link.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         link.setVisible(false);
 
-        // Assert
-        assertEquals(false, link.isVisible());
+        // Then
+        assertThat(link.isVisible()).isEqualTo(false);
     }
 
     @SuppressWarnings("deprecation")
     @Test
     public void click_ClickHandler() {
-        // Arrange
+        // Given
         bool = false;
         Hyperlink link = new Hyperlink();
         link.addClickHandler(new ClickHandler() {
@@ -41,60 +41,60 @@ public class HyperlinkTest extends GwtTestTest {
 
         });
 
-        // Act
+        // When
         Browser.click(link);
 
-        // Assert
-        assertEquals(true, bool);
+        // Then
+        assertThat(bool).isEqualTo(true);
     }
 
     @Test
     public void constructor_HTML_Token() {
-        // Act
+        // When
         Hyperlink link = new Hyperlink("<h1>foo</h1>", true, "test-history-token");
 
-        // Assert
-        assertEquals("test-history-token", link.getTargetHistoryToken());
-        assertEquals("<h1>foo</h1>", link.getHTML());
+        // Then
+        assertThat(link.getTargetHistoryToken()).isEqualTo("test-history-token");
+        assertThat(link.getHTML()).isEqualTo("<h1>foo</h1>");
 
     }
 
     @Test
     public void constructor_Text_Token() {
-        // Act
+        // When
         Hyperlink link = new Hyperlink("test-text", "test-history-token");
 
-        // Assert
-        assertEquals("test-text", link.getText());
-        assertEquals("test-history-token", link.getTargetHistoryToken());
+        // Then
+        assertThat(link.getText()).isEqualTo("test-text");
+        assertThat(link.getTargetHistoryToken()).isEqualTo("test-history-token");
     }
 
     @Test
     public void html() {
-        // Arrange
+        // Given
         Hyperlink link = new Hyperlink();
 
-        // Act
+        // When
         link.setHTML("<h1>test</h1>");
 
-        // Assert
-        assertEquals("<h1>test</h1>", link.getHTML());
-        assertEquals(1, link.getElement().getChild(0).getChildCount());
+        // Then
+        assertThat(link.getHTML()).isEqualTo("<h1>test</h1>");
+        assertThat(link.getElement().getChild(0).getChildCount()).isEqualTo(1);
         HeadingElement h1 = link.getElement().getChild(0).getChild(0).cast();
-        assertEquals("H1", h1.getTagName());
-        assertEquals("test", h1.getInnerText());
+        assertThat(h1.getTagName()).isEqualTo("H1");
+        assertThat(h1.getInnerText()).isEqualTo("test");
     }
 
     @Test
     public void title() {
-        // Act
+        // When
         Hyperlink link = new Hyperlink();
 
-        // Act
+        // When
         link.setTitle("title");
 
-        // Assert
-        assertEquals("title", link.getTitle());
+        // Then
+        assertThat(link.getTitle()).isEqualTo("title");
     }
 
 }

@@ -217,7 +217,7 @@ class ObjectFactory {
                 } catch (Exception x) {
                     fXercesProperties = null;
                     fLastModified = -1;
-                    // assert(x instanceof FileNotFoundException
+                    // Then(x instanceof FileNotFoundException
                     // || x instanceof SecurityException)
                     // In both cases, ignore and continue w/ next location
                 }
@@ -233,7 +233,7 @@ class ObjectFactory {
                 fis.close();
                 factoryClassName = props.getProperty(factoryId);
             } catch (Exception x) {
-                // assert(x instanceof FileNotFoundException
+                // Then(x instanceof FileNotFoundException
                 // || x instanceof SecurityException)
                 // In both cases, ignore and continue w/ next location
             }
@@ -273,7 +273,7 @@ class ObjectFactory {
         ClassLoader chain = system;
         while (true) {
             if (context == chain) {
-                // Assert: we are on JDK 1.1 or we have no Context ClassLoader
+                // Then: we are on JDK 1.1 or we have no Context ClassLoader
                 // or any Context ClassLoader in chain of system classloader
                 // (including extension ClassLoader) so extend to widest
                 // ClassLoader (always look in system ClassLoader if Xerces
@@ -286,7 +286,7 @@ class ObjectFactory {
                 chain = system;
                 while (true) {
                     if (current == chain) {
-                        // Assert: Current ClassLoader in chain of
+                        // Then: Current ClassLoader in chain of
                         // boot/extension/system ClassLoaders
                         return system;
                     }
@@ -296,7 +296,7 @@ class ObjectFactory {
                     chain = ss.getParentClassLoader(chain);
                 }
 
-                // Assert: Current ClassLoader not in chain of
+                // Then: Current ClassLoader not in chain of
                 // boot/extension/system ClassLoaders
                 return current;
             }
@@ -312,7 +312,7 @@ class ObjectFactory {
         }
         ;
 
-        // Assert: Context ClassLoader not in chain of
+        // Then: Context ClassLoader not in chain of
         // boot/extension/system ClassLoaders
         return context;
     } // findClassLoader():ClassLoader
@@ -378,7 +378,7 @@ class ObjectFactory {
      */
     static Object newInstance(String className, ClassLoader cl, boolean doFallback)
             throws ConfigurationError {
-        // assert(className != null);
+        // Then(className != null);
         try {
             Class providerClass = findProviderClass(className, cl, doFallback);
             Object instance = providerClass.newInstance();

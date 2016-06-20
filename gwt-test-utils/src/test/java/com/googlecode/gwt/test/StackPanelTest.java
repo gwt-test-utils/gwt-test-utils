@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.StackPanel;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StackPanelTest extends GwtTestTest {
 
@@ -14,7 +14,7 @@ public class StackPanelTest extends GwtTestTest {
 
     @Test
     public void click() {
-        // Arrange
+        // Given
         index = -1;
         StackPanel panel = new StackPanel() {
 
@@ -29,56 +29,56 @@ public class StackPanelTest extends GwtTestTest {
         panel.add(new Anchor());
         panel.add(new Anchor());
 
-        // Act
+        // When
         Browser.click(panel, 1);
 
-        // Assert
-        assertEquals(1, index);
+        // Then
+        assertThat(index).isEqualTo(1);
     }
 
     @Test
     public void stackPanel() {
-        // Arrange
+        // Given
         StackPanel panel = new StackPanel();
 
-        // Act
+        // When
         panel.add(new Label("Foo"), "foo");
         Label label = new Label("Bar");
         panel.add(label, "bar");
         panel.add(new Label("Baz"), "baz");
 
-        // Assert
-        assertEquals(3, panel.getWidgetCount());
-        assertEquals(label, panel.getWidget(1));
-        assertEquals(1, panel.getWidgetIndex(label));
+        // Then
+        assertThat(panel.getWidgetCount()).isEqualTo(3);
+        assertThat(panel.getWidget(1)).isEqualTo(label);
+        assertThat(panel.getWidgetIndex(label)).isEqualTo(1);
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         StackPanel sp = new StackPanel();
-        // Pre-Assert
-        assertEquals("", sp.getTitle());
+        // Preconditions
+        assertThat(sp.getTitle()).isEqualTo("");
 
-        // Act
+        // When
         sp.setTitle("title");
 
-        // Assert
-        assertEquals("title", sp.getTitle());
+        // Then
+        assertThat(sp.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         StackPanel sp = new StackPanel();
-        // Pre-Assert
-        assertEquals(true, sp.isVisible());
+        // Preconditions
+        assertThat(sp.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         sp.setVisible(false);
 
-        // Assert
-        assertEquals(false, sp.isVisible());
+        // Then
+        assertThat(sp.isVisible()).isEqualTo(false);
     }
 
 }

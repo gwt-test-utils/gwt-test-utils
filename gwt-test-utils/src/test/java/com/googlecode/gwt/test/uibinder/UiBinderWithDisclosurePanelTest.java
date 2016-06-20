@@ -5,24 +5,21 @@ import com.google.gwt.user.client.ui.Label;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithDisclosurePanelTest extends GwtTestTest {
 
     @Test
     public void uiBinderWithDisclosurePanel() {
-        // Act
+        // When
         UiBinderWithDisclosurePanel uiPanel = GWT.create(UiBinderWithDisclosurePanel.class);
 
-        // Assert
-        assertEquals("Some header text",
-                uiPanel.disclosurePanelWithTextHeader.getHeaderTextAccessor().getText());
-        assertEquals("Body label 1",
-                ((Label) uiPanel.disclosurePanelWithTextHeader.getContent()).getText());
-        assertEquals("Header label",
-                uiPanel.disclosurePanelWithCustomHeader.getHeaderTextAccessor().getText());
-        assertEquals("Body label 2",
-                ((Label) uiPanel.disclosurePanelWithCustomHeader.getContent()).getText());
+        // Then
+        assertThat(uiPanel.disclosurePanelWithTextHeader.getHeaderTextAccessor().getText()).isEqualTo("Some header text");
+        assertThat(((Label) uiPanel.disclosurePanelWithTextHeader.getContent()).getText()).isEqualTo("Body label 1");
+
+        assertThat(uiPanel.disclosurePanelWithCustomHeader.getHeaderTextAccessor().getText()).isEqualTo("Header label");
+        assertThat(((Label) uiPanel.disclosurePanelWithCustomHeader.getContent()).getText()).isEqualTo("Body label 2");
     }
 
 }

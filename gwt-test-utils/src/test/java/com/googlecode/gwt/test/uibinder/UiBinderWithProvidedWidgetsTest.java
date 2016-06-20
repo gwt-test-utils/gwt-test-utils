@@ -3,21 +3,21 @@ package com.googlecode.gwt.test.uibinder;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithProvidedWidgetsTest extends GwtTestTest {
 
     @Test
     public void instanciation() {
-        // Act
+        // When
         UiBinderWithProvidedWidgets w = new UiBinderWithProvidedWidgets();
 
-        assertEquals("my first label", w.firstProvidedLabel.getText());
-        assertEquals("first custom text setup in ui.xml", w.firstProvidedLabel.getCustomText());
-        assertEquals("first provided string", w.firstProvidedLabel.providedString);
+        assertThat(w.firstProvidedLabel.getText()).isEqualTo("my first label");
+        assertThat(w.firstProvidedLabel.getCustomText()).isEqualTo("first custom text setup in ui.xml");
+        assertThat(w.firstProvidedLabel.providedString).isEqualTo("first provided string");
 
-        assertEquals("my second label", w.secondProvidedLabel.getText());
-        assertEquals("second custom text setup in ui.xml", w.secondProvidedLabel.getCustomText());
-        assertEquals("second provided string", w.secondProvidedLabel.providedString);
+        assertThat(w.secondProvidedLabel.getText()).isEqualTo("my second label");
+        assertThat(w.secondProvidedLabel.getCustomText()).isEqualTo("second custom text setup in ui.xml");
+        assertThat(w.secondProvidedLabel.providedString).isEqualTo("second provided string");
     }
 }

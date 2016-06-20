@@ -13,7 +13,7 @@ public class JsonUtilsTest extends GwtTestTest {
         // Test
         MyJsonOverlay jso = JsonUtils.safeEval("{myString: 'json string', \"myDouble\": 3, myFloat: 3.1415, \"myBool\": true, 'myMixedArray': [\"John Locke\", \"Ben Linus\", 23, 42, true], myNumberArray: null, myObject: {myString: 'child object string', myNumberArray: [2.2, 3.3] } }");
 
-        // Assert
+        // Then
         assertThat(jso.getMyString()).isEqualTo("json string");
         assertThat(jso.getMyDouble()).isEqualTo(3);
         assertThat(jso.getMyFloat()).isEqualTo(3.1415f);
@@ -36,7 +36,7 @@ public class JsonUtilsTest extends GwtTestTest {
         // Test
         MyJsonOverlay jso = JsonUtils.unsafeEval("{myString: 'json string', \"myDouble\": 3, myFloat: 3.1415, \"myBool\": true, 'myMixedArray': [\"John Locke\", \"Ben Linus\", 23, 42, true], myNumberArray: null, myObject: {myString: 'child object string', myNumberArray: [2.2, 3.3] } }");
 
-        // Assert
+        // Then
         assertThat(jso.getMyString()).isEqualTo("json string");
         assertThat(jso.getMyDouble()).isEqualTo(3);
         assertThat(jso.getMyFloat()).isEqualTo(3.1415f);

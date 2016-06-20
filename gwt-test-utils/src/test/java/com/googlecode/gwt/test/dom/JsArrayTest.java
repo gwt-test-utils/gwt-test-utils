@@ -11,14 +11,14 @@ public class JsArrayTest extends GwtTestTest {
 
     @Test
     public void push() {
-        // Arrange
+        // Given
         JavaScriptObject jso = JavaScriptObject.createObject();
         JsArray<JavaScriptObject> array = JavaScriptObject.createArray().cast();
 
-        // Act
+        // When
         array.push(jso);
 
-        // Assert
+        // Then
         assertThat(array.length()).isEqualTo(1);
         assertThat(array.get(0)).isEqualTo(jso);
     }

@@ -6,14 +6,13 @@ import com.googlecode.gwt.test.editors.AddressEditor.AddressDriver;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddressEditorTest extends GwtTestTest {
 
     @Test
     public void editEmptyBean() {
-        // Arrange
+        // Given
         Address address = new Address();
         AddressEditor editor = new AddressEditor();
         AddressDriver driver = GWT.create(AddressDriver.class);
@@ -22,16 +21,16 @@ public class AddressEditorTest extends GwtTestTest {
         // Test
         driver.edit(address);
 
-        // Assert
-        assertEquals("", editor.street().getValue());
-        assertEquals("", editor.zipWithPathEditor().getValue());
-        assertEquals("", editor.city.getValue());
-        assertNull(editor.stateWithPath.getValue());
+        // Then
+        assertThat(editor.street().getValue()).isEqualTo("");
+        assertThat(editor.zipWithPathEditor().getValue()).isEqualTo("");
+        assertThat(editor.city.getValue()).isEqualTo("");
+        assertThat(editor.stateWithPath.getValue()).isNull();
     }
 
     @Test
     public void editFilledBean() {
-        // Arrange
+        // Given
         Address address = Address.createFilledAddress();
 
         AddressEditor editor = new AddressEditor();
@@ -41,16 +40,16 @@ public class AddressEditorTest extends GwtTestTest {
         // Test
         driver.edit(address);
 
-        // Assert
-        assertEquals("Avenue des Champs Elysées", editor.street().getValue());
-        assertEquals("75008", editor.zipWithPathEditor().getValue());
-        assertEquals("Paris", editor.city.getValue());
-        assertEquals("France", editor.stateWithPath.getValue());
+        // Then
+        assertThat(editor.street().getValue()).isEqualTo("Avenue des Champs Elysées");
+        assertThat(editor.zipWithPathEditor().getValue()).isEqualTo("75008");
+        assertThat(editor.city.getValue()).isEqualTo("Paris");
+        assertThat(editor.stateWithPath.getValue()).isEqualTo("France");
     }
 
     @Test
     public void flushWithData() {
-        // Arrange
+        // Given
         Address address = new Address();
         AddressEditor editor = new AddressEditor();
         AddressDriver driver = GWT.create(AddressDriver.class);
@@ -58,7 +57,7 @@ public class AddressEditorTest extends GwtTestTest {
         // Start editing
         driver.edit(address);
 
-        // Act : edit widget
+        // When : edit widget
         Browser.fillText(editor.street(), "Avenue des Champs Elysées");
         Browser.fillText(editor.zipWithPathEditor(), "75008");
         Browser.fillText(editor.city, "Paris");
@@ -66,11 +65,11 @@ public class AddressEditorTest extends GwtTestTest {
         editor.stateWithPath.setValue("France", true);
         driver.flush();
 
-        // Assert
-        assertEquals("Avenue des Champs Elysées", address.getStreet());
-        assertEquals("75008", address.getZip());
-        assertEquals("Paris", address.getCity());
-        assertEquals("France", address.getState());
+        // Then
+        assertThat(address.getStreet()).isEqualTo("Avenue des Champs Elysées");
+        assertThat(address.getZip()).isEqualTo("75008");
+        assertThat(address.getCity()).isEqualTo("Paris");
+        assertThat(address.getState()).isEqualTo("France");
     }
 
 }

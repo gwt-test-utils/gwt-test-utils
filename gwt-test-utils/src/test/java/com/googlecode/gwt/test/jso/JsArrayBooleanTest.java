@@ -14,14 +14,14 @@ public class JsArrayBooleanTest extends GwtTestTest {
 
     @Before
     public void beforeJsArrayIntegerTest() {
-        // Arrange
+        // Given
         jsArrayBoolean = JavaScriptObject.createArray().cast();
         assertThat(jsArrayBoolean.length()).isEqualTo(0);
 
-        // Act
+        // When
         jsArrayBoolean.set(4, true);
 
-        // Assert
+        // Then
         assertThat(jsArrayBoolean.length()).isEqualTo(5);
         assertThat(jsArrayBoolean.get(3)).isFalse();
         assertThat(jsArrayBoolean.get(4)).isTrue();
@@ -29,32 +29,32 @@ public class JsArrayBooleanTest extends GwtTestTest {
 
     @Test
     public void join() {
-        // Act
+        // When
         String join = jsArrayBoolean.join();
 
-        // Assert
+        // Then
         assertThat(join).isEqualTo(",,,,true");
     }
 
     @Test
     public void join_AfterResize() {
-        // Arrange
+        // Given
         jsArrayBoolean.setLength(3);
 
-        // Act
+        // When
         String join = jsArrayBoolean.join();
 
-        // Assert
+        // Then
         assertThat(jsArrayBoolean.length()).isEqualTo(3);
         assertThat(join).isEqualTo(",,");
     }
 
     @Test
     public void push() {
-        // Act
+        // When
         jsArrayBoolean.push(false);
 
-        // Assert
+        // Then
 
         assertThat(jsArrayBoolean.length()).isEqualTo(6);
         assertThat(jsArrayBoolean.join()).isEqualTo(",,,,true,false");
@@ -63,13 +63,13 @@ public class JsArrayBooleanTest extends GwtTestTest {
 
     @Test
     public void shift() {
-        // Arrange
+        // Given
         jsArrayBoolean.set(0, true);
 
-        // Act
+        // When
         boolean shift = jsArrayBoolean.shift();
 
-        // Assert
+        // Then
         assertThat(shift).isTrue();
         assertThat(jsArrayBoolean.length()).isEqualTo(4);
         assertThat(jsArrayBoolean.join()).isEqualTo(",,,true");
@@ -77,19 +77,19 @@ public class JsArrayBooleanTest extends GwtTestTest {
 
     @Test
     public void unboundedGet_Returns0() {
-        // Act
+        // When
         boolean unbounded = jsArrayBoolean.get(100);
 
-        // Assert
+        // Then
         assertThat(unbounded).isFalse();
     }
 
     @Test
     public void unshift() {
-        // Act
+        // When
         jsArrayBoolean.unshift(true);
 
-        // Assert
+        // Then
         assertThat(jsArrayBoolean.length()).isEqualTo(6);
         assertThat(jsArrayBoolean.join()).isEqualTo("true,,,,,true");
     }

@@ -6,117 +6,117 @@ import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.ui.Label;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LabelTest extends GwtTestTest {
 
     @SuppressWarnings("deprecation")
     @Test
     public void direction() {
-        // Arrange
+        // Given
         Label label = new Label();
-        // Pre-Assert
-        assertEquals(Direction.DEFAULT, label.getDirection());
+        // Preconditions
+        assertThat(label.getDirection()).isEqualTo(Direction.DEFAULT);
 
-        // Act
+        // When
         label.setDirection(Direction.RTL);
 
-        // Assert
-        assertEquals(Direction.RTL, label.getDirection());
+        // Then
+        assertThat(label.getDirection()).isEqualTo(Direction.RTL);
     }
 
     @Test
     public void getText_with_HTML() {
-        // Arrange
+        // Given
         Label label = new Label("<a href='#'>link</a><br/>test&nbsp;test");
 
         String text = label.getText();
 
-        // Assert
-        assertEquals("<a href='#'>link</a><br/>test&nbsp;test", text);
+        // Then
+        assertThat(text).isEqualTo("<a href='#'>link</a><br/>test&nbsp;test");
     }
 
     @Test
     public void id() {
-        // Arrange
+        // Given
         Label label = new Label();
 
-        // Act
+        // When
         label.getElement().setId("myId");
 
-        // Assert
-        assertEquals("myId", label.getElement().getAttribute("id"));
+        // Then
+        assertThat(label.getElement().getAttribute("id")).isEqualTo("myId");
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         Label label = new Label("foo");
-        // Pre-Assert
-        assertEquals("foo", label.getText());
+        // Preconditions
+        assertThat(label.getText()).isEqualTo("foo");
 
-        // Act
+        // When
         label.setText("text");
 
-        // Assert
-        assertEquals("text", label.getText());
+        // Then
+        assertThat(label.getText()).isEqualTo("text");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         Label label = new Label();
 
-        // Act
+        // When
         label.setTitle("title");
 
-        // Assert
-        assertEquals("title", label.getTitle());
+        // Then
+        assertThat(label.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         Label label = new Label();
-        // Pre-Assert
-        assertEquals(true, label.isVisible());
+        // Preconditions
+        assertThat(label.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         label.setVisible(false);
 
-        // Assert
-        assertFalse(label.isVisible());
+        // Then
+        assertThat(label.isVisible()).isFalse();
     }
 
     @Test
     public void wordWrap() {
-        // Arrange
+        // Given
         Label label = new Label();
-        // Pre-Assert
-        assertFalse(label.getWordWrap());
+        // Preconditions
+        assertThat(label.getWordWrap()).isFalse();
 
-        // Act
+        // When
         label.setWordWrap(true);
 
-        // Assert
-        assertTrue(label.getWordWrap());
+        // Then
+        assertThat(label.getWordWrap()).isTrue();
     }
 
     @Test
     public void wrap() {
-        // Arrange
+        // Given
         // Element.setInnerHTML & Document.get().getElementById are supposed to
         // work
         Document.get().getBody().setInnerHTML("<div id=\"anId\"></div>");
         DivElement div = Document.get().getElementById("anId").cast();
 
-        // Act
+        // When
         Label label = Label.wrap(div);
         label.setText("My wrapped label !");
 
-        // Assert
-        assertEquals(div, label.getElement());
-        assertEquals("My wrapped label !", div.getInnerText());
+        // Then
+        assertThat(label.getElement()).isEqualTo(div);
+        assertThat(div.getInnerText()).isEqualTo("My wrapped label !");
     }
 
 }

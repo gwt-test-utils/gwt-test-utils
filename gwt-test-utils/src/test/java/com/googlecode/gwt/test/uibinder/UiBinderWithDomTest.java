@@ -4,21 +4,21 @@ import com.google.gwt.dom.client.Document;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithDomTest extends GwtTestTest {
 
     @Test
     public void uiBinderDom() {
-        // Arrange
+        // Given
         UiBinderWithDom helloWorld = new UiBinderWithDom();
         Document.get().getBody().appendChild(helloWorld.getElement());
 
-        // Act
+        // When
         helloWorld.setName("World");
 
-        // Assert
-        assertEquals("World", helloWorld.nameSpan.getInnerText());
-        assertEquals("World", Document.get().getElementById("name").getInnerText());
+        // Then
+        assertThat(helloWorld.nameSpan.getInnerText()).isEqualTo("World");
+        assertThat(Document.get().getElementById("name").getInnerText()).isEqualTo("World");
     }
 }

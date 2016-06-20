@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DirectoryTestReaderTest {
 
@@ -16,31 +16,30 @@ public class DirectoryTestReaderTest {
     public void csvReader() throws Exception {
         InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/test.csv"));
         List<List<String>> l = CsvReader.readCsv(reader);
-        assertNotNull(l);
-        assertEquals(7, l.size());
-        assertArrayEquals(new String[]{"toto"}, l.get(0).toArray());
-        assertArrayEquals(new String[]{}, l.get(1).toArray());
-        assertArrayEquals(new String[]{"toto1", "toto2"}, l.get(2).toArray());
-        assertArrayEquals(new String[]{"toto3"}, l.get(3).toArray());
-        assertArrayEquals(new String[]{"toto4", "toto 5", "toto6"}, l.get(4).toArray());
-        assertArrayEquals(new String[]{}, l.get(5).toArray());
-        assertArrayEquals(new String[]{"", "toto7"}, l.get(6).toArray());
+        assertThat(l).hasSize(7);
+        assertThat(l.get(0)).containsExactly("toto");
+        assertThat(l.get(1)).isEmpty();
+        assertThat(l.get(2)).containsExactly("toto1", "toto2");
+        assertThat(l.get(3)).containsExactly("toto3");
+        assertThat(l.get(4)).containsExactly("toto4", "toto 5", "toto6");
+        assertThat(l.get(5)).isEmpty();
+        assertThat(l.get(6)).containsExactly("", "toto7");
     }
 
     @Test
     public void rep1() throws Exception {
         DirectoryTestReader reader = new DirectoryTestReader(Rep1.class);
-        assertEquals(4, reader.getTestList().size());
-        assertEquals(4, reader.getTestMethods().size());
-        assertEquals(2, reader.getMacroFileList().size());
+        assertThat(reader.getTestList()).hasSize(4);
+        assertThat(reader.getTestMethods()).hasSize(4);
+        assertThat(reader.getMacroFileList()).hasSize(2);
     }
 
     @Test
     public void rep2() throws Exception {
         DirectoryTestReader reader = new DirectoryTestReader(Rep2.class);
-        assertEquals(1, reader.getTestList().size());
-        assertEquals(1, reader.getTestMethods().size());
+        assertThat(reader.getTestList()).hasSize(1);
+        assertThat(reader.getTestMethods()).hasSize(1);
         // because we set the "pattern" attribute on @CsvMacros
-        assertEquals(1, reader.getMacroFileList().size());
+        assertThat(reader.getMacroFileList()).hasSize(1);
     }
 }

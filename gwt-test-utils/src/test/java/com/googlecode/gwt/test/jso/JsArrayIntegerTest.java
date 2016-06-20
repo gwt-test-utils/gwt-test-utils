@@ -14,46 +14,46 @@ public class JsArrayIntegerTest extends GwtTestTest {
 
     @Before
     public void beforeJsArrayIntegerTest() {
-        // Arrange
+        // Given
         jsArrayInteger = JavaScriptObject.createArray().cast();
         assertThat(jsArrayInteger.length()).isEqualTo(0);
 
-        // Act
+        // When
         jsArrayInteger.set(4, 23);
 
-        // Assert
+        // Then
         assertThat(jsArrayInteger.length()).isEqualTo(5);
         assertThat(jsArrayInteger.get(3)).isEqualTo(0);
     }
 
     @Test
     public void join() {
-        // Act
+        // When
         String join = jsArrayInteger.join();
 
-        // Assert
+        // Then
         assertThat(join).isEqualTo(",,,,23");
     }
 
     @Test
     public void join_AfterResize() {
-        // Arrange
+        // Given
         jsArrayInteger.setLength(3);
 
-        // Act
+        // When
         String join = jsArrayInteger.join();
 
-        // Assert
+        // Then
         assertThat(jsArrayInteger.length()).isEqualTo(3);
         assertThat(join).isEqualTo(",,");
     }
 
     @Test
     public void push() {
-        // Act
+        // When
         jsArrayInteger.push(42);
 
-        // Assert
+        // Then
 
         assertThat(jsArrayInteger.length()).isEqualTo(6);
         assertThat(jsArrayInteger.join()).isEqualTo(",,,,23,42");
@@ -62,13 +62,13 @@ public class JsArrayIntegerTest extends GwtTestTest {
 
     @Test
     public void shift() {
-        // Arrange
+        // Given
         jsArrayInteger.set(0, 2);
 
-        // Act
+        // When
         double shift = jsArrayInteger.shift();
 
-        // Assert
+        // Then
         assertThat(shift).isEqualTo(2d);
         assertThat(jsArrayInteger.length()).isEqualTo(4);
         assertThat(jsArrayInteger.join()).isEqualTo(",,,23");
@@ -76,19 +76,19 @@ public class JsArrayIntegerTest extends GwtTestTest {
 
     @Test
     public void unboundedGet_Returns0() {
-        // Act
+        // When
         double unbounded = jsArrayInteger.get(100);
 
-        // Assert
+        // Then
         assertThat(unbounded).isEqualTo(0);
     }
 
     @Test
     public void unshift() {
-        // Act
+        // When
         jsArrayInteger.unshift(8);
 
-        // Assert
+        // Then
         assertThat(jsArrayInteger.length()).isEqualTo(6);
         assertThat(jsArrayInteger.join()).isEqualTo("8,,,,,23");
     }

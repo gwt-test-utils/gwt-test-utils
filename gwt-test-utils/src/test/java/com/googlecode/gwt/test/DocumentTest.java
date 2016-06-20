@@ -4,35 +4,35 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DocumentTest extends GwtTestTest {
 
     @Test
     public void getDocumentElement() {
-        // Act
+        // When
         Element documentElement = Document.get().getDocumentElement();
 
-        // Assert
-        assertEquals("HTML", documentElement.getNodeName());
+        // Then
+        assertThat(documentElement.getNodeName()).isEqualTo("HTML");
     }
 
     @Test
     public void getNodeName() {
-        // Act
+        // When
         String nodeName = Document.get().getNodeName();
 
-        // Assert
-        assertEquals("#document", nodeName);
+        // Then
+        assertThat(nodeName).isEqualTo("#document");
     }
 
     @Test
     public void title() {
-        // Act
+        // When
         Document.get().setTitle("my title");
 
-        // Assert
-        assertEquals("my title", Document.get().getTitle());
+        // Then
+        assertThat(Document.get().getTitle()).isEqualTo("my title");
     }
 
 }

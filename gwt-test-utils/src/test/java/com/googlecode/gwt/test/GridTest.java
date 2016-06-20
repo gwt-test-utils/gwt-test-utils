@@ -8,8 +8,7 @@ import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.test.utils.events.Browser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("deprecation")
 public class GridTest extends GwtTestTest {
@@ -18,20 +17,20 @@ public class GridTest extends GwtTestTest {
 
     @Test
     public void addStyleName() {
-        // Arrange
+        // Given
         // Grids must be sized explicitly, though they can be resized later.
         Grid g = new Grid(1, 1);
 
-        // Act
+        // When
         g.getRowFormatter().addStyleName(0, "style");
 
-        // Assert
-        assertEquals("style", g.getRowFormatter().getStyleName(0));
+        // Then
+        assertThat(g.getRowFormatter().getStyleName(0)).isEqualTo("style");
     }
 
     @Test
     public void click_ClickHander() {
-        // Arrange
+        // Given
         clicked = false;
         final Grid g = new Grid(1, 1);
         final Button b = new Button("Does nothing, but could");
@@ -40,22 +39,21 @@ public class GridTest extends GwtTestTest {
 
             public void onClick(ClickEvent event) {
                 clicked = !clicked;
-                assertEquals(b, ((Grid) event.getSource()).getWidget(0, 0));
-
+                assertThat(((Grid) event.getSource()).getWidget(0, 0)).isSameAs(b);
             }
         });
 
-        // Act
+        // When
         Browser.click(g, 0, 0);
 
-        // Assert
-        assertTrue("TableListener should have been notified", clicked);
+        // Then
+        assertThat(clicked).as("TableListener should have been notified").isTrue();
 
     }
 
     @Test
     public void click_ClickHandler_NestedWidget() {
-        // Arrange
+        // Given
         // Grids must be sized explicitly, though they can be resized later.
         Grid g = new Grid(1, 1);
 
@@ -71,19 +69,19 @@ public class GridTest extends GwtTestTest {
         // add the button
         g.setWidget(0, 0, b);
 
-        // Pre-Assert
-        assertEquals(false, clicked);
+        // Preconditions
+        assertThat(clicked).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(g.getWidget(0, 0));
 
-        // Assert
-        assertEquals(true, clicked);
+        // Then
+        assertThat(clicked).isEqualTo(true);
     }
 
     @Test
     public void click_ClickListener_NestedWidget() {
-        // Arrange
+        // Given
         // Grids must be sized explicitly, though they can be resized later.
         Grid g = new Grid(1, 1);
 
@@ -99,19 +97,19 @@ public class GridTest extends GwtTestTest {
         // add the button
         g.setWidget(0, 0, b);
 
-        // Pre-Assert
-        assertEquals(false, clicked);
+        // Preconditions
+        assertThat(clicked).isEqualTo(false);
 
-        // Act
+        // When
         Browser.click(g.getWidget(0, 0));
 
-        // Assert
-        assertEquals(true, clicked);
+        // Then
+        assertThat(clicked).isEqualTo(true);
     }
 
     @Test
     public void click_TableListner() {
-        // Arrange
+        // Given
         clicked = false;
         Grid g = new Grid(1, 1);
         Button b = new Button("Does nothing, but could");
@@ -124,128 +122,128 @@ public class GridTest extends GwtTestTest {
 
         });
 
-        // Act
+        // When
         Browser.click(g, 0, 0);
 
-        // Assert
-        assertTrue("TableListener should have been notified", clicked);
+        // Then
+        assertThat(clicked).as("TableListener should have been notified").isTrue();
     }
 
     @Test
     public void html() {
-        // Arrange
+        // Given
         Grid g = new Grid(1, 1);
 
-        // Act
+        // When
         g.setHTML(0, 0, "<h1>test</h1>");
 
-        // Assert
-        assertEquals("<h1>test</h1>", g.getHTML(0, 0));
+        // Then
+        assertThat(g.getHTML(0, 0)).isEqualTo("<h1>test</h1>");
         Element e = g.getCellFormatter().getElement(0, 0);
-        assertEquals(1, e.getChildCount());
+        assertThat(e.getChildCount()).isEqualTo(1);
         HeadingElement h1 = e.getChild(0).cast();
-        assertEquals("H1", h1.getTagName());
-        assertEquals("test", h1.getInnerText());
+        assertThat(h1.getTagName()).isEqualTo("H1");
+        assertThat(h1.getInnerText()).isEqualTo("test");
     }
 
     @Test
     public void removeFromGrid() {
-        // Arrange
+        // Given
         // Grids must be sized explicitly, though they can be resized later.
         Grid g = new Grid(1, 1);
         Button b = new Button("Does nothing, but could");
         g.setWidget(0, 0, b);
 
-        // Act & Assert
-        assertTrue("The button has not been removed from grid", g.remove(b));
+        // When & Assert
+        assertThat(g.remove(b)).as("The button has not been removed from grid").isTrue();
     }
 
     @Test
     public void resizeRow() {
-        // Arrange
+        // Given
         Grid g = new Grid(1, 1);
         g.setWidget(0, 0, new Label("first"));
-        // Pre-Assert
-        assertEquals("<div class=\"gwt-Label\">first</div>", g.getHTML(0, 0));
+        // Preconditions
+        assertThat(g.getHTML(0, 0)).isEqualTo("<div class=\"gwt-Label\">first</div>");
 
-        // Act
+        // When
         g.resize(2, 2);
 
-        // Assert
-        assertEquals("<div class=\"gwt-Label\">first</div>", g.getHTML(0, 0));
-        assertEquals("&nbsp;", g.getHTML(0, 1));
-        assertEquals("&nbsp;", g.getHTML(1, 0));
-        assertEquals("&nbsp;", g.getHTML(1, 1));
+        // Then
+        assertThat(g.getHTML(0, 0)).isEqualTo("<div class=\"gwt-Label\">first</div>");
+        assertThat(g.getHTML(0, 1)).isEqualTo("&nbsp;");
+        assertThat(g.getHTML(1, 0)).isEqualTo("&nbsp;");
+        assertThat(g.getHTML(1, 1)).isEqualTo("&nbsp;");
     }
 
     @Test
     public void setText() {
-        // Arrange
+        // Given
         // Grids must be sized explicitly, though they can be resized later.
         Grid g = new Grid(5, 5);
 
         // Put some values in the grid cells.
         for (int row = 0; row < 5; ++row) {
             for (int col = 0; col < 5; ++col)
-                // Act
+                // When
                 g.setText(row, col, "" + row + ", " + col);
         }
 
-        // Assert
-        assertEquals("0, 0", g.getText(0, 0));
-        assertEquals("3, 2", g.getText(3, 2));
-        assertEquals("4, 4", g.getText(4, 4));
+        // Then
+        assertThat(g.getText(0, 0)).isEqualTo("0, 0");
+        assertThat(g.getText(3, 2)).isEqualTo("3, 2");
+        assertThat(g.getText(4, 4)).isEqualTo("4, 4");
     }
 
     @Test
     public void setWidget() {
-        // Arrange
+        // Given
         Grid g = new Grid(3, 3);
         Button b = new Button("Does nothing, but could");
 
-        // Act
+        // When
         g.setWidget(2, 2, b);
 
-        // Assert
-        assertEquals(b, g.getWidget(2, 2));
+        // Then
+        assertThat(g.getWidget(2, 2)).isSameAs(b);
     }
 
     @Test
     public void text() {
-        // Arrange
+        // Given
         Grid g = new Grid(1, 1);
 
-        // Act
+        // When
         g.setText(0, 0, "text");
 
-        // Assert
-        assertEquals("text", g.getText(0, 0));
+        // Then
+        assertThat(g.getText(0, 0)).isEqualTo("text");
     }
 
     @Test
     public void title() {
-        // Arrange
+        // Given
         Grid g = new Grid(1, 1);
 
-        // Act
+        // When
         g.setTitle("title");
 
-        // Assert
-        assertEquals("title", g.getTitle());
+        // Then
+        assertThat(g.getTitle()).isEqualTo("title");
     }
 
     @Test
     public void visible() {
-        // Arrange
+        // Given
         Grid g = new Grid(1, 1);
-        // Pre-Assert
-        assertEquals(true, g.isVisible());
+        // Preconditions
+        assertThat(g.isVisible()).isEqualTo(true);
 
-        // Act
+        // When
         g.setVisible(false);
 
-        // Assert
-        assertEquals(false, g.isVisible());
+        // Then
+        assertThat(g.isVisible()).isEqualTo(false);
     }
 
 }

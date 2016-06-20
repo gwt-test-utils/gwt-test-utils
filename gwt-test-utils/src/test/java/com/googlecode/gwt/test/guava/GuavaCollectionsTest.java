@@ -13,16 +13,16 @@ public class GuavaCollectionsTest extends GwtTestTest {
 
     @Test
     public void filterIslandCandidates() {
-        // Arrange
+        // Given
         List<String> list = new ArrayList<String>();
         list.add("Jack Shephard");
         list.add("John Locke");
         list.add("Hurley Reyes");
 
-        // Act
+        // When
         Collection<String> candidates = GuavaCollections.filterIslandCandidates(list);
 
-        // Assert
+        // Then
         assertThat(candidates).hasSize(2).doesNotContain("John Locke").contains("Jack Shephard").contains(
                 "Hurley Reyes");
     }

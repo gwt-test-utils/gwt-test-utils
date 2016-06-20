@@ -6,9 +6,10 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.googlecode.gwt.test.utils.events.Browser;
 import com.googlecode.gwt.test.utils.events.EventBuilder;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FocusPanelTest extends GwtTestTest {
 
@@ -25,7 +26,7 @@ public class FocusPanelTest extends GwtTestTest {
 
     @Test
     public void click_EmptyPanel() {
-        // Arrange
+        // Given
         panel = new FocusPanel();
         panel.addClickHandler(new ClickHandler() {
 
@@ -34,16 +35,16 @@ public class FocusPanelTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         Browser.click(panel);
 
-        // Assert
-        Assert.assertTrue(test);
+        // Then
+        assertThat(test).isTrue();
     }
 
     @Test
     public void click_WithChild() {
-        // Arrange
+        // Given
         panel.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
@@ -59,18 +60,18 @@ public class FocusPanelTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         Browser.click(panel);
 
-        // Assert
-        Assert.assertTrue(test);
+        // Then
+        assertThat(test).isTrue();
         // click event should not be dispatched to the child widget
-        Assert.assertEquals("focus panel's child widget", child.getText());
+        assertThat(child.getText()).isEqualTo("focus panel's child widget");
     }
 
     @Test
     public void touchCancel() {
-        // Arrange
+        // Given
         panel.addTouchCancelHandler(new TouchCancelHandler() {
 
             public void onTouchCancel(TouchCancelEvent event) {
@@ -78,16 +79,16 @@ public class FocusPanelTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHCANCEL).build());
 
-        // Assert
-        Assert.assertTrue(test);
+        // Then
+        assertThat(test).isTrue();
     }
 
     @Test
     public void touchEnd() {
-        // Arrange
+        // Given
         panel.addTouchEndHandler(new TouchEndHandler() {
 
             public void onTouchEnd(TouchEndEvent event) {
@@ -95,16 +96,16 @@ public class FocusPanelTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHEND).build());
 
-        // Assert
-        Assert.assertTrue(test);
+        // Then
+        assertThat(test).isTrue();
     }
 
     @Test
     public void touchMove() {
-        // Arrange
+        // Given
         panel.addTouchMoveHandler(new TouchMoveHandler() {
 
             public void onTouchMove(TouchMoveEvent event) {
@@ -113,16 +114,16 @@ public class FocusPanelTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHMOVE).build());
 
-        // Assert
-        Assert.assertTrue(test);
+        // Then
+        assertThat(test).isTrue();
     }
 
     @Test
     public void touchStart() {
-        // Arrange
+        // Given
         panel.addTouchStartHandler(new TouchStartHandler() {
 
             public void onTouchStart(TouchStartEvent event) {
@@ -131,11 +132,11 @@ public class FocusPanelTest extends GwtTestTest {
             }
         });
 
-        // Act
+        // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHSTART).build());
 
-        // Assert
-        Assert.assertTrue(test);
+        // Then
+        assertThat(test).isTrue();
     }
 
 }

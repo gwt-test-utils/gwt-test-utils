@@ -3,19 +3,19 @@ package com.googlecode.gwt.test.uibinder;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UiBinderWithLayoutPanelTest extends GwtTestTest {
 
     @Test
     public void content() {
-        // Act
+        // When
         UiBinderWithLayoutPanel panel = new UiBinderWithLayoutPanel();
 
-        // Assert
-        assertEquals(2, panel.getPanel().getWidgetCount());
-        assertEquals(panel.defaultLabel, panel.getPanel().getWidget(0));
-        assertEquals(panel.headerLabel, panel.getPanel().getWidget(1));
+        // Then
+        assertThat(panel.getPanel().getWidgetCount()).isEqualTo(2);
+        assertThat(panel.getPanel().getWidget(0)).isEqualTo(panel.defaultLabel);
+        assertThat(panel.getPanel().getWidget(1)).isEqualTo(panel.headerLabel);
     }
 
 }

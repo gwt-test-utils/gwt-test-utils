@@ -12,41 +12,41 @@ public class XMLElementTest extends GwtTestTest {
 
     @Test
     public void elementToString() {
-        // Arrange
+        // Given
         Document document = XMLParser.createDocument();
         Element e = document.createElement("ThisIsATest");
         e.appendChild(document.createTextNode("SomeTextNode"));
 
-        // Act
+        // When
         String toString = e.toString();
 
-        // Assert
+        // Then
         assertThat(toString).isEqualTo("<ThisIsATest>SomeTextNode</ThisIsATest>");
     }
 
     @Test
     public void emptyElementToString() {
-        // Arrange
+        // Given
         Document document = XMLParser.createDocument();
         Element e = document.createElement("ThisIsATest");
 
-        // Act
+        // When
         String toString = e.toString();
 
-        // Assert
+        // Then
         assertThat(toString).isEqualTo("<ThisIsATest/>");
     }
 
     @Test
     public void setAttribute() {
-        // Arrange
+        // Given
         Document document = XMLParser.createDocument();
         Element element = document.createElement("elem");
 
-        // Act
+        // When
         element.setAttribute("myAttr", "myValue");
 
-        // Assert
+        // Then
         assertThat(element.getAttribute("myAttr")).isEqualTo("myValue");
     }
 

@@ -8,63 +8,62 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DictionaryTest extends GwtTestTest {
 
     @Test
     public void checkToString() {
-        // Arrange
+        // Given
         addDictionaryEntries("toString", createDictionaryEntries());
 
-        // Act
+        // When
         String toString = Dictionary.getDictionary("toString").toString();
 
-        // Assert
-        assertEquals("Dictionary toString", toString);
+        // Then
+        assertThat(toString).isEqualTo("Dictionary toString");
     }
 
     @Test
     public void get() {
-        // Arrange
+        // Given
         addDictionaryEntries("get", createDictionaryEntries());
 
-        // Act
+        // When
         String name = Dictionary.getDictionary("get").get("name");
         String description = Dictionary.getDictionary("get").get("description");
 
-        // Assert
-        assertEquals("gwt-test-utils", name);
-        assertEquals("An awesome GWT testing tool ;-)", description);
+        // Then
+        assertThat(name).isEqualTo("gwt-test-utils");
+        assertThat(description).isEqualTo("An awesome GWT testing tool ;-)");
     }
 
     @Test
     public void keySet() {
-        // Arrange
+        // Given
         addDictionaryEntries("keySet", createDictionaryEntries());
 
-        // Act
+        // When
         Set<String> keySet = Dictionary.getDictionary("keySet").keySet();
 
-        // Assert
-        assertEquals(2, keySet.size());
-        assertTrue(keySet.contains("name"));
-        assertTrue(keySet.contains("description"));
+        // Then
+        assertThat(keySet).hasSize(2);
+        assertThat(keySet.contains("name")).isTrue();
+        assertThat(keySet.contains("description")).isTrue();
     }
 
     @Test
     public void values() {
-        // Arrange
+        // Given
         addDictionaryEntries("values", createDictionaryEntries());
 
-        // Act
+        // When
         Collection<String> values = Dictionary.getDictionary("values").values();
 
-        // Assert
-        assertEquals(2, values.size());
-        assertTrue(values.contains("gwt-test-utils"));
-        assertTrue(values.contains("An awesome GWT testing tool ;-)"));
+        // Then
+        assertThat(values).hasSize(2);
+        assertThat(values.contains("gwt-test-utils")).isTrue();
+        assertThat(values.contains("An awesome GWT testing tool ;-)")).isTrue();
     }
 
     private Map<String, String> createDictionaryEntries() {
