@@ -27,7 +27,7 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
 
 * GWT code unit testing with small execution time (no hosted mode / browser launched in the background)
 * Simulation for browser's events (click, blur, change, ...)
-* Fluent interface for assertions on widgets, based on [fest-assert](https://github.com/alexruiz/fest-assert-2.x)
+* Fluent interface for assertions on widgets, based on [assertj](http://joel-costigliola.github.io/assertj/index.html)
 * Mocks handling using [Mockito](http://mockito.org/) or [EasyMock](http://easymock.org/)
 * Standard maven-surefire-plugin support for testing with [Maven](http://maven.apache.org/)
 * Support for GWT + [Spring](http://www.springsource.org/) application testing

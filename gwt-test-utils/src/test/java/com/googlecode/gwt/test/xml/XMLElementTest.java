@@ -6,7 +6,7 @@ import com.google.gwt.xml.client.XMLParser;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class XMLElementTest extends GwtTestTest {
 

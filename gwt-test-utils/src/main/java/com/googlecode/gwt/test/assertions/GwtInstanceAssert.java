@@ -4,7 +4,7 @@ import com.googlecode.gwt.test.finder.GwtInstance;
 
 import java.util.Arrays;
 
-import static org.fest.util.Objects.namesOf;
+import static org.assertj.core.util.Objects.namesOf;
 
 /**
  * Assertions for <code>{@link GwtInstance}</code> wrapped object.
@@ -40,10 +40,10 @@ public class GwtInstanceAssert extends GwtGenericAssert<GwtInstanceAssert, Objec
         assertNotNull();
         validateNotNull(type);
         Class<?> current = actual.getClass();
-        if (type.isAssignableFrom(current))
-            return this;
+        if (!type.isAssignableFrom(current))
+            failWithMessage("expected instance of:<%s> but was instance of:<%s>", type, current);
 
-        throw failWithMessage("expected instance of:<%s> but was instance of:<%s>", type, current);
+        return this;
     }
 
     /**
@@ -63,14 +63,14 @@ public class GwtInstanceAssert extends GwtGenericAssert<GwtInstanceAssert, Objec
         if (types == null)
             throw new IllegalArgumentException("The given array of types should not be null");
         if (!foundInstanceOfAny(types))
-            throw failWithMessage("expected instance of any:<%s> but was instance of:<%s>",
+            failWithMessage("expected instance of any:<%s> but was instance of:<%s>",
                     typeNames(types), actual.getClass().getName());
         return this;
     }
 
     private void assertNotNull() {
         if (actual == null) {
-            throw failWithMessage("expecting actual value not to be null");
+            failWithMessage("expecting actual value not to be null");
         }
     }
 

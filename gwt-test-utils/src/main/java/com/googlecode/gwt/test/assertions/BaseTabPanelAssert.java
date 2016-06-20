@@ -2,7 +2,7 @@ package com.googlecode.gwt.test.assertions;
 
 import com.google.gwt.user.client.ui.TabPanel;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for all {@link TabPanel} assertions.
@@ -35,11 +35,10 @@ public class BaseTabPanelAssert<S extends BaseTabPanelAssert<S, A>, A extends Ta
      * @see TabPanel#isAnimationEnabled()
      */
     public S isAnimationDisabled() {
-        if (!actual.isAnimationEnabled())
-            return myself;
+        if (actual.isAnimationEnabled())
+            failWithMessage("should disables animation");
 
-        throw failWithMessage("should disables animation");
-
+        return myself;
     }
 
     /**
@@ -50,10 +49,10 @@ public class BaseTabPanelAssert<S extends BaseTabPanelAssert<S, A>, A extends Ta
      * @see TabPanel#isAnimationEnabled()
      */
     public S isAnimationEnabled() {
-        if (actual.isAnimationEnabled())
-            return myself;
+        if (!actual.isAnimationEnabled())
+            failWithMessage("should enable animation");
 
-        throw failWithMessage("should enable animation");
+        return myself;
     }
 
     /**

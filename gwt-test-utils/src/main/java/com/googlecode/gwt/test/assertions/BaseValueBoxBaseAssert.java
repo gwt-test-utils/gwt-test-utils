@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.ValueBoxBase;
 
 import java.text.ParseException;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for {@link ValueBoxBase} assertions.
@@ -85,11 +85,10 @@ public class BaseValueBoxBaseAssert<S extends BaseValueBoxBaseAssert<S, A, T>, A
      * @see ValueBoxBase#isReadOnly()
      */
     public S isNotReadOnly() {
-        if (!actual.isReadOnly())
-            return myself;
+        if (actual.isReadOnly())
+            failWithMessage("should not be read-only");
 
-        throw failWithMessage("should not be read-only");
-
+        return myself;
     }
 
     /**
@@ -100,10 +99,10 @@ public class BaseValueBoxBaseAssert<S extends BaseValueBoxBaseAssert<S, A, T>, A
      * @see ValueBoxBase#isReadOnly()
      */
     public S isReadOnly() {
-        if (actual.isReadOnly())
-            return myself;
+        if (!actual.isReadOnly())
+            failWithMessage("should be read-only");
 
-        throw failWithMessage("should be read-only");
+        return myself;
     }
 
     /**

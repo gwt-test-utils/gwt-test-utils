@@ -1,8 +1,8 @@
 package com.googlecode.gwt.test.assertions;
 
-import org.fest.assertions.core.WritableAssertionInfo;
-import org.fest.assertions.description.Description;
-import org.fest.assertions.description.TextDescription;
+import org.assertj.core.api.WritableAssertionInfo;
+import org.assertj.core.description.Description;
+import org.assertj.core.description.TextDescription;
 
 /**
  * Writable information about a GWT assertion.

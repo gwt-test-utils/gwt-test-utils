@@ -20,7 +20,7 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 import com.googlecode.gwt.test.utils.WidgetUtils;
 import com.googlecode.gwt.test.utils.events.Browser;
 import com.googlecode.gwt.test.utils.events.Browser.BrowserErrorHandler;
-import org.fest.assertions.api.Fail;
+import org.assertj.core.api.Fail;
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -38,8 +38,8 @@ import java.util.List;
 
 import static com.googlecode.gwt.test.assertions.GwtAssertions.assertThat;
 import static com.googlecode.gwt.test.finder.GwtFinder.object;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.api.Fail.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
 
 @RunWith(GwtCsvRunner.class)
 public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionHandlers {

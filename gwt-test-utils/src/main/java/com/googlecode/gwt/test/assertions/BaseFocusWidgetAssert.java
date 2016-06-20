@@ -33,10 +33,10 @@ public class BaseFocusWidgetAssert<S extends BaseFocusWidgetAssert<S, A>, A exte
      * @see FocusWidget#isEnabled()
      */
     public S isEnabled() {
-        if (actual.isEnabled())
-            return myself;
+        if (!actual.isEnabled())
+            failWithMessage("should be enabled");
 
-        throw failWithMessage("should be enabled");
+        return myself;
     }
 
     /**
@@ -47,10 +47,10 @@ public class BaseFocusWidgetAssert<S extends BaseFocusWidgetAssert<S, A>, A exte
      * @see FocusWidget#isEnabled()
      */
     public S isNotEnabled() {
-        if (!actual.isEnabled())
-            return myself;
+        if (actual.isEnabled())
+            failWithMessage("should not be enabled");
 
-        throw failWithMessage("should not be enabled");
+        return myself;
     }
 
 }

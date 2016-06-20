@@ -25,10 +25,10 @@ public class TreeItemAssert extends BaseUIObjectAssert<TreeItemAssert, TreeItem>
      * @throws AssertionError if the actual {@link TreeItem} is opened.
      */
     public TreeItemAssert isNotOpened() {
-        if (!actual.getState())
-            return this;
+        if (actual.getState())
+            failWithMessage("should not be opened");
 
-        throw failWithMessage("should not be opened");
+        return this;
     }
 
     /**
@@ -38,10 +38,10 @@ public class TreeItemAssert extends BaseUIObjectAssert<TreeItemAssert, TreeItem>
      * @throws AssertionError if the actual {@link TreeItem} is selected.
      */
     public TreeItemAssert isNotSelected() {
-        if (!actual.isSelected())
-            return this;
+        if (actual.isSelected())
+            failWithMessage("should not be selected");
 
-        throw failWithMessage("should not be selected");
+        return this;
     }
 
     /**
@@ -51,10 +51,10 @@ public class TreeItemAssert extends BaseUIObjectAssert<TreeItemAssert, TreeItem>
      * @throws AssertionError if the actual {@link TreeItem} is not opened.
      */
     public TreeItemAssert isOpened() {
-        if (actual.getState())
-            return this;
+        if (!actual.getState())
+            failWithMessage("should be opened");
 
-        throw failWithMessage("should be opened");
+        return this;
     }
 
     /**
@@ -64,10 +64,10 @@ public class TreeItemAssert extends BaseUIObjectAssert<TreeItemAssert, TreeItem>
      * @throws AssertionError if the actual {@link TreeItem} is not selected.
      */
     public TreeItemAssert isSelected() {
-        if (actual.isSelected())
-            return this;
+        if (!actual.isSelected())
+            failWithMessage("should be selected");
 
-        throw failWithMessage("should be selected");
+        return this;
     }
 
 }

@@ -1,13 +1,14 @@
 package com.googlecode.gwt.test.assertions;
 
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
-import org.fest.assertions.api.AbstractAssert;
-import org.fest.assertions.description.Description;
-import org.fest.assertions.error.BasicErrorMessageFactory;
-import org.fest.assertions.internal.Failures;
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.description.Description;
+import org.assertj.core.error.BasicErrorMessageFactory;
+import org.assertj.core.internal.Failures;
+import org.assertj.core.presentation.StandardRepresentation;
 
 import static java.lang.String.format;
-import static org.fest.assertions.error.ShouldBeEqual.shouldBeEqual;
+import static org.assertj.core.error.ShouldBeEqual.shouldBeEqual;
 
 /**
  * Template for all gwt-test-utils assertions.
@@ -35,7 +36,7 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
     protected GwtGenericAssert(A actual, Class<S> selfType) {
         super(actual, selfType);
 
-        // hack because fest-assert "info" is not configurable..
+        // hack because assertj "info" is not configurable..
         gwtInfo = new GwtWritableAssertionInfo();
         GwtReflectionUtils.setPrivateFieldValue(this, "info", gwtInfo);
     }
@@ -47,8 +48,9 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
      * @param args        the args used to fill description as in {@link String#format(String, Object...)}.
      * @return {@code this} object.
      * @throws NullPointerException if the description is {@code null}.
-     * @see #describedAs(String)
+     * @see #describedAs(String, Object...)
      */
+    @Override
     public S as(String description, Object... args) {
         return describedAs(format(description, args));
     }
@@ -75,7 +77,8 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
      * @return a {@code AssertionError} describing the assertion failure based on the supplied
      * message.
      */
-    protected AssertionError failWithMessage(String format, Object... arguments) {
+    @Override
+    protected void failWithMessage(String format, Object... arguments) {
         GwtWritableAssertionInfo info = new GwtWritableAssertionInfo();
         info.prefix(gwtInfo.prefix());
         info.overridingErrorMessage(gwtInfo.overridingErrorMessage());
@@ -84,7 +87,7 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
         String newDescription = d != null ? d.value() : this.actual.getClass().getSimpleName();
         info.description(newDescription);
 
-        return failures.failure(info, new BasicErrorMessageFactory(format, arguments));
+        throw failures.failure(info, new BasicErrorMessageFactory(format, arguments));
     }
 
     /**
@@ -109,7 +112,7 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
                 : this.actual.getClass().getSimpleName() + "'s " + propertyName;
         info.description(newDescription);
 
-        return failures.failure(info, shouldBeEqual(actual, expected));
+        return failures.failure(info, shouldBeEqual(actual, expected, new StandardRepresentation()));
 
     }
 

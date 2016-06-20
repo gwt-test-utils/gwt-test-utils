@@ -6,7 +6,7 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MockingOverlayInnerTypeTest extends GwtTestTest {
 

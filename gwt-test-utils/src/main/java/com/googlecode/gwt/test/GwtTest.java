@@ -9,7 +9,7 @@ import com.googlecode.gwt.test.utils.events.Browser.BrowserErrorHandler;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.fest.assertions.api.Fail;
+import org.assertj.core.api.Fail;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

@@ -7,7 +7,7 @@ import com.googlecode.gwt.test.finder.GwtInstance;
 /**
  * Entry point for assertion methods for different GWT types. Each method in this class is a static
  * factory for the type-specific assertion objects. The purpose of this class is to make test code
- * more readable, following <strong>fest-assert</strong> principles.
+ * more readable, following <strong>assertj</strong> principles.
  *
  * @author Gael Lazzari
  */

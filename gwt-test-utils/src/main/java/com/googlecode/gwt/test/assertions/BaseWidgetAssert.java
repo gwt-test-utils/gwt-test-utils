@@ -35,10 +35,10 @@ public abstract class BaseWidgetAssert<S extends BaseWidgetAssert<S, A>, A exten
      * @throws AssertionError if the actual {@link UIObject} is not visible.
      */
     public S isAttached() {
-        if (actual.isAttached())
-            return myself;
+        if (!actual.isAttached())
+            failWithMessage("should be attached");
 
-        throw failWithMessage("should be attached");
+        return myself;
     }
 
     /**
@@ -50,11 +50,10 @@ public abstract class BaseWidgetAssert<S extends BaseWidgetAssert<S, A>, A exten
      * @throws AssertionError if the actual {@link UIObject} is visible.
      */
     public S isNotAttached() {
-        if (!actual.isAttached())
-            return myself;
+        if (actual.isAttached())
+            failWithMessage("should not be attached");
 
-        throw failWithMessage("should not be attached");
-
+        return myself;
     }
 
 }

@@ -6,7 +6,7 @@ import com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithIE;
 import com.googlecode.gwt.test.deferred.ReplaceWithDefault.ReplaceWithMozilla;
 import org.junit.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class CustomDeferredBindingTest extends GwtTestTest {

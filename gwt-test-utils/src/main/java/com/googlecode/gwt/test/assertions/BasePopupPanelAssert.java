@@ -33,10 +33,10 @@ public class BasePopupPanelAssert<S extends BasePopupPanelAssert<S, A>, A extend
      * @see PopupPanel#isModal()
      */
     public S isModal() {
-        if (actual.isModal())
-            return myself;
+        if (!actual.isModal())
+            failWithMessage("should be modal");
 
-        throw failWithMessage("should be modal");
+        return myself;
     }
 
     /**
@@ -47,10 +47,10 @@ public class BasePopupPanelAssert<S extends BasePopupPanelAssert<S, A>, A extend
      * @see PopupPanel#isModal()
      */
     public S isNotModal() {
-        if (!actual.isModal())
-            return myself;
+        if (actual.isModal())
+            failWithMessage("should not be modal");
 
-        throw failWithMessage("should not be modal");
+        return myself;
     }
 
     /**
@@ -61,10 +61,10 @@ public class BasePopupPanelAssert<S extends BasePopupPanelAssert<S, A>, A extend
      * @see PopupPanel#isShowing()
      */
     public S isNotShowing() {
-        if (!actual.isShowing())
-            return myself;
+        if (actual.isShowing())
+            failWithMessage("should not be showing");
 
-        throw failWithMessage("should not be showing");
+        return myself;
     }
 
     /**
@@ -75,10 +75,10 @@ public class BasePopupPanelAssert<S extends BasePopupPanelAssert<S, A>, A extend
      * @see PopupPanel#isShowing()
      */
     public S isShowing() {
-        if (actual.isShowing())
-            return myself;
+        if (!actual.isShowing())
+            failWithMessage("should be showing");
 
-        throw failWithMessage("should be showing");
+        return myself;
     }
 
 }

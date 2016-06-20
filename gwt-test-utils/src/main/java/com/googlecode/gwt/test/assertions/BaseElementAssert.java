@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.UIObject;
 import com.googlecode.gwt.test.utils.GwtDomUtils;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for all {@link Element} assertions.
@@ -42,7 +42,7 @@ public abstract class BaseElementAssert<S extends BaseElementAssert<S, A>, A ext
     public S doesNotHaveStyle(String... notExpected) {
         for (String styleName : notExpected) {
             if (GwtDomUtils.hasStyle(actual, styleName)) {
-                throw failWithMessage("should not have style %s", styleName);
+                failWithMessage("should not have style %s", styleName);
             }
         }
 
@@ -59,7 +59,7 @@ public abstract class BaseElementAssert<S extends BaseElementAssert<S, A>, A ext
     public S hasStyle(String... expected) {
         for (String styleName : expected) {
             if (!GwtDomUtils.hasStyle(actual, styleName)) {
-                throw failWithMessage("should have style %s", styleName);
+                failWithMessage("should have style %s", styleName);
             }
         }
 
@@ -76,9 +76,10 @@ public abstract class BaseElementAssert<S extends BaseElementAssert<S, A>, A ext
     public S htmlContains(String sequence) {
         String html = HasHTML.class.isInstance(actual) ? ((HasHTML) actual).getHTML()
                 : actual.getInnerHTML();
-        if (html.contains(sequence))
-            return myself;
-        throw failWithMessage("actual HTML [%s] does not contains [%s]", html, sequence);
+        if (!html.contains(sequence))
+            failWithMessage("actual HTML [%s] does not contains [%s]", html, sequence);
+
+        return myself;
     }
 
     /**
@@ -103,11 +104,10 @@ public abstract class BaseElementAssert<S extends BaseElementAssert<S, A>, A ext
      * @throws AssertionError if the actual {@link UIObject} is visible.
      */
     public S isNotVisible() {
-        if (!GwtDomUtils.isVisible(actual))
-            return myself;
+        if (GwtDomUtils.isVisible(actual))
+            failWithMessage("should not be visible");
 
-        throw failWithMessage("should not be visible");
-
+        return myself;
     }
 
     /**
@@ -117,10 +117,10 @@ public abstract class BaseElementAssert<S extends BaseElementAssert<S, A>, A ext
      * @throws AssertionError if the actual {@link UIObject} is not visible.
      */
     public S isVisible() {
-        if (GwtDomUtils.isVisible(actual))
-            return myself;
+        if (!GwtDomUtils.isVisible(actual))
+            failWithMessage("should be visible");
 
-        throw failWithMessage("should be visible");
+        return myself;
     }
 
     /**
@@ -161,9 +161,10 @@ public abstract class BaseElementAssert<S extends BaseElementAssert<S, A>, A ext
     public S textContains(String sequence) {
         String text = HasText.class.isInstance(actual) ? ((HasText) actual).getText()
                 : actual.getInnerText();
-        if (text.contains(sequence))
-            return myself;
-        throw failWithMessage("actual text [%s] does not contains [%s]", text, sequence);
+        if (!text.contains(sequence))
+            failWithMessage("actual text [%s] does not contains [%s]", text, sequence);
+
+        return myself;
     }
 
     /**
@@ -190,9 +191,10 @@ public abstract class BaseElementAssert<S extends BaseElementAssert<S, A>, A ext
      */
     public S titleContains(String sequence) {
         String title = actual.getTitle();
-        if (title.contains(sequence))
-            return myself;
-        throw failWithMessage("actual title [%s] does not contains [%s]", title, sequence);
+        if (!title.contains(sequence))
+            failWithMessage("actual title [%s] does not contains [%s]", title, sequence);
+
+        return myself;
     }
 
     /**

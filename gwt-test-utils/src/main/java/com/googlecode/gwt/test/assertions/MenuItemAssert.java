@@ -26,10 +26,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      * @throws AssertionError if the actual {@link MenuItem} has an associated {@link Command}.
      */
     public MenuItemAssert doesNotHaveCommand() {
-        if (actual.getCommand() == null)
-            return this;
+        if (actual.getCommand() != null)
+            failWithMessage("should not have an associated command");
 
-        throw failWithMessage("should not have an associated command");
+        return this;
     }
 
     /**
@@ -39,10 +39,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      * @throws AssertionError if the actual {@link MenuItem} has an associated parent menu.
      */
     public MenuItemAssert doesNotHaveParentMenu() {
-        if (actual.getParentMenu() == null)
-            return this;
+        if (actual.getParentMenu() != null)
+            failWithMessage("should not have an associated parent menu");
 
-        throw failWithMessage("should not have an associated parent menu");
+        return this;
     }
 
     /**
@@ -52,10 +52,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      * @throws AssertionError if the actual {@link MenuItem} has an associated sub-menu.
      */
     public MenuItemAssert doesNotHaveSubMenu() {
-        if (actual.getSubMenu() == null)
-            return this;
+        if (actual.getSubMenu() != null)
+            failWithMessage("should not have an associated sub-menu");
 
-        throw failWithMessage("should not have an associated sub-menu");
+        return this;
     }
 
     /**
@@ -66,10 +66,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      *                        {@link Command}.
      */
     public MenuItemAssert hasCommand() {
-        if (actual.getCommand() != null)
-            return this;
+        if (actual.getCommand() == null)
+            failWithMessage("should have an associated command");
 
-        throw failWithMessage("should have an associated command");
+        return this;
     }
 
     /**
@@ -79,10 +79,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      * @throws AssertionError if the actual {@link MenuItem} does not have an associated parent menu.
      */
     public MenuItemAssert hasParentMenu() {
-        if (actual.getParentMenu() != null)
-            return this;
+        if (actual.getParentMenu() == null)
+            failWithMessage("should have an associated parent menu");
 
-        throw failWithMessage("should have an associated parent menu");
+        return this;
     }
 
     /**
@@ -92,10 +92,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      * @throws AssertionError if the actual {@link MenuItem} does not have an associated sub-menu.
      */
     public MenuItemAssert hasSubMenu() {
-        if (actual.getSubMenu() != null)
-            return this;
+        if (actual.getSubMenu() == null)
+            failWithMessage("should have an associated sub-menu");
 
-        throw failWithMessage("should have an associated sub-menu");
+        return this;
     }
 
     /**
@@ -105,10 +105,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      * @throws AssertionError if the actual {@link MenuItem} is not enabled.
      */
     public MenuItemAssert isEnabled() {
-        if (actual.isEnabled())
-            return this;
+        if (!actual.isEnabled())
+            failWithMessage("should be enabled");
 
-        throw failWithMessage("should be enabled");
+        return this;
     }
 
     /**
@@ -118,10 +118,10 @@ public class MenuItemAssert extends BaseUIObjectAssert<MenuItemAssert, MenuItem>
      * @throws AssertionError if the actual {@link MenuItem} is enabled.
      */
     public MenuItemAssert isNotEnabled() {
-        if (!actual.isEnabled())
-            return this;
+        if (actual.isEnabled())
+            failWithMessage("should not be enabled");
 
-        throw failWithMessage("should not be enabled");
+        return this;
     }
 
 }

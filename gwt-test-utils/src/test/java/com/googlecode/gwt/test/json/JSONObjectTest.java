@@ -4,7 +4,7 @@ import com.google.gwt.json.client.*;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.junit.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import static com.googlecode.gwt.test.assertions.GwtAssertions.assertThat;
 import static com.googlecode.gwt.test.finder.GwtFinder.object;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.api.Fail.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.failBecauseExceptionWasNotThrown;
 
 public class GwtInstanceTest extends GwtTestTest {
 

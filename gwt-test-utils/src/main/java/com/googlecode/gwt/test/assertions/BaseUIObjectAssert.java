@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.UIObject;
 import com.googlecode.gwt.test.utils.WidgetUtils;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for all {@link UIObject} assertions.
@@ -41,7 +41,7 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     public S doesNotHaveStyle(String... notExpected) {
         for (String styleName : notExpected) {
             if (WidgetUtils.hasStyle(actual, styleName)) {
-                throw failWithMessage("should not have style %s", styleName);
+                failWithMessage("should not have style %s", styleName);
             }
         }
 
@@ -58,7 +58,7 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     public S hasStyle(String... expected) {
         for (String styleName : expected) {
             if (!WidgetUtils.hasStyle(actual, styleName)) {
-                throw failWithMessage("should have style %s", styleName);
+                failWithMessage("should have style %s", styleName);
             }
         }
 
@@ -75,9 +75,10 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     public S htmlContains(String sequence) {
         String html = HasHTML.class.isInstance(actual) ? ((HasHTML) actual).getHTML()
                 : actual.getElement().getInnerHTML();
-        if (html.contains(sequence))
-            return myself;
-        throw failWithMessage("actual HTML [%s] does not contains [%s]", html, sequence);
+        if (!html.contains(sequence))
+            failWithMessage("actual HTML [%s] does not contains [%s]", html, sequence);
+
+        return myself;
     }
 
     /**
@@ -102,11 +103,10 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
      * @throws AssertionError if the actual {@link UIObject} is visible.
      */
     public S isNotVisible() {
-        if (!WidgetUtils.isWidgetVisible(actual))
-            return myself;
+        if (WidgetUtils.isWidgetVisible(actual))
+            failWithMessage("should not be visible");
 
-        throw failWithMessage("should not be visible");
-
+        return myself;
     }
 
     /**
@@ -116,10 +116,10 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
      * @throws AssertionError if the actual {@link UIObject} is not visible.
      */
     public S isVisible() {
-        if (WidgetUtils.isWidgetVisible(actual))
-            return myself;
+        if (!WidgetUtils.isWidgetVisible(actual))
+            failWithMessage("should be visible");
 
-        throw failWithMessage("should be visible");
+        return myself;
     }
 
     /**
@@ -160,9 +160,10 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
     public S textContains(String sequence) {
         String text = HasText.class.isInstance(actual) ? ((HasText) actual).getText()
                 : actual.getElement().getInnerText();
-        if (text.contains(sequence))
-            return myself;
-        throw failWithMessage("actual text [%s] does not contains [%s]", text, sequence);
+        if (!text.contains(sequence))
+            failWithMessage("actual text [%s] does not contains [%s]", text, sequence);
+
+        return myself;
     }
 
     /**
@@ -189,9 +190,10 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
      */
     public S titleContains(String sequence) {
         String title = actual.getTitle();
-        if (title.contains(sequence))
-            return myself;
-        throw failWithMessage("actual title [%s] does not contains [%s]", title, sequence);
+        if (!title.contains(sequence))
+            failWithMessage("actual title [%s] does not contains [%s]", title, sequence);
+
+        return myself;
     }
 
     /**

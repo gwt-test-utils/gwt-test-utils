@@ -2,7 +2,7 @@ package com.googlecode.gwt.test.assertions;
 
 import com.google.gwt.user.client.ui.SuggestBox;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for {@link SuggestBox} assertions.
@@ -32,13 +32,13 @@ public class BaseSuggestBoxAssert<S extends BaseSuggestBoxAssert<S, A>, A extend
      *
      * @return this assertion object.
      * @throws AssertionError if the actual {@link SuggestBox} is not enabled.
-     * @see SuggestBox#getTextBox()
+     * @see SuggestBox#getValueBox()
      */
     public S isEnabled() {
-        if (actual.getTextBox().isEnabled())
-            return myself;
+        if (!actual.getValueBox().isEnabled())
+            failWithMessage("should be enabled");
 
-        throw failWithMessage("should be enabled");
+        return myself;
     }
 
     /**
@@ -46,13 +46,13 @@ public class BaseSuggestBoxAssert<S extends BaseSuggestBoxAssert<S, A>, A extend
      *
      * @return this assertion object.
      * @throws AssertionError if the actual {@link SuggestBox} is enabled.
-     * @see SuggestBox#getTextBox()
+     * @see SuggestBox#getValueBox()
      */
     public S isNotEnabled() {
-        if (!actual.getTextBox().isEnabled())
-            return myself;
+        if (actual.getValueBox().isEnabled())
+            failWithMessage("should not be enabled");
 
-        throw failWithMessage("should not be enabled");
+        return myself;
     }
 
     /**

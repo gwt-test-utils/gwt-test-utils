@@ -3,7 +3,7 @@ package com.googlecode.gwt.test.assertions;
 import com.google.gwt.user.client.ui.ListBox;
 import com.googlecode.gwt.test.utils.WidgetUtils;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for {@link ListBox} assertions.
@@ -37,12 +37,12 @@ public class BaseListBoxAssert<S extends BaseListBoxAssert<S, A>, A extends List
     public S dataMatches(String... expected) {
         int contentSize = expected.length;
         if (contentSize != actual.getItemCount()) {
-            throw failWithMessage("does not match actual listbox's content: [%s]",
+            failWithMessage("does not match actual listbox's content: [%s]",
                     WidgetUtils.getListBoxContentToString(actual));
         }
         for (int i = 0; i < contentSize; i++) {
             if (!expected[i].equals(actual.getItemText(i))) {
-                throw failWithMessage("does not match actual listbox's content: [%s]",
+                failWithMessage("does not match actual listbox's content: [%s]",
                         WidgetUtils.getListBoxContentToString(actual));
             }
         }
@@ -60,16 +60,15 @@ public class BaseListBoxAssert<S extends BaseListBoxAssert<S, A>, A extends List
     public S selectedValueEquals(String expected) {
         int selectedIndex = actual.getSelectedIndex();
         if (selectedIndex == -1) {
-            throw failWithMessage("listbox does not have a selected value");
-        } else {
-            String selected = actual.getItemText(selectedIndex);
-            if (areEqual(selected, expected)) {
-                return myself;
-            } else {
-                throw propertyComparisonFailed("selected value", selected, expected);
-            }
+            failWithMessage("listbox does not have a selected value");
         }
 
+        String selected = actual.getItemText(selectedIndex);
+        if (areEqual(selected, expected)) {
+            return myself;
+        } else {
+            throw propertyComparisonFailed("selected value", selected, expected);
+        }
     }
 
 }

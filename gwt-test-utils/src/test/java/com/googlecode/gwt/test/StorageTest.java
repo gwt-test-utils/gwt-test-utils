@@ -3,7 +3,7 @@ package com.googlecode.gwt.test;
 import com.google.gwt.storage.client.Storage;
 import org.junit.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageTest extends GwtTestTest {
 

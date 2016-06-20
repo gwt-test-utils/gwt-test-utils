@@ -2,7 +2,7 @@ package com.googlecode.gwt.test.assertions;
 
 import com.google.gwt.user.client.ui.CheckBox;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for {@link CheckBox} assertions.
@@ -50,10 +50,12 @@ public class BaseCheckBoxAssert<S extends BaseCheckBoxAssert<S, A>, A extends Ch
      * @see CheckBox#getValue()
      */
     public S isChecked() {
-        if (actual.getValue())
-            return myself;
+        if (!actual.getValue())
+            failWithMessage("should be checked");
 
-        throw failWithMessage("should be checked");
+        return myself;
+
+
     }
 
     /**
@@ -64,11 +66,10 @@ public class BaseCheckBoxAssert<S extends BaseCheckBoxAssert<S, A>, A extends Ch
      * @see CheckBox#getValue()
      */
     public S isNotChecked() {
-        if (!actual.getValue())
-            return myself;
+        if (actual.getValue())
+            failWithMessage("should not be checked");
 
-        throw failWithMessage("should not be checked");
-
+        return myself;
     }
 
     /**
@@ -79,11 +80,10 @@ public class BaseCheckBoxAssert<S extends BaseCheckBoxAssert<S, A>, A extends Ch
      * @see CheckBox#getWordWrap()
      */
     public S isNotWordWrap() {
-        if (!actual.getWordWrap())
-            return myself;
+        if (actual.getWordWrap())
+            failWithMessage("should not be word wrapping");
 
-        throw failWithMessage("should not be word wrapping");
-
+        return myself;
     }
 
     /**
@@ -94,10 +94,10 @@ public class BaseCheckBoxAssert<S extends BaseCheckBoxAssert<S, A>, A extends Ch
      * @see CheckBox#getWordWrap()
      */
     public S isWordWrap() {
-        if (actual.getWordWrap())
-            return myself;
+        if (!actual.getWordWrap())
+            failWithMessage("should be word wrapping");
 
-        throw failWithMessage("should be word wrapping");
+        return myself;
     }
 
     /**

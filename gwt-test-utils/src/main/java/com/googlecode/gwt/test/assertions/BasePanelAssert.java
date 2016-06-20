@@ -4,7 +4,7 @@ import com.google.gwt.user.client.ui.*;
 
 import java.util.Iterator;
 
-import static org.fest.util.Objects.areEqual;
+import static org.assertj.core.util.Objects.areEqual;
 
 /**
  * Base class for all {@link Panel} assertions.
