@@ -17,18 +17,16 @@ import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 class GwtGuiceHelper {
 
     private static final GwtGuiceHelper INSTANCE = new GwtGuiceHelper();
-
-    public static GwtGuiceHelper get() {
-        return INSTANCE;
-    }
-
     private boolean hasSearchedInjector = false;
     private Injector injector;
-
     private ServletDefinitionReader servletDefinitionReader;
 
     private GwtGuiceHelper() {
 
+    }
+
+    public static GwtGuiceHelper get() {
+        return INSTANCE;
     }
 
     public Injector getInjector() {
@@ -65,8 +63,7 @@ class GwtGuiceHelper {
 
         // Try from Guice injection.
         String moduleName = GWT.getModuleName();
-        return servletDefinitionReader.getServletForPath("/" + moduleName + "/"
-                + remoteServiceRelativePath);
+        return servletDefinitionReader.getServletForPath("/" + moduleName + "/" + remoteServiceRelativePath);
     }
 
 }
