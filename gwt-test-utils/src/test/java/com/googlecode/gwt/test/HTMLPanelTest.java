@@ -27,7 +27,7 @@ public class HTMLPanelTest extends GwtTestTest {
         HTMLPanel panel = new HTMLPanel(
                 "<p>you can <b>test</b><a href=\"somelink\">here</a> and everything will be different</p>");
 
-        // When & Assert
+        // When & Then
         assertThat(panel.getElement().getInnerHTML()).isEqualTo("<p>you can <b>test</b><a href=\"somelink\">here</a> and everything will be different</p>");
     }
 }

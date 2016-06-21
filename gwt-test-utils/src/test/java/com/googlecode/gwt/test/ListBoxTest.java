@@ -42,7 +42,7 @@ public class ListBoxTest extends GwtTestTest {
         // Given
         ListBox listBox = getListBox();
 
-        // When & Assert
+        // When & Then
         assertThat(listBox.getVisibleItemCount()).isEqualTo(2);
         assertThat(listBox.getItemCount()).isEqualTo(2);
         assertThat(listBox.getItemText(0)).isEqualTo("item 0");

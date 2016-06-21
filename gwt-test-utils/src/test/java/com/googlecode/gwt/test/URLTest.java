@@ -23,7 +23,7 @@ public class URLTest extends GwtTestTest {
         // Given
         String stringToEncode = "test";
 
-        // When & Assert
+        // When & Then
         assertThat(URL.encodeQueryString(stringToEncode)).isEqualTo(stringToEncode);
     }
 

@@ -97,7 +97,7 @@ public class TabPanelTest extends GwtTestTest {
         Widget widget1 = new HTML("Bar");
         tp.add(widget1, "bar");
 
-        // When & Assert
+        // When & Then
         assertThat(tp.getWidgetIndex(widget1)).isEqualTo(1);
     }
 

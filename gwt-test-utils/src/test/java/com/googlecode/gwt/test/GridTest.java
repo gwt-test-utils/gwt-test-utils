@@ -154,7 +154,7 @@ public class GridTest extends GwtTestTest {
         Button b = new Button("Does nothing, but could");
         g.setWidget(0, 0, b);
 
-        // When & Assert
+        // When & Then
         assertThat(g.remove(b)).as("The button has not been removed from grid").isTrue();
     }
 

@@ -39,43 +39,43 @@ public class MainGwtTest extends GwtTestTest {
 
     @Test
     public void getHostPageBase() {
-        // When & Assert
+        // When & Then
         assertThat(GWT.getHostPageBaseURL()).isEqualTo("http://127.0.0.1:8888/");
     }
 
     @Test
     public void getModuleBaseURL() {
-        // When & Assert
+        // When & Then
         assertThat(GWT.getModuleBaseURL()).isEqualTo("http://127.0.0.1:8888/gwt_test_utils_module/");
     }
 
     @Test
     public void getVersion() {
-        // When & Assert
+        // When & Then
         assertThat(GWT.getVersion()).isEqualTo("GWT by gwt-test-utils");
     }
 
     @Test
     public void initialiseOccursBeforeTheJUnitInitialisationOfTheClass() {
-        // When & Assert
+        // When & Then
         assertThat(sToday).isEqualTo("mer. 24 nov.");
     }
 
     @Test
     public void isClient() {
-        // When & Assert
+        // When & Then
         assertThat(GWT.isClient()).isTrue();
     }
 
     @Test
     public void isScript() {
-        // When & Assert
+        // When & Then
         assertThat(GWT.isScript()).isFalse();
     }
 
     @Test
     public void moduleName() {
-        // When & Assert
+        // When & Then
         assertThat(GWT.getModuleName()).isEqualTo("gwt_test_utils_module");
     }
 

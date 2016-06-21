@@ -19,7 +19,7 @@ public class MenuBarImagesTest extends GwtTestTest {
         // Given
         AbstractImagePrototype proto = menuBarImages.menuBarSubMenuIcon();
 
-        // When & Assert
+        // When & Then
         assertThat(proto.toString()).isNotNull();
     }
 

@@ -43,7 +43,7 @@ public class ClientBundleTest extends GwtTestTest {
         // Given
         MyCssResource testCssResource = MyClientBundle.INSTANCE.cssResource();
 
-        // When & Assert
+        // When & Then
         assertThat(testCssResource.ensureInjected()).isTrue();
         assertThat(testCssResource.ensureInjected()).isFalse();
     }

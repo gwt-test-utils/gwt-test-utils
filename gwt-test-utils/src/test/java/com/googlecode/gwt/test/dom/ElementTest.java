@@ -241,7 +241,7 @@ public class ElementTest extends GwtTestTest {
         e.appendChild(be0);
         e.appendChild(be1);
 
-        // When & Assert
+        // When & Then
         assertThat(e.getFirstChildElement()).isEqualTo(be0);
     }
 
@@ -258,7 +258,7 @@ public class ElementTest extends GwtTestTest {
         e.appendChild(be1);
         e.appendChild(JsoUtils.newText("test2", Document.get()));
 
-        // When & Assert
+        // When & Then
         assertThat(be0.getNextSiblingElement()).isEqualTo(be1);
         assertThat(be1.getNextSiblingElement()).isNull();
     }
@@ -269,7 +269,7 @@ public class ElementTest extends GwtTestTest {
         Element parent = Document.get().createElement("a");
         parent.appendChild(e);
 
-        // When & Assert
+        // When & Then
         assertThat(e.getOffsetHeight()).isEqualTo(0);
         assertThat(e.getOffsetLeft()).isEqualTo(0);
         assertThat(e.getOffsetTop()).isEqualTo(0);
@@ -299,7 +299,7 @@ public class ElementTest extends GwtTestTest {
         // Given
         e.setAttribute("myAttr", "value");
 
-        // When & Assert
+        // When & Then
         assertThat(e.hasAttribute("myAttr")).isTrue();
     }
 
@@ -349,7 +349,7 @@ public class ElementTest extends GwtTestTest {
         e.appendChild(child);
         AnchorElement notAChild = Document.get().createAnchorElement();
 
-        // When & Assert
+        // When & Then
         assertThat(e.isOrHasChild(e)).isTrue();
         assertThat(e.isOrHasChild(child)).isTrue();
         assertThat(e.isOrHasChild(notAChild)).isFalse();
@@ -465,7 +465,7 @@ public class ElementTest extends GwtTestTest {
 
     @Test
     public void tagName() {
-        // When & Assert
+        // When & Then
         assertThat(e.getTagName()).isEqualTo("div");
         assertThat(e.getAttribute("tagName")).isEqualTo("");
         assertThat(e.getAttribute("TAGNAME")).isEqualTo("");

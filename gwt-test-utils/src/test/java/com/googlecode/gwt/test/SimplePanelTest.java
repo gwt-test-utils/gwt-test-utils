@@ -36,7 +36,7 @@ public class SimplePanelTest extends GwtTestTest {
         Button b = new Button();
         panel.add(b);
 
-        // When & Assert
+        // When & Then
         assertThat(panel.remove(b)).isTrue();
     }
 

@@ -15,7 +15,7 @@ public class NumberFormatTest extends GwtTestTest {
         // Given
         setLocale(Locale.FRENCH);
 
-        // When & Assert
+        // When & Then
         assertThat(NumberFormat.getCurrencyFormat().format(10)).isEqualTo("10,00 €");
         assertThat(NumberFormat.getDecimalFormat().format(3.1416)).isEqualTo("3,142");
     }
@@ -51,7 +51,7 @@ public class NumberFormatTest extends GwtTestTest {
         // Given
         setLocale(Locale.ENGLISH);
 
-        // When & Assert
+        // When & Then
         assertThat(NumberFormat.getCurrencyFormat().format(10)).isEqualTo("$10.00");
         assertThat(NumberFormat.getDecimalFormat().format(3.1416)).isEqualTo("3.142");
     }

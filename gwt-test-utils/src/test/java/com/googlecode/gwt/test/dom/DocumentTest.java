@@ -27,7 +27,7 @@ public class DocumentTest extends GwtTestTest {
 
     @Test
     public void createElement() {
-        // When & Assert
+        // When & Then
         assertThat(d.createAnchorElement().getTagName()).isEqualTo("a");
         assertThat(d.createAreaElement().getTagName()).isEqualTo("area");
         assertThat(d.createBaseElement().getTagName()).isEqualTo("base");
@@ -177,7 +177,7 @@ public class DocumentTest extends GwtTestTest {
 
     @Test
     public void getDomain() {
-        // When & Assert
+        // When & Then
         assertThat(d.getDomain()).isNull();
     }
 

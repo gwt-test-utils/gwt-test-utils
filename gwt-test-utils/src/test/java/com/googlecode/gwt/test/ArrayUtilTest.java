@@ -12,7 +12,7 @@ public class ArrayUtilTest {
         // Given
         String[] strings = new String[]{"test1", "test2", "test3"};
 
-        // When & Assert
+        // When & Then
         assertThat(ArrayUtils.contains(strings, "test1")).isTrue();
         assertThat(ArrayUtils.contains(strings, "test2")).isTrue();
         assertThat(ArrayUtils.contains(strings, "test3")).isTrue();

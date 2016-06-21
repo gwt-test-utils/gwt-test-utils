@@ -24,7 +24,7 @@ public class WidgetUtilsTest extends GwtTestTest {
 
         String[] content = new String[]{"item0", "item1", "item2"};
 
-        // When & Assert
+        // When & Then
         assertThat(WidgetUtils.assertListBoxDataMatch(lb, content)).isFalse();
     }
 
@@ -37,7 +37,7 @@ public class WidgetUtilsTest extends GwtTestTest {
 
         String[] content = new String[]{"item0", "item1", "item2"};
 
-        // When & Assert
+        // When & Then
         assertThat(WidgetUtils.assertListBoxDataMatch(lb, content)).isFalse();
     }
 
@@ -51,7 +51,7 @@ public class WidgetUtilsTest extends GwtTestTest {
 
         String[] content = new String[]{"item0", "item1", "item2"};
 
-        // When & Assert
+        // When & Then
         assertThat(WidgetUtils.assertListBoxDataMatch(lb, content)).isTrue();
     }
 
@@ -93,7 +93,7 @@ public class WidgetUtilsTest extends GwtTestTest {
         lb.addItem("item1");
         lb.addItem("item2");
 
-        // When & Assert
+        // When & Then
         assertThat(WidgetUtils.getIndexInListBox(lb, "item0")).isEqualTo(0);
         assertThat(WidgetUtils.getIndexInListBox(lb, "item1")).isEqualTo(1);
         assertThat(WidgetUtils.getIndexInListBox(lb, "item2")).isEqualTo(2);

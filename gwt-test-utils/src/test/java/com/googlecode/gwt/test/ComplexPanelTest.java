@@ -39,7 +39,7 @@ public class ComplexPanelTest extends GwtTestTest {
         panel.add(new Button());
         panel.add(new Button());
 
-        // When & Assert
+        // When & Then
         assertThat(panel.getWidgetCount()).isEqualTo(2);
     }
 

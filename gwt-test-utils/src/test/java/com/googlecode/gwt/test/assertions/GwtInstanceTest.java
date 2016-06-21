@@ -22,7 +22,7 @@ public class GwtInstanceTest extends GwtTestTest {
         html.setHTML("<h2> my HTML</h2>");
         RootPanel.get().add(html);
 
-        // When & Assert
+        // When & Then
         assertThat(object("<h2> my HTML</h2>").ofType(HTML.class)).isSameAs(html);
     }
 
@@ -33,7 +33,7 @@ public class GwtInstanceTest extends GwtTestTest {
         anchor.getElement().setAttribute("id", "my-anchor-id");
         RootPanel.get().add(anchor);
 
-        // When & Assert
+        // When & Then
         assertThat(object("my-anchor-id").ofType(Anchor.class)).isSameAs(anchor);
     }
 
@@ -51,7 +51,7 @@ public class GwtInstanceTest extends GwtTestTest {
             }
         });
 
-        // When & Assert
+        // When & Then
         assertThat(object("/root/widget(0)").ofType(ComplexPanel.class)).isSameAs(panel);
     }
 
@@ -62,7 +62,7 @@ public class GwtInstanceTest extends GwtTestTest {
         label.setText("my label text");
         RootPanel.get().add(label);
 
-        // When & Assert
+        // When & Then
         assertThat(object("my label text").ofType(Label.class)).isSameAs(label);
     }
 

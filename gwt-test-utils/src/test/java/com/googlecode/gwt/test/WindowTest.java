@@ -43,7 +43,7 @@ public class WindowTest extends GwtTestWithMockito {
 
     @Test
     public void emptyMethods() {
-        // When & Assert
+        // When & Then
         Window.enableScrolling(true);
         Window.moveBy(1, 2);
         Window.moveTo(3, 4);

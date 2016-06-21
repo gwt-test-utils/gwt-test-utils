@@ -138,13 +138,13 @@ public class StorageTest extends GwtTestTest {
         // Given
         setLocalStorageSupported(false);
 
-        // When & Assert
+        // When & Then
         assertThat(Storage.isLocalStorageSupported()).isFalse();
 
         // Given 2
         setLocalStorageSupported(true);
 
-        // When & Assert 2
+        // When & Then 2
         assertThat(Storage.isLocalStorageSupported()).isTrue();
     }
 
@@ -162,13 +162,13 @@ public class StorageTest extends GwtTestTest {
         // Given
         setSessionStorageSupported(false);
 
-        // When & Assert
+        // When & Then
         assertThat(Storage.isSessionStorageSupported()).isFalse();
 
         // Given 2
         setSessionStorageSupported(true);
 
-        // When & Assert 2
+        // When & Then 2
         assertThat(Storage.isSessionStorageSupported()).isTrue();
     }
 

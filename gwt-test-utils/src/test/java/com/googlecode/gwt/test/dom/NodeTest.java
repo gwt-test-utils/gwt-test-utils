@@ -30,7 +30,7 @@ public class NodeTest extends GwtTestTest {
 
     @Test
     public void as() {
-        // When & Assert 1
+        // When & Then 1
         assertThat(Node.as(n)).isEqualTo(n);
     }
 
@@ -104,7 +104,7 @@ public class NodeTest extends GwtTestTest {
         n.appendChild(be0);
         n.appendChild(be1);
 
-        // When & Assert
+        // When & Then
         assertThat(n.getFirstChild()).isEqualTo(be0);
     }
 
@@ -119,7 +119,7 @@ public class NodeTest extends GwtTestTest {
         n.appendChild(be0);
         n.appendChild(be1);
 
-        // When & Assert
+        // When & Then
         assertThat(n.getLastChild()).isEqualTo(be1);
     }
 
@@ -134,13 +134,13 @@ public class NodeTest extends GwtTestTest {
         n.appendChild(be0);
         n.appendChild(be1);
 
-        // When & Assert
+        // When & Then
         assertThat(be0.getNextSibling()).isEqualTo(be1);
     }
 
     @Test
     public void getOwnerDocument() {
-        // When & Assert
+        // When & Then
         assertThat(n.getOwnerDocument()).isEqualTo(Document.get());
     }
 
@@ -153,7 +153,7 @@ public class NodeTest extends GwtTestTest {
         BaseElement be = Document.get().createBaseElement();
         n.appendChild(be);
 
-        // When & assert
+        // When & Then
         assertThat(be.getParentNode()).isEqualTo(n);
     }
 
@@ -168,7 +168,7 @@ public class NodeTest extends GwtTestTest {
         n.appendChild(be0);
         n.appendChild(be1);
 
-        // When & Assert
+        // When & Then
         assertThat(be1.getPreviousSibling()).isEqualTo(be0);
     }
 
@@ -181,7 +181,7 @@ public class NodeTest extends GwtTestTest {
         BaseElement be = Document.get().createBaseElement();
         n.appendChild(be);
 
-        // When & Assert
+        // When & Then
         assertThat(n.hasChildNodes()).as("Element should have a child node").isTrue();
     }
 
@@ -197,7 +197,7 @@ public class NodeTest extends GwtTestTest {
         n.appendChild(be0);
         n.appendChild(be2);
 
-        // When & Assert
+        // When & Then
         n.insertBefore(be1, be2);
         n.insertBefore(be3, null);
         n.insertBefore(be4, be5);
@@ -214,7 +214,7 @@ public class NodeTest extends GwtTestTest {
         // Given
         NodeList<OptionElement> list = JsoUtils.newNodeList();
 
-        // When & Assert
+        // When & Then
         assertThat(Node.is(null)).as("null is not a DOM node").isFalse();
         assertThat(Node.is(list)).as("NodeList is not a DOM node").isFalse();
         assertThat(Node.is(Document.get().createAnchorElement())).as("AnchorElement is a DOM node").isTrue();
@@ -229,13 +229,13 @@ public class NodeTest extends GwtTestTest {
         div.appendChild(a);
         n.appendChild(div);
 
-        // When & Assert
+        // When & Then
         assertThat(n.isOrHasChild(a)).isTrue();
     }
 
     @Test
     public void isOrHasChild_is() {
-        // When & Assert
+        // When & Then
         assertThat(n.isOrHasChild(n)).isTrue();
     }
 
@@ -244,14 +244,14 @@ public class NodeTest extends GwtTestTest {
         // Given
         Element a = Document.get().createAnchorElement();
 
-        // When & Assert
+        // When & Then
         assertThat(n.isOrHasChild(a)).isFalse();
 
     }
 
     @Test
     public void nodeName() {
-        // When & Assert
+        // When & Then
         assertThat(Document.get().getNodeName()).isEqualTo("#document");
         assertThat(Document.get().getDocumentElement().getNodeName()).isEqualTo("HTML");
         assertThat(Document.get().createAnchorElement().getNodeName()).isEqualTo("a");
@@ -260,7 +260,7 @@ public class NodeTest extends GwtTestTest {
 
     @Test
     public void nodeType() {
-        // When & Assert
+        // When & Then
         assertThat(Document.get().getNodeType()).isEqualTo(Node.DOCUMENT_NODE);
         assertThat(Document.get().getDocumentElement().getNodeType()).isEqualTo(Node.ELEMENT_NODE);
         assertThat(Document.get().createAnchorElement().getNodeType()).isEqualTo(Node.ELEMENT_NODE);

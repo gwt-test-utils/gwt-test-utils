@@ -272,7 +272,7 @@ public class StyleTest extends GwtTestTest {
         b.addStyleName("tata");
         b.addStyleName("titi");
 
-        // When & Asserts
+        // When & Thens
         assertThat(b.getStylePrimaryName()).isEqualTo("toto");
         GwtAssertions.assertThat(b).hasStyle("tata", "titi", "toto");
     }
