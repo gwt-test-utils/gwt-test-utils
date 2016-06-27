@@ -34,7 +34,6 @@ The [Getting Started](https://github.com/gwt-test-utils/gwt-test-utils/wiki/Gett
 * Support for GWT + [Guice](https://github.com/google/guice) application testing
 * Support for GWT + [GIN](http://code.google.com/p/google-gin/) application testing, with [Jukito](https://github.com/ArcBees/Jukito) if wanted
 * Support for [JUnitParams](https://github.com/Pragmatists/JUnitParams)
-* Support for [GXT](http://www.sencha.com/products/gxt/) library (currently only version 2.x, version 3.x is coming !)
 * Complex use-case testing using CSV-based scenarios
 * Extensibility through the use of custom patchs
 
