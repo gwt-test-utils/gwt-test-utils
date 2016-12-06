@@ -23,7 +23,7 @@ import com.google.gwt.dev.RebindCache;
 import com.google.gwt.dev.cfg.BindingProperty;
 import com.google.gwt.dev.cfg.ConfigurationProperty;
 import com.google.gwt.dev.cfg.ModuleDef;
-import com.google.gwt.dev.cfg.PropertyPermutations;
+import com.google.gwt.dev.cfg.PropertyCombinations;
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.javac.CompiledClass;
 import com.google.gwt.dev.javac.JsniMethod;
@@ -100,7 +100,7 @@ public class GeneratorCreateHandler implements GwtCreateHandler {
 
     protected PropertyOracle getPropertyOracle() {
         if (propertyOracle == null) {
-            PropertyPermutations permutations = new PropertyPermutations(moduleDef.getProperties(),
+            PropertyCombinations permutations = new PropertyCombinations(moduleDef.getProperties(),
                     moduleDef.getActiveLinkerNames());
 
             SortedSet<ConfigurationProperty> configPropSet = moduleDef.getProperties().getConfigurationProperties();

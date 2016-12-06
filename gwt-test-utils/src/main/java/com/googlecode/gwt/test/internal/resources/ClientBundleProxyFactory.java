@@ -113,8 +113,15 @@ class ClientBundleProxyFactory {
         }
 
         private String[] getResourceDefaultExtensions(Method method) {
-            DefaultExtensions annotation = method.getReturnType().getAnnotation(
+            Class<?> returnType = method.getReturnType();
+            DefaultExtensions annotation = returnType.getAnnotation(
                     DefaultExtensions.class);
+            
+            for (; annotation == null && returnType.getInterfaces().length > 0; returnType = returnType.getInterfaces()[0]) {
+                annotation = returnType.getAnnotation(
+                        DefaultExtensions.class);
+            }
+            
             if (annotation == null) {
                 throw new GwtTestResourcesException(
                         method.getReturnType().getSimpleName()

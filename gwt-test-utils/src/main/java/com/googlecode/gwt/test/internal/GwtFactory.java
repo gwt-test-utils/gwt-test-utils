@@ -150,7 +150,7 @@ public class GwtFactory {
                                       CompilerContext compilerContext) throws UnableToCompleteException {
         List<String> gwtModules = configurationLoader.getGwtModules();
         String[] inherits = gwtModules.toArray(new String[gwtModules.size()]);
-        return ModuleDefLoader.createSyntheticModule(GwtTreeLogger.get(), compilerContext,
+        return ModuleDefLoader.createSyntheticModule(GwtTreeLogger.get(),
                 "com.googlecode.gwt.test.Aggregator", inherits, false);
     }
 
