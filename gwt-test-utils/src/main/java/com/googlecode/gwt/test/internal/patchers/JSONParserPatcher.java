@@ -32,9 +32,16 @@ class JSONParserPatcher {
                 f.configure(JsonParser.Feature.ALLOW_NUMERIC_LEADING_ZEROS, true);
             }
             jp = f.createJsonParser(json);
-            jp.nextToken(); // will return JsonToken.START_OBJECT (verify?)
-            JSONObject jsonObject = extractJSONObject(json, jp);
-            return jsonObject;
+            JsonToken token = jp.nextToken();
+            if(JsonToken.START_ARRAY == token)
+            {
+                JSONArray jsonArray = extractJSONArray(json, null, jp);
+                return jsonArray;
+            } else
+            {
+                JSONObject jsonObject = extractJSONObject(json, jp);
+                return jsonObject;
+            }
         } catch (Exception e) {
             if (e instanceof GwtTestException) {
                 throw (GwtTestException) e;
