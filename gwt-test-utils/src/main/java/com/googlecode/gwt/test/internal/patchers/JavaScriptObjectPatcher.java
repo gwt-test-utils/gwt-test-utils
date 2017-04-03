@@ -64,6 +64,16 @@ class JavaScriptObjectPatcher {
 
     }
 
+    @PatchMethod
+    static boolean equals(JavaScriptObject jso, Object obj) {
+        return System.identityHashCode(jso) == System.identityHashCode(obj);
+    }
+
+    @PatchMethod
+    static int hashCode(JavaScriptObject jso) {
+        return System.identityHashCode(jso);
+    }
+
     private static String documentToString(Document document) {
         StringBuilder html = new StringBuilder();
         NodeList<Node> childs = document.getChildNodes();
