@@ -23,6 +23,14 @@ public class JSONObjectTest extends GwtTestTest {
     }
 
     @Test
+    public void parseArray()
+    {
+        String json = "[2,3,4,5,6]";
+        JSONArray o = JSONParser.parseStrict(json).isArray();
+        assertThat(o.size()).isEqualTo(5);
+    }
+
+    @Test
     public void parseLenient() {
         // Given
         String json = "{string: 'json string', \"int\": 3, float: 3.1415, \"bool\": true, 'array': [1, 33.7, \"l33t\"], \"object\": {\"int\": 4, \"array\": [5, 6, 7]}}";
