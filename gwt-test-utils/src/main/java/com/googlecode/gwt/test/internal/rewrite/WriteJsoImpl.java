@@ -170,7 +170,7 @@ abstract class WriteJsoImpl extends ClassVisitor {
                 size = Math.max(size, implementingMethod.getReturnType().getSize());
 
                 mv.visitMethodInsn(Opcodes.INVOKESTATIC, implementingType.getInternalName(),
-                        implementingMethod.getName(), implementingMethod.getDescriptor());
+                        implementingMethod.getName(), implementingMethod.getDescriptor(), false);
                 mv.visitInsn(localMethod.getReturnType().getOpcode(Opcodes.IRETURN));
                 mv.visitMaxs(size, var);
                 mv.visitEnd();
@@ -248,7 +248,7 @@ abstract class WriteJsoImpl extends ClassVisitor {
      * @param mapper         maps methods to the class in which they are declared
      */
     private WriteJsoImpl(ClassVisitor cv, InstanceMethodOracle mapper) {
-        super(Opcodes.ASM4, cv);
+        super(Opcodes.ASM5, cv);
         this.mapper = mapper;
     }
 

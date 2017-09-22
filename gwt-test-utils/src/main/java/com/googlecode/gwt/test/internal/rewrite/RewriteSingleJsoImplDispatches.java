@@ -44,14 +44,14 @@ import java.util.*;
 public class RewriteSingleJsoImplDispatches extends ClassVisitor {
     private class MyMethodVisitor extends MethodVisitor {
         public MyMethodVisitor(MethodVisitor mv) {
-            super(Opcodes.ASM4, mv);
+            super(Opcodes.ASM5, mv);
         }
 
         /*
          * Implements objective #3: updates call sites to unmangled methods.
          */
         @Override
-        public void visitMethodInsn(int opcode, String owner, String name, String desc) {
+        public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean dintf) {
             if (opcode == Opcodes.INVOKEINTERFACE) {
                 if (jsoData.getSingleJsoIntfTypes().contains(owner)) {
                     // Simple case; referring directly to a SingleJso interface.
@@ -106,7 +106,7 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
                 }
             }
 
-            super.visitMethodInsn(opcode, owner, name, desc);
+            super.visitMethodInsn(opcode, owner, name, desc, dintf);
         }
     }
 
@@ -119,7 +119,7 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
 
     public RewriteSingleJsoImplDispatches(ClassVisitor v, TypeOracle typeOracle,
                                           SingleJsoImplData jsoData) {
-        super(Opcodes.ASM4, v);
+        super(Opcodes.ASM5, v);
         this.typeOracle = typeOracle;
         this.jsoData = jsoData;
     }
@@ -306,7 +306,7 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
                     size = Math.max(size, toCall.getReturnType().getSize());
 
                     mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, currentTypeName, toCall.getName(),
-                            toCall.getDescriptor());
+                            toCall.getDescriptor(), false);
                     mv.visitInsn(toCall.getReturnType().getOpcode(Opcodes.IRETURN));
                     mv.visitMaxs(size, var);
                     mv.visitEnd();
