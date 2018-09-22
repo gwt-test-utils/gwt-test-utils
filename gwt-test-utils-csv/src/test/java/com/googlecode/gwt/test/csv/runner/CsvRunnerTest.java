@@ -1,5 +1,7 @@
 package com.googlecode.gwt.test.csv.runner;
 
+import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.gwt.test.assertions.GwtAssertions;
 import com.googlecode.gwt.test.csv.CsvMethod;
 import com.googlecode.gwt.test.csv.GwtTestCsvException;
 import com.googlecode.gwt.test.finder.Node;
@@ -173,8 +175,6 @@ public class CsvRunnerTest {
 
     }
 
-    ;
-
     private final Object o = new A();
 
     private final Object oo = new B();
@@ -199,59 +199,59 @@ public class CsvRunnerTest {
     @Test
     public void getInList() {
         SimiliWidgetContainer root = getList();
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget(2)"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[label=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[getLabel=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/list[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/getCurrentlist[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget(2)"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[label=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[getLabel=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/list[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/getCurrentlist[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
     }
 
     @Test
     public void getInListRecurse() {
         SimiliWidgetContainer root = getList();
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[labelWithParam(a)/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]/id"))).isSameAs(root.getWidget().list.get(2).id);
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[labelWithParam(a)/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]/id"))).isSameAs(root.getWidget().list.get(2).id);
     }
 
     @Test
     public void getMap() {
-        assertThat(runner.getNodeValue(o, Node.parse("/map[a]"))).isEqualTo("b");
-        assertThat(runner.getNodeValue(o, Node.parse("/map[c]"))).isEqualTo("d");
+        assertThat(runner.<Widget>getNodeValue(o, Node.parse("/map[a]"))).isEqualTo("b");
+        assertThat(runner.<Widget>getNodeValue(o, Node.parse("/map[c]"))).isEqualTo("d");
     }
 
     @Test
     public void getMapNotFound() {
-        assertThat(runner.getNodeValue(o, Node.parse("/map[b]"))).isNull();
+        assertThat(runner.<Widget>getNodeValue(o, Node.parse("/map[b]"))).isNull();
     }
 
     @Test
     public void getter() {
-        assertThat(runner.getNodeValue(o, Node.parse("/public"))).isEqualTo("public");
-        assertThat(runner.getNodeValue(o, Node.parse("/getpublic"))).isEqualTo("public");
-        assertThat(runner.getNodeValue(o, Node.parse("/private"))).isEqualTo("private");
-        assertThat(runner.getNodeValue(o, Node.parse("/zz"))).isEqualTo("zz");
-        assertThat(runner.getNodeValue(o, Node.parse("/zzz"))).isEqualTo("zzz");
-        assertThat(runner.getNodeValue(o, Node.parse("/me/ME/getMe/zzz"))).isEqualTo("zzz");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/public"))).isEqualTo("public");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/getpublic"))).isEqualTo("public");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/private"))).isEqualTo("private");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/zz"))).isEqualTo("zz");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/zzz"))).isEqualTo("zzz");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/me/ME/getMe/zzz"))).isEqualTo("zzz");
     }
 
     @Test
     public void getterDerived() {
-        assertThat(runner.getNodeValue(oo, Node.parse("/zz"))).isEqualTo("zz");
-        assertThat(runner.getNodeValue(oo, Node.parse("/zzz"))).isEqualTo("zzz");
+        assertThat(runner.<String>getNodeValue(oo, Node.parse("/zz"))).isEqualTo("zz");
+        assertThat(runner.<String>getNodeValue(oo, Node.parse("/zzz"))).isEqualTo("zzz");
     }
 
     @Test
     public void getWidget() {
-        assertThat(runner.getNodeValue(o, Node.parse("/getWidget(toto)"))).isEqualTo("toto");
-        assertThat(runner.getNodeValue(o, Node.parse("/WIDGET(toto)"))).isEqualTo("toto");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/getWidget(toto)"))).isEqualTo("toto");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/WIDGET(toto)"))).isEqualTo("toto");
     }
 
     @Test
     public void getWidgetInt() {
-        assertThat(runner.getNodeValue(o, Node.parse("/getWidgetInt(0)"))).isEqualTo("0");
-        assertThat(runner.getNodeValue(o, Node.parse("/getWidgetInt(12)"))).isEqualTo("12");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/getWidgetInt(0)"))).isEqualTo("0");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/getWidgetInt(12)"))).isEqualTo("12");
     }
 
     @Test
