@@ -55,8 +55,7 @@ class DeferredBindingModule extends AbstractModule {
         }
 
         public Object get() {
-            // call GWT deferred binding, which is patch by gwt-test-utils to call
-            // GwtCreateHandlerManager
+            // call GWT deferred binding, which is patch by gwt-test-utils to call GwtCreateHandlerManager
             return GWT.create(clazzToInstanciate);
         }
 
@@ -64,7 +63,7 @@ class DeferredBindingModule extends AbstractModule {
 
     private static final Map<Class<?>, DeferredBindingModule> DEFERRED_BINDING_MODULES_CACHE = new HashMap<Class<?>, DeferredBindingModule>();
 
-    private static final Map<String, Class<Object>> GENERATED = new HashMap<String, Class<Object>>();
+    private static final Map<String, Class<?>> GENERATED = new HashMap<String, Class<?>>();
     private static final Map<Class<?>, Boolean> HAS_INJECTION_ANNOTATION_CACHE = new HashMap<Class<?>, Boolean>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeferredBindingModule.class);
@@ -116,7 +115,7 @@ class DeferredBindingModule extends AbstractModule {
                 addDeferredBindings(collected, bindedClasses);
             }
         } else if (isAsyncProviderKey(toInstanciate)) {
-            Class<Object> asyncProviderClass = getAsyncProvider(toInstanciate);
+            Class<?> asyncProviderClass = getAsyncProvider(toInstanciate);
             bind((Key<Object>) toInstanciate).to(asyncProviderClass);
 
             Key<Object> providedKey = (Key<Object>) ReflectUtil.getProvidedKey(toInstanciate);
@@ -225,7 +224,7 @@ class DeferredBindingModule extends AbstractModule {
     }
 
     @SuppressWarnings("unchecked")
-    private Class<Object> generatedAsyncProvider(String className, Key<?> providedKey) {
+    private Class<?> generatedAsyncProvider(String className, Key<?> providedKey) {
 
         CtClass providedCtClass = GwtClassPool.getCtClass(providedKey.getTypeLiteral().getRawType());
 
@@ -265,12 +264,12 @@ class DeferredBindingModule extends AbstractModule {
 
     }
 
-    private Class<Object> getAsyncProvider(Key<?> key) {
+    private Class<?> getAsyncProvider(Key<?> key) {
 
         Key<?> providedKey = ReflectUtil.getProvidedKey(key);
         String className = providedKey.getTypeLiteral().getRawType().getName() + "AsyncProvider";
 
-        Class<Object> clazz = GENERATED.get(className);
+        Class<?> clazz = GENERATED.get(className);
 
         if (clazz != null) {
             return clazz;
