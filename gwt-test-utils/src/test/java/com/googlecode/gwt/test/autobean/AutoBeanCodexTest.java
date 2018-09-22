@@ -7,6 +7,8 @@ import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 import com.googlecode.gwt.test.GwtTestTest;
 import com.googlecode.gwt.test.autobean.MyAutoBeanFactory.Address;
 import com.googlecode.gwt.test.autobean.MyAutoBeanFactory.Person;
+import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AutoBeanCodexTest extends GwtTestTest {
 
     private final MyAutoBeanFactory myFactory = GWT.create(MyAutoBeanFactory.class);
+
+    @Before
+    public void before() {
+        GwtTestGWTBridge.get().setClient(false);
+    }
 
     @Test
     public void deserializeFromJson() {

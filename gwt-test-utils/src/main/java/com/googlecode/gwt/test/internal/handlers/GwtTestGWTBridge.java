@@ -54,6 +54,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
     private final TestRemoteServiceCreateHandler testRemoteServiceCreateHandler;
     private final GwtCreateHandler uiBinderCreateHandler;
     private final WebXmlRemoteServiceCreateHandler webXmlRemoteServiceCreateHandler;
+    private boolean isClient = true;
 
     private GwtTestGWTBridge() {
         // TODO : all createHandler should be singleton ?
@@ -86,6 +87,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
         addedHandlers.clear();
         testRemoteServiceCreateHandler.reset();
         mockCreateHandler = null;
+        isClient = true;
     }
 
     @SuppressWarnings("unchecked")
@@ -126,7 +128,11 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
 
     @Override
     public boolean isClient() {
-        return true;
+        return isClient;
+    }
+
+    public void setClient(Boolean isClient) {
+        this.isClient = isClient;
     }
 
     @Override
