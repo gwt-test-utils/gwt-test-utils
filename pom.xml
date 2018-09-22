@@ -57,10 +57,6 @@
     <modules>
         <module>gwt-test-utils</module>
         <module>gwt-test-utils-csv</module>
-        <!-- gwtbootstrap doesn't seem to be gwt 2.6.0 compatible yet -->
-        <!--<module>gwt-test-utils-gwtbootstrap</module> -->
-        <!-- gxt3 not implemented yet -->
-        <!--<module>gwt-test-utils-gxt3</module> -->
     </modules>
     <properties>
         <encoding>UTF-8</encoding>
@@ -70,7 +66,6 @@
         <guice.version>4.1.0</guice.version>
         <guava.version>19.0</guava.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <gxt.version>3.1.1</gxt.version>
     </properties>
     <dependencies>
         <dependency>
@@ -101,11 +96,6 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>gwt-test-utils-gxt3</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-user</artifactId>
                 <version>${gwt.version}</version>
@@ -119,11 +109,6 @@
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-dev</artifactId>
                 <version>${gwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.gwtbootstrap</groupId>
-                <artifactId>gwt-bootstrap</artifactId>
-                <version>2.3.2.0</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -149,21 +134,6 @@
                 <groupId>org.jukito</groupId>
                 <artifactId>jukito</artifactId>
                 <version>1.5</version>
-            </dependency>
-            <dependency>
-                <groupId>com.extjs</groupId>
-                <artifactId>gxt</artifactId>
-                <version>${gxt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sencha.gxt</groupId>
-                <artifactId>gxt</artifactId>
-                <version>${gxt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jhickman</groupId>
-                <artifactId>gxt-uibinder</artifactId>
-                <version>1.0.1</version>
             </dependency>
             <dependency>
                 <groupId>com.jhickman</groupId>
