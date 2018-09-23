@@ -50,8 +50,7 @@ Whether you want to...
 
 Here are the features we are working on, ordered by priority (which is not frozen) :
 
-* Support for [GWT-Bootstrap](https://github.com/gwtbootstrap/gwt-bootstrap)
-* Support for [GXT 3.0](http://www.sencha.com/products/gxt/)
+* Support for GWT 2.8.2
 * Support for [RequestFactory](http://www.gwtproject.org/doc/latest/DevGuideRequestFactory.html)
 * Support for [PowerMock](https://github.com/jayway/powermock)
 * Support for [TestNG](http://testng.org/)
