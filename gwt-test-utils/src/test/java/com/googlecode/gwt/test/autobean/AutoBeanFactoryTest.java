@@ -6,7 +6,6 @@ import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.googlecode.gwt.test.GwtTestTest;
 import com.googlecode.gwt.test.autobean.MyAutoBeanFactory.Address;
 import com.googlecode.gwt.test.autobean.MyAutoBeanFactory.Person;
-import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +44,7 @@ public class AutoBeanFactoryTest extends GwtTestTest {
 
     @Before
     public void before() {
-        GwtTestGWTBridge.get().setClient(false);
+        setIsClient(false);
     }
 
     @Test

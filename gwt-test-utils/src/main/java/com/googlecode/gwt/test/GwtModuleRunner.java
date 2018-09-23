@@ -35,13 +35,20 @@ public interface GwtModuleRunner {
      * is expected to be supported for the running test. <strong><code>true</code> by
      * default.</strong>
      */
-    public boolean isLocalStorageSupported();
+    boolean isLocalStorageSupported();
 
     /**
      * Returns <code>true</code> if the <code>sessionStorage</code> part of the Storage API is
      * expected to be supported for the running test. <strong><code>true</code> by default.</strong>
      */
-    public boolean isSessionStorageSupported();
+    boolean isSessionStorageSupported();
+
+    /**
+     * Setup <code>GWT.isClient()</code> for one unit test. Default value is <code>true</code>.
+     *
+     * @param isClient <code>GWT.isClient()</code> value.
+     */
+    void setIsClient(boolean isClient);
 
     /**
      * Add a client's property, such as the browser 'user-agent' which could be use to simulate the

@@ -59,7 +59,7 @@ public abstract class GwtTest extends GwtModuleRunnerAdapter {
      * classloader instead.
      */
     @AfterClass
-    public static final void unbindClassLoader() {
+    public static void unbindClassLoader() {
         Thread.currentThread().setContextClassLoader(GwtFactory.get().getClassLoader().getParent());
     }
 

@@ -74,7 +74,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
 
     private WindowOperationsHandler windowOperationsHandler;
 
-    public GwtModuleRunnerAdapter() {
+    GwtModuleRunnerAdapter() {
         browserErrorHandlerDelegate = new BrowserErrorHandlerDelegate();
         browserSimulatorImpl = BrowserSimulatorImpl.get();
         clientProperties = new HashMap<String, String>();
@@ -255,6 +255,15 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
      */
     public boolean isSessionStorageSupported() {
         return sessionStorageSupported;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.googlecode.gwt.test.GwtModuleRunner#setIsClient(java.lang.Boolean)
+     */
+    public final void setIsClient(boolean isClient) {
+        GwtTestGWTBridge.get().setClient(isClient);
     }
 
     /**
