@@ -68,16 +68,16 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
     private Locale locale;
     private boolean localStorageSupported;
     private GwtLogHandler logHandler;
-    private final List<RemoteServiceExecutionHandler> remoteServiceExecutionHandlers = new ArrayList<RemoteServiceExecutionHandler>();
+    private final List<RemoteServiceExecutionHandler> remoteServiceExecutionHandlers = new ArrayList<>();
     private ServletMockProvider servletMockProvider;
     private boolean sessionStorageSupported;
 
     private WindowOperationsHandler windowOperationsHandler;
 
-    GwtModuleRunnerAdapter() {
+     GwtModuleRunnerAdapter() {
         browserErrorHandlerDelegate = new BrowserErrorHandlerDelegate();
         browserSimulatorImpl = BrowserSimulatorImpl.get();
-        clientProperties = new HashMap<String, String>();
+        clientProperties = new HashMap<>();
         localStorageSupported = true;
         sessionStorageSupported = true;
         AfterTestCallbackManager.get().registerRemoveableCallback(this);
@@ -130,7 +130,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
      *
      * @see com.googlecode.gwt.test.internal.AfterTestCallback#afterTest()
      */
-    public final void afterTest() throws Throwable {
+    public final void afterTest() {
         this.locale = null;
         this.windowOperationsHandler = null;
         this.browserErrorHandlerDelegate.customHandler = null;
@@ -285,7 +285,7 @@ public abstract class GwtModuleRunnerAdapter implements GwtModuleRunner, AfterTe
      * @return The relative path of the HTML file used, or null if there is no HTML file
      */
     protected String getHostPagePath(String moduleFullQualifiedName) {
-        List<String> expectedFileNames = new ArrayList<String>();
+        List<String> expectedFileNames = new ArrayList<>();
 
         // Use maybeGet : we may not always have a web.xml file.
         WebXmlUtils webXmlUtils = WebXmlUtils.maybeGet();
