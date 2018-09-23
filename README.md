@@ -51,6 +51,7 @@ Whether you want to...
 Here are the features we are working on, ordered by priority (which is not frozen) :
 
 * Support for GWT 2.8.2
+* Support for JUnit 5
 * Support for [RequestFactory](http://www.gwtproject.org/doc/latest/DevGuideRequestFactory.html)
 * Support for [PowerMock](https://github.com/jayway/powermock)
 * Support for [TestNG](http://testng.org/)
