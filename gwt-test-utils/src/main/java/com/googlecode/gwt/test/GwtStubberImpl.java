@@ -4,9 +4,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.mockito.GwtStubber;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 class GwtStubberImpl extends StubberImpl implements GwtStubber {
+
+    public GwtStubberImpl(Strictness strictness) {
+        super(strictness);
+    }
 
     private static class FailureAnswer<T> implements Answer<T> {
 

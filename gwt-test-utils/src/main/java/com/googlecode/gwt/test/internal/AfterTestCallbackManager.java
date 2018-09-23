@@ -24,9 +24,9 @@ public class AfterTestCallbackManager {
     private final Set<AfterTestCallback> removeableCallbacks;
 
     private AfterTestCallbackManager() {
-        callbacks = new HashSet<AfterTestCallback>();
-        finalCallbacks = new HashSet<AfterTestCallback>();
-        removeableCallbacks = new HashSet<AfterTestCallback>();
+        callbacks = new HashSet<>();
+        finalCallbacks = new HashSet<>();
+        removeableCallbacks = new HashSet<>();
     }
 
     /**

@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,6 +17,11 @@ public class WindowTest extends GwtTestWithMockito {
     @Mock
     private WindowOperationsHandler mockedHandler;
 
+    @Before
+    public void beforeWindowTest() {
+        setWindowOperationsHandler(mockedHandler);
+    }
+
     @Test
     public void alert() {
         // When
@@ -22,11 +29,6 @@ public class WindowTest extends GwtTestWithMockito {
 
         // Then
         verify(mockedHandler).alert("this is an alert");
-    }
-
-    @Before
-    public void beforeWindowTest() {
-        setWindowOperationsHandler(mockedHandler);
     }
 
     @Test

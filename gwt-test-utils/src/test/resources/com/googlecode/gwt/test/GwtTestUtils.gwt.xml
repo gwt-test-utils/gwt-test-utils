@@ -12,6 +12,7 @@
     <entry-point class='com.googlecode.gwt.test.client.GwtTestEntryPoint'/>
 
     <servlet path="/myService" class="com.googlecode.gwt.test.rpc.MyServiceImpl"/>
+    <servlet path="/myRemoteService" class="com.googlecode.gwt.test.MyRemoteServiceImpl"/>
 
     <!-- Specify the paths for translatable code -->
     <source path='client'/>

@@ -1,17 +1,13 @@
 package com.googlecode.gwt.test;
 
-import com.googlecode.gwt.test.exceptions.ReflectionException;
+import com.googlecode.gwt.test.mockito.GwtMockitoAnnotations;
 import com.googlecode.gwt.test.mockito.GwtStubber;
-import com.googlecode.gwt.test.utils.GwtReflectionUtils;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.configuration.AnnotationEngine;
-import org.mockito.configuration.AnnotationEngineHolder;
+import org.mockito.quality.Strictness;
 
-import java.lang.reflect.Field;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,27 +24,17 @@ import java.util.Set;
  */
 public abstract class GwtTestWithMockito extends GwtTestWithMocks {
 
-    @AfterClass
-    public static void resetAnnotationEngineHolder() {
-        AnnotationEngineHolder.reset();
-    }
-
     public GwtTestWithMockito() {
-        AnnotationEngineHolder.setAnnotationEngine(getCustomAnnotationEngine());
+        super(MockManager.get());
     }
 
     @Before
     public void beforeGwtTestWithMockito() {
-        MockitoAnnotations.initMocks(this);
-        for (Field f : mockFields) {
-            GwtReflectionUtils.makeAccessible(f);
-            try {
-                addMockedObject(f.getType(), f.get(this));
-            } catch (Exception e) {
-                throw new ReflectionException(
-                        "Could not register Mockito mocks declared in test class", e);
-            }
-        }
+        GwtMockitoAnnotations.initMocks(this);
+    }
+
+    public Map<Class<?>, Object> getAllMocksByType() {
+        return getMockManager().getAllMocksByType();
     }
 
     /**
@@ -60,7 +46,7 @@ public abstract class GwtTestWithMockito extends GwtTestWithMocks {
      * @return a customised Mockito stubber which will call the callback.onFailure() method
      */
     protected <T> GwtStubber doFailureCallback(final Throwable exception) {
-        return new GwtStubberImpl().doFailureCallback(exception);
+        return new GwtStubberImpl(Strictness.STRICT_STUBS).doFailureCallback(exception);
     }
 
     /**
@@ -72,20 +58,7 @@ public abstract class GwtTestWithMockito extends GwtTestWithMocks {
      * @return a customised Mockito stubber which will call the callback.onSuccess() method
      */
     protected <T> GwtStubber doSuccessCallback(final T object) {
-        return new GwtStubberImpl().doSuccessCallback(object);
-    }
-
-    protected AnnotationEngine getCustomAnnotationEngine() {
-        return null;
-    }
-
-    @Override
-    protected Set<Field> getMockFields() {
-        Set<Field> mocksFields = super.getMockFields();
-        Set<Field> mockitoMockFields = GwtReflectionUtils.getAnnotatedField(this.getClass(),
-                org.mockito.Mock.class).keySet();
-        mocksFields.addAll(mockitoMockFields);
-        return mocksFields;
+        return new GwtStubberImpl(Strictness.STRICT_STUBS).doSuccessCallback(object);
     }
 
 }

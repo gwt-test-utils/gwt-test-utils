@@ -52,7 +52,7 @@ public class MockitoGwtTest extends GwtTestWithMockito {
     MyRemoteService remoteService;
 
     @Test
-    public void injectGwtMock() {
+    public void injectMockitoMock() {
         // Given
         doReturn("mocked method call").when(remoteService).myMethod("testParam");
 
@@ -64,7 +64,7 @@ public class MockitoGwtTest extends GwtTestWithMockito {
     }
 
     @Test
-    public void injectMockitoMock() {
+    public void injectGwtMock() {
         // Given
         doReturn("mocked bye !").when(contants).goodbye();
 

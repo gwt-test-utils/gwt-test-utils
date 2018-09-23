@@ -1,6 +1,6 @@
 package com.googlecode.gwt.test;
 
-import com.google.gwt.user.client.Element;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.CustomButton;
 import com.google.gwt.user.client.ui.PushButton;
@@ -21,7 +21,7 @@ public class CompositeWithMockitoTest extends GwtTestWithMockito {
     @Test
     public void testComposite() {
         // Given
-        Mockito.when(injectedButton.getElement()).thenReturn(element);
+        Mockito.when(injectedButton.getElement()).thenReturn(element.cast());
 
         // When
         MyComposite composite = new MyComposite(injectedButton);

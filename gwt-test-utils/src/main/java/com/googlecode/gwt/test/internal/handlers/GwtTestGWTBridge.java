@@ -148,7 +148,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
     }
 
     private List<GwtCreateHandler> getGwtCreateHandlers() {
-        List<GwtCreateHandler> list = new ArrayList<GwtCreateHandler>();
+        List<GwtCreateHandler> list = new ArrayList<>();
 
         // declared @Mock objects creation
         if (mockCreateHandler != null) {

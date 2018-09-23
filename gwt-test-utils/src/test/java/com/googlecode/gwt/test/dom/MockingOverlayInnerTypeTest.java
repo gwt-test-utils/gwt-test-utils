@@ -3,6 +3,7 @@ package com.googlecode.gwt.test.dom;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.googlecode.gwt.test.GwtTestTest;
 import org.easymock.EasyMock;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -19,6 +20,8 @@ public class MockingOverlayInnerTypeTest extends GwtTestTest {
         assertThat(event).isNotNull();
     }
 
+    // FIXME : enable this test
+    @Ignore
     @Test
     public void withMockito() {
         // Given

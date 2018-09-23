@@ -19,7 +19,6 @@ public class GwtRpcWithMockitoTest extends GwtTestWithMockito {
     @Test
     public void rpcCall_KO() {
         // Given
-
         // mock future remote call
         doFailureCallback(new Exception()).when(mockedService).myMethod(eq("myParamValue"),
                 any(AsyncCallback.class));

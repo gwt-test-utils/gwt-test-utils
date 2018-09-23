@@ -73,16 +73,16 @@ public class GwtReflectionUtils {
 
     private static final String ASSERTIONS_FIELD_NAME = "$assertionsDisabled";
 
-    private static DoubleMap<Class<?>, Class<?>, Map<Field, ?>> cacheAnnotatedField = new DoubleMap<Class<?>, Class<?>, Map<Field, ?>>();
-    private static DoubleMap<Class<?>, Class<?>, Map<Method, ?>> cacheAnnotatedMethod = new DoubleMap<Class<?>, Class<?>, Map<Method, ?>>();
+    private static DoubleMap<Class<?>, Class<?>, Map<Field, ?>> cacheAnnotatedField = new DoubleMap<>();
+    private static DoubleMap<Class<?>, Class<?>, Map<Method, ?>> cacheAnnotatedMethod = new DoubleMap<>();
 
     private static DoubleMap<Class<?>, Class<?>, Object> cacheAnnotation = new DoubleMap<Class<?>, Class<?>, Object>();
 
-    private static Map<Class<?>, Set<Field>> cacheField = new HashMap<Class<?>, Set<Field>>();
+    private static Map<Class<?>, Set<Field>> cacheField = new HashMap<>();
 
-    private static DoubleMap<Class<?>, String, Method> cacheMethod = new DoubleMap<Class<?>, String, Method>();
+    private static DoubleMap<Class<?>, String, Method> cacheMethod = new DoubleMap<>();
 
-    private static DoubleMap<Class<?>, String, Field> cacheUniqueField = new DoubleMap<Class<?>, String, Field>();
+    private static DoubleMap<Class<?>, String, Field> cacheUniqueField = new DoubleMap<>();
 
     public static <T> T callPrivateMethod(JavaScriptObject target, String methodName,
                                           String overlayOriginalType, Object... args) {
@@ -123,11 +123,11 @@ public class GwtReflectionUtils {
             Object res = method.invoke(target, args);
             return (T) res;
         } catch (InvocationTargetException e) {
-            if (GwtTestException.class.isInstance(e.getCause())) {
+            if (e.getCause() instanceof GwtTestException) {
                 throw (GwtTestException) e.getCause();
-            } else if (AssertionError.class.isInstance(e.getCause())) {
+            } else if (e.getCause() instanceof AssertionError) {
                 throw (AssertionError) e.getCause();
-            } else if (UmbrellaException.class.isInstance(e.getCause())) {
+            } else if (e.getCause() instanceof UmbrellaException) {
                 throw new ReflectionException("Error while calling method '" + method.toString() + "'",
                         e.getCause().getCause());
             }
@@ -270,8 +270,7 @@ public class GwtReflectionUtils {
         while (!Object.class.equals(searchType) && searchType != null) {
             Method[] methods = searchType.isInterface() ? searchType.getMethods()
                     : searchType.getDeclaredMethods();
-            for (int i = 0; i < methods.length; i++) {
-                Method method = methods[i];
+            for (Method method : methods) {
                 if (name.equals(method.getName())
                         && paramTypes.length == method.getParameterTypes().length) {
                     boolean compatibleParams = true;
@@ -321,7 +320,7 @@ public class GwtReflectionUtils {
         if (l != null) {
             return l;
         }
-        l = new HashMap<Field, T>();
+        l = new HashMap<>();
         recurseGetAnnotatedField(l, clazz, annotationClass);
         cacheAnnotatedField.put(clazz, annotationClass, l);
         return l;
@@ -517,9 +516,9 @@ public class GwtReflectionUtils {
             throw new ReflectionException("Error during instanciation of '"
                     + ctor.getDeclaringClass().getName() + "'. Illegal arguments for constructor", ex);
         } catch (InvocationTargetException ex) {
-            if (GwtTestException.class.isInstance(ex.getTargetException())) {
+            if (ex.getTargetException() instanceof GwtTestException) {
                 throw (GwtTestException) ex.getTargetException();
-            } else if (GwtTestException.class.isInstance(ex.getTargetException().getCause())) {
+            } else if (ex.getTargetException().getCause() instanceof GwtTestException) {
                 throw (GwtTestException) ex.getTargetException().getCause();
             } else {
                 throw new ReflectionException("Error during instanciation of '"
@@ -636,8 +635,7 @@ public class GwtReflectionUtils {
      * @return The set of field of the class
      */
     private static Set<Field> getFields(Class<?> clazz, boolean hasAssertionField) {
-        Set<Field> set = new HashSet<Field>();
-        ;
+        Set<Field> set = new HashSet<>();
 
         for (Field f : clazz.getDeclaredFields()) {
             if (ASSERTIONS_FIELD_NAME.equals(f.getName())) {
@@ -671,7 +669,7 @@ public class GwtReflectionUtils {
         }
         Set<Field> fieldSet = getFields(clazz);
 
-        Set<Field> result = new HashSet<Field>();
+        Set<Field> result = new HashSet<>();
 
         for (Field field : fieldSet) {
             if (field.getName().equals(fieldName)) {

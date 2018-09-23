@@ -3,7 +3,6 @@ package com.googlecode.gwt.test;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.googlecode.gwt.test.rpc.RemoteServiceCreateHandler;
 import org.junit.Before;
@@ -24,12 +23,7 @@ public class SchedulerTest extends GwtTestTest {
             @Override
             protected Object findService(Class<?> remoteServiceClass, String remoteServiceRelativePath) {
                 if (remoteServiceClass == MyRemoteService.class) {
-                    return new MyRemoteService() {
-
-                        public String myMethod(String param1) {
-                            return "mock " + param1;
-                        }
-                    };
+                    return (MyRemoteService) param1 -> "mock " + param1;
                 }
 
                 return null;
@@ -42,68 +36,27 @@ public class SchedulerTest extends GwtTestTest {
         // Given
         final StringBuilder sb = new StringBuilder();
 
-        Scheduler.get().scheduleEntry(new ScheduledCommand() {
+        Scheduler.get().scheduleEntry(() -> sb.append("scheduleEntry1 "));
 
-            public void execute() {
-                sb.append("scheduleEntry1 ");
+        Scheduler.get().scheduleFinally(() -> sb.append("scheduleFinally1 "));
 
-            }
-        });
+        Scheduler.get().scheduleDeferred(() -> {
+            sb.append("scheduleDeferred1 ");
 
-        Scheduler.get().scheduleFinally(new ScheduledCommand() {
+            Scheduler.get().scheduleEntry(() -> {
+                sb.append("scheduleEntry2 ");
 
-            public void execute() {
-                sb.append("scheduleFinally1 ");
+                Scheduler.get().scheduleEntry(() -> sb.append("scheduleEntry3 "));
 
-            }
-        });
+            });
 
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            Scheduler.get().scheduleFinally(() -> {
+                sb.append("scheduleFinally2 ");
+                Scheduler.get().scheduleFinally(() -> sb.append("scheduleFinally3 "));
+            });
 
-            public void execute() {
-                sb.append("scheduleDeferred1 ");
+            Scheduler.get().scheduleDeferred(() -> sb.append("scheduleDeferred2 "));
 
-                Scheduler.get().scheduleEntry(new ScheduledCommand() {
-
-                    public void execute() {
-                        sb.append("scheduleEntry2 ");
-
-                        Scheduler.get().scheduleEntry(new ScheduledCommand() {
-
-                            public void execute() {
-                                sb.append("scheduleEntry3 ");
-
-                            }
-                        });
-
-                    }
-                });
-
-                Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-                    public void execute() {
-                        sb.append("scheduleFinally2 ");
-
-                        Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-                            public void execute() {
-                                sb.append("scheduleFinally3 ");
-
-                            }
-                        });
-
-                    }
-                });
-
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-                    public void execute() {
-                        sb.append("scheduleDeferred2 ");
-
-                    }
-                });
-
-            }
         });
 
         // When
@@ -121,21 +74,9 @@ public class SchedulerTest extends GwtTestTest {
         final StringBuilder sb = new StringBuilder();
         final MyRemoteServiceAsync service = GWT.create(MyRemoteService.class);
 
-        Scheduler.get().scheduleEntry(new ScheduledCommand() {
+        Scheduler.get().scheduleEntry(() -> sb.append("scheduleEntry1 "));
 
-            public void execute() {
-                sb.append("scheduleEntry1 ");
-
-            }
-        });
-
-        Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-            public void execute() {
-                sb.append("scheduleFinally1 ");
-
-            }
-        });
+        Scheduler.get().scheduleFinally(() -> sb.append("scheduleFinally1 "));
 
         service.myMethod("service1", new AsyncCallback<String>() {
 
@@ -157,62 +98,35 @@ public class SchedulerTest extends GwtTestTest {
             }
         });
 
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+        Scheduler.get().scheduleDeferred(() -> {
+            sb.append("scheduleDeferred1 ");
 
-            public void execute() {
-                sb.append("scheduleDeferred1 ");
+            service.myMethod("service3", new AsyncCallback<String>() {
 
-                service.myMethod("service3", new AsyncCallback<String>() {
+                public void onFailure(Throwable caught) {
+                }
 
-                    public void onFailure(Throwable caught) {
-                    }
+                public void onSuccess(String result) {
+                    sb.append("onSuccess3 ");
+                }
+            });
 
-                    public void onSuccess(String result) {
-                        sb.append("onSuccess3 ");
-                    }
-                });
+            Scheduler.get().scheduleEntry(() -> {
+                sb.append("scheduleEntry2 ");
 
-                Scheduler.get().scheduleEntry(new ScheduledCommand() {
+                Scheduler.get().scheduleEntry(() -> sb.append("scheduleEntry3 "));
 
-                    public void execute() {
-                        sb.append("scheduleEntry2 ");
+            });
 
-                        Scheduler.get().scheduleEntry(new ScheduledCommand() {
+            Scheduler.get().scheduleFinally(() -> {
+                sb.append("scheduleFinally2 ");
 
-                            public void execute() {
-                                sb.append("scheduleEntry3 ");
+                Scheduler.get().scheduleFinally(() -> sb.append("scheduleFinally3 "));
 
-                            }
-                        });
+            });
 
-                    }
-                });
+            Scheduler.get().scheduleDeferred(() -> sb.append("scheduleDeferred2 "));
 
-                Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-                    public void execute() {
-                        sb.append("scheduleFinally2 ");
-
-                        Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-                            public void execute() {
-                                sb.append("scheduleFinally3 ");
-
-                            }
-                        });
-
-                    }
-                });
-
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-                    public void execute() {
-                        sb.append("scheduleDeferred2 ");
-
-                    }
-                });
-
-            }
         });
 
         // When
@@ -228,13 +142,7 @@ public class SchedulerTest extends GwtTestTest {
         // Given
         final StringBuilder sb = new StringBuilder();
 
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-            public void execute() {
-                sb.append("scheduleDeferred");
-
-            }
-        });
+        Scheduler.get().scheduleDeferred(() -> sb.append("scheduleDeferred"));
 
         // Preconditions
         assertThat(sb.toString()).isEmpty();
@@ -252,37 +160,25 @@ public class SchedulerTest extends GwtTestTest {
         i = j = 0;
         final StringBuilder sb = new StringBuilder();
 
-        Scheduler.get().scheduleEntry(new RepeatingCommand() {
-
-            public boolean execute() {
-                sb.append("entry").append(i).append(" ");
-                return 3 > i++;
-            }
+        Scheduler.get().scheduleEntry(() -> {
+            sb.append("entry").append(i).append(" ");
+            return 3 > i++;
         });
 
-        Scheduler.get().scheduleFinally(new RepeatingCommand() {
+        Scheduler.get().scheduleFinally(() -> {
+            sb.append("finally").append(j).append(" ");
 
-            public boolean execute() {
-                sb.append("finally").append(j).append(" ");
+            Scheduler.get().scheduleEntry(() -> {
+                sb.append("subentry").append(j).append(" ");
+                return false;
+            });
 
-                Scheduler.get().scheduleEntry(new RepeatingCommand() {
+            Scheduler.get().scheduleFinally(() -> {
+                sb.append("subfinally").append(j).append(" ");
+                return false;
+            });
 
-                    public boolean execute() {
-                        sb.append("subentry").append(j).append(" ");
-                        return false;
-                    }
-                });
-
-                Scheduler.get().scheduleFinally(new RepeatingCommand() {
-
-                    public boolean execute() {
-                        sb.append("subfinally").append(j).append(" ");
-                        return false;
-                    }
-                });
-
-                return 3 > j++;
-            }
+            return 3 > j++;
         });
 
         // When
@@ -298,13 +194,7 @@ public class SchedulerTest extends GwtTestTest {
         // Given
         final StringBuilder sb = new StringBuilder();
 
-        Scheduler.get().scheduleEntry(new ScheduledCommand() {
-
-            public void execute() {
-                sb.append("scheduleEntry");
-
-            }
-        });
+        Scheduler.get().scheduleEntry(() -> sb.append("scheduleEntry"));
 
         // Preconditions
         assertThat(sb.toString()).isEmpty();
@@ -321,13 +211,7 @@ public class SchedulerTest extends GwtTestTest {
         // Given
         final StringBuilder sb = new StringBuilder();
 
-        Scheduler.get().scheduleFinally(new ScheduledCommand() {
-
-            public void execute() {
-                sb.append("scheduleFinally");
-
-            }
-        });
+        Scheduler.get().scheduleFinally(() -> sb.append("scheduleFinally"));
 
         // Preconditions
         assertThat(sb.toString()).isEmpty();
