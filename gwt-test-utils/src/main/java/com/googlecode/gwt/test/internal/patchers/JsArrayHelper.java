@@ -180,11 +180,10 @@ class JsArrayHelper {
     @SuppressWarnings("unchecked")
     public static List<Object> getWrappedList(JavaScriptObject jsArray) {
 
-        List<Object> wrappedList = (List<Object>) JavaScriptObjects.getObject(jsArray,
-                JSARRAY_WRAPPED_LIST);
+        List<Object> wrappedList = JavaScriptObjects.getObject(jsArray, JSARRAY_WRAPPED_LIST);
 
         if (wrappedList == null) {
-            wrappedList = new ArrayList<Object>();
+            wrappedList = new ArrayList<>();
             JavaScriptObjects.setProperty(jsArray, JSARRAY_WRAPPED_LIST, wrappedList);
         }
 

@@ -17,13 +17,13 @@ class CurrencyListPatcher {
 
     private static class CurrencyDataHolder implements AfterTestCallback {
 
-        private final Map<Locale, CurrencyData> currencyDatas = new HashMap<Locale, CurrencyData>();
+        private final Map<Locale, CurrencyData> currencyDatas = new HashMap<>();
 
         private CurrencyDataHolder() {
             AfterTestCallbackManager.get().registerCallback(this);
         }
 
-        public void afterTest() throws Throwable {
+        public void afterTest() {
             currencyDatas.clear();
         }
 
@@ -68,7 +68,7 @@ class CurrencyListPatcher {
                 if (currencySplit.length > 2 && currencySplit[2].length() > 0) {
                     try {
                         currencyFractionDigits = Integer.valueOf(currencySplit[2]);
-                    } catch (NumberFormatException e) {
+                    } catch (NumberFormatException ignored) {
                     }
                 }
 

@@ -23,7 +23,7 @@ public class UiDockLayoutPanelTagFactory implements UiObjectTagFactory<DockLayou
 
     private static class UiDockLayoutPanelTag extends UiObjectTag<DockLayoutPanel> {
 
-        private final List<IsWidget> centerWidgets = new ArrayList<IsWidget>();
+        private final List<IsWidget> centerWidgets = new ArrayList<>();
         private double eastSize;
         private IsWidget eastWidget;
         private double northSize;

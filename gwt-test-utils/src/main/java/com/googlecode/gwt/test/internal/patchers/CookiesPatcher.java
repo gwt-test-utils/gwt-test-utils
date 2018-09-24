@@ -35,7 +35,7 @@ class CookiesPatcher {
 
         Map<String, String> cachedCookies = getCookiesMap();
         if (cachedCookies == null) {
-            cachedCookies = new HashMap<String, String>();
+            cachedCookies = new HashMap<>();
             GwtReflectionUtils.setStaticField(Cookies.class, "cachedCookies", cachedCookies);
         }
 

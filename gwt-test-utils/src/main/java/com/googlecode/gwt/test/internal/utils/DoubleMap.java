@@ -16,7 +16,7 @@ public class DoubleMap<A, B, C> {
     private final Map<A, Map<B, C>> map;
 
     public DoubleMap() {
-        map = new HashMap<A, Map<B, C>>();
+        map = new HashMap<>();
     }
 
     public C get(A a, B b) {
@@ -26,7 +26,7 @@ public class DoubleMap<A, B, C> {
 
     public void put(A a, B b, C c) {
         if (map.get(a) == null) {
-            map.put(a, new HashMap<B, C>());
+            map.put(a, new HashMap<>());
         }
         map.get(a).put(b, c);
     }

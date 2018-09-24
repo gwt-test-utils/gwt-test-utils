@@ -29,7 +29,7 @@ public abstract class AbstractGwtRunner extends Runner implements Filterable {
     }
 
     public void filter(Filter filter) throws NoTestsRemainException {
-        if (Filterable.class.isInstance(runner)) {
+        if (runner instanceof Filterable) {
             ((Filterable) runner).filter(filter);
         }
     }

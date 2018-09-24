@@ -21,7 +21,7 @@ import java.util.Map;
 
 class UiBinderInvocationHandler implements InvocationHandler {
 
-    private static final Map<Class<?>, GwtEvent<?>> EVENT_PROTOTYPES = new HashMap<Class<?>, GwtEvent<?>>();
+    private static final Map<Class<?>, GwtEvent<?>> EVENT_PROTOTYPES = new HashMap<>();
 
     private final Class<UiBinder<?, ?>> proxiedClass;
 
@@ -29,7 +29,7 @@ class UiBinderInvocationHandler implements InvocationHandler {
         this.proxiedClass = proxiedClass;
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) {
         if (method.getName().equals("createAndBindUi")) {
             return createAndBindUi(args[0]);
         } else {

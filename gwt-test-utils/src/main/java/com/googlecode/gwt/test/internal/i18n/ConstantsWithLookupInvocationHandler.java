@@ -9,7 +9,7 @@ import java.util.Properties;
 
 class ConstantsWithLookupInvocationHandler extends ConstantsInvocationHandler {
 
-    public ConstantsWithLookupInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
+    ConstantsWithLookupInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
         super(proxiedClass);
     }
 

@@ -17,11 +17,11 @@ abstract class LocalizableResourceInvocationHandler implements InvocationHandler
 
     private final Class<? extends LocalizableResource> proxiedClass;
 
-    public LocalizableResourceInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
+    LocalizableResourceInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
         this.proxiedClass = proxiedClass;
     }
 
-    public Class<? extends LocalizableResource> getProxiedClass() {
+    Class<? extends LocalizableResource> getProxiedClass() {
         return proxiedClass;
     }
 

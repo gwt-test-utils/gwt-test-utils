@@ -19,7 +19,7 @@ import java.util.Map;
 class WebXmlRemoteServiceCreateHandler extends RemoteServiceCreateHandler {
 
     // a map with servletUrl as key and serviceImpl instance as value
-    private final Map<String, Object> servicesImplMap = new HashMap<String, Object>();
+    private final Map<String, Object> servicesImplMap = new HashMap<>();
 
     /*
      * (non-Javadoc)

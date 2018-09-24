@@ -15,7 +15,7 @@ class CellBasedWidgetImplCreateHandler implements GwtCreateHandler {
      *
      * @see com.googlecode.gwt.test.GwtCreateHandler#create(java.lang.Class)
      */
-    public Object create(Class<?> classLiteral) throws Exception {
+    public Object create(Class<?> classLiteral) {
         if ("com.google.gwt.user.cellview.client.CellBasedWidgetImpl".equals(classLiteral.getName())) {
             return new CellBasedWidgetImplStandardBase();
         } else {

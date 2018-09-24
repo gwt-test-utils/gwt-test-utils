@@ -115,7 +115,7 @@ public class WebXmlUtils {
 
     private Set<String> parseListeners(Document document, XPath xpath)
             throws XPathExpressionException {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
 
         NodeList listeners = (NodeList) xpath.evaluate("/web-app/listener", document,
                 XPathConstants.NODESET);
@@ -134,7 +134,7 @@ public class WebXmlUtils {
         NodeList mappings = (NodeList) xpath.evaluate("/web-app/servlet-mapping", document,
                 XPathConstants.NODESET);
 
-        Map<String, String> mappingsMap = new HashMap<String, String>();
+        Map<String, String> mappingsMap = new HashMap<>();
 
         for (int i = 0; i < mappings.getLength(); i++) {
             Node mapping = mappings.item(i);
@@ -163,7 +163,7 @@ public class WebXmlUtils {
         Map<String, String> mappingsMap = parseMappingElements(document, xpath);
 
         // create the final map with servlets and servlet-mappings information
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, String> result = new HashMap<>();
         for (Map.Entry<String, String> mappingsEntry : mappingsMap.entrySet()) {
             result.put(mappingsEntry.getValue(), servletsMap.get(mappingsEntry.getKey()));
         }
@@ -175,7 +175,7 @@ public class WebXmlUtils {
         NodeList servlets = (NodeList) xpath.evaluate("/web-app/servlet", document,
                 XPathConstants.NODESET);
 
-        Map<String, String> servletsMap = new HashMap<String, String>();
+        Map<String, String> servletsMap = new HashMap<>();
 
         for (int i = 0; i < servlets.getLength(); i++) {
             Node servlet = servlets.item(i);

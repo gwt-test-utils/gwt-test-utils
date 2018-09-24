@@ -48,17 +48,18 @@ class CssResourceReader implements AfterTestCallback {
     private final Map<URL, CssParsingResult> cache;
 
     private CssResourceReader() {
-        cache = new HashMap<URL, CssParsingResult>();
+        cache = new HashMap<>();
         AfterTestCallbackManager.get().registerCallback(this);
     }
 
-    public void afterTest() throws Throwable {
+    @Override
+    public void afterTest() {
         cache.clear();
     }
 
     public CssParsingResult readCss(List<URL> urls) throws IOException {
 
-        Map<String, String> cssConstants = new HashMap<String, String>();
+        Map<String, String> cssConstants = new HashMap<>();
 
         for (URL url : urls) {
             cssConstants.putAll(readCssFile(url).cssConstants);
@@ -84,7 +85,7 @@ class CssResourceReader implements AfterTestCallback {
 
     private CssParsingResult parse(Reader reader) throws IOException {
 
-        Map<String, String> cssConstants = new HashMap<String, String>();
+        Map<String, String> cssConstants = new HashMap<>();
         BufferedReader br = null;
 
         try {

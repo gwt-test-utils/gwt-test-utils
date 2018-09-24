@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 class DefaultGwtCreateHandler implements GwtCreateHandler {
 
     @SuppressWarnings("unchecked")
-    public Object create(Class<?> classLiteral) throws Exception {
+    public Object create(Class<?> classLiteral) {
         if (classLiteral.isAnnotation() || classLiteral.isArray() || classLiteral.isEnum()
                 || classLiteral.isInterface() || Modifier.isAbstract(classLiteral.getModifiers())) {
             return null;

@@ -24,7 +24,7 @@ public class JavassistUtils {
 
     public static CtConstructor findConstructor(CtClass ctClass, Class<?>... argsClasses) {
 
-        Set<CtConstructor> set = new HashSet<CtConstructor>();
+        Set<CtConstructor> set = new HashSet<>();
 
         findConstructors(ctClass, set, argsClasses);
 

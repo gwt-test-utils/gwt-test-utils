@@ -49,7 +49,7 @@ public class WidgetUtils {
 
         Map<Object, List<?>> eventHandlerMap = map.get(eventType);
 
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
 
         if (eventHandlerMap != null) {
             for (List<?> eventHandlerList : eventHandlerMap.values()) {

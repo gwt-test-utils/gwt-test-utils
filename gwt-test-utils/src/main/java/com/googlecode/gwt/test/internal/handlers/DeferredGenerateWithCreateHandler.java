@@ -13,7 +13,7 @@ public class DeferredGenerateWithCreateHandler implements GwtCreateHandler {
 
     private Set<Class<?>> customGeneratedClasses;
 
-    public Object create(Class<?> classLiteral) throws Exception {
+    public Object create(Class<?> classLiteral) {
         if (customGeneratedClasses == null) {
             customGeneratedClasses = initCustomGeneratedClasses();
         }
@@ -31,7 +31,7 @@ public class DeferredGenerateWithCreateHandler implements GwtCreateHandler {
     }
 
     private Set<Class<?>> initCustomGeneratedClasses() {
-        Set<Class<?>> result = new HashSet<Class<?>>();
+        Set<Class<?>> result = new HashSet<>();
         String moduleName = GwtConfig.get().getTestedModuleName();
         for (String className : ModuleData.get(moduleName).getCustomGeneratedClasses()) {
             try {

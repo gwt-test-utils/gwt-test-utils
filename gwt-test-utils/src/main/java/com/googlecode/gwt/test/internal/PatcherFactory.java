@@ -15,7 +15,7 @@ class PatcherFactory {
     private final Map<String, Patcher> patchers;
 
     PatcherFactory(Map<String, Set<CtClass>> patchClassMap) {
-        this.patchers = new HashMap<String, Patcher>();
+        this.patchers = new HashMap<>();
 
         for (Map.Entry<String, Set<CtClass>> entry : patchClassMap.entrySet()) {
             Patcher patcher = createPatcher(entry.getValue());

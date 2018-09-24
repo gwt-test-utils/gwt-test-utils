@@ -51,7 +51,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
         private final HashMap<String, List<List<String>>> macroList;
 
         public MacroReader() {
-            macroList = new HashMap<String, List<List<String>>>();
+            macroList = new HashMap<>();
         }
 
         public List<List<String>> getMacro(String macroName) {
@@ -76,7 +76,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
                         currentMacroName = row.size() > 1 ? row.get(1) : null;
                         assertThat(currentMacroName).as("You have to specified a macro name").isNotNull();
                         logger.info("Starting reading " + currentMacroName);
-                        currentMacroContent = new ArrayList<List<String>>();
+                        currentMacroContent = new ArrayList<>();
                     }
                 }
             }
@@ -89,7 +89,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
     protected CsvRunner csvRunner;
 
-    private final List<CsvTestExecutionHandler> csvTestExecutionHandlers = new ArrayList<CsvTestExecutionHandler>();
+    private final List<CsvTestExecutionHandler> csvTestExecutionHandlers = new ArrayList<>();
 
     private MacroReader macroReader;
 
@@ -523,7 +523,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
         assertThat(macro).as(prefix() + "CsvMacro '" + macroName + "' has not been found").isNotNull();
         int i = 0;
         for (List<String> line : macro) {
-            List<String> l = new ArrayList<String>();
+            List<String> l = new ArrayList<>();
             for (String s : line) {
                 String replaced = s;
                 for (int z = 0; z < identifier.length; z++) {

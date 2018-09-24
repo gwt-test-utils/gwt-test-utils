@@ -45,7 +45,7 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
         Class<? extends Ginjector> ginjectorClass = (Class<? extends Ginjector>) classLiteral;
 
         if (injectors == null) {
-            injectors = new HashMap<Class<? extends Ginjector>, Object>();
+            injectors = new HashMap<>();
         }
 
         Object guiceInjectorProxy = injectors.get(classLiteral);
@@ -91,7 +91,7 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
 
         Class<? extends GinModule>[] ginModules = annotation.value();
 
-        if (ginModules == null || ginModules.length == 0) {
+        if (ginModules.length == 0) {
             // there are no GinModules present in the Ginjector.
             throw new IllegalArgumentException(classLiteral.getName()
                     + " doesn't have any GinModules. " + "Runtime should not work.");
@@ -104,7 +104,7 @@ public class GInjectorCreateHandler implements GwtCreateHandler {
     private Set<Module> readGuiceModules(Class<? extends GinModule>[] classLiterals,
                                          Class<? extends Ginjector> ginectorClass) throws Exception {
 
-        Set<Module> modules = new HashSet<Module>();
+        Set<Module> modules = new HashSet<>();
         for (Class<? extends GinModule> literal : classLiterals) {
             LOGGER.debug("wrapping GinModule literal " + literal);
             MemberCollector memberCollector = new MemberCollector(GwtTreeLogger.get());

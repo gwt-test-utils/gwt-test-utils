@@ -16,7 +16,7 @@ import java.util.Properties;
 
 class ConstantsInvocationHandler extends LocalizableResourceInvocationHandler {
 
-    public ConstantsInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
+    ConstantsInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
         super(proxiedClass);
     }
 
@@ -44,7 +44,7 @@ class ConstantsInvocationHandler extends LocalizableResourceInvocationHandler {
                         + " value incorrect for method " + method.getDeclaringClass().getName() + "."
                         + method.getName() + "() : the array value (key/value pair) should be even");
             }
-            Map<String, String> result = new HashMap<String, String>();
+            Map<String, String> result = new HashMap<>();
             for (int i = 0; i < v.length; i++) {
                 result.put(v[i], treatLine(v[++i]));
             }
@@ -88,7 +88,7 @@ class ConstantsInvocationHandler extends LocalizableResourceInvocationHandler {
         } else if (returnType.isArray() && returnType.getComponentType() == String.class) {
             return line.split("\\s*,\\s*");
         } else if (returnType == Map.class) {
-            Map<String, Object> result = new HashMap<String, Object>();
+            Map<String, Object> result = new HashMap<>();
             String[] v = line.split("\\s*,\\s*");
 
             for (String key : v) {

@@ -24,9 +24,9 @@ public class LocalizableResourceCreateHandler implements GwtCreateHandler {
 
     private static class LocalizableResourceProxyFactory {
 
-        private static Map<String, LocalizableResourceProxyFactory> factoryMap = new HashMap<String, LocalizableResourceProxyFactory>();
+        private static Map<String, LocalizableResourceProxyFactory> factoryMap = new HashMap<>();
 
-        public static <T extends LocalizableResource> LocalizableResourceProxyFactory getFactory(
+        static <T extends LocalizableResource> LocalizableResourceProxyFactory getFactory(
                 Class<T> clazz) {
             LocalizableResourceProxyFactory factory = factoryMap.get(clazz.getName());
             if (factory == null) {
@@ -44,7 +44,7 @@ public class LocalizableResourceCreateHandler implements GwtCreateHandler {
         }
 
         @SuppressWarnings("unchecked")
-        public <T extends LocalizableResource> T createProxy() {
+        <T extends LocalizableResource> T createProxy() {
             InvocationHandler ih = createInvocationHandler(proxiedClass);
             return (T) Proxy.newProxyInstance(proxiedClass.getClassLoader(),
                     new Class<?>[]{proxiedClass}, ih);

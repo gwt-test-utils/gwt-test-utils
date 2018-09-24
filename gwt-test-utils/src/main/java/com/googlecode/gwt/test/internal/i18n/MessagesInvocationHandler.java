@@ -20,12 +20,12 @@ import java.util.Properties;
 @SuppressWarnings("deprecation")
 class MessagesInvocationHandler extends LocalizableResourceInvocationHandler {
 
-    public MessagesInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
+    MessagesInvocationHandler(Class<? extends LocalizableResource> proxiedClass) {
         super(proxiedClass);
     }
 
     @Override
-    protected Object extractDefaultValue(Method method, Object[] args) throws Throwable {
+    protected Object extractDefaultValue(Method method, Object[] args) {
         DefaultMessage defaultMessage = method.getAnnotation(DefaultMessage.class);
         Annotation messageAnnotation = getMessageAnnotation(method);
         String valuePattern = null;
@@ -50,8 +50,7 @@ class MessagesInvocationHandler extends LocalizableResourceInvocationHandler {
     }
 
     @Override
-    protected Object extractFromProperties(Properties localizedProperties, Method method,
-                                           Object[] args, Locale locale) throws Throwable {
+    protected Object extractFromProperties(Properties localizedProperties, Method method, Object[] args, Locale locale) {
         Annotation messageAnnotation = getMessageAnnotation(method);
 
         String key = messageAnnotation == null ? getKey(method) : getSpecificKey(messageAnnotation,
@@ -70,7 +69,7 @@ class MessagesInvocationHandler extends LocalizableResourceInvocationHandler {
         return null;
     }
 
-    protected String extractProperty(Properties properties, String key) {
+    private String extractProperty(Properties properties, String key) {
         String result = properties.getProperty(key);
         if (result == null) {
             result = properties.getProperty(key.replaceAll("_", "."));
@@ -98,9 +97,9 @@ class MessagesInvocationHandler extends LocalizableResourceInvocationHandler {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < annotations.length; i++) {
             Annotation[] childArray = annotations[i];
-            for (int j = 0; j < childArray.length; j++) {
-                if (PluralCount.class.isAssignableFrom(childArray[j].getClass())) {
-                    PluralCount pluralCount = (PluralCount) childArray[j];
+            for (Annotation aChildArray : childArray) {
+                if (PluralCount.class.isAssignableFrom(aChildArray.getClass())) {
+                    PluralCount pluralCount = (PluralCount) aChildArray;
                     Class<? extends PluralRule> pluralRuleClass = pluralCount.value();
                     int count = (Integer) args[i];
 
@@ -119,14 +118,11 @@ class MessagesInvocationHandler extends LocalizableResourceInvocationHandler {
                         throw new GwtTestI18NException("Cannot find PluralRule for method '"
                                 + method.getDeclaringClass().getSimpleName() + "." + method.getName()
                                 + "()'. Expected PluralRule : '" + pluralRuleClassName + "'");
-                    } catch (InstantiationException e) {
-                        throw new GwtTestI18NException("Error during instanciation of class '"
-                                + pluralRuleClassName + "'", e);
-                    } catch (IllegalAccessException e) {
+                    } catch (InstantiationException | IllegalAccessException e) {
                         throw new GwtTestI18NException("Error during instanciation of class '"
                                 + pluralRuleClassName + "'", e);
                     }
-                } else if (Select.class.isAssignableFrom(childArray[j].getClass())) {
+                } else if (Select.class.isAssignableFrom(aChildArray.getClass())) {
                     sb.append(args[i]).append("|");
                 }
             }
@@ -159,7 +155,7 @@ class MessagesInvocationHandler extends LocalizableResourceInvocationHandler {
      * @return a map of named values
      */
     private Map<String, String> getAnnotationValues(String[] annotationValues) {
-        Map<String, String> pluralForms = new HashMap<String, String>();
+        Map<String, String> pluralForms = new HashMap<>();
 
         for (int i = 0; i < annotationValues.length; i++) {
             pluralForms.put(annotationValues[i], annotationValues[++i]);
@@ -185,9 +181,9 @@ class MessagesInvocationHandler extends LocalizableResourceInvocationHandler {
     }
 
     private String[] getMessageAnnotationValues(Annotation messageAnnotation) {
-        if (AlternateMessage.class.isInstance(messageAnnotation)) {
+        if (messageAnnotation instanceof AlternateMessage) {
             return ((AlternateMessage) messageAnnotation).value();
-        } else if (PluralText.class.isInstance(messageAnnotation)) {
+        } else if (messageAnnotation instanceof PluralText) {
             return ((PluralText) messageAnnotation).value();
         }
 

@@ -52,7 +52,7 @@ class PrefixTreePatcher {
     private static Set<String> getPrefixSet(Object prefixTree) {
         Set<String> set = GwtReflectionUtils.getPrivateFieldValue(prefixTree, PREFIXES_SET_PROPERTY);
         if (set == null) {
-            set = new TreeSet<String>();
+            set = new TreeSet<>();
             GwtReflectionUtils.setPrivateFieldValue(prefixTree, PREFIXES_SET_PROPERTY, set);
         }
         return set;

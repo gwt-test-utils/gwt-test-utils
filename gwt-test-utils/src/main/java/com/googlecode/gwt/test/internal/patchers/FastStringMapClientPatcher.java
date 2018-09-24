@@ -25,11 +25,10 @@ class FastStringMapClientPatcher {
 
     @SuppressWarnings("unchecked")
     private static Map<String, String> getInternalMap(JavaScriptObject map) {
-        Map<String, String> internalMap = (Map<String, String>) JavaScriptObjects.getObject(map,
-                INTERNAL_MAP);
+        Map<String, String> internalMap = JavaScriptObjects.getObject(map, INTERNAL_MAP);
 
         if (internalMap == null) {
-            internalMap = new HashMap<String, String>();
+            internalMap = new HashMap<>();
             JavaScriptObjects.setProperty(map, INTERNAL_MAP, internalMap);
         }
 

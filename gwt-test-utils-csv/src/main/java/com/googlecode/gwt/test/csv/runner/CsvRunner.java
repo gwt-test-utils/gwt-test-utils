@@ -22,7 +22,7 @@ import static org.assertj.core.api.Fail.fail;
 
 public class CsvRunner {
 
-    private static Map<Class<?>, Map<String, Method>> csvMethodsCache = new HashMap<Class<?>, Map<String, Method>>();
+    private static Map<Class<?>, Map<String, Method>> csvMethodsCache = new HashMap<>();
 
     private static final Logger logger = LoggerFactory.getLogger(CsvRunner.class);
 
@@ -32,7 +32,7 @@ public class CsvRunner {
 
     private int lineNumber = -1;
 
-    private final List<ObjectFinder> objectFinders = new ArrayList<ObjectFinder>();
+    private final List<ObjectFinder> objectFinders = new ArrayList<>();
 
     public CsvRunner(HasCsvTestExecutionHandlers hasCsvMethodInvocationHandlers) {
         this.hasCsvMethodInvocationHandlers = hasCsvMethodInvocationHandlers;
@@ -48,7 +48,7 @@ public class CsvRunner {
         }
         String methodName = row.get(0).trim();
         if (!"".equals(methodName)) {
-            List<String> args = new ArrayList<String>();
+            List<String> args = new ArrayList<>();
             args.addAll(row);
             args.remove(0);
             executeLine(methodName, args, fixture);
@@ -173,7 +173,7 @@ public class CsvRunner {
             // commented line
             return;
         }
-        List<String> filterArgs = new ArrayList<String>(args);
+        List<String> filterArgs = new ArrayList<>(args);
         removeEmptyElements(filterArgs);
         transformArgs(filterArgs);
         Method m = getCsvMethod(fixture.getClass(), methodName);
@@ -183,7 +183,7 @@ public class CsvRunner {
         }
         GwtReflectionUtils.makeAccessible(m);
 
-        List<Object> argList = new ArrayList<Object>();
+        List<Object> argList = new ArrayList<>();
         for (Class<?> clazz : m.getParameterTypes()) {
             if (filterArgs.size() == 0) {
                 if (clazz.isArray()) {
@@ -302,7 +302,7 @@ public class CsvRunner {
         Map<String, Method> classCsvMethods = csvMethodsCache.get(clazz);
 
         if (classCsvMethods == null) {
-            classCsvMethods = new HashMap<String, Method>();
+            classCsvMethods = new HashMap<>();
             csvMethodsCache.put(clazz, classCsvMethods);
 
             Map<Method, CsvMethod> csvMethods = GwtReflectionUtils.getAnnotatedMethod(clazz,
@@ -431,7 +431,7 @@ public class CsvRunner {
     }
 
     private void removeEmptyElements(List<String> list) {
-        List<String> newList = new ArrayList<String>();
+        List<String> newList = new ArrayList<>();
         for (String s : list) {
             if (!"".equals(s)) {
                 newList.add(s);
@@ -442,7 +442,7 @@ public class CsvRunner {
     }
 
     private void transformArgs(List<String> list) {
-        List<String> newList = new ArrayList<String>();
+        List<String> newList = new ArrayList<>();
         for (String s : list) {
             String out = s;
             if ("*empty*".equals(s)) {

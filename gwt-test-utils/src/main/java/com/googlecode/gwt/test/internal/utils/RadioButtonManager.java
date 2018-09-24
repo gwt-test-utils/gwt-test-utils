@@ -68,7 +68,7 @@ public class RadioButtonManager implements AfterTestCallback {
         get().deregister(rb);
     }
 
-    private final Map<String, Set<RadioButton>> map = new HashMap<String, Set<RadioButton>>();
+    private final Map<String, Set<RadioButton>> map = new HashMap<>();
 
     private RadioButtonManager() {
         AfterTestCallbackManager.get().registerCallback(this);
@@ -96,7 +96,7 @@ public class RadioButtonManager implements AfterTestCallback {
     private Set<RadioButton> getRadioButtons(String groupName) {
         Set<RadioButton> set = map.get(groupName);
         if (set == null) {
-            set = new HashSet<RadioButton>();
+            set = new HashSet<>();
             map.put(groupName, set);
         }
 

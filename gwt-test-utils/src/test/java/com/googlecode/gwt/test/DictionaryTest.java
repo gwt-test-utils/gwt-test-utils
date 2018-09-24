@@ -68,7 +68,7 @@ public class DictionaryTest extends GwtTestTest {
 
     private Map<String, String> createDictionaryEntries() {
 
-        Map<String, String> entries = new HashMap<String, String>();
+        Map<String, String> entries = new HashMap<>();
         entries.put("name", "gwt-test-utils");
         entries.put("description", "An awesome GWT testing tool ;-)");
 

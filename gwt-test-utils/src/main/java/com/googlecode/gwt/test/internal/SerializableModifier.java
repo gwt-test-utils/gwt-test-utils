@@ -92,7 +92,7 @@ public class SerializableModifier implements JavaClassModifier {
 
     private static Map<Field, Object> getFieldValues(Serializable o)
             throws IllegalArgumentException, IllegalAccessException {
-        Map<Field, Object> result = new HashMap<Field, Object>();
+        Map<Field, Object> result = new HashMap<>();
 
         for (Field field : GwtReflectionUtils.getFields(o.getClass())) {
             int fieldModifier = field.getModifiers();

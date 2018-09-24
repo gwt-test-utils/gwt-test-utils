@@ -122,18 +122,14 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
      */
     protected <T> T createMockAndKeepMethods(Class<T> clazz, final boolean keepSetters,
                                              final Method... list) {
-        final List<Method> l = new ArrayList<Method>();
-        GwtReflectionUtils.doWithMethods(clazz, new MethodCallback() {
-
-            public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-                if (!ArrayUtils.contains(list, method)) {
-                    if (!keepSetters || !method.getName().startsWith("set")
-                            || method.getReturnType() != void.class) {
-                        l.add(method);
-                    }
+        final List<Method> l = new ArrayList<>();
+        GwtReflectionUtils.doWithMethods(clazz, method -> {
+            if (!ArrayUtils.contains(list, method)) {
+                if (!keepSetters || !method.getName().startsWith("set")
+                        || method.getReturnType() != void.class) {
+                    l.add(method);
                 }
             }
-
         });
         T o = EasyMock.createMockBuilder(clazz).addMockedMethods(l.toArray(new Method[]{})).createMock();
         addMockedObject(clazz, o);

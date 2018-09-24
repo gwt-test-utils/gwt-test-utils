@@ -18,9 +18,10 @@ class GwtHtmlContentHandler implements ContentHandler {
 
     private Node currentNode;
 
-    private final List<Node> nodes = new ArrayList<Node>();
+    private final List<Node> nodes = new ArrayList<>();
 
-    public void characters(char[] ch, int start, int length) throws SAXException {
+    @Override
+    public void characters(char[] ch, int start, int length) {
 
         String string = String.valueOf(ch, start, length).replaceAll("\\u00A0", " ");
 

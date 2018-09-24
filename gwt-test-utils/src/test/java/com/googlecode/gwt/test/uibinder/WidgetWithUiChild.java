@@ -16,8 +16,8 @@ public class WidgetWithUiChild extends Composite {
 
     public WidgetWithUiChild() {
         initWidget(new FlowPanel());
-        labels = new ArrayList<Label>();
-        customWidgets = new ArrayList<Widget>();
+        labels = new ArrayList<>();
+        customWidgets = new ArrayList<>();
     }
 
     public int customWidgetCount() {

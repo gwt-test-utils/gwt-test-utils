@@ -27,7 +27,7 @@ import java.util.List;
 public class GwtSpring2CsvJUnit4ClassRunner extends SpringJUnit4ClassRunner {
 
     class CsvMethodValidator {
-        private final List<Throwable> fErrors = new ArrayList<Throwable>();
+        private final List<Throwable> fErrors = new ArrayList<>();
 
         private final TestClass fTestClass;
 

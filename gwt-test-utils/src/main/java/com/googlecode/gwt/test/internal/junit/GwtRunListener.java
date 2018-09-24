@@ -24,12 +24,12 @@ public class GwtRunListener extends RunListener {
     }
 
     @Override
-    public void testFailure(Failure failure) throws Exception {
+    public void testFailure(Failure failure) {
         GwtTestDataHolder.get().setCurrentTestFailed(true);
     }
 
     @Override
-    public void testStarted(Description description) throws Exception {
+    public void testStarted(Description description) {
         WithProperties withProperties = description.getAnnotation(WithProperties.class);
         GwtTestDataHolder.get().setCurrentWithProperties(withProperties);
     }

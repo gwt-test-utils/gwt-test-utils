@@ -39,21 +39,21 @@ public class UseMirroredClasses extends ClassVisitor {
             // The list of mirrored methods
             // TODO(unnurg): Find a better way to track methods that will get
             // rewritten - possibly by using annotations
-            mirrorMap = new HashMap<String, HashMap<String, String>>();
+            mirrorMap = new HashMap<>();
 
-            HashMap<String, String> logRecordMethods = new HashMap<String, String>();
+            HashMap<String, String> logRecordMethods = new HashMap<>();
             logRecordMethods.put("getLoggerName",
                     "com/google/gwt/logging/impl/DevModeLoggingFixes:getLoggerName");
             mirrorMap.put("java/util/logging/LogRecord", logRecordMethods);
 
-            HashMap<String, String> logManagerMethods = new HashMap<String, String>();
+            HashMap<String, String> logManagerMethods = new HashMap<>();
             logManagerMethods.put("getLogger",
                     "com/google/gwt/logging/impl/DevModeLoggingFixes:logManagerGetLogger");
             logManagerMethods.put("getLoggerNames",
                     "com/google/gwt/logging/impl/DevModeLoggingFixes:logManagerGetLoggerNames");
             mirrorMap.put("java/util/logging/LogManager", logManagerMethods);
 
-            HashMap<String, String> loggerMethods = new HashMap<String, String>();
+            HashMap<String, String> loggerMethods = new HashMap<>();
             loggerMethods.put("getName", "com/google/gwt/logging/impl/DevModeLoggingFixes:getName");
             loggerMethods.put("getLogger",
                     "com/google/gwt/logging/impl/DevModeLoggingFixes:loggerGetLogger");

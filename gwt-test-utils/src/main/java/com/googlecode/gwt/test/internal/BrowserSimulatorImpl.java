@@ -43,7 +43,8 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
     /**
      * Check there is no pending command to execute. A {@link GwtTestException} would we thrown.
      */
-    public void afterTest() throws Throwable {
+    @Override
+    public void afterTest() {
 
         if (deferredScheduledCommands.size() == 0 //
                 && finallyScheduledCommands.size() == 0 //
@@ -146,7 +147,7 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
     }
 
     private void executeReaptingCommnand(List<RepeatingCommand> commands) {
-        List<RepeatingCommand> toRemove = new ArrayList<RepeatingCommand>();
+        List<RepeatingCommand> toRemove = new ArrayList<>();
         int i = 0;
 
         while (i < commands.size()) {

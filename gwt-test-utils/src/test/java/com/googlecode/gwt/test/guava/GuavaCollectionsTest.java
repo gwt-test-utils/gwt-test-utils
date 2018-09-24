@@ -14,7 +14,7 @@ public class GuavaCollectionsTest extends GwtTestTest {
     @Test
     public void filterIslandCandidates() {
         // Given
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("Jack Shephard");
         list.add("John Locke");
         list.add("Hurley Reyes");

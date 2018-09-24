@@ -33,13 +33,14 @@ public class GwtConfig implements AfterTestCallback {
 
     private String testedModuleName;
 
-    private final List<UiObjectTagFactory<?>> uiObjectTagFactories = new ArrayList<UiObjectTagFactory<?>>();
+    private final List<UiObjectTagFactory<?>> uiObjectTagFactories = new ArrayList<>();
 
     private GwtConfig() {
         AfterTestCallbackManager.get().registerFinalCallback(this);
     }
 
-    public void afterTest() throws Throwable {
+    @Override
+    public void afterTest() {
         gwtModuleRunner = null;
         uiObjectTagFactories.clear();
     }

@@ -89,7 +89,7 @@ class UiElementTag implements UiTag<Element> {
                 UIBINDER_CHILD_WIDGETS_LIST);
 
         if (childWidgets == null) {
-            childWidgets = new ArrayList<IsWidget>();
+            childWidgets = new ArrayList<>();
             JavaScriptObjects.setProperty(wrapped, UIBINDER_CHILD_WIDGETS_LIST, childWidgets);
         }
 
@@ -111,7 +111,7 @@ class UiElementTag implements UiTag<Element> {
                 UIBINDER_CHILD_UIOBJECT_LIST);
 
         if (childObjects == null) {
-            childObjects = new ArrayList<UIObject>();
+            childObjects = new ArrayList<>();
             JavaScriptObjects.setProperty(wrapped, UIBINDER_CHILD_UIOBJECT_LIST, childObjects);
         }
 

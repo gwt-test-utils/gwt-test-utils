@@ -6,12 +6,10 @@ import com.google.gwt.resources.ext.DefaultExtensions;
 import com.googlecode.gwt.test.exceptions.GwtTestResourcesException;
 import com.googlecode.gwt.test.internal.GwtClassPool;
 import javassist.CtClass;
-import javassist.NotFoundException;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +20,13 @@ class ClientBundleProxyFactory {
     private static class ClientBundleMethodsRegistry {
 
         private final CtClass ctClass;
-        private final Map<Method, List<URL>> resourceURLMap = new HashMap<Method, List<URL>>();
+        private final Map<Method, List<URL>> resourceURLMap = new HashMap<>();
 
-        public ClientBundleMethodsRegistry(Class<? extends ClientBundle> clazz) {
+        ClientBundleMethodsRegistry(Class<? extends ClientBundle> clazz) {
             ctClass = GwtClassPool.getCtClass(clazz);
         }
 
-        public List<URL> getResourceURL(Method method) throws Exception {
+        List<URL> getResourceURL(Method method) {
             List<URL> resourceURLs = resourceURLMap.get(method);
             if (resourceURLs == null) {
                 resourceURLs = computeResourceURLs(method);
@@ -38,10 +36,9 @@ class ClientBundleProxyFactory {
             return resourceURLs;
         }
 
-        private List<URL> computeResourceURLs(Method method) throws NotFoundException,
-                URISyntaxException {
+        private List<URL> computeResourceURLs(Method method) {
 
-            List<ResourceFileEntry> filesSimpleNames = new ArrayList<ResourceFileEntry>();
+            List<ResourceFileEntry> filesSimpleNames = new ArrayList<>();
             boolean computeExtensions = false;
             Source source = method.getAnnotation(Source.class);
 
@@ -57,7 +54,7 @@ class ClientBundleProxyFactory {
                 computeExtensions = true;
             }
 
-            List<URL> existingFiles = new ArrayList<URL>();
+            List<URL> existingFiles = new ArrayList<>();
 
             for (ResourceFileEntry resourceEntry : filesSimpleNames) {
                 String resourceName = resourceEntry.resourceName;
@@ -116,12 +113,12 @@ class ClientBundleProxyFactory {
             Class<?> returnType = method.getReturnType();
             DefaultExtensions annotation = returnType.getAnnotation(
                     DefaultExtensions.class);
-            
+
             for (; annotation == null && returnType.getInterfaces().length > 0; returnType = returnType.getInterfaces()[0]) {
                 annotation = returnType.getAnnotation(
                         DefaultExtensions.class);
             }
-            
+
             if (annotation == null) {
                 throw new GwtTestResourcesException(
                         method.getReturnType().getSimpleName()
@@ -141,15 +138,15 @@ class ClientBundleProxyFactory {
         private final Method resourceMethod;
         private final String resourceName;
 
-        public ResourceFileEntry(String resourceName, Method resourceMethod) {
+        ResourceFileEntry(String resourceName, Method resourceMethod) {
             this.resourceName = resourceName;
             this.resourceMethod = resourceMethod;
         }
     }
 
-    private static Map<String, ClientBundleProxyFactory> factoryMap = new HashMap<String, ClientBundleProxyFactory>();
+    private static Map<String, ClientBundleProxyFactory> factoryMap = new HashMap<>();
 
-    public static <T extends ClientBundle> ClientBundleProxyFactory getFactory(Class<T> clazz) {
+    static <T extends ClientBundle> ClientBundleProxyFactory getFactory(Class<T> clazz) {
         ClientBundleProxyFactory factory = factoryMap.get(clazz.getName());
         if (factory == null) {
             factory = new ClientBundleProxyFactory(clazz);
@@ -169,12 +166,12 @@ class ClientBundleProxyFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ClientBundle> T createProxy() {
+    <T extends ClientBundle> T createProxy() {
         InvocationHandler ih = new InvocationHandler() {
 
-            private final Map<Method, Object> cache = new HashMap<Method, Object>();
+            private final Map<Method, Object> cache = new HashMap<>();
 
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            public Object invoke(Object proxy, Method method, Object[] args) {
 
                 Object result = cache.get(method);
 

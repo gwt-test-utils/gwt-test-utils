@@ -20,7 +20,7 @@ public class ArrayUtils {
     }
 
     public static <K, V> Map<K, V> copyMap(Map<K, V> map) {
-        Map<K, V> result = new HashMap<K, V>();
+        Map<K, V> result = new HashMap<>();
 
         for (Map.Entry<K, V> entry : map.entrySet()) {
             result.put(entry.getKey(), entry.getValue());

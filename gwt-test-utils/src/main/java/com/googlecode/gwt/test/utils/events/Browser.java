@@ -1275,7 +1275,7 @@ public class Browser {
             }
 
             // fire with bubble support
-            Set<Widget> applied = new HashSet<Widget>();
+            Set<Widget> applied = new HashSet<>();
             dispatchEventWithBubble(target, event, applied);
 
         } catch (UmbrellaException e) {

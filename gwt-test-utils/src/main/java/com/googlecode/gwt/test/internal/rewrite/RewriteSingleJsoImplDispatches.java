@@ -111,7 +111,7 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
     }
 
     private String currentTypeName;
-    private final Set<String> implementedMethods = new HashSet<String>();
+    private final Set<String> implementedMethods = new HashSet<>();
     private boolean inSingleJsoImplInterfaceType;
     private Map<String, Set<String>> intfNamesToAllInterfaces = Maps.create();
     private final SingleJsoImplData jsoData;
@@ -226,7 +226,7 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
     }
 
     private Set<String> computeAllInterfaces(String[] interfaces) {
-        Set<String> toReturn = new HashSet<String>();
+        Set<String> toReturn = new HashSet<>();
         for (String intfName : interfaces) {
             toReturn.addAll(computeAllInterfaces(intfName));
         }
@@ -247,7 +247,7 @@ public class RewriteSingleJsoImplDispatches extends ClassVisitor {
         String name = typeName.replace('/', '_');
         String prefix = name + "_";
         String suffix = name + "`";
-        SortedSet<String> toReturn = new TreeSet<String>();
+        SortedSet<String> toReturn = new TreeSet<>();
         for (String mangledName : jsoData.getMangledNames().subSet(prefix, suffix)) {
             if (!implementedMethods.contains(mangledName)) {
                 toReturn.add(mangledName);

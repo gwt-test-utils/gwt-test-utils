@@ -287,7 +287,7 @@ public abstract class UiObjectTag<T> implements UiTag<T> {
 
     private Map<String, UiChildMethodHolder> collectUiChildMethods(Class<? extends T> clazz) {
 
-        Map<String, UiChildMethodHolder> map = new HashMap<String, UiObjectTag.UiChildMethodHolder>();
+        Map<String, UiChildMethodHolder> map = new HashMap<>();
 
         Map<Method, UiChild> uiChildMap = GwtReflectionUtils.getAnnotatedMethod(clazz, UiChild.class);
         for (Map.Entry<Method, UiChild> entry : uiChildMap.entrySet()) {

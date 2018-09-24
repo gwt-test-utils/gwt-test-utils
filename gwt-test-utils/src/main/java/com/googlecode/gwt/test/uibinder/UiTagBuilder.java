@@ -227,7 +227,7 @@ class UiTagBuilder<T> {
 
     private Map<String, Object> parseAttributesMap(String elementNsURI, Attributes attributesXML) {
 
-        Map<String, Object> attributesMap = new HashMap<String, Object>();
+        Map<String, Object> attributesMap = new HashMap<>();
 
         for (int i = 0; i < attributesXML.getLength(); i++) {
             String attrName = attributesXML.getLocalName(i);
@@ -276,7 +276,7 @@ class UiTagBuilder<T> {
             // we have to find potential {} resources
             m = EXTERNAL_RESOURCES_PATTERN.matcher(attrValue);
 
-            List<Object> resources = new ArrayList<Object>();
+            List<Object> resources = new ArrayList<>();
             while (m.find()) {
                 resources.add(extractResource(m.group(1), resourceManager, owner));
             }

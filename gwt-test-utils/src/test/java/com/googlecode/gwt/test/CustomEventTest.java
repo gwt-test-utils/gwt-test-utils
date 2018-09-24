@@ -194,7 +194,7 @@ public class CustomEventTest extends GwtTestTest {
 
     private static class ListModel {
         private final HandlerManager handlerManager = new HandlerManager(this);
-        private final List<ListItem> items = new ArrayList<ListItem>();
+        private final List<ListItem> items = new ArrayList<>();
 
         public void addItem(ListItem item) {
             items.add(item);

@@ -24,7 +24,7 @@ class TestRemoteServiceCreateHandler extends RemoteServiceCreateHandler {
         return INSTANCE;
     }
 
-    private final Map<String, Object> cachedServices = new HashMap<String, Object>();
+    private final Map<String, Object> cachedServices = new HashMap<>();
 
     public void reset() {
         cachedServices.clear();

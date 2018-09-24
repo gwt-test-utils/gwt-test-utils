@@ -113,7 +113,7 @@ public class ResourcePrototypeProxyBuilder {
     }
 
     public ResourcePrototypeProxyBuilder resourceURL(URL url) {
-        urls = new ArrayList<URL>(1);
+        urls = new ArrayList<>(1);
         urls.add(url);
         return this;
     }

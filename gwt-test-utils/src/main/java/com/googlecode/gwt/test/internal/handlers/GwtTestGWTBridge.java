@@ -60,7 +60,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
         // TODO : all createHandler should be singleton ?
         generatorCreateHandler = new GeneratorCreateHandler(GwtFactory.get().getCompilationState(),
                 GwtFactory.get().getModuleDef());
-        addedHandlers = new ArrayList<GwtCreateHandler>();
+        addedHandlers = new ArrayList<>();
         animationSchedulerCreateHandler = new AnimationSchedulerCreateHandler();
         autoBeanCreateHandler = new AutoBeanCreateHandler();
         cellBasedWidgetImplCreateHandler = new CellBasedWidgetImplCreateHandler();
@@ -83,7 +83,7 @@ public class GwtTestGWTBridge extends GWTBridge implements AfterTestCallback {
         addedHandlers.add(0, gwtCreateHandler);
     }
 
-    public void afterTest() throws Throwable {
+    public void afterTest() {
         addedHandlers.clear();
         testRemoteServiceCreateHandler.reset();
         mockCreateHandler = null;

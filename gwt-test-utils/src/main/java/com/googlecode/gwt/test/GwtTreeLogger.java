@@ -31,7 +31,7 @@ public class GwtTreeLogger extends AbstractTreeLogger {
 
     private static final String DEFAULT_BRANCH_INDENT = "   ";
 
-    private static final List<ErrorDto> ERROR_MSG_BUFFER = new ArrayList<ErrorDto>();
+    private static final List<ErrorDto> ERROR_MSG_BUFFER = new ArrayList<>();
 
     private static final GwtTreeLogger INSTANCE = new GwtTreeLogger("");
 

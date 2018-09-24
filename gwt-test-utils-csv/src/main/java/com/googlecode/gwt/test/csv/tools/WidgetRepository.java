@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class WidgetRepository {
 
-    private final Map<String, Object> map = new HashMap<String, Object>();
+    private final Map<String, Object> map = new HashMap<>();
 
     public Object addAlias(String alias, Object widget) {
         return map.put(alias, widget);

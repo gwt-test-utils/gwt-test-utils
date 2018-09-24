@@ -15,7 +15,7 @@ class TimerPatcher {
 
     private static class TimerHolder implements AfterTestCallback {
 
-        private final Map<Timer, java.util.Timer> timers = new HashMap<Timer, java.util.Timer>();
+        private final Map<Timer, java.util.Timer> timers = new HashMap<>();
 
         TimerHolder() {
             AfterTestCallbackManager.get().registerCallback(this);
@@ -50,7 +50,7 @@ class TimerPatcher {
     }
 
     @PatchMethod
-    static void schedule(final Timer timer, int delayMillis) throws Exception {
+    static void schedule(final Timer timer, int delayMillis) {
         if (delayMillis <= 0) {
             throw new IllegalArgumentException("must be positive");
         }
@@ -70,7 +70,7 @@ class TimerPatcher {
     }
 
     @PatchMethod
-    static void scheduleRepeating(final Timer timer, int periodMillis) throws Exception {
+    static void scheduleRepeating(final Timer timer, int periodMillis) {
         if (periodMillis <= 0) {
             throw new IllegalArgumentException("must be positive");
         }

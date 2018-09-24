@@ -34,29 +34,17 @@ public class UiBinderBeanUtils {
             }, new PropertyUtilsBean());
 
     static {
-        registerConverter(new Converter() {
+        registerConverter((type, value) ->
+                UiBinderXmlUtils.parseHorizontalAlignment(value.toString()), HorizontalAlignmentConstant.class
+        );
 
-            @SuppressWarnings("rawtypes")
-            public Object convert(Class type, Object value) {
-                return UiBinderXmlUtils.parseHorizontalAlignment(value.toString());
-            }
-        }, HorizontalAlignmentConstant.class);
+        registerConverter((type, value) ->
+                UiBinderXmlUtils.parseVerticalAlignment(value.toString()), VerticalAlignmentConstant.class
+        );
 
-        registerConverter(new Converter() {
-
-            @SuppressWarnings("rawtypes")
-            public Object convert(Class type, Object value) {
-                return UiBinderXmlUtils.parseVerticalAlignment(value.toString());
-            }
-        }, VerticalAlignmentConstant.class);
-
-        registerConverter(new Converter() {
-
-            @SuppressWarnings("rawtypes")
-            public Object convert(Class type, Object value) {
-                return UiBinderXmlUtils.parseTextAlignConstant(value.toString());
-            }
-        }, TextAlignConstant.class);
+        registerConverter((type, value) ->
+                UiBinderXmlUtils.parseTextAlignConstant(value.toString()), TextAlignConstant.class
+        );
     }
 
     /**
@@ -66,7 +54,7 @@ public class UiBinderBeanUtils {
      */
     public static void populateObject(Object o, Map<String, Object> properties) {
         try {
-            Map<String, Object> filteredProperties = new HashMap<String, Object>();
+            Map<String, Object> filteredProperties = new HashMap<>();
             for (String key : properties.keySet()) {
                 if (PropertyUtils.isWriteable(o, key)) {
                     filteredProperties.put(key, properties.get(key));

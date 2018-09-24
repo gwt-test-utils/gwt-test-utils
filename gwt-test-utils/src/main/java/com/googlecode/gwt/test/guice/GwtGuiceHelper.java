@@ -29,7 +29,7 @@ class GwtGuiceHelper {
         return INSTANCE;
     }
 
-    public Injector getInjector() {
+    Injector getInjector() {
 
         if (this.injector == null && !hasSearchedInjector) {
             for (String listenerClassName : WebXmlUtils.get().getListenerClasses()) {
@@ -54,8 +54,8 @@ class GwtGuiceHelper {
         return this.injector;
     }
 
-    public Object getRpcServiceFromInjector(Injector injector, Class<?> remoteServiceClass,
-                                            String remoteServiceRelativePath) {
+    Object getRpcServiceFromInjector(Injector injector, Class<?> remoteServiceClass,
+                                     String remoteServiceRelativePath) {
 
         if (servletDefinitionReader == null) {
             servletDefinitionReader = new ServletDefinitionReader(injector);

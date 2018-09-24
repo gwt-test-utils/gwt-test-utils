@@ -15,7 +15,7 @@ class HTMLTableImplCreateHandler implements GwtCreateHandler {
 
     private static final class HTMLTableImplInvocationHandler implements InvocationHandler {
 
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(Object proxy, Method method, Object[] args) {
             if (method.getName().equals("getRows")) {
                 return getRows((Element) args[0]);
             } else if (method.getName().equals("getCells")) {

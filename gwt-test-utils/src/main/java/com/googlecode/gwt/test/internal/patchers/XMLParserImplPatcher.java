@@ -88,7 +88,7 @@ class XMLParserImplPatcher {
     static JavaScriptObject getAttributes(JavaScriptObject t) {
         Set<String> attrSet = JavaScriptObjects.getObject(t, JsoProperties.XML_ATTR_SET);
 
-        List<Node> list = new ArrayList<Node>();
+        List<Node> list = new ArrayList<>();
 
         for (String attrName : attrSet) {
             Node attrNode = getAttributeNode(t, attrName).cast();

@@ -105,7 +105,7 @@ class DocumentPatcher {
 
     @PatchMethod
     static NodeList<Element> getElementsByTagName(Node node, String tagName) {
-        List<Element> result = new ArrayList<Element>();
+        List<Element> result = new ArrayList<>();
         inspectDomForTag(node, tagName, result);
 
         return JsoUtils.newNodeList(result);

@@ -30,7 +30,7 @@ public class DirectoryTestReader {
 
         public static List<List<String>> readCsv(Reader reader) throws IOException {
             BufferedReader br = new BufferedReader(reader);
-            List<List<String>> l = new ArrayList<List<String>>();
+            List<List<String>> l = new ArrayList<>();
             while (true) {
                 String line = br.readLine();
                 if (line == null) {
@@ -38,7 +38,7 @@ public class DirectoryTestReader {
                 }
                 line = new String(line.getBytes(), "UTF-8").trim();
                 if ("".equals(line)) {
-                    l.add(new ArrayList<String>());
+                    l.add(new ArrayList<>());
                 } else if (!line.startsWith("//")) {
                     String[] tab = SEPARATOR_PATTERN.split(line);
                     l.add(treatParams(tab));
@@ -48,7 +48,7 @@ public class DirectoryTestReader {
         }
 
         private static List<String> treatParams(String[] csvParams) {
-            List<String> list = new ArrayList<String>(csvParams.length);
+            List<String> list = new ArrayList<>(csvParams.length);
             for (String csvParam : csvParams) {
                 list.add(REPLACE_PATTERN.matcher(csvParam).replaceAll(SEPARATOR));
             }
@@ -151,7 +151,7 @@ public class DirectoryTestReader {
     }
 
     private void initCsvMacros(CsvMacros csvMacros) throws FileNotFoundException, IOException {
-        macros = new HashMap<String, List<List<String>>>();
+        macros = new HashMap<>();
 
         if (csvMacros == null) {
             return;
@@ -175,19 +175,19 @@ public class DirectoryTestReader {
         File testsRoot = getDirectory(csvDirectory.value());
         String extension = csvDirectory.extension();
 
-        testMethods = new ArrayList<Method>();
+        testMethods = new ArrayList<>();
 
-        tests = new HashMap<String, List<List<String>>>();
+        tests = new HashMap<>();
         collectCsvTests(testsRoot, extension, tests);
     }
 
     private void initTestMethods(Class<?> clazz, CsvDirectory csvDirectory) throws Exception {
-        testMethods = new ArrayList<Method>();
+        testMethods = new ArrayList<>();
 
         CtClass newClazz = GwtClassPool.get().makeClass(
                 clazz.getName() + ".generated" + System.nanoTime());
         newClazz.setSuperclass(GwtClassPool.getCtClass(clazz));
-        List<String> methodList = new ArrayList<String>();
+        List<String> methodList = new ArrayList<>();
         for (Entry<String, List<List<String>>> entry : tests.entrySet()) {
             String fileAbsolutePath = entry.getKey();
 

@@ -61,10 +61,10 @@ class DeferredBindingModule extends AbstractModule {
 
     }
 
-    private static final Map<Class<?>, DeferredBindingModule> DEFERRED_BINDING_MODULES_CACHE = new HashMap<Class<?>, DeferredBindingModule>();
+    private static final Map<Class<?>, DeferredBindingModule> DEFERRED_BINDING_MODULES_CACHE = new HashMap<>();
 
-    private static final Map<String, Class<?>> GENERATED = new HashMap<String, Class<?>>();
-    private static final Map<Class<?>, Boolean> HAS_INJECTION_ANNOTATION_CACHE = new HashMap<Class<?>, Boolean>();
+    private static final Map<String, Class<?>> GENERATED = new HashMap<>();
+    private static final Map<Class<?>, Boolean> HAS_INJECTION_ANNOTATION_CACHE = new HashMap<>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeferredBindingModule.class);
 
@@ -97,7 +97,7 @@ class DeferredBindingModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        Set<Key<?>> copy = new HashSet<Key<?>>(bindedClasses);
+        Set<Key<?>> copy = new HashSet<>(bindedClasses);
         addDeferredBindings(classesToInstanciate, copy);
 
     }
@@ -110,7 +110,7 @@ class DeferredBindingModule extends AbstractModule {
             Key<Object> providedKey = (Key<Object>) ReflectUtil.getProvidedKey(toInstanciate);
             if (!bindedClasses.contains(providedKey)) {
                 bindedClasses.add(providedKey);
-                Set<Key<?>> collected = new HashSet<Key<?>>();
+                Set<Key<?>> collected = new HashSet<>();
                 collectDependencies(providedKey, collected);
                 addDeferredBindings(collected, bindedClasses);
             }
@@ -121,7 +121,7 @@ class DeferredBindingModule extends AbstractModule {
             Key<Object> providedKey = (Key<Object>) ReflectUtil.getProvidedKey(toInstanciate);
             if (!bindedClasses.contains(providedKey)) {
                 bindedClasses.add(providedKey);
-                Set<Key<?>> collected = new HashSet<Key<?>>();
+                Set<Key<?>> collected = new HashSet<>();
                 collectDependencies(providedKey, collected);
                 addDeferredBindings(collected, bindedClasses);
             }
@@ -147,7 +147,7 @@ class DeferredBindingModule extends AbstractModule {
     }
 
     private Set<Key<?>> collectBindedClasses(List<Element> elements) {
-        final Set<Key<?>> bindedClasses = new HashSet<Key<?>>();
+        final Set<Key<?>> bindedClasses = new HashSet<>();
 
         for (Element e : elements) {
             e.acceptVisitor(new DefaultElementVisitor<Void>() {
@@ -164,7 +164,7 @@ class DeferredBindingModule extends AbstractModule {
 
     private Set<Key<?>> collectClassesFromInjector(Class<?> injectorClass) {
 
-        Set<Key<?>> classesToInstanciate = new HashSet<Key<?>>();
+        Set<Key<?>> classesToInstanciate = new HashSet<>();
 
         for (Method m : injectorClass.getMethods()) {
             if (m.getGenericParameterTypes().length > 0) {
@@ -198,7 +198,7 @@ class DeferredBindingModule extends AbstractModule {
     }
 
     private Set<Key<?>> collectDependencies(List<Element> elements) {
-        final Set<Key<?>> dependencies = new HashSet<Key<?>>();
+        final Set<Key<?>> dependencies = new HashSet<>();
         for (Element e : elements) {
             e.acceptVisitor(new DefaultElementVisitor<Void>() {
                 @Override
@@ -282,7 +282,7 @@ class DeferredBindingModule extends AbstractModule {
     }
 
     private Set<Key<?>> getDependencies(InjectionPoint point) {
-        Set<Key<?>> dependencies = new HashSet<Key<?>>();
+        Set<Key<?>> dependencies = new HashSet<>();
         for (Dependency<?> d1 : point.getDependencies()) {
             dependencies.add(d1.getKey());
         }
@@ -292,7 +292,7 @@ class DeferredBindingModule extends AbstractModule {
 
     private Set<Key<?>> getDependencies(Key<?> clazz) {
 
-        Set<Key<?>> dependencies = new HashSet<Key<?>>();
+        Set<Key<?>> dependencies = new HashSet<>();
 
         if (clazz.getTypeLiteral().getRawType().isInterface()) {
             dependencies.add(clazz);

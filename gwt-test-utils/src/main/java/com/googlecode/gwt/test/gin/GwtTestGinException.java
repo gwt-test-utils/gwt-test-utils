@@ -9,8 +9,6 @@ import com.googlecode.gwt.test.exceptions.GwtTestException;
  */
 public class GwtTestGinException extends GwtTestException {
 
-    private static final long serialVersionUID = 3271039561760563185L;
-
     /**
      *
      */

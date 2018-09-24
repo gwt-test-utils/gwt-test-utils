@@ -25,7 +25,7 @@ class HistoryImplPatcher {
         private final List<String> stack;
 
         GwtBrowserHistory() {
-            this.stack = new ArrayList<String>();
+            this.stack = new ArrayList<>();
             this.currentIndex = -1;
             AfterTestCallbackManager.get().registerCallback(this);
         }

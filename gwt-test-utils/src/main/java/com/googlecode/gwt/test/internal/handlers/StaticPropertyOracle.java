@@ -97,7 +97,7 @@ public class StaticPropertyOracle implements PropertyOracle, Serializable {
             if (name.equals(propertyName)) {
                 final String value = orderedPropValues[i];
                 String[] values = prop.getDefinedValues();
-                final TreeSet<String> possibleValues = new TreeSet<String>();
+                final TreeSet<String> possibleValues = new TreeSet<>();
                 for (String v : values) {
                     possibleValues.add(v);
                 }

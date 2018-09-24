@@ -58,7 +58,7 @@ public abstract class AbstractGwtRunnerFactory {
 
         Class<?> runnerClass = GwtFactory.get().getClassLoader().loadClass(runnerClassName);
         Class<?> testedClass = GwtFactory.get().getClassLoader().loadClass(constructorParam.getName());
-        constructor = runnerClass.getConstructor(Class.class.getClass());
+        constructor = runnerClass.getConstructor(Class.class);
         return (Runner) constructor.newInstance(testedClass);
     }
 

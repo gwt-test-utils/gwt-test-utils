@@ -60,17 +60,14 @@ public class TextBoxTest extends GwtTestTest {
     @Test
     public void pressKey() {
         // Given
-        final List<KeyPressEventData> events = new ArrayList<KeyPressEventData>();
+        final List<KeyPressEventData> events = new ArrayList<>();
         TextBox tb = new TextBox();
 
-        tb.addKeyPressHandler(new KeyPressHandler() {
-
-            public void onKeyPress(KeyPressEvent event) {
-                KeyPressEventData data = new KeyPressEventData();
-                data.keyCode = event.getNativeEvent().getKeyCode();
-                data.charCode = event.getCharCode();
-                events.add(data);
-            }
+        tb.addKeyPressHandler(event -> {
+            KeyPressEventData data = new KeyPressEventData();
+            data.keyCode = event.getNativeEvent().getKeyCode();
+            data.charCode = event.getCharCode();
+            events.add(data);
         });
 
         // When

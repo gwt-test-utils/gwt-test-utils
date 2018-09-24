@@ -36,7 +36,7 @@ class GwtRpcInvocationHandler implements InvocationHandler {
         this.exceptionHandler = exceptionHandler;
         this.serializerHander = serializerHandler;
 
-        this.methodTable = new HashMap<Method, Method>();
+        this.methodTable = new HashMap<>();
         for (Method m : asyncClazz.getMethods()) {
             for (Method m2 : target.getClass().getMethods()) {
                 if (m.getName().equals(m2.getName())

@@ -305,12 +305,8 @@ public class GwtReflectionUtils {
      * included first.
      */
     public static Method[] getAllDeclaredMethods(Class<?> leafClass) throws IllegalArgumentException {
-        final List<Method> methods = new ArrayList<Method>(32);
-        doWithMethods(leafClass, new MethodCallback() {
-            public void doWith(Method method) {
-                methods.add(method);
-            }
-        });
+        final List<Method> methods = new ArrayList<>(32);
+        doWithMethods(leafClass, methods::add);
         return methods.toArray(new Method[methods.size()]);
     }
 
@@ -332,7 +328,7 @@ public class GwtReflectionUtils {
         if (map != null) {
             return map;
         }
-        map = new HashMap<Method, T>();
+        map = new HashMap<>();
         recurseGetAnnotatedMethod(map, target, annotationClass);
         cacheAnnotatedMethod.put(target, annotationClass, map);
         return map;

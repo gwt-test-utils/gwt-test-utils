@@ -7,7 +7,7 @@ import com.googlecode.gwt.test.GwtCreateHandler;
 public class AutoBeanCreateHandler implements GwtCreateHandler {
 
     @SuppressWarnings("unchecked")
-    public Object create(Class<?> classLiteral) throws Exception {
+    public Object create(Class<?> classLiteral) {
         if (AutoBeanFactory.class.isAssignableFrom(classLiteral)) {
             return AutoBeanFactorySource.create((Class<? extends AutoBeanFactory>) classLiteral);
         }

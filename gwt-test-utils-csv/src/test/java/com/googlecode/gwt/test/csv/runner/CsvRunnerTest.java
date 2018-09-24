@@ -34,7 +34,7 @@ public class CsvRunnerTest {
 
         @CsvMethod
         Map<String, String> getMap() {
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             map.put("a", "b");
             map.put("c", "d");
             return map;
@@ -188,7 +188,7 @@ public class CsvRunnerTest {
     @Test
     public void executeLine_Exception() {
         try {
-            runner.executeLine("runMyException", new ArrayList<String>(), o);
+            runner.executeLine("runMyException", new ArrayList<>(), o);
             failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
         } catch (GwtTestCsvException e) {
             assertThat(e.getMessage()).isEqualTo(
@@ -256,12 +256,12 @@ public class CsvRunnerTest {
 
     @Test
     public void meth0() throws Exception {
-        runner.executeLine("meth0", new ArrayList<String>(), o);
+        runner.executeLine("meth0", new ArrayList<>(), o);
     }
 
     @Test
     public void meth0Derived() throws Exception {
-        runner.executeLine("meth0", new ArrayList<String>(), oo);
+        runner.executeLine("meth0", new ArrayList<>(), oo);
     }
 
     @Test
@@ -307,7 +307,7 @@ public class CsvRunnerTest {
     @Test
     public void runtime() {
         try {
-            runner.executeLine("runException", new ArrayList<String>(), o);
+            runner.executeLine("runException", new ArrayList<>(), o);
             failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
         } catch (GwtTestCsvException e) {
             assertThat(e.getMessage()).isEqualTo(

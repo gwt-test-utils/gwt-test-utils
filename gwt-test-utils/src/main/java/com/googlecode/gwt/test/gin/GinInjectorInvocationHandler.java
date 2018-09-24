@@ -16,11 +16,11 @@ class GinInjectorInvocationHandler implements InvocationHandler {
     // the wrapped Guice injector
     private final Injector injector;
 
-    public GinInjectorInvocationHandler(Injector injector) {
+    GinInjectorInvocationHandler(Injector injector) {
         this.injector = injector;
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) {
         // Make sure method called has zero arguments (otherwise we're in
         // big trouble).
         assert args == null || args.length == 0 : "Cannot execute GinInjector methods with non-zero argument list";

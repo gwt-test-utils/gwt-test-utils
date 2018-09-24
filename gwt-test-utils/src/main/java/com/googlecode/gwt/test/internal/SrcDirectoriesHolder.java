@@ -12,6 +12,6 @@ import java.util.Set;
  */
 public class SrcDirectoriesHolder {
 
-    public static final Set<String> SRC_DIRECTORIES = new HashSet<String>();
+    public static final Set<String> SRC_DIRECTORIES = new HashSet<>();
 
 }

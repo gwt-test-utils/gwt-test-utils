@@ -48,17 +48,16 @@ public class GeneratorCreateHandler implements GwtCreateHandler {
 
     private static final ArtifactAcceptor ARTIFACT_ACCEPTOR = new ArtifactAcceptor() {
 
-        public void accept(TreeLogger logger, ArtifactSet newlyGeneratedArtifacts)
-                throws UnableToCompleteException {
+        public void accept(TreeLogger logger, ArtifactSet newlyGeneratedArtifacts) {
 
         }
     };
 
-    private static Map<String, ModuleSpaceHost> moduleSpaceHosts = new HashMap<String, ModuleSpaceHost>();
+    private static Map<String, ModuleSpaceHost> moduleSpaceHosts = new HashMap<>();
 
     private static final RebindCache REBIND_CACHE = new RebindCache();
 
-    protected Map<String, CompiledClass> compiledClassMap = new HashMap<String, CompiledClass>();
+    protected Map<String, CompiledClass> compiledClassMap = new HashMap<>();
 
     private final CompilationState compilationState;
     private final TreeLogger logger = GwtTreeLogger.get();

@@ -24,8 +24,8 @@ class PlaceHistoryMapperCreateHandler implements GwtCreateHandler {
 
         private GwtTestPlaceHistoryMapper(Class<? extends PlaceTokenizer<?>>[] placeTokenizers) {
 
-            this.prefixMap = new HashMap<Class<?>, String>();
-            this.tokenizerMap = new HashMap<String, PlaceTokenizer<?>>();
+            this.prefixMap = new HashMap<>();
+            this.tokenizerMap = new HashMap<>();
 
             collectTokenizerByPrefix(placeTokenizers);
         }
@@ -95,23 +95,24 @@ class PlaceHistoryMapperCreateHandler implements GwtCreateHandler {
             placeHistoryMapper = new GwtTestPlaceHistoryMapper(placeTokenizers);
         }
 
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (method.getName().equals("getPlace")) {
-                return placeHistoryMapper.getPlace((String) args[0]);
-            } else if (method.getName().equals("getToken")) {
-                return placeHistoryMapper.getToken((Place) args[0]);
-            } else {
-                throw new GwtTestPatchException(
-                        "Unhandled method '"
-                                + method.getDeclaringClass().getName()
-                                + "."
-                                + method.getName()
-                                + "' by the default gwt-test-utils GwtCreateHandler for PlaceHistoryMapper subtypes");
+        public Object invoke(Object proxy, Method method, Object[] args) {
+            switch (method.getName()) {
+                case "getPlace":
+                    return placeHistoryMapper.getPlace((String) args[0]);
+                case "getToken":
+                    return placeHistoryMapper.getToken((Place) args[0]);
+                default:
+                    throw new GwtTestPatchException(
+                            "Unhandled method '"
+                                    + method.getDeclaringClass().getName()
+                                    + "."
+                                    + method.getName()
+                                    + "' by the default gwt-test-utils GwtCreateHandler for PlaceHistoryMapper subtypes");
             }
         }
     }
 
-    public Object create(Class<?> classLiteral) throws Exception {
+    public Object create(Class<?> classLiteral) {
         if (!PlaceHistoryMapper.class.isAssignableFrom(classLiteral)) {
             return null;
         }

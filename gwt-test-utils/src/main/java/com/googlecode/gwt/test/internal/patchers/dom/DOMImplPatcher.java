@@ -427,7 +427,7 @@ class DOMImplPatcher {
 
     @PatchMethod
     static NodeList<OptionElement> selectGetOptions(Object domImpl, SelectElement select) {
-        List<OptionElement> innerList = new ArrayList<OptionElement>();
+        List<OptionElement> innerList = new ArrayList<>();
         for (int i = 0; i < select.getChildNodes().getLength(); i++) {
             Element e = select.getChildNodes().getItem(i).cast();
             if ("option".equals(e.getTagName())) {

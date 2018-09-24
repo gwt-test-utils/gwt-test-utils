@@ -47,7 +47,7 @@ class JSONArrayPatcher {
 
         List<JSONValue> list = JavaScriptObjects.getObject(jsArray, JSONARRAY_LIST);
         if (list == null) {
-            list = new ArrayList<JSONValue>();
+            list = new ArrayList<>();
             JavaScriptObjects.setProperty(jsArray, JSONARRAY_LIST, list);
         }
 

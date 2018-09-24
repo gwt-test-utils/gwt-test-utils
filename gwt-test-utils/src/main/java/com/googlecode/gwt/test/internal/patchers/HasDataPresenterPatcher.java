@@ -44,7 +44,7 @@ class HasDataPresenterPatcher {
 
     @PatchMethod
     static void sortJsArrayInteger(JsArrayInteger array) {
-        List<Integer> list = new ArrayList<Integer>(array.length());
+        List<Integer> list = new ArrayList<>(array.length());
         for (int i = 0; i < array.length(); i++) {
             list.add(array.get(i));
         }

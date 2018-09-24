@@ -516,9 +516,9 @@ public class BrowserTest extends GwtTestTest {
         // Given
         String textToFill = "some text";
 
-        final List<Character> keyUpChars = new ArrayList<Character>();
-        final List<Character> keyDownChars = new ArrayList<Character>();
-        final List<Character> keyPressChars = new ArrayList<Character>();
+        final List<Character> keyUpChars = new ArrayList<>();
+        final List<Character> keyDownChars = new ArrayList<>();
+        final List<Character> keyPressChars = new ArrayList<>();
 
         final TextBox tb = new TextBox();
 
@@ -590,9 +590,9 @@ public class BrowserTest extends GwtTestTest {
         String initialText = "intial text";
         String textToFill = "some text which will not be filled";
 
-        final List<Character> keyUpChars = new ArrayList<Character>();
-        final List<Character> keyDownChars = new ArrayList<Character>();
-        final List<Character> keyPressChars = new ArrayList<Character>();
+        final List<Character> keyUpChars = new ArrayList<>();
+        final List<Character> keyDownChars = new ArrayList<>();
+        final List<Character> keyPressChars = new ArrayList<>();
 
         final TextBox tb = new TextBox();
         tb.setText(initialText);
@@ -671,9 +671,9 @@ public class BrowserTest extends GwtTestTest {
         String initialText = "intial text";
         String textToFill = "some text which will not be filled";
 
-        final List<Character> keyUpChars = new ArrayList<Character>();
-        final List<Character> keyDownChars = new ArrayList<Character>();
-        final List<Character> keyPressChars = new ArrayList<Character>();
+        final List<Character> keyUpChars = new ArrayList<>();
+        final List<Character> keyDownChars = new ArrayList<>();
+        final List<Character> keyPressChars = new ArrayList<>();
 
         final TextBox tb = new TextBox();
         tb.setText(initialText);
@@ -784,9 +784,9 @@ public class BrowserTest extends GwtTestTest {
         String initialText = "intial text";
         String textToFill = "some text which will not be filled";
 
-        final List<Character> keyUpChars = new ArrayList<Character>();
-        final List<Character> keyDownChars = new ArrayList<Character>();
-        final List<Character> keyPressChars = new ArrayList<Character>();
+        final List<Character> keyUpChars = new ArrayList<>();
+        final List<Character> keyDownChars = new ArrayList<>();
+        final List<Character> keyPressChars = new ArrayList<>();
 
         final TextBox tb = new TextBox();
         tb.setText(initialText);

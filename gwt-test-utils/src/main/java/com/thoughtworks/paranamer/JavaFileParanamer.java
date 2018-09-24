@@ -181,7 +181,7 @@ public class JavaFileParanamer implements Paranamer {
      */
     public JavaFileParanamer(JavaFileFinder javaFileFinder) {
         this.javaFileFinder = javaFileFinder;
-        this.cache = new HashMap<AccessibleObject, String[]>();
+        this.cache = new HashMap<>();
     }
 
     /*

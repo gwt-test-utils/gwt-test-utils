@@ -6,7 +6,6 @@ import com.googlecode.gwt.test.internal.AfterTestCallbackManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -28,15 +27,16 @@ class TextResourceReader implements AfterTestCallback {
     private final Map<URL, String> cache;
 
     private TextResourceReader() {
-        cache = new HashMap<URL, String>();
+        cache = new HashMap<>();
         AfterTestCallbackManager.get().registerCallback(this);
     }
 
-    public void afterTest() throws Throwable {
+    @Override
+    public void afterTest() {
         cache.clear();
     }
 
-    public String readFiles(List<URL> urls) throws UnsupportedEncodingException, IOException {
+    public String readFiles(List<URL> urls) throws IOException {
 
         StringBuilder sb = new StringBuilder();
 
@@ -47,7 +47,7 @@ class TextResourceReader implements AfterTestCallback {
         return sb.toString();
     }
 
-    private String readFile(URL url) throws UnsupportedEncodingException, IOException {
+    private String readFile(URL url) throws IOException {
 
         if (!cache.containsKey(url)) {
             StringBuilder sb = new StringBuilder();

@@ -60,7 +60,7 @@ public class AfterTestCallbackManager {
      * @return A list of exceptions that has been thrown when triggering the different callbacks.
      */
     public List<Throwable> triggerCallbacks() {
-        List<Throwable> throwables = new ArrayList<Throwable>();
+        List<Throwable> throwables = new ArrayList<>();
 
         for (AfterTestCallback callback : callbacks) {
             executeCallback(callback, throwables);

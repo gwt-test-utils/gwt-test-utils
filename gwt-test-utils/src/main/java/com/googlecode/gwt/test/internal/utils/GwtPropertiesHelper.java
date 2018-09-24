@@ -177,14 +177,15 @@ public class GwtPropertiesHelper implements AfterTestCallback {
     private final List<SequenceReplacement> sequenceReplacements;
 
     private GwtPropertiesHelper() {
-        cachedProperties = new HashMap<String, Properties>();
-        sequenceReplacements = new ArrayList<GwtPropertiesHelper.SequenceReplacement>();
+        cachedProperties = new HashMap<>();
+        sequenceReplacements = new ArrayList<>();
         initSequenceReplacements();
 
         AfterTestCallbackManager.get().registerCallback(this);
     }
 
-    public void afterTest() throws Throwable {
+    @Override
+    public void afterTest() {
         // cachedProperties.clear();
         sequenceReplacements.clear();
         initSequenceReplacements();

@@ -311,12 +311,12 @@ public class JsoUtils {
     }
 
     public static <T extends Node> NodeList<T> newNodeList() {
-        return newNodeList(new ArrayList<T>());
+        return newNodeList(new ArrayList<>());
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends Node> NodeList<T> newNodeList(List<T> innerList) {
-        NodeList<T> nodeList = (NodeList<T>) JavaScriptObject.createObject().cast();
+        NodeList<T> nodeList = JavaScriptObject.createObject().cast();
         JavaScriptObjects.setProperty(nodeList, NODE_LIST_INNER_LIST, innerList);
         return nodeList;
     }

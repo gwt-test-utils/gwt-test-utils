@@ -82,7 +82,7 @@ public class Node {
 
     public void insertParam(String param) {
         if (this.paramList == null) {
-            this.paramList = new ArrayList<String>();
+            this.paramList = new ArrayList<>();
         }
         this.paramList.add(0, param);
     }

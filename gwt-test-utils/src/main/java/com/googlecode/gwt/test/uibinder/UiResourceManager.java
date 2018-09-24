@@ -469,7 +469,7 @@ class UiResourceManager {
     }
 
     private final Object owner;
-    private final Map<String, Object> resources = new HashMap<String, Object>();
+    private final Map<String, Object> resources = new HashMap<>();
 
     private UiResourceManager(Object owner) {
         this.owner = owner;

@@ -33,7 +33,7 @@ public class GwtSpring3CsvJUnit4ClassRunner extends SpringJUnit4ClassRunner {
         if (reader == null) {
             reader = new DirectoryTestReader(getTestClass().getJavaClass());
         }
-        List<FrameworkMethod> frameworkMethods = new ArrayList<FrameworkMethod>();
+        List<FrameworkMethod> frameworkMethods = new ArrayList<>();
         for (Method csvMethod : reader.getTestMethods()) {
             frameworkMethods.add(new FrameworkMethod(csvMethod));
         }

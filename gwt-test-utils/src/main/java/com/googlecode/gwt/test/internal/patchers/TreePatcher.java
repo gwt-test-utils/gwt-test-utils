@@ -33,7 +33,7 @@ class TreePatcher {
     }
 
     private static List<Class<?>> getFocusElementClasses() {
-        List<Class<?>> list = new ArrayList<Class<?>>();
+        List<Class<?>> list = new ArrayList<>();
         list.add(SelectElement.class);
         list.add(InputElement.class);
         list.add(TextAreaElement.class);

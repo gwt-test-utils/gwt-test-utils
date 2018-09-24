@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @SuppressWarnings("unchecked")
 class UiBinderInstanciator {
-    public final static Map<Class<?>, Class<?>> primitiveMap = new HashMap<Class<?>, Class<?>>();
+    public final static Map<Class<?>, Class<?>> primitiveMap = new HashMap<>();
 
     static {
         primitiveMap.put(boolean.class, Boolean.class);
@@ -98,7 +98,7 @@ class UiBinderInstanciator {
 
     private static List<Object> extractArgs(String[] argNames, Map<String, Object> attributes) {
 
-        List<Object> args = new ArrayList<Object>();
+        List<Object> args = new ArrayList<>();
         for (String argName : argNames) {
             Object arg = attributes.get(argName);
             if (arg == null) {
@@ -157,7 +157,7 @@ class UiBinderInstanciator {
         Map<Method, UiFactory> map = GwtReflectionUtils.getAnnotatedMethod(owner.getClass(),
                 UiFactory.class);
 
-        List<Method> compatibleFactories = new ArrayList<Method>();
+        List<Method> compatibleFactories = new ArrayList<>();
         for (Method factoryMethod : map.keySet()) {
             if (clazz.isAssignableFrom(factoryMethod.getReturnType())) {
                 compatibleFactories.add(factoryMethod);
@@ -182,7 +182,6 @@ class UiBinderInstanciator {
         for (Map.Entry<Field, UiField> entry : map.entrySet()) {
             if (!entry.getValue().provided()) {
                 // not a provided uiField
-                continue;
             } else if (entry.getKey().getName().equals(uiFieldValue)
                     || (uiFieldValue == null && entry.getKey().getType() == clazz)) {
                 Object providedObject = GwtReflectionUtils.getPrivateFieldValue(owner, entry.getKey());
@@ -211,8 +210,7 @@ class UiBinderInstanciator {
                     cons.getDeclaringClass().getSimpleName()).append("(");
 
             for (Object arg : args) {
-                sb.append("\"" + arg.toString() + "\"");
-                sb.append(", ");
+                sb.append("\"").append(arg.toString()).append("\"").append(", ");
             }
 
             if (args.size() > 0) {

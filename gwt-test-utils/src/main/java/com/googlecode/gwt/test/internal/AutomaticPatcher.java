@@ -46,7 +46,7 @@ class AutomaticPatcher implements Patcher {
 
         this.initMethod = getInitMethod(patchClasses);
         this.patchMethods = getPatchMethods(patchClasses);
-        this.processedMethods = new HashSet<CtMethod>();
+        this.processedMethods = new HashSet<>();
     }
 
     public void finalizeClass(CtClass c) throws Exception {
@@ -159,7 +159,7 @@ class AutomaticPatcher implements Patcher {
     }
 
     private CtMethod getInitMethod(Set<CtClass> patchClasses) {
-        List<CtMethod> initMethods = new ArrayList<CtMethod>();
+        List<CtMethod> initMethods = new ArrayList<>();
 
         for (CtClass patchClass : patchClasses) {
             for (CtMethod ctMethod : patchClass.getDeclaredMethods()) {
@@ -249,10 +249,10 @@ class AutomaticPatcher implements Patcher {
     }
 
     private Set<CtMethod> getPatchMethods(Set<CtClass> patchClasses) {
-        Set<CtMethod> result = new HashSet<CtMethod>();
+        Set<CtMethod> result = new HashSet<>();
 
         // add all @PatchMethod found in a temporary map
-        Map<String, List<CtMethod>> temp = new HashMap<String, List<CtMethod>>();
+        Map<String, List<CtMethod>> temp = new HashMap<>();
         for (CtClass patchClass : patchClasses) {
             for (CtMethod ctMethod : patchClass.getDeclaredMethods()) {
                 if (ctMethod.hasAnnotation(PatchMethod.class)) {
@@ -265,7 +265,7 @@ class AutomaticPatcher implements Patcher {
                     List<CtMethod> correspondingMethods = temp.get(nameAndSignature);
 
                     if (correspondingMethods == null) {
-                        correspondingMethods = new ArrayList<CtMethod>();
+                        correspondingMethods = new ArrayList<>();
                         temp.put(nameAndSignature, correspondingMethods);
                     }
 

@@ -83,7 +83,7 @@ public class OverlayTypesRewriter {
             for (JMethod method : javaLangObject.getMethods()) {
                 if (!method.isStatic()) {
                     String signature = createSignature(method);
-                    Set<JClassType> declaringClasses = new HashSet<JClassType>();
+                    Set<JClassType> declaringClasses = new HashSet<>();
                     signatureToDeclaringClasses.put(signature, declaringClasses);
                     declaringClasses.add(javaLangObject);
                 }
@@ -126,7 +126,7 @@ public class OverlayTypesRewriter {
             String signature = createSignature(method);
             Set<JClassType> declaringClasses = signatureToDeclaringClasses.get(signature);
             if (declaringClasses == null) {
-                declaringClasses = new HashSet<JClassType>();
+                declaringClasses = new HashSet<>();
                 signatureToDeclaringClasses.put(signature, declaringClasses);
             }
             declaringClasses.add(type);
@@ -161,9 +161,9 @@ public class OverlayTypesRewriter {
      * remain static.
      */
     private class MySingleJsoImplData implements SingleJsoImplData {
-        private final SortedSet<String> mangledNames = new TreeSet<String>();
-        private final Map<String, List<Method>> mangledNamesToDeclarations = new HashMap<String, List<Method>>();
-        private final Map<String, List<Method>> mangledNamesToImplementations = new HashMap<String, List<Method>>();
+        private final SortedSet<String> mangledNames = new TreeSet<>();
+        private final Map<String, List<Method>> mangledNamesToDeclarations = new HashMap<>();
+        private final Map<String, List<Method>> mangledNamesToImplementations = new HashMap<>();
         private final Set<String> unmodifiableIntfNames = Collections.unmodifiableSet(singleJsoImplTypes);
         private final SortedSet<String> unmodifiableNames = Collections.unmodifiableSortedSet(mangledNames);
 
@@ -424,7 +424,7 @@ public class OverlayTypesRewriter {
      */
     private final InstanceMethodOracle mapper;
 
-    private final Set<String> singleJsoImplTypes = new HashSet<String>();
+    private final Set<String> singleJsoImplTypes = new HashSet<>();
 
     private final TypeOracle typeOracle;
 
@@ -435,15 +435,15 @@ public class OverlayTypesRewriter {
     public OverlayTypesRewriter(CompilationState compilationState, JClassType jsoType) {
 
         // Create a set of binary names.
-        Set<JClassType> jsoTypes = new HashSet<JClassType>();
+        Set<JClassType> jsoTypes = new HashSet<>();
         JClassType[] jsoSubtypes = jsoType.getSubtypes();
         Collections.addAll(jsoTypes, jsoSubtypes);
         jsoTypes.add(jsoType);
 
-        Set<String> jsoTypeNames = new HashSet<String>();
-        Map<String, List<String>> jsoSuperTypes = new HashMap<String, List<String>>();
+        Set<String> jsoTypeNames = new HashSet<>();
+        Map<String, List<String>> jsoSuperTypes = new HashMap<>();
         for (JClassType type : jsoTypes) {
-            List<String> types = new ArrayList<String>();
+            List<String> types = new ArrayList<>();
             types.add(getBinaryName(type.getSuperclass()));
             for (JClassType impl : type.getImplementedInterfaces()) {
                 types.add(getBinaryName(impl));
@@ -454,9 +454,9 @@ public class OverlayTypesRewriter {
             jsoSuperTypes.put(binaryName, types);
         }
 
-        Set<String> buildJsoIntfDescs = new HashSet<String>();
-        Set<String> buildJsoImplDescs = new HashSet<String>();
-        Map<String, List<String>> buildJsoSuperDescs = new HashMap<String, List<String>>();
+        Set<String> buildJsoIntfDescs = new HashSet<>();
+        Set<String> buildJsoImplDescs = new HashSet<>();
+        Map<String, List<String>> buildJsoSuperDescs = new HashMap<>();
         for (String jsoSubtype : jsoTypeNames) {
             String desc = toDescriptor(jsoSubtype);
 

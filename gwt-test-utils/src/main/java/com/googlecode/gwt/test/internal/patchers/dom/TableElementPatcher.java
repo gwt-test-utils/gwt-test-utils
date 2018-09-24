@@ -199,7 +199,7 @@ class TableElementPatcher {
     private static NodeList<Element> getElementByTagName(TableElement e, String tagName) {
 
         NodeList<Node> childs = e.getChildNodes();
-        List<Element> list = new ArrayList<Element>();
+        List<Element> list = new ArrayList<>();
 
         for (int i = 0; i < childs.getLength(); i++) {
             Node n = childs.getItem(i);

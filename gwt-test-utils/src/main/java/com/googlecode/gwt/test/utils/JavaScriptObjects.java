@@ -107,7 +107,7 @@ public class JavaScriptObjects {
                 JsoProperties.JSO_PROPERTIES);
 
         if (pc == null) {
-            pc = PropertyContainer.newInstance(new HashMap<String, Object>());
+            pc = PropertyContainer.newInstance(new HashMap<>());
             GwtReflectionUtils.setPrivateFieldValue(o, JsoProperties.JSO_PROPERTIES, pc);
         }
 

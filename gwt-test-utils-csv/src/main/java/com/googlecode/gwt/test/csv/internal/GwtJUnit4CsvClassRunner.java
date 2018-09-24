@@ -16,7 +16,7 @@ import java.util.List;
 public class GwtJUnit4CsvClassRunner extends GwtJUnit4ClassRunner {
 
     class CsvMethodValidator {
-        private final List<Throwable> fErrors = new ArrayList<Throwable>();
+        private final List<Throwable> fErrors = new ArrayList<>();
 
         private final TestClass fTestClass;
 

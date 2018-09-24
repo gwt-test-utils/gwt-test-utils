@@ -41,8 +41,7 @@ public abstract class GwtGuiceTest extends GwtTest {
 
             @Override
             protected Object findService(Class<?> remoteServiceClass, String remoteServiceRelativePath) {
-                return getRpcServiceFromInjector(injector, remoteServiceClass,
-                        remoteServiceRelativePath);
+                return getRpcServiceFromInjector(injector, remoteServiceClass, remoteServiceRelativePath);
             }
         });
 

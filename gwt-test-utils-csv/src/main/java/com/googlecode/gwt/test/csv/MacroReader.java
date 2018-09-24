@@ -16,7 +16,7 @@ class MacroReader {
     private final HashMap<String, List<List<String>>> macroList;
 
     public MacroReader() {
-        macroList = new HashMap<String, List<List<String>>>();
+        macroList = new HashMap<>();
     }
 
     public List<List<String>> getMacro(String macroName) {
@@ -41,7 +41,7 @@ class MacroReader {
                     currentMacroName = row.size() > 1 ? row.get(1) : null;
                     assertThat(currentMacroName).as("You have to specified a macro name").isNotNull();
                     logger.info("Starting reading " + currentMacroName);
-                    currentMacroContent = new ArrayList<List<String>>();
+                    currentMacroContent = new ArrayList<>();
                 }
             }
         }

@@ -45,7 +45,7 @@ public class ElementTest extends GwtTestTest {
     @Test
     public void checkHashCode() {
         // Given
-        Map<Element, String> map = new HashMap<Element, String>();
+        Map<Element, String> map = new HashMap<>();
 
         // When
         map.put(e, "a string value");

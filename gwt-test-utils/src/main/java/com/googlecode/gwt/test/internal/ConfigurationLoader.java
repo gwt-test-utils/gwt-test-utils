@@ -46,10 +46,10 @@ public final class ConfigurationLoader {
     private final List<URL> srcDirectories;
 
     ConfigurationLoader(URL surefireBooterJarUrl) {
-        this.gwtModules = new ArrayList<String>();
-        this.delegates = new HashSet<String>();
-        this.scanPackages = new HashSet<String>();
-        this.srcDirectories = new ArrayList<URL>();
+        this.gwtModules = new ArrayList<>();
+        this.delegates = new HashSet<>();
+        this.scanPackages = new HashSet<>();
+        this.srcDirectories = new ArrayList<>();
 
         readFiles();
         visitPatchClasses();
@@ -229,7 +229,7 @@ public final class ConfigurationLoader {
     }
 
     private void visitPatchClasses() {
-        final Map<String, Set<CtClass>> patchClassMap = new HashMap<String, Set<CtClass>>();
+        final Map<String, Set<CtClass>> patchClassMap = new HashMap<>();
 
         ClassVisitor patchClassVisitor = new ClassVisitor() {
 
@@ -266,7 +266,7 @@ public final class ConfigurationLoader {
             private void addPatchClass(String targetName, CtClass patchClass) {
                 Set<CtClass> patchClasses = patchClassMap.get(targetName);
                 if (patchClasses == null) {
-                    patchClasses = new HashSet<CtClass>();
+                    patchClasses = new HashSet<>();
                     patchClassMap.put(targetName, patchClasses);
                 }
 

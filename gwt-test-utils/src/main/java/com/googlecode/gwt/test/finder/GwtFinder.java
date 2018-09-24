@@ -29,7 +29,7 @@ public class GwtFinder implements AfterTestCallback {
         private final Map<String, NodeObjectFinder> nodeObjectFinders;
 
         DefaultObjectFinder() {
-            nodeObjectFinders = new HashMap<String, NodeObjectFinder>();
+            nodeObjectFinders = new HashMap<>();
         }
 
         public boolean accept(String... params) {
@@ -74,10 +74,10 @@ public class GwtFinder implements AfterTestCallback {
         private final Map<String, Set<Object>> mapByText;
 
         IndexedObjectFinder() {
-            this.mapByHTML = new HashMap<String, Set<Object>>();
-            this.mapById = new HashMap<String, Object>();
-            this.mapByName = new HashMap<String, Set<Object>>();
-            this.mapByText = new HashMap<String, Set<Object>>();
+            this.mapByHTML = new HashMap<>();
+            this.mapById = new HashMap<>();
+            this.mapByName = new HashMap<>();
+            this.mapByText = new HashMap<>();
         }
 
         public boolean accept(String... params) {
@@ -339,7 +339,7 @@ public class GwtFinder implements AfterTestCallback {
 
         Set<Object> newSet = cache.get(index);
         if (newSet == null) {
-            newSet = new HashSet<Object>();
+            newSet = new HashSet<>();
             cache.put(index, newSet);
         }
         newSet.add(object);
@@ -366,7 +366,7 @@ public class GwtFinder implements AfterTestCallback {
     private final IndexedObjectFinder indexedObjectFinder;
 
     private GwtFinder() {
-        customObjectFinders = new ArrayList<ObjectFinder>();
+        customObjectFinders = new ArrayList<>();
         defaultObjectFinder = new DefaultObjectFinder();
         indexedObjectFinder = new IndexedObjectFinder();
 

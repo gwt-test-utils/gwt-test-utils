@@ -27,9 +27,9 @@ public class ModuleData {
 
     public static class ReplaceWithData {
 
-        private final Map<String, List<String>> anyWhenPropertyIs = new HashMap<String, List<String>>();
+        private final Map<String, List<String>> anyWhenPropertyIs = new HashMap<>();
         private final String replaceWith;
-        private final Map<String, String> whenPropertyIs = new HashMap<String, String>();
+        private final Map<String, String> whenPropertyIs = new HashMap<>();
         private final String whenTypeIs;
 
         public ReplaceWithData(String replaceWith, String whenTypeIs) {
@@ -78,7 +78,7 @@ public class ModuleData {
         void addAny(String propName, String propValue) {
             List<String> any = anyWhenPropertyIs.get(propName);
             if (any == null) {
-                any = new ArrayList<String>();
+                any = new ArrayList<>();
                 anyWhenPropertyIs.put(propName, any);
             }
             any.add(propValue);
@@ -89,7 +89,7 @@ public class ModuleData {
         }
     }
 
-    private static final Map<String, ModuleData> CACHE = new HashMap<String, ModuleData>();
+    private static final Map<String, ModuleData> CACHE = new HashMap<>();
 
     private static final String[] CLASSPATH_ROOTS = new String[]{
             "src/main/java/", "src/main/resources/", "src/test/java/", "src/test/resources/",
@@ -114,9 +114,9 @@ public class ModuleData {
     private final Map<String, List<ReplaceWithData>> replaceWithListMap;
 
     private ModuleData(String moduleName) {
-        this.replaceWithListMap = new HashMap<String, List<ReplaceWithData>>();
-        this.customGeneratedClasses = new HashSet<String>();
-        this.parsedModules = new HashSet<String>();
+        this.replaceWithListMap = new HashMap<>();
+        this.customGeneratedClasses = new HashSet<>();
+        this.parsedModules = new HashSet<>();
 
         parseModule(moduleName);
     }
@@ -243,7 +243,7 @@ public class ModuleData {
 
             List<ReplaceWithData> list = replaceWithListMap.get(data.whenTypeIs);
             if (list == null) {
-                list = new ArrayList<ReplaceWithData>();
+                list = new ArrayList<>();
                 replaceWithListMap.put(data.whenTypeIs, list);
             }
 
