@@ -49,7 +49,7 @@ public class OverlayTypesRewriter {
      */
     private class MyInstanceMethodOracle implements InstanceMethodOracle {
 
-        private final Map<String, Set<JClassType>> signatureToDeclaringClasses = new HashMap<String, Set<JClassType>>();
+        private final Map<String, Set<JClassType>> signatureToDeclaringClasses = new HashMap<>();
 
         public MyInstanceMethodOracle(Set<JClassType> jsoTypes, JClassType javaLangObject) {
             // Record that the JSO implements its own methods

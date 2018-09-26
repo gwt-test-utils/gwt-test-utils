@@ -5,14 +5,20 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.dev.CompilerContext;
+import com.google.gwt.dev.DevMode;
 import com.google.gwt.dev.cfg.ModuleDef;
 import com.google.gwt.dev.cfg.ModuleDefLoader;
 import com.google.gwt.dev.javac.CompilationState;
+import com.google.gwt.dev.javac.UnitCache;
+import com.google.gwt.dev.javac.UnitCacheSingleton;
 import com.google.gwt.dev.shell.JsValueGlue;
 import com.googlecode.gwt.test.GwtTreeLogger;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.internal.rewrite.OverlayTypesRewriter;
+import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -105,7 +111,7 @@ public class GwtFactory {
             // META-INF/gwt-test-utils.properties files
             CompilerContext tempContext = compilerContextBuilder.build();
             moduleDef = createModuleDef(configurationLoader, tempContext);
-            compilerContext = compilerContextBuilder.module(moduleDef).build();
+            compilerContext = compilerContextBuilder.module(moduleDef).unitCache(getPersistantCache()).build();
             compilationState = createCompilationState(moduleDef, compilerContext);
             overlayRewriter = createOverlayRewriter(compilationState);
             gwtClassLoader = GwtClassLoader.createClassLoader(configurationLoader, compilationState,
@@ -162,4 +168,23 @@ public class GwtFactory {
         return jsoType != null ? new OverlayTypesRewriter(compilationState, jsoType) : null;
     }
 
+    private UnitCache getPersistantCache() {
+        return UnitCacheSingleton.get(GwtTreeLogger.get(), getTargetDir(), createOptions());
+    }
+
+    private File getTargetDir() {
+        try {
+            return new File(ClassLoader.getSystemResource(".").toURI());
+        } catch (URISyntaxException e) {
+            throw new GwtTestException("Error while trying to get test target directory", e);
+        }
+    }
+
+    // Copied from JUnitShell
+    private DevMode.HostedModeOptions createOptions() {
+        DevMode.HostedModeOptions options = GwtReflectionUtils.instantiateClass("com.google.gwt.dev.DevMode$HostedModeOptionsImpl");
+        options.setSuperDevMode(false);
+        options.setIncrementalCompileEnabled(false);
+        return options;
+    }
 }

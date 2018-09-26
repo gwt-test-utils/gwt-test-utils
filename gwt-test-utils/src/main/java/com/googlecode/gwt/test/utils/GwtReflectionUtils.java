@@ -481,6 +481,15 @@ public class GwtReflectionUtils {
         }
     }
 
+    public static <T> T instantiateClass(String className) {
+        try {
+            Class<T> clazz = (Class<T>) Class.forName(className);
+            return instantiateClass(clazz);
+        } catch (ClassNotFoundException e) {
+            throw new GwtTestException("Error while trying to get class " + className, e);
+        }
+    }
+
     /**
      * Convenience method to instantiate a class using the given constructor. As this method doesn't
      * try to load classes by name, it should avoid class-loading issues.
