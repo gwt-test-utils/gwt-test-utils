@@ -8,12 +8,15 @@ import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 import com.googlecode.gwt.test.internal.rewrite.OverlayTypesRewriter;
+import com.googlecode.gwt.test.utils.GwtReflectionUtils;
 import javassist.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.security.ProtectionDomain;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -48,8 +51,7 @@ public class GwtClassLoader extends Loader {
         private final OverlayTypesRewriter overlayRewriter;
 
         private GwtClassLoaderWithRewriter(ConfigurationLoader configurationLoader,
-                                           CompilationState compilationState, OverlayTypesRewriter overlayRewriter)
-                throws NotFoundException, CannotCompileException {
+                                           CompilationState compilationState, OverlayTypesRewriter overlayRewriter) {
             super(configurationLoader, compilationState);
 
             this.overlayRewriter = overlayRewriter;
@@ -59,11 +61,8 @@ public class GwtClassLoader extends Loader {
          * Performs Overlay type support bytecode manipulation
          *
          * @param className the name of the class to find
-         * @param rewriter
          * @return the class byte array, or null if class has not been found
-         * @throws NotFoundException
-         * @throws CannotCompileException
-         * @throws IOException
+         * @throws ClassNotFoundException
          */
         @Override
         protected byte[] findClassBytes(String className) throws ClassNotFoundException {
@@ -136,6 +135,7 @@ public class GwtClassLoader extends Loader {
         this.compilationState = compilationState;
         this.source = GwtClassPool.get();
         this.translator = new GwtTranslator(configurationLoader);
+
 
         StringBuilder sb = new StringBuilder("^(");
         sb = appendPackageToDelegate(sb, "java.");

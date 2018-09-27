@@ -33,7 +33,7 @@ public class MenuBarImagesTest extends GwtTestTest {
 
         // Then
         assertThat(element.getTagName()).isEqualTo("IMG");
-        assertThat(element.toString()).isEqualTo("<img onload=\"this.__gwtLastUnhandledEvent=\"load\";\" src=\"http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif\" style=\"width: 0px; height: 0px; background:url(http://127.0.0.1: 8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px; \" border=\"0\"></img>");
+        assertThat(element.toString()).isEqualTo("<img src=\"http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif\" style=\"width: 0px; height: 0px; background:url(http://127.0.0.1: 8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px; \" border=\"0\" onload=\"null\"></img>");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class MenuBarImagesTest extends GwtTestTest {
         String html = proto.getHTML();
 
         // Then
-        assertThat(html).isEqualTo("<img onload='this.__gwtLastUnhandledEvent=\"load\";' src='http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif' style='width:0.0px;height:0.0px;background:url(http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px;' border='0'>");
+        assertThat(html).isEqualTo("<img src='http://127.0.0.1:8888/gwt_test_utils_module/clear.cache.gif' style='width:0.0px;height:0.0px;background:url(http://127.0.0.1:8888/gwt_test_utils_module/menuBarSubMenuIcon.gif) no-repeat 0px 0px;' border='0'>");
     }
 
 }

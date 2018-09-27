@@ -1,5 +1,6 @@
 package com.googlecode.gwt.test.internal;
 
+import com.google.common.base.Joiner;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
@@ -21,8 +22,12 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static com.google.gwt.thirdparty.guava.common.base.StandardSystemProperty.JAVA_CLASS_PATH;
+
 
 /**
  * An unique place for internal singleton which are ClassLoader independent and can eventually be
@@ -155,9 +160,15 @@ public class GwtFactory {
     private ModuleDef createModuleDef(ConfigurationLoader configurationLoader,
                                       CompilerContext compilerContext) throws UnableToCompleteException {
         List<String> gwtModules = configurationLoader.getGwtModules();
+        addToClassPath(configurationLoader.getSrcUrls());
         String[] inherits = gwtModules.toArray(new String[gwtModules.size()]);
         return ModuleDefLoader.createSyntheticModule(GwtTreeLogger.get(),
                 "com.googlecode.gwt.test.Aggregator", inherits, false);
+    }
+
+    private void addToClassPath(URL[] srcUrls) {
+        String additionalClassPath = Joiner.on(File.pathSeparatorChar).join(srcUrls);
+        System.setProperty(JAVA_CLASS_PATH.key(), Joiner.on(File.pathSeparatorChar).join(new String[]{JAVA_CLASS_PATH.value(), additionalClassPath}));
     }
 
     private OverlayTypesRewriter createOverlayRewriter(CompilationState compilationState) {
