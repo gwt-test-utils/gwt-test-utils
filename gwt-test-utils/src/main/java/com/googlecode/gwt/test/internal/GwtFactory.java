@@ -1,6 +1,5 @@
 package com.googlecode.gwt.test.internal;
 
-import com.google.common.base.Joiner;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
@@ -25,6 +24,7 @@ import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.google.gwt.thirdparty.guava.common.base.StandardSystemProperty.JAVA_CLASS_PATH;
 
@@ -167,8 +167,8 @@ public class GwtFactory {
     }
 
     private void addToClassPath(URL[] srcUrls) {
-        String additionalClassPath = Joiner.on(File.pathSeparatorChar).join(srcUrls);
-        System.setProperty(JAVA_CLASS_PATH.key(), Joiner.on(File.pathSeparatorChar).join(new String[]{JAVA_CLASS_PATH.value(), additionalClassPath}));
+        String additionalClassPath = String.join(File.pathSeparator, Arrays.stream(srcUrls).map(URL::getPath).collect(Collectors.toList()));
+        System.setProperty(JAVA_CLASS_PATH.key(), String.join(File.pathSeparator, new String[]{JAVA_CLASS_PATH.value(), additionalClassPath}));
     }
 
     private OverlayTypesRewriter createOverlayRewriter(CompilationState compilationState) {
