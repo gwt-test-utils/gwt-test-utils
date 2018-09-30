@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UiBinderWithUiConstructorTest extends GwtTestTest {
 
     @Test
-    public void instanciation() throws Exception {
+    public void instanciation() {
         // When
         UiBinderWithUiConstructor w = new UiBinderWithUiConstructor();
 

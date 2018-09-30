@@ -1,16 +1,15 @@
 package com.thoughtworks.paranamer;
 
-import japa.parser.JavaParser;
-import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.PackageDeclaration;
-import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.body.ConstructorDeclaration;
-import japa.parser.ast.body.MethodDeclaration;
-import japa.parser.ast.body.Parameter;
-import japa.parser.ast.visitor.GenericVisitor;
-import japa.parser.ast.visitor.GenericVisitorAdapter;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 /**
  * .java parser implementation of Paranamer. It relies on <a
- * href="http://code.google.com/p/javaparser/">javaparser library</a> 1.0.8+ to parse java files
+ * href="https://javaparser.org/">javaparser-core library</a> 3.6.23+ to parse java files
  * retrieved by a {@link JavaFileFinder} implementation.
  *
  * @author Gael Lazzari
@@ -66,7 +65,7 @@ public class JavaFileParanamer implements Paranamer {
 
             super.visit(n, arg);
 
-            currentClassName.delete(currentClassName.length() - n.getName().length() - 1,
+            currentClassName.delete(currentClassName.length() - n.getName().asString().length() - 1,
                     currentClassName.length());
 
             return null;
@@ -125,7 +124,7 @@ public class JavaFileParanamer implements Paranamer {
             String[] params = new String[length];
 
             for (int i = 0; i < params.length; i++) {
-                params[i] = parameters.get(i).getId().getName();
+                params[i] = parameters.get(i).getNameAsString();
             }
 
             return params;
@@ -147,9 +146,8 @@ public class JavaFileParanamer implements Paranamer {
             Class<?> currentVisitedClass = getCurrentVisitedClass();
 
             for (Method method : currentVisitedClass.getDeclaredMethods()) {
-                if (!method.getName().equals(n.getName())) {
-                    continue;
-                } else if (argsMatch(method.getParameterTypes(), n.getParameters())) {
+               if (method.getName().equals(n.getNameAsString())
+                       && argsMatch(method.getParameterTypes(), n.getParameters())) {
                     return method;
                 }
             }
@@ -167,8 +165,6 @@ public class JavaFileParanamer implements Paranamer {
                         + className + " :", e);
             }
         }
-
-        ;
 
     }
 
@@ -200,6 +196,7 @@ public class JavaFileParanamer implements Paranamer {
      * @see com.thoughtworks.paranamer.Paranamer#lookupParameterNames(java.lang.reflect
      * .AccessibleObject, boolean)
      */
+    @Override
     public String[] lookupParameterNames(AccessibleObject methodOrConstructor,
                                          boolean throwExceptionIfMissing) {
 
@@ -224,9 +221,7 @@ public class JavaFileParanamer implements Paranamer {
 
     private void visitJavaFileToPopulateCache(AccessibleObject methodOrConstructor) {
 
-        InputStream is = null;
-        try {
-            is = javaFileFinder.openJavaFile(methodOrConstructor);
+        try (InputStream is = javaFileFinder.openJavaFile(methodOrConstructor)) {
             if (is != null) {
                 // visit .java file using our custom GenericVisitorAdapter
                 CompilationUnit cu = JavaParser.parse(is);
@@ -237,14 +232,6 @@ public class JavaFileParanamer implements Paranamer {
             throw new ParameterNamesNotFoundException(
                     "Error while trying to read parameter names from the Java file which contains the declaration of "
                             + methodOrConstructor.toString(), e);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    // should never happen
-                }
-            }
         }
     }
 
