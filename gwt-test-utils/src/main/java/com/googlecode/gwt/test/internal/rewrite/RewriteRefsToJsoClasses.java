@@ -50,7 +50,7 @@ class RewriteRefsToJsoClasses extends ClassVisitor {
         };
 
         public MyMethodAdapter(MethodVisitor mv) {
-            super(Opcodes.ASM4, mv);
+            super(Opcodes.ASM5, mv);
         }
 
         @Override
@@ -69,7 +69,7 @@ class RewriteRefsToJsoClasses extends ClassVisitor {
         }
 
         @Override
-        public void visitMethodInsn(int opcode, String owner, String name, String desc) {
+        public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean dintf) {
             if (jsoDescriptors.contains(owner)) {
                 // Find the class that actually declared the method.
                 if (opcode == Opcodes.INVOKEVIRTUAL) {
@@ -86,7 +86,7 @@ class RewriteRefsToJsoClasses extends ClassVisitor {
                     owner += "$";
                 }
             }
-            super.visitMethodInsn(opcode, owner, name, desc);
+            super.visitMethodInsn(opcode, owner, name, desc, dintf);
         }
 
         @Override
@@ -125,7 +125,7 @@ class RewriteRefsToJsoClasses extends ClassVisitor {
      */
     public RewriteRefsToJsoClasses(ClassVisitor cv, Set<String> jsoDescriptors,
                                    InstanceMethodOracle mapper) {
-        super(Opcodes.ASM4, cv);
+        super(Opcodes.ASM5, cv);
         this.jsoDescriptors = jsoDescriptors;
         this.mapper = mapper;
     }
