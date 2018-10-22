@@ -40,7 +40,8 @@ class GwtRpcInvocationHandler implements InvocationHandler {
         for (Method m : asyncClazz.getMethods()) {
             for (Method m2 : target.getClass().getMethods()) {
                 if (m.getName().equals(m2.getName())
-                        && m.getParameterTypes().length == m2.getParameterTypes().length + 1) {
+                        && m.getParameterTypes().length == m2.getParameterTypes().length + 1
+                        && areParametersWithSameTypes(m.getParameterTypes(), m2.getParameterTypes())) {
                     methodTable.put(m, m2);
                     GwtReflectionUtils.makeAccessible(m2);
                 }
@@ -174,5 +175,15 @@ class GwtRpcInvocationHandler implements InvocationHandler {
 
         // async callback always return void
         return null;
+    }
+
+    private boolean areParametersWithSameTypes(Class<?>[] asyncParameters, Class<?>[] targetParameters) {
+        for (int i = 0; i < targetParameters.length; i++) {
+            // test on the class names are the classes from both sides are not loaded by the same classloader
+            if (!targetParameters[i].getName().equals(asyncParameters[i].getName())) {
+                return false;
+            }
+        }
+        return true;
     }
 }
