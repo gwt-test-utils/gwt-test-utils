@@ -136,6 +136,12 @@ public class WidgetUtils {
         return GwtDomUtils.isVisible(object.getElement());
     }
 
+    public static Boolean isShowingItems(SuggestBox suggestBox) {
+        SuggestBox.DefaultSuggestionDisplay display = GwtReflectionUtils.getPrivateFieldValue(suggestBox, "display");
+        PopupPanel suggestionPopup = GwtReflectionUtils.getPrivateFieldValue(display, "suggestionPopup");
+        return suggestionPopup.isShowing();
+    }
+
     /**
      * set a CheckBox value without firing any {@link ValueChangeEvent}.
      *

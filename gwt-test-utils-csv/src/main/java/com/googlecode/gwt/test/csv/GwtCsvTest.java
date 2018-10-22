@@ -333,6 +333,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
         SuggestBox suggestBox = object(identifier).ofType(SuggestBox.class);
 
         Browser.fillText(content, suggestBox);
+        assertThat(WidgetUtils.isShowingItems(suggestBox)).describedAs(prefix()).isTrue();
         Browser.click(suggestBox, Integer.parseInt(index));
     }
 
@@ -342,6 +343,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
         SuggestBox suggestBox = object(identifier).ofType(SuggestBox.class);
 
         Browser.fillText(content, suggestBox);
+        assertThat(WidgetUtils.isShowingItems(suggestBox)).isTrue();
 
         List<MenuItem> menuItems = WidgetUtils.getMenuItems(suggestBox);
         int i = 0;
