@@ -1,5 +1,7 @@
 package com.googlecode.gwt.test.assertions;
 
+import com.google.common.base.Ascii;
+import com.google.common.base.Strings;
 import com.google.gwt.user.client.ui.HasHTML;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.UIObject;
@@ -94,6 +96,21 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
         if (areEqual(html, expected))
             return myself;
         throw propertyComparisonFailed("HTML", html, expected);
+    }
+
+    /**
+     * Verifies that the actual {@link UIObject} HTML is equal to the given one,
+     * ignoring case considerations.
+     *
+     * @param expected
+     *            the given HTML to compare the actual HTML value to.
+     * @return this assertion object.
+     * @throws AssertionError
+     *             if the actual HTML value is not equal to the given one.
+     */
+    public S htmlEqualsIgnoreCase(String expected) {
+        String html = HasHTML.class.isInstance(actual) ? ((HasHTML) actual).getHTML() : actual.getElement().getInnerHTML();
+        return propertyValueEqualsIgnoreCase("HTML", html, expected);
     }
 
     /**
@@ -208,6 +225,25 @@ public abstract class BaseUIObjectAssert<S extends BaseUIObjectAssert<S, A>, A e
         if (areEqual(title, expected))
             return myself;
         throw propertyComparisonFailed("title", title, expected);
+    }
+
+    private S propertyValueEqualsIgnoreCase(String propertyName, String propertyValue, String expected) {
+        String normalizedPropertyValue = normalizeValue(propertyValue);
+        String normalizedExpected = normalizeValue(expected);
+
+        if (Strings.isNullOrEmpty(normalizedPropertyValue) && Strings.isNullOrEmpty(normalizedExpected)
+                || areEqual(normalizedPropertyValue, normalizedExpected))
+            return myself;
+        throw propertyIgnoreCaseComparisonFailed(propertyName, propertyValue, expected);
+    }
+
+    /**
+     * If the input string is not null and is not empty, returns a copy in which
+     * all {@linkplain #isUpperCase(char) uppercase ASCII characters} have been
+     * converted to lowercase. Otherwise returns the input string.
+     */
+    protected String normalizeValue(String value) {
+        return Strings.isNullOrEmpty(value) ? value : Ascii.toLowerCase(value);
     }
 
 }

@@ -91,28 +91,74 @@ public abstract class GwtGenericAssert<S extends GwtGenericAssert<S, A>, A> exte
     }
 
     /**
-     * Returns a <code>{@link AssertionError}</code> describing a property comparison failure. A
-     * default description is set if the default error message is not overrided and a custom
-     * description is not applied. In both case, the resulting description would be prefixed by the
-     * message eventually supplied through {@link GwtGenericAssert#withPrefix(String)}.
+     * Returns a <code>{@link AssertionError}</code> describing a property
+     * comparison failure. A default description is set if the default error
+     * message is not overrided and a custom description is not applied. In both
+     * case, the resulting description would be prefixed by the message
+     * eventually supplied through {@link GwtGenericAssert#withPrefix(String)}.
      *
-     * @param propertyName the compared property name
-     * @param actual       the actual value.
-     * @param expected     the expected value.
+     * @param propertyName
+     *            the compared property name
+     * @param actual
+     *            the actual value.
+     * @param expected
+     *            the expected value.
      * @return a {@code AssertionError} describing the comparison failure.
      */
-    protected AssertionError propertyComparisonFailed(String propertyName, Object actual,
-                                                      Object expected) {
+    protected AssertionError propertyComparisonFailed(String propertyName, Object actual, Object expected) {
+        GwtWritableAssertionInfo info = generateAssertionInfo(propertyName, actual, expected, false);
+        return failures.failure(info, shouldBeEqual(actual, expected, new StandardRepresentation()));
+    }
+
+    /**
+     * Returns a <code>{@link AssertionError}</code> describing a property
+     * comparison failure. A default description is set if the default error
+     * message is not overrided and a custom description is not applied. In both
+     * case, the resulting description would be prefixed by the ignore case
+     * label mode and by the message eventually supplied through
+     * {@link GwtGenericAssert#withPrefix(String)}.
+     *
+     * @param propertyName
+     *            the compared property name
+     * @param actual
+     *            the actual value.
+     * @param expected
+     *            the expected value.
+     * @return a {@code AssertionError} describing the comparison failure.
+     */
+    protected AssertionError propertyIgnoreCaseComparisonFailed(String propertyName, Object actual, Object expected) {
+        GwtWritableAssertionInfo info = generateAssertionInfo(propertyName, actual, expected, true);
+        return failures.failure(info, shouldBeEqual(actual, expected, new StandardRepresentation()));
+
+    }
+
+    /**
+     * Returns a decription of comparison failure. A default description is set
+     * if the default error message is not overrided and a custom description is
+     * not applied. In both case, the resulting description would be prefixed by
+     * the message and eventually supplied through
+     * {@link GwtGenericAssert#withPrefix(String)}. If the ignoring case mode is
+     * enabled the resulting description would be prefixed by a ignore case mode
+     * label.
+     *
+     * @param propertyName
+     *            the compared property name
+     * @param actual
+     *            the actual value.
+     * @param expected
+     *            the expected value.
+     * @return a {@code AssertionError} describing the comparison failure.
+     */
+    protected GwtWritableAssertionInfo generateAssertionInfo(String propertyName, Object actual, Object expected, boolean ignoreCase) {
         GwtWritableAssertionInfo info = new GwtWritableAssertionInfo();
         info.prefix(gwtInfo.prefix());
         info.overridingErrorMessage(gwtInfo.overridingErrorMessage());
 
         Description d = gwtInfo.superDescription();
-        String newDescription = d != null ? d.value() + " " + propertyName
-                : this.actual.getClass().getSimpleName() + "'s " + propertyName;
+        String newDescription = d != null ? d.value() + " " + propertyName : this.actual.getClass().getSimpleName() + "'s " + propertyName;
+        newDescription = ignoreCase ? "(ignore case mode)  " + newDescription : newDescription;
         info.description(newDescription);
-
-        return failures.failure(info, shouldBeEqual(actual, expected, new StandardRepresentation()));
+        return info;
 
     }
 

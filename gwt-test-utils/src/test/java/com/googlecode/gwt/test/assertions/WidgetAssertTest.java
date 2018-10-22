@@ -23,6 +23,7 @@ public class WidgetAssertTest extends GwtTestTest {
         try {
             assertThat(a).hasStyle("first-style", "second-style", "third-style");
         } catch (AssertionError e) {
+            // Then
             fail("assertion should pass but failed with message : " + e.getMessage());
         }
     }
@@ -40,6 +41,7 @@ public class WidgetAssertTest extends GwtTestTest {
             assertThat(a).hasStyle("first-style", "second-style", "thrid-style", "fourth-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] should have style \"thrid-style\"");
         }
     }
@@ -54,6 +56,7 @@ public class WidgetAssertTest extends GwtTestTest {
         try {
             GwtAssertions.assertThat(a).htmlEquals("<h3>Ben Linus</h3>");
         } catch (AssertionError e) {
+            // Then
             fail("assertion should pass but failed with message : " + e.getMessage());
         }
     }
@@ -69,6 +72,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).htmlEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[Anchor's HTML] expected:<\"[John Locke]\"> but was:<\"[<h3>Ben Linus</h3>]\">");
         }
@@ -85,6 +89,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).withPrefix("my prefix").htmlEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[my prefix Anchor's HTML] expected:<\"[John Locke]\"> but was:<\"[<h3>Ben Linus</h3>]\">");
         }
@@ -102,6 +107,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor HTML] custom error message");
         }
     }
@@ -117,6 +123,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").htmlEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[my anchor HTML] expected:<\"[John Locke]\"> but was:<\"[<h3>Ben Linus</h3>]\">");
         }
@@ -134,7 +141,70 @@ public class WidgetAssertTest extends GwtTestTest {
                     "John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor's HTML] custom error message");
+        }
+    }
+
+    @Test
+    public void htmlEqualsIgnoreCase() {
+        // Given
+        Anchor a = new Anchor();
+        a.setHTML("<h3>Ben Linus</h3>");
+
+        // When & Then
+        try {
+            GwtAssertions.assertThat(a).htmlEqualsIgnoreCase("<h3>ben LInus</h3>");
+        } catch (AssertionError e) {
+            fail("assertion should pass but failed with message : " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void htmlEqualsIgnoreCaseEmpty() {
+        // Given
+        Anchor a = new Anchor();
+        a.setHTML("");
+
+        // When & Then
+        try {
+            GwtAssertions.assertThat(a).htmlEqualsIgnoreCase("");
+            GwtAssertions.assertThat(a).htmlEqualsIgnoreCase(null);
+        } catch (AssertionError e) {
+            fail("assertion should pass but failed with message : " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void htmlEqualsIgnoreCaseNull() {
+        // Given
+        String valueHtml = null;
+        Anchor a = new Anchor();
+        a.setHTML(valueHtml);
+
+        // When & Then
+        try {
+            GwtAssertions.assertThat(a).htmlEqualsIgnoreCase("");
+            GwtAssertions.assertThat(a).htmlEqualsIgnoreCase(null);
+        } catch (AssertionError e) {
+            fail("assertion should pass but failed with message : " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void htmlIgnoreCaseWithAsAssertionErrorMessage() {
+        // Given
+        Anchor a = new Anchor();
+        a.setHTML("<h3>Ada Byron</h3>");
+
+        // When
+        try {
+            GwtAssertions.assertThat(a).as("my anchor").htmlEqualsIgnoreCase("<h3>Ada Lovelace</h3>");
+            fail("AssertionError should be thrown");
+        } catch (AssertionError e) {
+            // Then
+            assertThat(e.getMessage()).isEqualTo(
+                    "[(ignore case mode)  my anchor HTML] expected:<\"<h3>Ada [Lovelace]</h3>\"> but was:<\"<h3>Ada [Byron]</h3>\">");
         }
     }
 
@@ -144,7 +214,7 @@ public class WidgetAssertTest extends GwtTestTest {
         Anchor a = new Anchor();
         RootPanel.get().add(a);
 
-        // When
+        // When & Then
         try {
             assertThat(a).isAttached();
         } catch (AssertionError e) {
@@ -162,6 +232,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).isAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] should be attached");
         }
     }
@@ -176,6 +247,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] custom failure");
         }
     }
@@ -190,6 +262,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").isAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] should be attached");
         }
     }
@@ -204,6 +277,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] custom failure");
         }
     }
@@ -213,7 +287,7 @@ public class WidgetAssertTest extends GwtTestTest {
         // Given
         Anchor a = new Anchor();
 
-        // When
+        // When & Then
         try {
             GwtAssertions.assertThat(a).isNotAttached();
         } catch (AssertionError e) {
@@ -232,6 +306,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).isNotAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] should not be attached");
         }
     }
@@ -247,6 +322,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isNotAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] custom failure");
         }
     }
@@ -262,6 +338,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").isNotAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] should not be attached");
         }
     }
@@ -277,6 +354,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isNotAttached();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] custom failure");
         }
     }
@@ -287,7 +365,7 @@ public class WidgetAssertTest extends GwtTestTest {
         Anchor a = new Anchor();
         a.setVisible(false);
 
-        // When
+        // When & Then
         try {
             GwtAssertions.assertThat(a).isNotVisible();
         } catch (AssertionError e) {
@@ -305,6 +383,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).isNotVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] should not be visible");
         }
     }
@@ -319,6 +398,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isNotVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] custom failure");
         }
     }
@@ -333,6 +413,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").isNotVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] should not be visible");
         }
     }
@@ -347,6 +428,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isNotVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] custom failure");
         }
     }
@@ -356,7 +438,7 @@ public class WidgetAssertTest extends GwtTestTest {
         // Given
         Anchor a = new Anchor();
 
-        // When
+        // When & Then
         try {
             GwtAssertions.assertThat(a).isVisible();
         } catch (AssertionError e) {
@@ -375,6 +457,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).isVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] should be visible");
         }
     }
@@ -390,6 +473,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").overridingErrorMessage("custom failure").isVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] custom failure");
         }
     }
@@ -405,6 +489,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").isVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor] should be visible");
         }
     }
@@ -420,6 +505,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom failure").isVisible();
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor] custom failure");
         }
     }
@@ -431,7 +517,7 @@ public class WidgetAssertTest extends GwtTestTest {
         a.setStyleName("first");
         a.addStyleName("second");
 
-        // When
+        // When & Then
         try {
             assertThat(a).styleNameEquals("first second");
         } catch (AssertionError e) {
@@ -451,6 +537,7 @@ public class WidgetAssertTest extends GwtTestTest {
             assertThat(a).styleNameEquals("not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[Anchor's styleName] expected:<\"[not-my-style]\"> but was:<\"[first second]\">");
         }
@@ -469,6 +556,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor styleName] custom error message");
         }
     }
@@ -485,6 +573,7 @@ public class WidgetAssertTest extends GwtTestTest {
             assertThat(a).as("my anchor").styleNameEquals("not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[my anchor styleName] expected:<\"[not-my-style]\"> but was:<\"[first second]\">");
         }
@@ -503,6 +592,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor's styleName] custom error message");
         }
     }
@@ -514,7 +604,7 @@ public class WidgetAssertTest extends GwtTestTest {
         a.setStylePrimaryName("primary");
         a.addStyleName("second");
 
-        // When
+        // When & Then
         try {
             assertThat(a).stylePrimaryNameEquals("primary");
         } catch (AssertionError e) {
@@ -534,6 +624,7 @@ public class WidgetAssertTest extends GwtTestTest {
             assertThat(a).stylePrimaryNameEquals("not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[Anchor's stylePrimaryName] expected:<\"[not-my-style]\"> but was:<\"[primary]\">");
         }
@@ -552,6 +643,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor stylePrimaryName] my custom error");
         }
     }
@@ -568,6 +660,7 @@ public class WidgetAssertTest extends GwtTestTest {
             assertThat(a).as("my anchor").stylePrimaryNameEquals("not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[my anchor stylePrimaryName] expected:<\"[not-my-style]\"> but was:<\"[primary]\">");
         }
@@ -586,6 +679,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "not-my-style");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor's stylePrimaryName] my custom error");
         }
     }
@@ -596,7 +690,7 @@ public class WidgetAssertTest extends GwtTestTest {
         Anchor a = new Anchor();
         a.setText("Ben Linus");
 
-        // When
+        // When & Then
         try {
             GwtAssertions.assertThat(a).textEquals("Ben Linus");
         } catch (AssertionError e) {
@@ -615,6 +709,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).textEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[Anchor's text] expected:<\"[John Locke]\"> but was:<\"[Ben Linus]\">");
         }
@@ -632,6 +727,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor text] custom error message");
         }
     }
@@ -647,6 +743,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").textEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[my anchor text] expected:<\"[John Locke]\"> but was:<\"[Ben Linus]\">");
         }
@@ -664,6 +761,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor's text] custom error message");
         }
     }
@@ -674,7 +772,7 @@ public class WidgetAssertTest extends GwtTestTest {
         Anchor a = new Anchor();
         a.setTitle("Lost 108");
 
-        // When
+        // When & Then
         try {
             GwtAssertions.assertThat(a).titleEquals("Lost 108");
         } catch (AssertionError e) {
@@ -693,6 +791,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).titleEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[Anchor's title] expected:<\"[John Locke]\"> but was:<\"[Lost 108]\">");
         }
@@ -709,6 +808,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).withPrefix("my prefix").titleEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[my prefix Anchor's title] expected:<\"[John Locke]\"> but was:<\"[Lost 108]\">");
         }
@@ -726,6 +826,7 @@ public class WidgetAssertTest extends GwtTestTest {
                     "John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[my anchor title] custom error message");
         }
     }
@@ -741,6 +842,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).as("my anchor").titleEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo(
                     "[my anchor title] expected:<\"[John Locke]\"> but was:<\"[Lost 108]\">");
         }
@@ -757,6 +859,7 @@ public class WidgetAssertTest extends GwtTestTest {
             GwtAssertions.assertThat(a).overridingErrorMessage("custom error message").titleEquals("John Locke");
             fail("AssertionError should be thrown");
         } catch (AssertionError e) {
+            // Then
             assertThat(e.getMessage()).isEqualTo("[Anchor's title] custom error message");
         }
     }
