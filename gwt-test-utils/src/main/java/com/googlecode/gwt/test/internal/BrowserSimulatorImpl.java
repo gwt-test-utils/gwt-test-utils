@@ -3,6 +3,7 @@ package com.googlecode.gwt.test.internal;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Command;
 import com.googlecode.gwt.test.BrowserSimulator;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
@@ -27,12 +28,14 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
         return INSTANCE;
     }
 
-    private final Queue<Command> asyncCallbackCommands = new LinkedList<Command>();
-    private final Queue<ScheduledCommand> deferredScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
-    private final List<RepeatingCommand> entryRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
-    private final Queue<ScheduledCommand> entryScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
-    private final List<RepeatingCommand> finallyRepeatingCommands = new LinkedList<Scheduler.RepeatingCommand>();
-    private final Queue<ScheduledCommand> finallyScheduledCommands = new LinkedList<Scheduler.ScheduledCommand>();
+    private final Queue<Command> asyncCallbackCommands = new LinkedList<>();
+    private final Queue<ScheduledCommand> deferredScheduledCommands = new LinkedList<>();
+    private final List<RepeatingCommand> entryRepeatingCommands = new LinkedList<>();
+    private final Queue<ScheduledCommand> entryScheduledCommands = new LinkedList<>();
+    private final List<RepeatingCommand> finallyRepeatingCommands = new LinkedList<>();
+    private final Queue<ScheduledCommand> finallyScheduledCommands = new LinkedList<>();
+
+    private Element currentFocusElement;
 
     private boolean isTriggering;
 
@@ -46,6 +49,7 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
     @Override
     public void afterTest() {
 
+        setCurrentFocusElement(null);
         if (deferredScheduledCommands.size() == 0 //
                 && finallyScheduledCommands.size() == 0 //
                 && finallyRepeatingCommands.size() == 0 //
@@ -57,7 +61,7 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
 
         String testName = GwtConfig.get().getModuleRunner().getClass().getSimpleName();
         String format = "%s pending %s must be triggered manually by calling %s.getBrowserSimulator().fireLoopEnd() before making your test assertions";
-        String errorMessage = null;
+        String errorMessage;
 
         if (deferredScheduledCommands.size() > 0) {
             errorMessage = String.format(format, deferredScheduledCommands.size(),
@@ -188,4 +192,11 @@ public class BrowserSimulatorImpl implements BrowserSimulator, AfterTestCallback
         }
     }
 
+    public Element getCurrentFocusElement() {
+        return currentFocusElement;
+    }
+
+    public void setCurrentFocusElement(Element currentFocusElement) {
+        this.currentFocusElement = currentFocusElement;
+    }
 }

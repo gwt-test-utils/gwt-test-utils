@@ -428,6 +428,21 @@ public class GwtReflectionUtils {
         return res;
     }
 
+    public static Method getMethod(Class<?> clazz, String methodName, int paramLenght) {
+        Method method = getMethod(clazz, methodName);
+        if (method != null && method.getParameterTypes().length == paramLenght) {
+            return method;
+        } else if (method != null) {
+            for (Method m : clazz.getDeclaredMethods()) {
+                if (methodName.equalsIgnoreCase(m.getName()) && m.getParameterTypes().length == paramLenght) {
+                    m.setAccessible(true);
+                    return m;
+                }
+            }
+        }
+        return null;
+    }
+
     public static <T> T getPrivateFieldValue(Object target, Field field) {
         try {
             makeAccessible(field);

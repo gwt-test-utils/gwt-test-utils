@@ -3,12 +3,15 @@ package com.googlecode.gwt.test.utils.events;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.user.cellview.client.AbstractCellTable;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.HasData;
 import com.googlecode.gwt.test.finder.GwtFinder;
@@ -89,7 +92,10 @@ public class Browser {
      * @param target The targeted widget.
      */
     public static void blur(IsWidget target) {
+        BrowserSimulatorImpl.get().fireLoopEnd();
         dispatchEvent(target, EventBuilder.create(Event.ONBLUR).build());
+        BrowserSimulatorImpl.get().setCurrentFocusElement(null);
+        BrowserSimulatorImpl.get().fireLoopEnd();
     }
 
     /**
@@ -111,7 +117,9 @@ public class Browser {
      * @param target The targeted widget.
      */
     public static void change(IsWidget target) {
+        BrowserSimulatorImpl.get().fireLoopEnd();
         dispatchEvent(target, EventBuilder.create(Event.ONCHANGE).build());
+        BrowserSimulatorImpl.get().fireLoopEnd();
     }
 
     /**
@@ -179,17 +187,31 @@ public class Browser {
      */
     public static void click(Grid grid, int row, int column) {
         Widget target = grid.getWidget(row, column);
-        clickInternal(grid, target);
+        clickInternal(grid, target, target.getElement());
     }
 
     /**
      * Simulates a click event.
      *
-     * @param target The targeted widget.
-     * @see Event#ONCLICK
+     * @param target
+     *            The targeted widget.
      */
+
+    public static void click(CheckBox target) {
+        // delegate the click to the input element like in the real life (Web Browser)
+        click(target, target.getElement().getFirstChildElement());
+    }
+
     public static void click(IsWidget target) {
-        clickInternal(target, target.asWidget());
+        if (target instanceof CheckBox) {
+            click((CheckBox) target);
+        } else {
+            click(target, target.asWidget().getElement());
+        }
+    }
+
+    public static void click(IsWidget target, Element element) {
+        clickInternal(target, target.asWidget(), element);
     }
 
     /**
@@ -209,7 +231,7 @@ public class Browser {
      * @param clickedItem The widget to click inside the menu bar.
      */
     public static void click(MenuBar menuBar, MenuItem clickedItem) {
-        clickInternal(menuBar, clickedItem);
+        clickInternal(menuBar, clickedItem, clickedItem.getElement());
     }
 
     /**
@@ -243,11 +265,13 @@ public class Browser {
      * @param clickedItem The child widget to click inside the suggest box.
      */
     public static void click(SuggestBox suggestBox, MenuItem clickedItem) {
+        BrowserSimulatorImpl.get().fireLoopEnd();
         Event onClick = EventBuilder.create(Event.ONCLICK).setTarget(clickedItem).build();
 
         if (canApplyEvent(suggestBox, onClick)) {
             clickedItem.getScheduledCommand().execute();
         }
+        BrowserSimulatorImpl.get().fireLoopEnd();
     }
 
     /**
@@ -258,7 +282,24 @@ public class Browser {
      */
     public static <T extends IndexedPanel & IsWidget> void click(T panel, int index) {
         Widget target = panel.getWidget(index);
-        clickInternal(panel, target);
+        clickInternal(panel, target, target.getElement());
+    }
+
+    /**
+     * Simulates a click event.
+     *
+     * @param target
+     *            The targeted HasHandlers.
+     */
+    public static void clickHaskHandlers(HasHandlers target) {
+        if (target instanceof IsWidget) {
+            click((IsWidget) target);
+        } else {
+            Event onClick = EventBuilder.create(Event.ONCLICK).build();
+            BrowserSimulatorImpl.get().fireLoopEnd();
+            ClickEvent.fireNativeEvent(onClick, target);
+            BrowserSimulatorImpl.get().fireLoopEnd();
+        }
     }
 
     /**
@@ -665,6 +706,73 @@ public class Browser {
     public static void fillText(String value, boolean check, HasText hasTextWidget)
             throws IllegalArgumentException {
         fillText(value, check, true, hasTextWidget);
+    }
+
+    public static void fillText(Element element, String value) {
+
+        BrowserSimulatorImpl.get().fireLoopEnd();
+        if (!"input".equalsIgnoreCase(element.getTagName())) {
+            return;
+        }
+
+        for (int i = 0; i < value.length(); i++) {
+
+            int keyCode = value.charAt(i);
+            Event keyDownEvent = EventBuilder.create(Event.ONKEYDOWN).setKeyCode(keyCode).setTarget(element).build();
+            dispatchEvent(element, keyDownEvent);
+
+            Event keyPressEvent = EventBuilder.create(Event.ONKEYPRESS).setKeyCode(keyCode).setTarget(element).build();
+            dispatchEvent(element, keyPressEvent);
+            element.setAttribute("value", value.substring(0, i + 1));
+
+            Event keyUpEvent = EventBuilder.create(Event.ONKEYUP).setKeyCode(keyCode).setTarget(element).build();
+            dispatchEvent(element, keyUpEvent);
+        }
+
+        dispatchEvent(element, EventBuilder.create(Event.ONBLUR).setTarget(element).build());
+        dispatchEvent(element, EventBuilder.create(Event.ONCHANGE).setTarget(element).build());
+        BrowserSimulatorImpl.get().fireLoopEnd();
+
+    }
+
+    public static void dispatchEvent(Element element, Event event) {
+        canApplyEvent(element, event);
+        prepareEvents(element, event);
+
+        // set the related target
+        Element relatedTargetElement = JavaScriptObjects.getObject(event, JsoProperties.EVENT_RELATEDTARGET);
+
+        if (relatedTargetElement == null) {
+            switch (event.getTypeInt()) {
+                case Event.ONMOUSEOVER:
+                case Event.ONMOUSEOUT:
+                    relatedTargetElement = element.getParentElement();
+                    JavaScriptObjects.setProperty(event, JsoProperties.EVENT_RELATEDTARGET, relatedTargetElement);
+
+                    break;
+            }
+        }
+
+        //For preview event handling
+        GwtReflectionUtils.callStaticMethod(DOM.class, "previewEvent", event);
+
+        Element currentElement = element;
+        EventListener currentEventListener = DOM.getEventListener((com.google.gwt.user.client.Element) element);
+        Set<EventListener> applied = new HashSet<EventListener>();
+        while (currentElement != null && !isEventStopped(event)) {
+            //for app event handling
+            if (currentEventListener != null && !applied.contains(currentEventListener)) {
+                applied.add(currentEventListener);
+                GwtReflectionUtils.callStaticMethod(DOM.class, "dispatchEvent", event, currentElement, currentEventListener);
+            }
+            currentElement = currentElement.getParentElement();
+            if (currentElement != null) {
+                currentEventListener = DOM.getEventListener((com.google.gwt.user.client.Element) currentElement);
+            } else {
+                currentEventListener = null;
+            }
+        }
+
     }
 
     /**
@@ -1204,14 +1312,29 @@ public class Browser {
         if (!WidgetUtils.isWidgetVisible(widget) && isVisible(widget, targetElement)) {
             GwtConfig.get().getModuleRunner().getBrowserErrorHandler().onError(
                     "Cannot dispatch '" + event.getType()
-                            + "' event : the targeted element or one of its parents is not visible");
+                            + "' event : the targeted Widget or one of its parents is not visible");
 
             return false;
-        } else if (isDisabled(targetElement)) {
+        }
+
+        return canApplyEvent(targetElement, event);
+    }
+
+    private static boolean canApplyEvent(Element element, Event event) {
+        if (!UIObject.isVisible(element)) {
+            GwtConfig.get().getModuleRunner().getBrowserErrorHandler().onError(
+                    "Cannot dispatch '" + event.getType()
+                            + "' event : the targeted element or one of its parents is not visible : "
+                            + element.toString()
+            );
+
+            return false;
+        } else if (isDisabled(element)) {
             GwtConfig.get().getModuleRunner().getBrowserErrorHandler().onError(
                     "Cannot dispatch '" + event.getType()
                             + "' event : the targeted element has to be enabled : "
-                            + targetElement.toString());
+                            + element.toString()
+            );
 
             return false;
         }
@@ -1219,18 +1342,39 @@ public class Browser {
         return true;
     }
 
-    private static void clickInternal(IsWidget parent, UIObject target) {
-        Event onMouseOver = EventBuilder.create(Event.ONMOUSEOVER).setTarget(target).build();
-        Event onMouseDown = EventBuilder.create(Event.ONMOUSEDOWN).setTarget(target).setButton(
-                Event.BUTTON_LEFT).build();
-        Event onMouseUp = EventBuilder.create(Event.ONMOUSEUP).setTarget(target).setButton(
-                Event.BUTTON_LEFT).build();
-        Event onClick = EventBuilder.create(Event.ONCLICK).setTarget(target).build();
+    private static void clickInternal(IsWidget eventListener, UIObject target, Element element) {
+        BrowserSimulatorImpl.get().fireLoopEnd();
+        Event onMouseOver = element != null ? EventBuilder.create(Event.ONMOUSEOVER).setTarget(element).build() : EventBuilder
+                .create(Event.ONMOUSEOVER).setTarget(target).build();
+        dispatchEvent(eventListener, onMouseOver);
 
-        dispatchEvent(parent, onMouseOver, onMouseDown, onMouseUp, onClick);
+        Event onMouseDown = element != null ? EventBuilder.create(Event.ONMOUSEDOWN).setTarget(element).setButton(Event.BUTTON_LEFT).build()
+                : EventBuilder.create(Event.ONMOUSEDOWN).setTarget(target).setButton(Event.BUTTON_LEFT).build();
+        dispatchEvent(eventListener, onMouseDown);
+
+        if (BrowserSimulatorImpl.get().getCurrentFocusElement() != null) {
+            Event onBlur = EventBuilder.create(Event.ONBLUR).setTarget(BrowserSimulatorImpl.get().getCurrentFocusElement()).build();
+            dispatchEvent(eventListener, onBlur);
+        }
+
+        Event onFocus = element != null ? EventBuilder.create(Event.ONFOCUS).setTarget(element).build() : EventBuilder.create(Event.ONFOCUS)
+                .setTarget(target).build();
+        dispatchEvent(eventListener, onFocus);
+        BrowserSimulatorImpl.get().setCurrentFocusElement(element);
+
+        Event onMouseUp = element != null ? EventBuilder.create(Event.ONMOUSEUP).setTarget(element).setButton(Event.BUTTON_LEFT).build()
+                : EventBuilder.create(Event.ONMOUSEUP).setTarget(target).setButton(Event.BUTTON_LEFT).build();
+        dispatchEvent(eventListener, onMouseUp);
+
+        Event onClick = element != null ? EventBuilder.create(Event.ONCLICK).setTarget(element).build() : EventBuilder.create(Event.ONCLICK)
+                .setTarget(target).build();
+        dispatchEvent(eventListener, onClick);
+
+        BrowserSimulatorImpl.get().fireLoopEnd();
     }
 
     private static void clickOnCheckBox(CheckBox checkBox) {
+        BrowserSimulatorImpl.get().fireLoopEnd();
         boolean newValue = RadioButton.class.isInstance(checkBox) ? true : !checkBox.getValue();
 
         // change value without triggering ValueChangeEvent : the trigger is done
@@ -1242,6 +1386,7 @@ public class Browser {
             // change every other radiobutton and trigger ValueChangeEvent
             RadioButtonManager.onRadioGroupChanged((RadioButton) checkBox, newValue, true);
         }
+        BrowserSimulatorImpl.get().fireLoopEnd();
     }
 
     private static void dispatchEventInternal(IsWidget target, Event event) {
@@ -1349,17 +1494,20 @@ public class Browser {
             return true;
         } else {
 
-            return UIObject.isVisible(element) ? isVisible(visibleRoot, element.getParentElement())
-                    : false;
+            return UIObject.isVisible(element) && isVisible(visibleRoot, element.getParentElement());
         }
     }
 
     private static void prepareEvents(IsWidget target, Event... events) {
+        prepareEvents(target.asWidget().getElement(),events);
+    }
+
+    private static void prepareEvents(Element element, Event... events) {
         for (Event event : events) {
             Element effectiveTarget = JavaScriptObjects.getObject(event, JsoProperties.EVENT_TARGET);
 
             if (effectiveTarget == null) {
-                effectiveTarget = target.asWidget().getElement();
+                effectiveTarget = element;
                 JavaScriptObjects.setProperty(event, JsoProperties.EVENT_TARGET, effectiveTarget);
             }
         }

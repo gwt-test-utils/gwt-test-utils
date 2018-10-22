@@ -201,7 +201,7 @@ public abstract class GwtTestWithEasyMock extends GwtTestWithMocks {
      */
     protected void verify() {
         // trigger commands
-        BrowserSimulatorImpl.get().fireLoopEnd();
+        getBrowserSimulator().fireLoopEnd();
 
         getMockManager().getAllMocksByType().values().forEach(EasyMock::verify);
     }

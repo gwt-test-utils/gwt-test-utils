@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
+import com.googlecode.gwt.test.assertions.GwtAssertions;
 import com.googlecode.gwt.test.utils.events.Browser;
 import com.googlecode.gwt.test.utils.events.EventBuilder;
 import org.junit.Before;
@@ -21,9 +22,11 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.googlecode.gwt.test.assertions.GwtAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 import static org.assertj.core.api.Fail.failBecauseExceptionWasNotThrown;
+import static org.junit.Assert.assertTrue;
 
 public class BrowserTest extends GwtTestTest {
 
@@ -153,16 +156,19 @@ public class BrowserTest extends GwtTestTest {
                 if (DOM.eventGetType(event) == Event.ONCLICK) {
                     tested = !tested;
                     assertThat(event.getRelatedEventTarget()).isNull();
+                    assertThat(event.getEventTarget()).isEqualTo(a1.getElement());
                 }
-
-                assertThat(event.getEventTarget()).isEqualTo(a1.getElement());
             }
-
-            ;
         };
 
         panel.add(a0);
         panel.insert(a1, 1);
+        panel.showStack(1);
+
+        // Pre-Assertions
+        assertThat(a1).isVisible();
+        assertThat(a0).isNotVisible();
+
 
         // When
         Browser.click(panel, 1);
@@ -336,6 +342,27 @@ public class BrowserTest extends GwtTestTest {
 
         // Then
         assertThat(tested).as("onClick event was not triggered").isTrue();
+    }
+
+    @Test
+    public void click_eventBubbling() {
+        // Given
+        final Boolean[] clicked = new Boolean[2];
+        clicked[0] = false;
+        clicked[1] = false;
+        FocusPanel panel0 = new FocusPanel();
+        FocusPanel panel1 = new FocusPanel();
+        panel0.add(panel1);
+        panel0.addClickHandler(event -> clicked[0] = true);
+        panel1.addClickHandler(event -> clicked[1] = true);
+
+        // When
+        Browser.click(panel1);
+
+        // Then
+        assertThat(clicked[0]).isTrue();
+        assertThat(clicked[1]).isTrue();
+
     }
 
     @Test

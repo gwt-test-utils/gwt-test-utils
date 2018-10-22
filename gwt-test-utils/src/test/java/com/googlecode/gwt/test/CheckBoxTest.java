@@ -2,6 +2,7 @@ package com.googlecode.gwt.test;
 
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.gwt.test.utils.events.Browser;
 import com.googlecode.gwt.test.utils.events.Browser.BrowserErrorHandler;
 import org.junit.Before;
@@ -17,12 +18,7 @@ public class CheckBoxTest extends GwtTestTest {
     public void beforeCheckBoxTest() {
         errorStringBuilder.delete(0, errorStringBuilder.length());
 
-        setBrowserErrorHandler(new BrowserErrorHandler() {
-
-            public void onError(String errorMessage) {
-                errorStringBuilder.append(errorMessage);
-            }
-        });
+        setBrowserErrorHandler(errorStringBuilder::append);
     }
 
     @Test
@@ -43,6 +39,7 @@ public class CheckBoxTest extends GwtTestTest {
     public void click() {
         // Given
         CheckBox cb = new CheckBox();
+        cb.setEnabled(true);
         // Preconditions
         assertThat(cb.getValue()).isFalse();
 
@@ -72,7 +69,7 @@ public class CheckBoxTest extends GwtTestTest {
 
         // Then
         assertThat(cb.getValue()).isFalse();
-        assertThat(errorStringBuilder).startsWith("Cannot dispatch 'mouseover' event : the targeted element has to be enabled : <span class=\"gwt-CheckBox gwt-CheckBox-disabled\"><input type=\"checkbox\"");
+        assertThat(errorStringBuilder).startsWith("Cannot dispatch 'mouseover' event : the targeted element has to be enabled : <input type=\"checkbox\"");
     }
 
     @Test

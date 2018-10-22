@@ -123,8 +123,7 @@ public class WidgetUtils {
      * @return True if the widget and its possible parents are visible, false otherwise.
      */
     public static boolean isWidgetVisible(UIObject object) {
-        // FIXME : remove this hack which is required for googlecode main GWT
-        // project...
+        // FIXME : remove this hack which is required for googlecode main GWT project...
         if (object == null) {
             return false;
         } else if (object instanceof RootPanel) {

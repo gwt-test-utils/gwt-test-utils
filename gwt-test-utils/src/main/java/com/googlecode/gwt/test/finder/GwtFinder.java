@@ -467,12 +467,12 @@ public class GwtFinder implements AfterTestCallback {
             boolean mapEqIsProcessed = false;
             boolean ok = false;
             if (!ok) {
-                Method m = null;
+                int numberOfParams = currentNode.getParams() != null ? currentNode.getParams().size() : 0;
+
+                Method m = GwtReflectionUtils.getMethod(current.getClass(), currentName, numberOfParams);
+
                 if (m == null) {
-                    m = GwtReflectionUtils.getMethod(current.getClass(), currentName);
-                }
-                if (m == null) {
-                    m = GwtReflectionUtils.getMethod(current.getClass(), "get" + currentName);
+                    m = GwtReflectionUtils.getMethod(current.getClass(), "get" + currentName, numberOfParams);
                 }
                 if (m != null) {
                     try {
