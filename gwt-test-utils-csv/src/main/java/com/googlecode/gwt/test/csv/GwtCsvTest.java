@@ -669,14 +669,15 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
     protected void selectInListBox(ListBox listBox, String regex) {
         int selectedIndex;
-        String errorMessage;
-        if (regex.matches("^\\d*$")) {
-            selectedIndex = Integer.parseInt(regex);
-            errorMessage = "Cannot select negative index in ListBox <" + regex
-                    + "> in ListBox with values : ";
-        } else {
-            selectedIndex = WidgetUtils.getIndexInListBox(listBox, regex);
-            errorMessage = "Regex <" + regex + "> has not been matched in ListBox values : ";
+        String errorMessage = "";
+        selectedIndex = WidgetUtils.getIndexInListBox(listBox, regex);
+        if (selectedIndex == -1) {
+            if (regex.matches("^\\d*$")) {
+                selectedIndex = Integer.parseInt(regex);
+                errorMessage = "Cannot select negative index in ListBox <" + regex + "> in ListBox with values : ";
+            } else {
+                errorMessage = "Regex <" + regex + "> has not been matched in ListBox values : ";
+            }
         }
 
         if (selectedIndex > -1) {
