@@ -196,10 +196,20 @@ public class Browser {
      * @param target
      *            The targeted widget.
      */
-
     public static void click(CheckBox target) {
         // delegate the click to the input element like in the real life (Web Browser)
         click(target, target.getElement().getFirstChildElement());
+    }
+
+    /**
+     * Simulates a click event.
+     *
+     * @param target
+     *            The targeted Element.
+     */
+    public static void click(Element target) {
+        EventListener eventListener = getEventListener(target);
+        click((IsWidget) eventListener, target);
     }
 
     public static void click(IsWidget target) {
@@ -1391,9 +1401,9 @@ public class Browser {
 
     private static void dispatchEventInternal(IsWidget target, Event event) {
         try {
-            // special case of click on CheckBox : set the internal inputElement
-            // value
+            // special case of click on CheckBox : set the internal inputElement value
             if (CheckBox.class.isInstance(target) && event.getTypeInt() == Event.ONCLICK) {
+                // click on label fire another event click on inputElement
                 clickOnCheckBox((CheckBox) target);
             }
 
@@ -1476,6 +1486,14 @@ public class Browser {
         // process bubbling
         dispatchEventWithBubble(WidgetUtils.getWidget(widget.getElement().getParentElement()), event,
                 applied);
+    }
+
+    private static EventListener getEventListener(Element element) {
+        EventListener eventListener = DOM.getEventListener(element);
+        if (eventListener != null) {
+            return eventListener;
+        }
+        return getEventListener(element.getParentElement());
     }
 
     private static boolean isDisabled(Element element) {
