@@ -1,6 +1,8 @@
 package com.googlecode.gwt.test.csv;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.LabelElement;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.csv.internal.DirectoryTestReader;
@@ -280,7 +282,28 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
     @CsvMethod
     public void click(String... identifier) {
-        Browser.click(object(identifier).ofType(Widget.class));
+        Object object = object(identifier).ofType(Object.class);
+        if (object instanceof CheckBox) {
+            Widget widget = (Widget) object;
+            Browser.click(widget, widget.getElement().getFirstChildElement());
+        } else if (object instanceof Widget) {
+            Widget widget = (Widget) object;
+            if (identifier.length == 1) {
+                Element element = Document.get().getElementById(identifier[0]);
+                Browser.click(widget, element);
+            } else {
+                Browser.click(widget);
+            }
+        } else if (object instanceof Element) {
+            Element element = (Element) object;
+            Browser.click(element);
+            if (element.getTagName().equalsIgnoreCase("label")) {
+                LabelElement labelElement = (LabelElement) element;
+                String targetIdentifierForLabel = labelElement.getHtmlFor();
+                Element target = object(targetIdentifierForLabel).ofType(Element.class);
+                Browser.click(target);
+            }
+        }
     }
 
     @CsvMethod
