@@ -19,12 +19,7 @@ public class PushButtonTest extends GwtTestTest {
 
         final PushButton b = new PushButton("Up", "Down");
 
-        b.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                clicked = true;
-            }
-        });
+        b.addClickHandler(event -> clicked = true);
 
         // Preconditions
         assertThat(b.getText()).isEqualTo("Up");

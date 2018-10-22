@@ -14,13 +14,9 @@ public class GwtLogTest extends GwtTestTest {
 
     @Before
     public void beforeGwtLogTest() {
-        setLogHandler(new GwtLogHandler() {
-
-            public void log(String message, Throwable t) {
-                GwtLogTest.this.message = message;
-                GwtLogTest.this.t = t;
-            }
-
+        setLogHandler((message, t) -> {
+            GwtLogTest.this.message = message;
+            GwtLogTest.this.t = t;
         });
     }
 

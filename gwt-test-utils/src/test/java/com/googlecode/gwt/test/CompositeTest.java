@@ -69,28 +69,21 @@ public class CompositeTest extends GwtTestTest {
     @Test
     public void click_Wrapper() {
         // Given
-        label.addClickHandler(new ClickHandler() {
+        label.addClickHandler(event -> {
+            labelCount++;
 
-            public void onClick(ClickEvent event) {
-                labelCount++;
-
-                assertThat(event.getSource()).isEqualTo(label);
-                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
-            }
+            assertThat(event.getSource()).isEqualTo(label);
+            assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
         });
 
-        composite.addDomHandler(new ClickHandler() {
+        composite.addDomHandler(event -> {
+            compositeCount++;
 
-            public void onClick(ClickEvent event) {
-                compositeCount++;
+            assertThat(event.getSource()).isEqualTo(composite);
+            assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
 
-                assertThat(event.getSource()).isEqualTo(composite);
-                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
-
-                // composite handler should be trigger first
-                assertThat(compositeCount).isEqualTo(labelCount + 1);
-            }
-
+            // composite handler should be trigger first
+            assertThat(compositeCount).isEqualTo(labelCount + 1);
         }, ClickEvent.getType());
 
         // When
@@ -104,25 +97,18 @@ public class CompositeTest extends GwtTestTest {
     @Test
     public void fireNativeEvent_Wrapped() {
         // Given
-        label.addClickHandler(new ClickHandler() {
+        label.addClickHandler(event -> {
+            labelCount++;
 
-            public void onClick(ClickEvent event) {
-                labelCount++;
-
-                assertThat(event.getSource()).isEqualTo(label);
-                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
-            }
+            assertThat(event.getSource()).isEqualTo(label);
+            assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
         });
 
-        composite.addDomHandler(new ClickHandler() {
+        composite.addDomHandler(event -> {
+            compositeCount++;
 
-            public void onClick(ClickEvent event) {
-                compositeCount++;
-
-                assertThat(event.getSource()).isEqualTo(composite);
-                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
-            }
-
+            assertThat(event.getSource()).isEqualTo(composite);
+            assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
         }, ClickEvent.getType());
 
         Event clickEvent = EventBuilder.create(Event.ONCLICK).build();
@@ -139,25 +125,18 @@ public class CompositeTest extends GwtTestTest {
     @Test
     public void fireNativeEvent_Wrapper() {
         // Given
-        label.addClickHandler(new ClickHandler() {
+        label.addClickHandler(event -> {
+            labelCount++;
 
-            public void onClick(ClickEvent event) {
-                labelCount++;
-
-                assertThat(event.getSource()).isEqualTo(label);
-                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
-            }
+            assertThat(event.getSource()).isEqualTo(label);
+            assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
         });
 
-        composite.addDomHandler(new ClickHandler() {
+        composite.addDomHandler(event -> {
+            compositeCount++;
 
-            public void onClick(ClickEvent event) {
-                compositeCount++;
-
-                assertThat(event.getSource()).isEqualTo(composite);
-                assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
-            }
-
+            assertThat(event.getSource()).isEqualTo(composite);
+            assertThat(event.getRelativeElement()).isEqualTo(label.getElement());
         }, ClickEvent.getType());
 
         Event clickEvent = EventBuilder.create(Event.ONCLICK).build();

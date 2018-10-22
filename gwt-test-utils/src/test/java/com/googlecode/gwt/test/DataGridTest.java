@@ -68,12 +68,10 @@ public class DataGridTest extends GwtTestTest {
         // Add a selection model to handle user selection.
         final SingleSelectionModel<Contact> selectionModel = new SingleSelectionModel<Contact>();
         table.setSelectionModel(selectionModel);
-        selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-            public void onSelectionChange(SelectionChangeEvent event) {
-                Contact selected = selectionModel.getSelectedObject();
-                if (selected != null) {
-                    sb.append(selected.name).append(" : ").append(selected.address);
-                }
+        selectionModel.addSelectionChangeHandler(event -> {
+            Contact selected = selectionModel.getSelectedObject();
+            if (selected != null) {
+                sb.append(selected.name).append(" : ").append(selected.address);
             }
         });
 

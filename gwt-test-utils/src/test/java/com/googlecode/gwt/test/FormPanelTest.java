@@ -189,28 +189,24 @@ public class FormPanelTest extends GwtTestTest {
         panel.add(upload);
 
         // Add an event handler to the form.
-        form.addSubmitHandler(new FormPanel.SubmitHandler() {
-            public void onSubmit(SubmitEvent event) {
-                // This event is fired just before the form is submitted. We can
-                // take
-                // this opportunity to perform validation.
-                if (tb.getText() == null || tb.getText().length() == 0) {
-                    event.cancel();
-                }
+        form.addSubmitHandler(event -> {
+            // This event is fired just before the form is submitted. We can
+            // take
+            // this opportunity to perform validation.
+            if (tb.getText() == null || tb.getText().length() == 0) {
+                event.cancel();
+            }
 
-                submitted = true;
-            }
+            submitted = true;
         });
-        form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-            public void onSubmitComplete(SubmitCompleteEvent event) {
-                // When the form submission is successfully completed, this event is
-                // fired. Assuming the service returned a response of type
-                // text/html,
-                // we can get the result text here (see the FormPanel documentation
-                // for
-                // further explanation).
-                completeSubmitted = true;
-            }
+        form.addSubmitCompleteHandler(event -> {
+            // When the form submission is successfully completed, this event is
+            // fired. Assuming the service returned a response of type
+            // text/html,
+            // we can get the result text here (see the FormPanel documentation
+            // for
+            // further explanation).
+            completeSubmitted = true;
         });
 
     }

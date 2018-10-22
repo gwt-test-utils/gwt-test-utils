@@ -28,12 +28,7 @@ public class FocusPanelTest extends GwtTestTest {
     public void click_EmptyPanel() {
         // Given
         panel = new FocusPanel();
-        panel.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                test = true;
-            }
-        });
+        panel.addClickHandler(event -> test = true);
 
         // When
         Browser.click(panel);
@@ -45,20 +40,9 @@ public class FocusPanelTest extends GwtTestTest {
     @Test
     public void click_WithChild() {
         // Given
-        panel.addClickHandler(new ClickHandler() {
+        panel.addClickHandler(event -> test = true);
 
-            public void onClick(ClickEvent event) {
-                test = true;
-            }
-        });
-
-        child.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                child.setText("clicked");
-
-            }
-        });
+        child.addClickHandler(event -> child.setText("clicked"));
 
         // When
         Browser.click(panel);
@@ -72,12 +56,7 @@ public class FocusPanelTest extends GwtTestTest {
     @Test
     public void touchCancel() {
         // Given
-        panel.addTouchCancelHandler(new TouchCancelHandler() {
-
-            public void onTouchCancel(TouchCancelEvent event) {
-                test = true;
-            }
-        });
+        panel.addTouchCancelHandler(event -> test = true);
 
         // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHCANCEL).build());
@@ -89,12 +68,7 @@ public class FocusPanelTest extends GwtTestTest {
     @Test
     public void touchEnd() {
         // Given
-        panel.addTouchEndHandler(new TouchEndHandler() {
-
-            public void onTouchEnd(TouchEndEvent event) {
-                test = true;
-            }
-        });
+        panel.addTouchEndHandler(event -> test = true);
 
         // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHEND).build());
@@ -106,13 +80,7 @@ public class FocusPanelTest extends GwtTestTest {
     @Test
     public void touchMove() {
         // Given
-        panel.addTouchMoveHandler(new TouchMoveHandler() {
-
-            public void onTouchMove(TouchMoveEvent event) {
-                test = true;
-
-            }
-        });
+        panel.addTouchMoveHandler(event -> test = true);
 
         // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHMOVE).build());
@@ -124,13 +92,7 @@ public class FocusPanelTest extends GwtTestTest {
     @Test
     public void touchStart() {
         // Given
-        panel.addTouchStartHandler(new TouchStartHandler() {
-
-            public void onTouchStart(TouchStartEvent event) {
-                test = true;
-
-            }
-        });
+        panel.addTouchStartHandler(event -> test = true);
 
         // When
         Browser.dispatchEvent(panel, EventBuilder.create(Event.ONTOUCHSTART).build());

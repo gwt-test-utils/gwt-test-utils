@@ -54,13 +54,7 @@ public class RadioButtonTest extends GwtTestTest {
         // Given
         tested = false;
         RadioButton r = new RadioButton("myRadioGroup", "foo");
-        r.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                tested = !tested;
-            }
-
-        });
+        r.addClickHandler(event -> tested = !tested);
         // Preconditions
         assertThat(tested).isEqualTo(false);
 
@@ -78,13 +72,7 @@ public class RadioButtonTest extends GwtTestTest {
         tested = false;
         RadioButton r1 = new RadioButton("myRadioGroup", "r1");
         RadioButton r2 = new RadioButton("myRadioGroup", "r2");
-        r1.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                tested = !tested;
-            }
-
-        });
+        r1.addClickHandler(event -> tested = !tested);
 
         r2.addClickHandler(new ClickHandler() {
 

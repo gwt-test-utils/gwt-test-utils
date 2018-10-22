@@ -33,13 +33,7 @@ public class HyperlinkTest extends GwtTestTest {
         // Given
         bool = false;
         Hyperlink link = new Hyperlink();
-        link.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                bool = true;
-            }
-
-        });
+        link.addClickHandler(event -> bool = true);
 
         // When
         Browser.click(link);

@@ -22,13 +22,7 @@ public class FlexTableTest extends GwtTestTest {
         FlexTable t = new FlexTable();
 
         Button b = new Button("Wide Button");
-        b.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                clicked = !clicked;
-
-            }
-        });
+        b.addClickHandler(event -> clicked = !clicked);
         // add the button
         t.setWidget(0, 0, b);
 
@@ -49,13 +43,7 @@ public class FlexTableTest extends GwtTestTest {
         FlexTable t = new FlexTable();
 
         Button b = new Button("Wide Button");
-        b.addClickListener(new ClickListener() {
-
-            public void onClick(Widget sender) {
-                clicked = !clicked;
-
-            }
-        });
+        b.addClickListener(sender -> clicked = !clicked);
         // add the button
         t.setWidget(0, 0, b);
 

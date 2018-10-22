@@ -23,11 +23,7 @@ public class ToggleButtonTest extends GwtTestTest {
 
         clicked = false;
 
-        toggleButton.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                clicked = true;
-            }
-        });
+        toggleButton.addClickHandler(event -> clicked = true);
 
         // Preconditions
         assertThat(toggleButton.isDown()).as("ToggleButton should not be toggled by default").isFalse();

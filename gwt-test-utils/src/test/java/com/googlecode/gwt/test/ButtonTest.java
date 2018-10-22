@@ -47,13 +47,7 @@ public class ButtonTest extends GwtTestTest {
     public void click_ClickHandler() {
         // Given
         // add a handler to test the click
-        b.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                b.setHTML("clicked");
-            }
-
-        });
+        b.addClickHandler(event -> b.setHTML("clicked"));
 
         // Preconditions
         assertThat(b.getHTML()).isEqualTo("");
@@ -68,13 +62,7 @@ public class ButtonTest extends GwtTestTest {
     @Test
     public void click_ClickListener() {
         // Given
-        b.addClickListener(new ClickListener() {
-
-            public void onClick(Widget sender) {
-                b.setHTML("clicked");
-
-            }
-        });
+        b.addClickListener(sender -> b.setHTML("clicked"));
 
         // Preconditions
         assertThat(b.getHTML()).isEqualTo("");

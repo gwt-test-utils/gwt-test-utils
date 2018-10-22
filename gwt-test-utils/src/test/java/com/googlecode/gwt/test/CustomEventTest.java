@@ -21,21 +21,13 @@ public class CustomEventTest extends GwtTestTest {
     @Test
     public void add() {
         // Given
-        listModel.addItemAddedHandler(new ItemAddedHandler() {
+        listModel.addItemAddedHandler(event -> {
+            addCount++;
+            assertThat(event.getListItem().getText()).isEqualTo("addedItem");
 
-            public void onItemAdded(ItemAddedEvent event) {
-                addCount++;
-                assertThat(event.getListItem().getText()).isEqualTo("addedItem");
-
-            }
         });
 
-        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
-
-            public void onItemRemoved(ItemRemovedEvent event) {
-                fail("should not be called");
-            }
-        });
+        listModel.addItemRemovedHandler(event -> fail("should not be called"));
 
         // When
         listModel.addItem(new ListItem("addedItem"));
@@ -58,22 +50,12 @@ public class CustomEventTest extends GwtTestTest {
         final ListItem itemToRemove = new ListItem("itemToRemove");
         listModel.addItem(itemToRemove);
 
-        listModel.addItemRemovedHandler(new ItemRemovedHandler() {
-
-            public void onItemRemoved(ItemRemovedEvent event) {
-                removeCount++;
-                assertThat(event.getListItem()).isEqualTo(itemToRemove);
-            }
-
+        listModel.addItemRemovedHandler(event -> {
+            removeCount++;
+            assertThat(event.getListItem()).isEqualTo(itemToRemove);
         });
 
-        listModel.addItemAddedHandler(new ItemAddedHandler() {
-
-            public void onItemAdded(ItemAddedEvent event) {
-                fail("should not be called");
-
-            }
-        });
+        listModel.addItemAddedHandler(event -> fail("should not be called"));
 
         // When
         listModel.removeItem(itemToRemove);

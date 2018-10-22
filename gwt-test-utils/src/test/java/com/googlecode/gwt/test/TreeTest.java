@@ -100,12 +100,7 @@ public class TreeTest extends GwtTestTest {
     @Test
     public void selected() {
         // Given
-        tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
-
-            public void onSelection(SelectionEvent<TreeItem> event) {
-                clickedTreeItem = event.getSelectedItem();
-            }
-        });
+        tree.addSelectionHandler(event -> clickedTreeItem = event.getSelectedItem());
 
         // When
         tree.setSelectedItem(item1);
@@ -119,12 +114,7 @@ public class TreeTest extends GwtTestTest {
     @Test
     public void selectedOnFocusWidget() {
         // Given
-        tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
-
-            public void onSelection(SelectionEvent<TreeItem> event) {
-                clickedTreeItem = event.getSelectedItem();
-            }
-        });
+        tree.addSelectionHandler(event -> clickedTreeItem = event.getSelectedItem());
 
         // When on item2 which wrap a Checkbox
         tree.setSelectedItem(item2);

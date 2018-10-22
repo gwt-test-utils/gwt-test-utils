@@ -67,12 +67,7 @@ public class BrowserTest extends GwtTestTest {
         // must be attached to use "addText"
         RootPanel.get().add(textBox);
 
-        textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
-
-            public void onValueChange(ValueChangeEvent<String> event) {
-                fail("ValueChangeEvent should not be fired with Browser.addText(..)");
-            }
-        });
+        textBox.addValueChangeHandler(event -> fail("ValueChangeEvent should not be fired with Browser.addText(..)"));
 
         // When
         Browser.addText(textBox, "toto");
@@ -122,15 +117,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void blur() {
         // Given
-        b.addBlurHandler(new BlurHandler() {
+        b.addBlurHandler(event -> {
+            tested = !tested;
 
-            public void onBlur(BlurEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When
@@ -188,14 +179,11 @@ public class BrowserTest extends GwtTestTest {
 
         final StringBuilder sb = new StringBuilder();
 
-        Event.addNativePreviewHandler(new NativePreviewHandler() {
-
-            public void onPreviewNativeEvent(NativePreviewEvent event) {
-                Event nativeEvent = Event.as(event.getNativeEvent());
-                int eventType = DOM.eventGetType(nativeEvent);
-                if (eventType == Event.ONCLICK) {
-                    sb.append("click!");
-                }
+        Event.addNativePreviewHandler(event -> {
+            Event nativeEvent = Event.as(event.getNativeEvent());
+            int eventType = DOM.eventGetType(nativeEvent);
+            if (eventType == Event.ONCLICK) {
+                sb.append("click!");
             }
         });
 
@@ -213,14 +201,11 @@ public class BrowserTest extends GwtTestTest {
         final Anchor a = new Anchor();
         g.setWidget(1, 1, a);
 
-        g.addClickHandler(new ClickHandler() {
+        g.addClickHandler(event -> {
+            clickedCell = g.getCellForEvent(event);
 
-            public void onClick(ClickEvent event) {
-                clickedCell = g.getCellForEvent(event);
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(a.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(a.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When
@@ -234,25 +219,18 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void click_propagation() {
         // Given
-        b.addClickHandler(new ClickHandler() {
+        b.addClickHandler(event -> {
+            tested = !tested;
 
-            public void onClick(ClickEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
-        panel.addClickHandler(new ClickHandler() {
+        panel.addClickHandler(event -> {
+            panelTested = !panelTested;
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
 
-            public void onClick(ClickEvent event) {
-                panelTested = !panelTested;
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-
-            }
         });
 
         // When
@@ -266,27 +244,17 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void click_stopPropagation() {
         // Given
-        b.addClickHandler(new ClickHandler() {
+        b.addClickHandler(event -> {
+            tested = !tested;
+            // stop event propagation : parent clickHandler should not be
+            // triggered
+            event.stopPropagation();
 
-            public void onClick(ClickEvent event) {
-                tested = !tested;
-                // stop event propagation : parent clickHandler should not be
-                // triggered
-                event.stopPropagation();
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
-        panel.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                fail("parent click handler should not be triggered when event.stopPropagation() is called");
-
-            }
-        });
+        panel.addClickHandler(event -> fail("parent click handler should not be triggered when event.stopPropagation() is called"));
 
         // When
         Browser.click(b);
@@ -314,24 +282,20 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void click_WithPosition() {
         // Given
-        b.addClickHandler(new ClickHandler() {
+        b.addClickHandler(event -> {
+            tested = !tested;
 
-            public void onClick(ClickEvent event) {
-                tested = !tested;
+            // Then
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
 
-                // Then
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-
-                // check positions
-                assertThat(event.getX()).isEqualTo(1);
-                assertThat(event.getY()).isEqualTo(2);
-                assertThat(event.getClientX()).isEqualTo(1);
-                assertThat(event.getClientY()).isEqualTo(2);
-                assertThat(event.getScreenX()).isEqualTo(3);
-                assertThat(event.getScreenY()).isEqualTo(4);
-            }
-
+            // check positions
+            assertThat(event.getX()).isEqualTo(1);
+            assertThat(event.getY()).isEqualTo(2);
+            assertThat(event.getClientX()).isEqualTo(1);
+            assertThat(event.getClientY()).isEqualTo(2);
+            assertThat(event.getScreenX()).isEqualTo(3);
+            assertThat(event.getScreenY()).isEqualTo(4);
         });
 
         Event clickEvent = EventBuilder.create(Event.ONCLICK).setMouseX(1).setMouseY(2).setMouseScreenX(
@@ -373,41 +337,20 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> fail("no keyPress event should be triggered when pressing backspace button"));
+
+        tb.addKeyUpHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyUpCount++;
         });
 
-        tb.addBlurHandler(new BlurHandler() {
-
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
-        });
-
-        tb.addKeyPressHandler(new KeyPressHandler() {
-
-            public void onKeyPress(KeyPressEvent event) {
-                fail("no keyPress event should be triggered when pressing backspace button");
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyUpCount++;
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyDownCount++;
-            }
+        tb.addKeyDownHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyDownCount++;
         });
 
         // When
@@ -430,41 +373,20 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> fail("no keyPress event should be triggered when pressing backspace button"));
+
+        tb.addKeyUpHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyUpCount++;
         });
 
-        tb.addBlurHandler(new BlurHandler() {
-
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
-        });
-
-        tb.addKeyPressHandler(new KeyPressHandler() {
-
-            public void onKeyPress(KeyPressEvent event) {
-                fail("no keyPress event should be triggered when pressing backspace button");
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyUpCount++;
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyDownCount++;
-            }
+        tb.addKeyDownHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyDownCount++;
         });
 
         // When
@@ -487,43 +409,22 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> fail("no keyPress event should be triggered when pressing backspace button"));
+
+        tb.addKeyUpHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyUpCount++;
         });
 
-        tb.addBlurHandler(new BlurHandler() {
+        tb.addKeyDownHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyDownCount++;
 
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
-        });
-
-        tb.addKeyPressHandler(new KeyPressHandler() {
-
-            public void onKeyPress(KeyPressEvent event) {
-                fail("no keyPress event should be triggered when pressing backspace button");
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyUpCount++;
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyDownCount++;
-
-                event.preventDefault();
-            }
+            event.preventDefault();
         });
 
         // When
@@ -549,52 +450,33 @@ public class BrowserTest extends GwtTestTest {
 
         final TextBox tb = new TextBox();
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> {
+            // Then that onKeyPress is triggered before onKeyUp and after
+            // onKeyDown
+            assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
+            assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
+
+            keyPressChars.add(event.getCharCode());
         });
 
-        tb.addBlurHandler(new BlurHandler() {
+        tb.addKeyUpHandler(event -> {
+            // Then that onKeyUp is triggered after onKeyDown and onKeyPress
+            assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
+            assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
 
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
+            keyUpChars.add((char) event.getNativeKeyCode());
         });
 
-        tb.addKeyPressHandler(new KeyPressHandler() {
+        tb.addKeyDownHandler(event -> {
+            // Then that onKeyDown is triggered before onKeyPress and onKeyUp
+            assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
+            assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
 
-            public void onKeyPress(KeyPressEvent event) {
-                // Then that onKeyPress is triggered before onKeyUp and after
-                // onKeyDown
-                assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
-                assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
-
-                keyPressChars.add(event.getCharCode());
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                // Then that onKeyUp is triggered after onKeyDown and onKeyPress
-                assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
-                assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
-
-                keyUpChars.add((char) event.getNativeKeyCode());
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                // Then that onKeyDown is triggered before onKeyPress and onKeyUp
-                assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
-                assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
-
-                keyDownChars.add((char) event.getNativeKeyCode());
-            }
+            keyDownChars.add((char) event.getNativeKeyCode());
         });
 
         // When
@@ -624,56 +506,37 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> {
+            // Then that onKeyPress is triggered before onKeyUp and after
+            // onKeyDown
+            assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
+            assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
+
+            keyPressChars.add(event.getCharCode());
         });
 
-        tb.addBlurHandler(new BlurHandler() {
+        tb.addKeyUpHandler(event -> {
+            // Then that onKeyUp is triggered after onKeyDown and onKeyPress
+            assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
+            assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
 
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
+            keyUpChars.add((char) event.getNativeKeyCode());
         });
 
-        tb.addKeyPressHandler(new KeyPressHandler() {
+        tb.addKeyDownHandler(event -> {
+            // Then that onKeyDown is triggered before onKeyPress and onKeyUp
+            assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
+            assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
 
-            public void onKeyPress(KeyPressEvent event) {
-                // Then that onKeyPress is triggered before onKeyUp and after
-                // onKeyDown
-                assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
-                assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
+            keyDownChars.add((char) event.getNativeKeyCode());
 
-                keyPressChars.add(event.getCharCode());
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                // Then that onKeyUp is triggered after onKeyDown and onKeyPress
-                assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
-                assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
-
-                keyUpChars.add((char) event.getNativeKeyCode());
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                // Then that onKeyDown is triggered before onKeyPress and onKeyUp
-                assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
-                assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
-
-                keyDownChars.add((char) event.getNativeKeyCode());
-
-                // prevent the keydown event : the textbox value should not be
-                // updated
-                event.preventDefault();
-            }
+            // prevent the keydown event : the textbox value should not be
+            // updated
+            event.preventDefault();
         });
 
         // When
@@ -705,56 +568,37 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> {
+            // Then that onKeyPress is triggered before onKeyUp and after
+            // onKeyDown
+            assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
+            assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
+
+            keyPressChars.add(event.getCharCode());
+
+            // prevent the keyPress event : the textbox value should not be
+            // updated
+            event.preventDefault();
         });
 
-        tb.addBlurHandler(new BlurHandler() {
+        tb.addKeyUpHandler(event -> {
+            // Then that onKeyUp is triggered after onKeyDown and onKeyPress
+            assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
+            assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
 
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
+            keyUpChars.add((char) event.getNativeKeyCode());
         });
 
-        tb.addKeyPressHandler(new KeyPressHandler() {
+        tb.addKeyDownHandler(event -> {
+            // Then that onKeyDown is triggered before onKeyPress and onKeyUp
+            assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
+            assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
 
-            public void onKeyPress(KeyPressEvent event) {
-                // Then that onKeyPress is triggered before onKeyUp and after
-                // onKeyDown
-                assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
-                assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
-
-                keyPressChars.add(event.getCharCode());
-
-                // prevent the keyPress event : the textbox value should not be
-                // updated
-                event.preventDefault();
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                // Then that onKeyUp is triggered after onKeyDown and onKeyPress
-                assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
-                assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
-
-                keyUpChars.add((char) event.getNativeKeyCode());
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                // Then that onKeyDown is triggered before onKeyPress and onKeyUp
-                assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
-                assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
-
-                keyDownChars.add((char) event.getNativeKeyCode());
-            }
+            keyDownChars.add((char) event.getNativeKeyCode());
         });
 
         // When
@@ -818,55 +662,36 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> {
+            // Then that onKeyPress is triggered before onKeyUp and after
+            // onKeyDown
+            assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
+            assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
+
+            keyPressChars.add(event.getCharCode());
         });
 
-        tb.addBlurHandler(new BlurHandler() {
+        tb.addKeyUpHandler(event -> {
+            // Then that onKeyUp is triggered after onKeyDown and onKeyPress
+            assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
+            assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
 
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
+            keyUpChars.add((char) event.getNativeKeyCode());
+
+            // prevent the keyUp event : the textbox value should be updated
+            event.preventDefault();
         });
 
-        tb.addKeyPressHandler(new KeyPressHandler() {
+        tb.addKeyDownHandler(event -> {
+            // Then that onKeyDown is triggered before onKeyPress and onKeyUp
+            assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
+            assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
 
-            public void onKeyPress(KeyPressEvent event) {
-                // Then that onKeyPress is triggered before onKeyUp and after
-                // onKeyDown
-                assertThat(keyUpChars.size()).isEqualTo(keyPressChars.size());
-                assertThat(keyDownChars.size()).isEqualTo(keyPressChars.size() + 1);
-
-                keyPressChars.add(event.getCharCode());
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                // Then that onKeyUp is triggered after onKeyDown and onKeyPress
-                assertThat(keyDownChars.size()).isEqualTo(keyUpChars.size() + 1);
-                assertThat(keyPressChars.size()).isEqualTo(keyUpChars.size() + 1);
-
-                keyUpChars.add((char) event.getNativeKeyCode());
-
-                // prevent the keyUp event : the textbox value should be updated
-                event.preventDefault();
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                // Then that onKeyDown is triggered before onKeyPress and onKeyUp
-                assertThat(keyPressChars.size()).isEqualTo(keyDownChars.size());
-                assertThat(keyUpChars.size()).isEqualTo(keyDownChars.size());
-
-                keyDownChars.add((char) event.getNativeKeyCode());
-            }
+            keyDownChars.add((char) event.getNativeKeyCode());
         });
 
         // When
@@ -887,15 +712,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void focus() {
         // Given
-        b.addFocusHandler(new FocusHandler() {
+        b.addFocusHandler(event -> {
+            tested = !tested;
 
-            public void onFocus(FocusEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When
@@ -908,16 +729,13 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void keyDown() {
         // Given
-        b.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    tested = !tested;
-                }
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
+        b.addKeyDownHandler(event -> {
+            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                tested = !tested;
             }
+
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When 1
@@ -934,16 +752,13 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void keyPress() {
         // Given
-        b.addKeyPressHandler(new KeyPressHandler() {
-
-            public void onKeyPress(KeyPressEvent event) {
-                if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-                    tested = !tested;
-                }
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
+        b.addKeyPressHandler(event -> {
+            if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+                tested = !tested;
             }
+
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When 1
@@ -960,16 +775,13 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void keyUp() {
         // Given
-        b.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    tested = !tested;
-                }
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
+        b.addKeyUpHandler(event -> {
+            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                tested = !tested;
             }
+
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When 1
@@ -986,15 +798,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void mouseDown() {
         // Given
-        b.addMouseDownHandler(new MouseDownHandler() {
+        b.addMouseDownHandler(event -> {
+            tested = !tested;
 
-            public void onMouseDown(MouseDownEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When
@@ -1007,15 +815,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void mouseMove() {
         // Given
-        b.addMouseMoveHandler(new MouseMoveHandler() {
+        b.addMouseMoveHandler(event -> {
+            tested = !tested;
 
-            public void onMouseMove(MouseMoveEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When
@@ -1028,15 +832,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void mouseOut() {
         // Given
-        b.addMouseOutHandler(new MouseOutHandler() {
+        b.addMouseOutHandler(event -> {
+            tested = !tested;
 
-            public void onMouseOut(MouseOutEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isEqualTo(b.getParent().getElement());
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isEqualTo(b.getParent().getElement());
         });
 
         // When
@@ -1049,15 +849,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void mouseOver() {
         // Given
-        b.addMouseOverHandler(new MouseOverHandler() {
+        b.addMouseOverHandler(event -> {
+            tested = !tested;
 
-            public void onMouseOver(MouseOverEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isEqualTo(b.getParent().getElement());
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isEqualTo(b.getParent().getElement());
         });
 
         // When
@@ -1070,15 +866,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void mouseUp() {
         // Given
-        b.addMouseUpHandler(new MouseUpHandler() {
+        b.addMouseUpHandler(event -> {
+            tested = !tested;
 
-            public void onMouseUp(MouseUpEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When
@@ -1091,15 +883,11 @@ public class BrowserTest extends GwtTestTest {
     @Test
     public void mouseWheel() {
         // Given
-        b.addMouseWheelHandler(new MouseWheelHandler() {
+        b.addMouseWheelHandler(event -> {
+            tested = !tested;
 
-            public void onMouseWheel(MouseWheelEvent event) {
-                tested = !tested;
-
-                assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
-                assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
-            }
-
+            assertThat(event.getNativeEvent().getEventTarget()).isEqualTo(b.getElement());
+            assertThat(event.getNativeEvent().getRelatedEventTarget()).isNull();
         });
 
         // When
@@ -1121,41 +909,20 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> fail("no keyPress event should be triggered when pressing backspace button"));
+
+        tb.addKeyUpHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyUpCount++;
         });
 
-        tb.addBlurHandler(new BlurHandler() {
-
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
-        });
-
-        tb.addKeyPressHandler(new KeyPressHandler() {
-
-            public void onKeyPress(KeyPressEvent event) {
-                fail("no keyPress event should be triggered when pressing backspace button");
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyUpCount++;
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyDownCount++;
-            }
+        tb.addKeyDownHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyDownCount++;
         });
 
         // When
@@ -1182,43 +949,22 @@ public class BrowserTest extends GwtTestTest {
         final TextBox tb = new TextBox();
         tb.setText(initialText);
 
-        tb.addChangeHandler(new ChangeHandler() {
+        tb.addChangeHandler(event -> onChangeTriggered = true);
 
-            public void onChange(ChangeEvent event) {
-                onChangeTriggered = true;
-            }
+        tb.addBlurHandler(event -> onBlurTriggered = true);
+
+        tb.addKeyPressHandler(event -> fail("no keyPress event should be triggered when pressing backspace button"));
+
+        tb.addKeyUpHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyUpCount++;
         });
 
-        tb.addBlurHandler(new BlurHandler() {
+        tb.addKeyDownHandler(event -> {
+            assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
+            keyDownCount++;
 
-            public void onBlur(BlurEvent event) {
-                onBlurTriggered = true;
-            }
-        });
-
-        tb.addKeyPressHandler(new KeyPressHandler() {
-
-            public void onKeyPress(KeyPressEvent event) {
-                fail("no keyPress event should be triggered when pressing backspace button");
-            }
-        });
-
-        tb.addKeyUpHandler(new KeyUpHandler() {
-
-            public void onKeyUp(KeyUpEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyUpCount++;
-            }
-        });
-
-        tb.addKeyDownHandler(new KeyDownHandler() {
-
-            public void onKeyDown(KeyDownEvent event) {
-                assertThat(event.getNativeKeyCode()).isEqualTo(KeyCodes.KEY_BACKSPACE);
-                keyDownCount++;
-
-                event.preventDefault();
-            }
+            event.preventDefault();
         });
 
         // When
@@ -1238,18 +984,8 @@ public class BrowserTest extends GwtTestTest {
         // Given
         final StringBuilder sb = new StringBuilder();
         FormPanel form = new FormPanel();
-        form.addSubmitHandler(new SubmitHandler() {
-
-            public void onSubmit(SubmitEvent event) {
-                sb.append("onSubmit");
-            }
-        });
-        form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
-
-            public void onSubmitComplete(SubmitCompleteEvent event) {
-                sb.append(" complete : ").append(event.getResults());
-            }
-        });
+        form.addSubmitHandler(event -> sb.append("onSubmit"));
+        form.addSubmitCompleteHandler(event -> sb.append(" complete : ").append(event.getResults()));
 
         // Attach to the DOM
         RootPanel.get().add(form);
@@ -1272,12 +1008,7 @@ public class BrowserTest extends GwtTestTest {
                 sb.append("onSubmit");
             }
         });
-        form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
-
-            public void onSubmitComplete(SubmitCompleteEvent event) {
-                sb.append(" complete : ").append(event.getResults());
-            }
-        });
+        form.addSubmitCompleteHandler(event -> sb.append(" complete : ").append(event.getResults()));
 
         // When
         Browser.submit(form, "mock result");

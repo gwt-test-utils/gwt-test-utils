@@ -30,12 +30,7 @@ public class TabPanelTest extends GwtTestTest {
         // Given
         TabPanel tp = createTabPanel();
 
-        tp.addSelectionHandler(new SelectionHandler<Integer>() {
-
-            public void onSelection(SelectionEvent<Integer> event) {
-                selectedTabIndex = event.getSelectedItem();
-            }
-        });
+        tp.addSelectionHandler(event -> selectedTabIndex = event.getSelectedItem());
         // Preconditions
         assertThat(selectedTabIndex).isEqualTo(-1);
 

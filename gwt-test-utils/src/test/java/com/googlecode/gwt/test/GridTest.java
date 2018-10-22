@@ -35,12 +35,9 @@ public class GridTest extends GwtTestTest {
         final Grid g = new Grid(1, 1);
         final Button b = new Button("Does nothing, but could");
         g.setWidget(0, 0, b);
-        g.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                clicked = !clicked;
-                assertThat(((Grid) event.getSource()).getWidget(0, 0)).isSameAs(b);
-            }
+        g.addClickHandler(event -> {
+            clicked = !clicked;
+            assertThat(((Grid) event.getSource()).getWidget(0, 0)).isSameAs(b);
         });
 
         // When
@@ -59,13 +56,7 @@ public class GridTest extends GwtTestTest {
 
         Button b = new Button();
 
-        b.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                clicked = !clicked;
-
-            }
-        });
+        b.addClickHandler(event -> clicked = !clicked);
         // add the button
         g.setWidget(0, 0, b);
 
@@ -87,13 +78,7 @@ public class GridTest extends GwtTestTest {
 
         Button b = new Button();
 
-        b.addClickListener(new ClickListener() {
-
-            public void onClick(Widget sender) {
-                clicked = !clicked;
-
-            }
-        });
+        b.addClickListener(sender -> clicked = !clicked);
         // add the button
         g.setWidget(0, 0, b);
 
@@ -114,13 +99,7 @@ public class GridTest extends GwtTestTest {
         Grid g = new Grid(1, 1);
         Button b = new Button("Does nothing, but could");
         g.setWidget(0, 0, b);
-        g.addTableListener(new TableListener() {
-
-            public void onCellClicked(SourcesTableEvents sender, int row, int cell) {
-                clicked = !clicked;
-            }
-
-        });
+        g.addTableListener((sender, row, cell) -> clicked = !clicked);
 
         // When
         Browser.click(g, 0, 0);

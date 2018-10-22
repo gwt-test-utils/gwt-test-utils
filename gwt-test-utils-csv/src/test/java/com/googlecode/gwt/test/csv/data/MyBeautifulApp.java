@@ -65,101 +65,66 @@ public class MyBeautifulApp implements EntryPoint {
 
         RootPanel.get().add(panel);
 
-        b1.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent arg0) {
-                l.setText("click on b1");
-            }
-
-        });
-        b2.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent arg0) {
-                l.setText("click on b2");
-            }
-
-        });
+        b1.addClickHandler(event -> l.setText("click on b1"));
+        b2.addClickHandler(event -> l.setText("click on b2"));
         b3 = new Button("Button3's HTML");
         panel.add(b3);
-        b3.addClickHandler(new ClickHandler() {
+        b3.addClickHandler(event -> {
+            MyRemoteServiceAsync remoteServiceAsync = GWT.create(MyRemoteService.class);
+            remoteServiceAsync.myMethod(l.getText(), new AsyncCallback<String>() {
 
-            public void onClick(ClickEvent arg0) {
-                MyRemoteServiceAsync remoteServiceAsync = GWT.create(MyRemoteService.class);
-                remoteServiceAsync.myMethod(l.getText(), new AsyncCallback<String>() {
+                public void onFailure(Throwable arg0) {
+                    l.setText("error");
+                }
 
-                    public void onFailure(Throwable arg0) {
-                        l.setText("error");
-                    }
+                public void onSuccess(String arg0) {
+                    l.setText(arg0);
+                }
 
-                    public void onSuccess(String arg0) {
-                        l.setText(arg0);
-                    }
-
-                });
-            }
+            });
         });
 
         b4 = new Button("Button4's HTML");
         panel.add(b4);
 
-        b4.addClickHandler(new ClickHandler() {
+        b4.addClickHandler(event -> {
+            MyRemoteServiceAsync remoteServiceAsync = GWT.create(MyRemoteService.class);
+            remoteServiceAsync.myMethod2(new MyCustomObject("toto"),
+                    new AsyncCallback<MyCustomObject>() {
 
-            public void onClick(ClickEvent arg0) {
-                MyRemoteServiceAsync remoteServiceAsync = GWT.create(MyRemoteService.class);
-                remoteServiceAsync.myMethod2(new MyCustomObject("toto"),
-                        new AsyncCallback<MyCustomObject>() {
+                        public void onFailure(Throwable t) {
+                            throw new RuntimeException(t);
+                        }
 
-                            public void onFailure(Throwable t) {
-                                throw new RuntimeException(t);
-                            }
+                        public void onSuccess(MyCustomObject object) {
+                            l.setText(object.myField + " " + object.myTransientField);
+                        }
 
-                            public void onSuccess(MyCustomObject object) {
-                                l.setText(object.myField + " " + object.myTransientField);
-                            }
-
-                        });
-            }
-
+                    });
         });
 
         b5 = new Button("Button5's HTML");
         panel.add(b5);
 
-        b5.addClickHandler(new ClickHandler() {
+        b5.addClickHandler(event -> {
+            MyRemoteServiceAsync remoteServiceAsync = GWT.create(MyRemoteService.class);
+            remoteServiceAsync.myMethod3(new AsyncCallback<Void>() {
 
-            public void onClick(ClickEvent arg0) {
-                MyRemoteServiceAsync remoteServiceAsync = GWT.create(MyRemoteService.class);
-                remoteServiceAsync.myMethod3(new AsyncCallback<Void>() {
+                public void onFailure(Throwable arg0) {
+                    l.setText("error");
+                }
 
-                    public void onFailure(Throwable arg0) {
-                        l.setText("error");
-                    }
+                public void onSuccess(Void arg0) {
+                    l.setText("success");
+                }
 
-                    public void onSuccess(Void arg0) {
-                        l.setText("success");
-                    }
-
-                });
-            }
-
+            });
         });
 
-        t.addChangeHandler(new ChangeHandler() {
+        t.addChangeHandler(event -> historyLabel.setText("t was filled with value \"" + t.getText() + "\""));
 
-            public void onChange(ChangeEvent event) {
-                historyLabel.setText("t was filled with value \"" + t.getText() + "\"");
-            }
-
-        });
-
-        invisibleTB.addChangeHandler(new ChangeHandler() {
-
-            public void onChange(ChangeEvent event) {
-                historyLabel.setText("invisibleTB was filled with value \"" + invisibleTB.getText()
-                        + "\"");
-            }
-
-        });
+        invisibleTB.addChangeHandler(event -> historyLabel.setText("invisibleTB was filled with value \"" + invisibleTB.getText()
+                + "\""));
 
         myComposite = new MyComposite("myComposite Label", "MyComposite Button");
         panel.add(myComposite);
