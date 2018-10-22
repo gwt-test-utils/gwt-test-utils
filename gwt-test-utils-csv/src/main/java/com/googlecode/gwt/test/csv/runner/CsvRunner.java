@@ -146,12 +146,15 @@ public class CsvRunner {
         int lineExecuted = 0;
         lineNumber = 0;
         for (List<String> row : sheet) {
+            if (row != null && row.size() > 0 && "start".equals(row.get(0))) {
+                execute = true;
+            }
             if (execute) {
                 executeRow(row, fixture);
                 lineExecuted++;
             }
-            if (row != null && row.size() > 0 && "start".equals(row.get(0))) {
-                execute = true;
+            if (row != null && row.size() > 0 && "stop".equals(row.get(0))) {
+                execute = false;
             }
             lineNumber++;
         }
