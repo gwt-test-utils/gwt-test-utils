@@ -1,9 +1,11 @@
 package com.googlecode.gwt.test.finder;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.test.internal.AfterTestCallback;
 import com.googlecode.gwt.test.internal.AfterTestCallbackManager;
 import com.googlecode.gwt.test.utils.GwtReflectionUtils;
+import com.googlecode.gwt.test.utils.WidgetUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -32,10 +34,12 @@ public class GwtFinder implements AfterTestCallback {
             nodeObjectFinders = new HashMap<>();
         }
 
+        @Override
         public boolean accept(String... params) {
             return params.length == 1 && params[0].matches("^/\\w+/.*$");
         }
 
+        @Override
         public Object find(String... params) {
             Node node = Node.parse(params[0]);
             if (node == null) {
@@ -80,10 +84,12 @@ public class GwtFinder implements AfterTestCallback {
             this.mapByText = new HashMap<>();
         }
 
+        @Override
         public boolean accept(String... params) {
             return params.length == 1 && !params[0].trim().startsWith("/");
         }
 
+        @Override
         public Object find(String... params) {
 
             String alias = params[0];
@@ -241,10 +247,7 @@ public class GwtFinder implements AfterTestCallback {
         }
 
         if (widget.getElement() != null) {
-            String id = widget.getElement().getId();
-            if (id != null && id.length() > 0) {
-                INSTANCE.indexedObjectFinder.mapById.put(id, widget);
-            }
+            storeId(widget, widget.getElement());
         }
     }
 
@@ -283,7 +286,7 @@ public class GwtFinder implements AfterTestCallback {
         }
 
         if (widget.getElement() != null) {
-            INSTANCE.indexedObjectFinder.mapById.remove(widget.getElement().getId());
+            removeId(widget, widget.getElement());
         }
     }
 
@@ -328,6 +331,30 @@ public class GwtFinder implements AfterTestCallback {
         if (!(hasText instanceof Widget) || ((Widget) hasText).isAttached()
                 || (hasText instanceof PopupPanel)) {
             onSetIndex(hasText, newText, oldText, INSTANCE.indexedObjectFinder.mapByText);
+        }
+    }
+
+    private static void storeId(Widget widget, Element element) {
+        String id = element.getId();
+        if ((widget.getElement() == element || WidgetUtils.getWidget(element) == widget) && id != null && !id.isEmpty()) {
+            INSTANCE.indexedObjectFinder.mapById.put(id, widget);
+            for (int i = 0; i < element.getChildCount(); i++) {
+                if (element.getChild(i) instanceof Element) {
+                    storeId(widget, (Element) element.getChild(i));
+                }
+            }
+        }
+    }
+
+    private static void removeId(Widget widget, Element element) {
+        String id = widget.getElement().getId();
+        if ((widget.getElement() == element || WidgetUtils.getWidget(element) == widget) && id != null && !id.isEmpty()) {
+            INSTANCE.indexedObjectFinder.mapById.remove(id);
+            for (int i = 0; i < element.getChildCount(); i++) {
+                if (element.getChild(i) instanceof Element) {
+                    removeId(widget, (Element) element.getChild(i));
+                }
+            }
         }
     }
 
