@@ -120,7 +120,7 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
 
     @After
     public final void afterGwtCsvTest() {
-        getCsvTestExecutionHandlers().clear();
+        csvTestExecutionHandlers.clear();
     }
 
     @CsvMethod
