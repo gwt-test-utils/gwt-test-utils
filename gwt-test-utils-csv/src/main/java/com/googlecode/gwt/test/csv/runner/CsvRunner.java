@@ -34,7 +34,10 @@ public class CsvRunner {
 
     private final List<ObjectFinder> objectFinders = new ArrayList<>();
 
-    public CsvRunner(HasCsvTestExecutionHandlers hasCsvMethodInvocationHandlers) {
+    private final String testName;
+
+    public CsvRunner(HasCsvTestExecutionHandlers hasCsvMethodInvocationHandlers, String testName) {
+        this.testName = testName;
         this.hasCsvMethodInvocationHandlers = hasCsvMethodInvocationHandlers;
     }
 
@@ -56,7 +59,7 @@ public class CsvRunner {
     }
 
     public String getAssertionErrorMessagePrefix() {
-        return "Error line " + getCurrentExecutedLine() + ": ";
+        return testName + " error line " + getCurrentExecutedLine() + ": ";
     }
 
     @SuppressWarnings("unchecked")

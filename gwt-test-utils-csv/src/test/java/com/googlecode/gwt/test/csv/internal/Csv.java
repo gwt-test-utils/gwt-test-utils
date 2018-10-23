@@ -2,15 +2,15 @@ package com.googlecode.gwt.test.csv.internal;
 
 import com.googlecode.gwt.test.csv.Rep1;
 import com.googlecode.gwt.test.csv.Rep2;
-import com.googlecode.gwt.test.csv.internal.DirectoryTestReader.CsvReader;
 import org.junit.Test;
+import org.junit.runners.model.InitializationError;
 
 import java.io.InputStreamReader;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DirectoryTestReaderTest {
+public class Csv {
 
     @Test
     public void csvReader() throws Exception {
@@ -28,18 +28,18 @@ public class DirectoryTestReaderTest {
 
     @Test
     public void rep1() throws Exception {
-        DirectoryTestReader reader = new DirectoryTestReader(Rep1.class);
-        assertThat(reader.getTestList()).hasSize(4);
-        assertThat(reader.getTestMethods()).hasSize(4);
-        assertThat(reader.getMacroFileList()).hasSize(2);
+        CsvTestsProvider csvTestsProvider = CsvTestsProviderFactory.create(new GwtBlockJUnit4CsvRunner(Rep1.class));
+        assertThat(csvTestsProvider.getTestList()).hasSize(4);
+        assertThat(csvTestsProvider.getTestMethods()).hasSize(4);
+        assertThat(csvTestsProvider.getMacroFileList()).hasSize(2);
     }
 
     @Test
     public void rep2() throws Exception {
-        DirectoryTestReader reader = new DirectoryTestReader(Rep2.class);
-        assertThat(reader.getTestList()).hasSize(1);
-        assertThat(reader.getTestMethods()).hasSize(1);
+        CsvTestsProvider csvTestsProvider = CsvTestsProviderFactory.create(new GwtBlockJUnit4CsvRunner(Rep2.class));
+        assertThat(csvTestsProvider.getTestList()).hasSize(1);
+        assertThat(csvTestsProvider.getTestMethods()).hasSize(1);
         // because we set the "pattern" attribute on @CsvMacros
-        assertThat(reader.getMacroFileList()).hasSize(1);
+        assertThat(csvTestsProvider.getMacroFileList()).hasSize(1);
     }
 }

@@ -43,7 +43,7 @@ public abstract class MyGwtShell extends GwtCsvTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void before() {
         registerCustomCreateHandler();
         registerNodeFinder();
     }
@@ -70,21 +70,11 @@ public abstract class MyGwtShell extends GwtCsvTest {
 
     private void registerNodeFinder() {
 
-        GwtFinder.registerNodeFinder("app", new NodeObjectFinder() {
-
-            public Object find(Node node) {
-                return csvRunner.getNodeValue(app, node);
-            }
-        });
+        GwtFinder.registerNodeFinder("app", node -> getCsvRunner().getNodeValue(app, node));
 
         MyStringStore.appender = "";
 
-        GwtFinder.registerNodeFinder("appender", new NodeObjectFinder() {
-
-            public Object find(Node node) {
-                return MyStringStore.appender;
-            }
-        });
+        GwtFinder.registerNodeFinder("appender", node -> MyStringStore.appender);
     }
 
 }

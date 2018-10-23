@@ -178,12 +178,7 @@ public class CsvRunnerTest {
     private final Object o = new A();
 
     private final Object oo = new B();
-    private final CsvRunner runner = new CsvRunner(new HasCsvTestExecutionHandlers() {
-
-        public List<CsvTestExecutionHandler> getCsvTestExecutionHandlers() {
-            return new ArrayList<>();
-        }
-    });
+    private final CsvRunner runner = new CsvRunner(ArrayList::new, "Runner");
 
     @Test
     public void executeLine_Exception() {
@@ -192,7 +187,7 @@ public class CsvRunnerTest {
             failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
         } catch (GwtTestCsvException e) {
             assertThat(e.getMessage()).isEqualTo(
-                    "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.runner.CsvRunnerTest$A.runMyException() throws com.googlecode.gwt.test.csv.runner.CsvRunnerTest$MyException");
+                    "Runner error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.runner.CsvRunnerTest$A.runMyException() throws com.googlecode.gwt.test.csv.runner.CsvRunnerTest$MyException");
         }
     }
 
@@ -311,7 +306,7 @@ public class CsvRunnerTest {
             failBecauseExceptionWasNotThrown(GwtTestCsvException.class);
         } catch (GwtTestCsvException e) {
             assertThat(e.getMessage()).isEqualTo(
-                    "Error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.runner.CsvRunnerTest$A.runException()");
+                    "Runner error line 0: Error invoking @CsvMethod void com.googlecode.gwt.test.csv.runner.CsvRunnerTest$A.runException()");
         }
     }
 

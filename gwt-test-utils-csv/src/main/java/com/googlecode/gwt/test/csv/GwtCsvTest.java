@@ -5,7 +5,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.LabelElement;
 import com.google.gwt.user.client.ui.*;
 import com.googlecode.gwt.test.GwtTest;
-import com.googlecode.gwt.test.csv.internal.DirectoryTestReader;
+import com.googlecode.gwt.test.csv.internal.CsvTestsProvider;
 import com.googlecode.gwt.test.csv.runner.CsvRunner;
 import com.googlecode.gwt.test.csv.runner.CsvTestExecutionHandler;
 import com.googlecode.gwt.test.csv.runner.HasCsvTestExecutionHandlers;
@@ -89,13 +89,13 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
     // MODE INTERACTIF
     private static final Class<?>[] baseList = {String.class, Integer.class, int.class, Class.class};
 
-    protected CsvRunner csvRunner;
+    private CsvRunner csvRunner;
 
     private final List<CsvTestExecutionHandler> csvTestExecutionHandlers = new ArrayList<>();
 
     private MacroReader macroReader;
 
-    private DirectoryTestReader reader;
+    private CsvTestsProvider csvTestsProvider;
 
     private final NodeObjectFinder rootObjectFinder = new NodeObjectFinder() {
 
@@ -108,9 +108,19 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
         setCanDispatchEventsOnDetachedWidgets(false);
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.googlecode.gwt.test.csv.runner.HasCsvTestExecutionHandlers#getCsvTestExecutionHandlers()
+     */
+    public List<CsvTestExecutionHandler> getCsvTestExecutionHandlers() {
+        return Collections.unmodifiableList(csvTestExecutionHandlers);
+    }
+
     @After
     public final void afterGwtCsvTest() {
-        csvTestExecutionHandlers.clear();
+        getCsvTestExecutionHandlers().clear();
     }
 
     @CsvMethod
@@ -377,16 +387,6 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
         Browser.focus(object(identifier).ofType(Widget.class));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.googlecode.gwt.test.csv.runner.HasCsvTestExecutionHandlers#getCsvTestExecutionHandlers()
-     */
-    public List<CsvTestExecutionHandler> getCsvTestExecutionHandlers() {
-        return Collections.unmodifiableList(csvTestExecutionHandlers);
-    }
-
     @CsvMethod
     public void hasStyle(String style, String... identifier) {
         Object raw = object(identifier).getRaw();
@@ -585,12 +585,11 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
         selectInListBox(regex, identifier);
     }
 
-    public void setReader(DirectoryTestReader reader) {
-        this.reader = reader;
-        csvRunner = new CsvRunner(this);
+    public void setReader(CsvTestsProvider csvTestsProvider) {
+        this.csvTestsProvider = csvTestsProvider;
         macroReader = new MacroReader();
-        for (String name : reader.getMacroFileList()) {
-            macroReader.read(reader.getMacroFile(name));
+        for (String name : csvTestsProvider.getMacroFileList()) {
+            macroReader.read(csvTestsProvider.getMacroFile(name));
         }
 
         GwtFinder.registerNodeFinder("root", rootObjectFinder);
@@ -603,12 +602,11 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
      */
     @Override
     protected BrowserErrorHandler getDefaultBrowserErrorHandler() {
-        return new BrowserErrorHandler() {
+        return errorMessage -> Fail.fail(prefix() + errorMessage);
+    }
 
-            public void onError(String errorMessage) {
-                Fail.fail(prefix() + errorMessage);
-            }
-        };
+    protected CsvRunner getCsvRunner() {
+        return csvRunner;
     }
 
     protected FocusWidget getFocusWidget(String... identifier) {
@@ -645,15 +643,17 @@ public abstract class GwtCsvTest extends GwtTest implements HasCsvTestExecutionH
      *
      * @param csvTestFileAbsolutePath absolute path of current CSV test file.
      * @throws Exception
-     * @see {@link DirectoryTestReader}
      */
     protected final void launchTest(String csvTestFileAbsolutePath) throws Exception {
+        csvRunner = new CsvRunner(this, csvTestsProvider.getTestName(csvTestFileAbsolutePath));
+
+
         File testFile = new File(URLDecoder.decode(csvTestFileAbsolutePath, "utf-8"));
         for (CsvTestExecutionHandler handler : getCsvTestExecutionHandlers()) {
             handler.beforeCsvTestExecution(testFile);
         }
 
-        csvRunner.runSheet(reader.getTest(csvTestFileAbsolutePath), this);
+        csvRunner.runSheet(csvTestsProvider.getTest(csvTestFileAbsolutePath), this);
 
         for (CsvTestExecutionHandler handler : getCsvTestExecutionHandlers()) {
             handler.afterCsvTestExecution(testFile);

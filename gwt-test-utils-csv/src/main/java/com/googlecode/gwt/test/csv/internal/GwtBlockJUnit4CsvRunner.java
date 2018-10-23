@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class GwtBlockJUnit4CsvRunner extends GwtBlockJUnit4ClassRunner {
 
-    private DirectoryTestReader reader;
+    private CsvTestsProvider csvTestsProvider;
 
     public GwtBlockJUnit4CsvRunner(Class<?> clazz) throws InitializationError,
             ClassNotFoundException {
@@ -23,11 +23,11 @@ public class GwtBlockJUnit4CsvRunner extends GwtBlockJUnit4ClassRunner {
 
     @Override
     protected List<FrameworkMethod> computeTestMethods() {
-        if (reader == null) {
-            reader = new DirectoryTestReader(getTestClass().getJavaClass());
+        if (csvTestsProvider == null) {
+            csvTestsProvider = CsvTestsProviderFactory.create(this);
         }
         List<FrameworkMethod> frameworkMethods = new ArrayList<>();
-        for (Method csvMethod : reader.getTestMethods()) {
+        for (Method csvMethod : csvTestsProvider.getTestMethods()) {
             frameworkMethods.add(new FrameworkMethod(csvMethod));
         }
 
@@ -36,8 +36,7 @@ public class GwtBlockJUnit4CsvRunner extends GwtBlockJUnit4ClassRunner {
 
     @Override
     protected Object createTest() throws Exception {
-        Object testInstance = reader.createObject();
-        GwtReflectionUtils.callPrivateMethod(testInstance, "setReader", reader);
+        Object testInstance = csvTestsProvider.newTestClassInstance();
         return testInstance;
     }
 
