@@ -1,5 +1,11 @@
 package com.googlecode.gwt.test.internal;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.ProtectionDomain;
+import java.util.regex.Pattern;
+
 import com.google.gwt.dev.javac.CompilationState;
 import com.google.gwt.dev.javac.CompiledClass;
 import com.google.gwt.dev.shell.JsValueGlue;
@@ -8,16 +14,13 @@ import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 import com.googlecode.gwt.test.internal.rewrite.OverlayTypesRewriter;
-import com.googlecode.gwt.test.utils.GwtReflectionUtils;
-import javassist.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.security.ProtectionDomain;
-import java.util.Arrays;
-import java.util.regex.Pattern;
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.Loader;
+import javassist.NotFoundException;
+import javassist.Translator;
 
 /**
  * <p>
@@ -138,6 +141,7 @@ public class GwtClassLoader extends Loader {
 
 
         StringBuilder sb = new StringBuilder("^(");
+        sb = appendPackageToDelegate(sb, "jdk.internal.reflect.");
         sb = appendPackageToDelegate(sb, "java.");
         sb = appendPackageToDelegate(sb, "javax.");
         sb = appendPackageToDelegate(sb, "sun.");
