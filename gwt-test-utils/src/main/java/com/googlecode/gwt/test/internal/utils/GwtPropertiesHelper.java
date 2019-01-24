@@ -203,7 +203,7 @@ public class GwtPropertiesHelper implements AfterTestCallback {
             return cachedProperties.get(path);
         }
         String propertiesNameFile = "/" + path + ".properties";
-        InputStream inputStream = path.getClass().getResourceAsStream(propertiesNameFile);
+        InputStream inputStream = this.getClass().getResourceAsStream(propertiesNameFile);
         if (inputStream == null) {
             cachedProperties.put(path, null);
             return null;

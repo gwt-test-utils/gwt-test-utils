@@ -167,8 +167,16 @@ public class GwtFactory {
     }
 
     private void addToClassPath(URL[] srcUrls) {
-        String additionalClassPath = String.join(File.pathSeparator, Arrays.stream(srcUrls).map(URL::getPath).collect(Collectors.toList()));
+        String additionalClassPath = String.join(File.pathSeparator, Arrays.stream(srcUrls).map(this::asPath).collect(Collectors.toList()));
         System.setProperty(JAVA_CLASS_PATH.key(), String.join(File.pathSeparator, new String[]{JAVA_CLASS_PATH.value(), additionalClassPath}));
+    }
+    
+    private String asPath(URL url) {
+    	try {
+			return new File(url.toURI()).getPath();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("Invalid file url");
+		}
     }
 
     private OverlayTypesRewriter createOverlayRewriter(CompilationState compilationState) {

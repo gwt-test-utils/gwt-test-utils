@@ -44,11 +44,7 @@ class CompilationStateClassLoader extends Loader {
 
             CtClass ctClass = pool.get(classname);
 
-            int modifiers = ctClass.getModifiers();
-            if (!Modifier.isPublic(modifiers)) {
-                ctClass.setModifiers(modifiers + Modifier.PUBLIC);
-            }
-
+            ClassVisibilityModifier.setPublic(ctClass, false);
         }
 
         public void start(ClassPool pool) throws NotFoundException, CannotCompileException {
@@ -65,6 +61,7 @@ class CompilationStateClassLoader extends Loader {
         for (String delegate : configurationLoader.getDelegates()) {
             delegateLoadingOf(delegate);
         }
+        delegateLoadingOf("jdk.internal.reflect.");
 
         try {
             addTranslator(cp, new MakeClassPublicTranslator());
