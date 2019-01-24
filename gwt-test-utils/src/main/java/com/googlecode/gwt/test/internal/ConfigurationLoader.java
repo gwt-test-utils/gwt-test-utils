@@ -1,30 +1,40 @@
 package com.googlecode.gwt.test.internal;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.googlecode.gwt.test.exceptions.GwtTestConfigurationException;
 import com.googlecode.gwt.test.exceptions.GwtTestException;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 import com.googlecode.gwt.test.internal.ClassesScanner.ClassVisitor;
 import com.googlecode.gwt.test.patchers.PatchClass;
 import com.googlecode.gwt.test.utils.JavassistUtils;
+
 import javassist.CtClass;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.ClassMemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.URLDecoder;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 /**
  * Class in charge of parsing META-INF/gwt-test-utils.properties configuration files. <strong>For
@@ -163,22 +173,18 @@ public final class ConfigurationLoader {
 
     private void processRelatedProjectSrcDirectories(URL surefireBooterJarUrl) {
 
-        URL[] classpathUrls = null;
-
-        if (surefireBooterJarUrl != null) {
-            classpathUrls = extractSrcUrlsFromBooterJar(surefireBooterJarUrl.getFile());
-        } else {
-
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            if (classLoader instanceof URLClassLoader) {
-                classpathUrls = ((URLClassLoader) classLoader).getURLs();
-            }
-        }
-
-        if (classpathUrls == null) {
-            // should never happen
-            throw new GwtTestConfigurationException("Unable to collect classpath entries");
-        }
+       	String pathSeparator = System.getProperty("path.separator");
+    	String[] classPathEntries = System.getProperty("java.class.path").split(pathSeparator);
+    	
+    	Collection<URL> urls = new ArrayList<>();
+    	for (final String cpe : classPathEntries) {
+    		try {
+				urls.add(new File(cpe).toURI().toURL());
+			} catch (MalformedURLException e) {
+				throw new IllegalStateException("Invalid ClassPathURL", e);
+			}
+    	}
+    	URL[] classpathUrls = urls.toArray(new URL[0]);
 
         for (URL classpathUrl : classpathUrls) {
             srcDirectories.add(classpathUrl);

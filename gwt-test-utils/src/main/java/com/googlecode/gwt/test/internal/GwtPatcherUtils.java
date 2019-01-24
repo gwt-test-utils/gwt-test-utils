@@ -15,7 +15,7 @@ import javassist.Modifier;
 public class GwtPatcherUtils {
 
     public static void patch(CtClass c, Patcher patcher) throws Exception {
-        c.setModifiers(Modifier.PUBLIC);
+        ClassVisibilityModifier.setPublic(c, true);
 
         if (patcher != null) {
             patcher.initClass(c);
