@@ -89,7 +89,7 @@ public class MyMessagesTest extends GwtTestTest {
         totalAmount = messages.totalAmount(6);
 
         // Then 2
-        assertThat(totalAmount).isEqualTo("Le total de votre panier est de 6,00 €");
+        assertThat(totalAmount).isEqualTo("Le total de votre panier est de 6,00\u00A0€");
     }
 
     @Test
