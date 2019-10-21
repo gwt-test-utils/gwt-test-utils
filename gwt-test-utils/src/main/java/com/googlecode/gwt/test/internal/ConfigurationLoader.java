@@ -49,6 +49,7 @@ public final class ConfigurationLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationLoader.class);
 
     private final Set<String> delegates;
+    private final Set<String> delegatesToRemove;
 
     private final List<String> gwtModules;
     private PatcherFactory patcherFactory;
@@ -58,6 +59,7 @@ public final class ConfigurationLoader {
     ConfigurationLoader(URL surefireBooterJarUrl) {
         this.gwtModules = new ArrayList<>();
         this.delegates = new HashSet<>();
+        this.delegatesToRemove = new HashSet<>();
         this.scanPackages = new HashSet<>();
         this.srcDirectories = new ArrayList<>();
 
@@ -161,6 +163,8 @@ public final class ConfigurationLoader {
                 scanPackages.add(key);
             } else if ("delegate".equals(value)) {
                 delegates.add(key);
+            } else if ("remove-delegate".equals(value)) {
+            	delegatesToRemove.add(key);
             } else if ("src-directory".equals(value)) {
                 processSrcDirectory(key);
             } else {
@@ -222,6 +226,8 @@ public final class ConfigurationLoader {
                 process(p, url);
                 LOGGER.debug("File loaded and processed " + url.toString());
             }
+            
+            delegates.removeAll(delegatesToRemove);
 
             if (gwtModules.size() == 0) {
                 throw new GwtTestConfigurationException(
