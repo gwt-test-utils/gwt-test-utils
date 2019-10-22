@@ -1362,7 +1362,7 @@ public class Browser {
                 : EventBuilder.create(Event.ONMOUSEDOWN).setTarget(target).setButton(Event.BUTTON_LEFT).build();
         dispatchEvent(eventListener, onMouseDown);
 
-        if (BrowserSimulatorImpl.get().getCurrentFocusElement() != null) {
+        if (BrowserSimulatorImpl.get().getCurrentFocusElement() != null && !isDisabled(BrowserSimulatorImpl.get().getCurrentFocusElement())) {
             Event onBlur = EventBuilder.create(Event.ONBLUR).setTarget(BrowserSimulatorImpl.get().getCurrentFocusElement()).build();
             dispatchEvent(eventListener, onBlur);
         }
