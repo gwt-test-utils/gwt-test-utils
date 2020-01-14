@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/gwt-test-utils/gwt-test-utils.svg?branch=master)](https://travis-ci.org/gwt-test-utils/gwt-test-utils)
 
+In loving memory of Gaël
+
 **gwt-test-utils** is a Java testing framework for [GWT](http://code.google.com/intl/fr-FR/webtoolkit/) applications. It provides a simple way to write **fast** Java tests for your GWT client code, **without GWTTestCase** or any servlet container instance! This means you are able to use any Java tool without restriction: JUnit, reflection, Easymock, Mockito, etc.
 
 Writing tests looks like:
