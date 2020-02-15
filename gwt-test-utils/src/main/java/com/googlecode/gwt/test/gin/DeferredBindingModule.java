@@ -6,6 +6,7 @@ import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.inject.rebind.reflect.ReflectUtil;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.*;
+import com.google.inject.Module;
 import com.google.inject.spi.*;
 import com.googlecode.gwt.test.exceptions.GwtTestPatchException;
 import com.googlecode.gwt.test.internal.GwtClassPool;

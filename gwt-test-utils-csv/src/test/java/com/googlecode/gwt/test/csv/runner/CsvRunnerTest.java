@@ -194,26 +194,26 @@ public class CsvRunnerTest {
     @Test
     public void getInList() {
         SimiliWidgetContainer root = getList();
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget(2)"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[label=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[getLabel=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/list[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/getCurrentlist[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/widget(2)"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/widget[label=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/widget[getLabel=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/widget[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/list[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/getCurrentlist[id=child3Id]"))).isSameAs(root.getWidget().list.get(2));
     }
 
     @Test
     public void getInListRecurse() {
         SimiliWidgetContainer root = getList();
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[labelWithParam(a)/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
-        assertThat(runner.<Widget>getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]/id"))).isSameAs(root.getWidget().list.get(2).id);
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<SimiliWidget>getNodeValue(root, Node.parse("/widget/widget[labelWithParam(a)/toString=child3]"))).isSameAs(root.getWidget().list.get(2));
+        assertThat(runner.<String>getNodeValue(root, Node.parse("/widget/widget[label/toString=child3]/id"))).isSameAs(root.getWidget().list.get(2).id);
     }
 
     @Test
     public void getMap() {
-        assertThat(runner.<Widget>getNodeValue(o, Node.parse("/map[a]"))).isEqualTo("b");
-        assertThat(runner.<Widget>getNodeValue(o, Node.parse("/map[c]"))).isEqualTo("d");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/map[a]"))).isEqualTo("b");
+        assertThat(runner.<String>getNodeValue(o, Node.parse("/map[c]"))).isEqualTo("d");
     }
 
     @Test
