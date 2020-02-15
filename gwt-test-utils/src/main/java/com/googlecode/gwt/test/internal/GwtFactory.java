@@ -23,6 +23,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -166,8 +167,24 @@ public class GwtFactory {
                 "com.googlecode.gwt.test.Aggregator", inherits, false);
     }
 
+    /**
+     * fetches absolute path from URL object.
+     *
+     * @param url
+     *          the URL object we like to get the
+     * @return the absolute path from the given URL, or null if not possible
+     */
+    private String getAbsPathFromUrl(URL url) {
+        try {
+            File nf = new File(url.toURI());
+            return nf.getAbsolutePath();
+        } catch (URISyntaxException e) {
+            return null;
+        }
+    }
+
     private void addToClassPath(URL[] srcUrls) {
-        String additionalClassPath = String.join(File.pathSeparator, Arrays.stream(srcUrls).map(this::asPath).collect(Collectors.toList()));
+        String additionalClassPath = Arrays.stream(srcUrls).map(this::getAbsPathFromUrl).filter(Objects::nonNull).collect(Collectors.joining(File.pathSeparator));
         System.setProperty(JAVA_CLASS_PATH.key(), String.join(File.pathSeparator, new String[]{JAVA_CLASS_PATH.value(), additionalClassPath}));
     }
     
