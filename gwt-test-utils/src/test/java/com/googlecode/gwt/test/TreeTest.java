@@ -57,9 +57,13 @@ public class TreeTest extends GwtTestTest {
     @Before
     public void beforeTreeTest() {
         // Create a tree with a few items in it.
-        parent = new TreeItem(new SafeHtmlBuilder().appendEscaped("parent").toSafeHtml());
-        item0 = parent.addItem(new SafeHtmlBuilder().appendEscaped("item0").toSafeHtml());
-        item1 = parent.addItem(new SafeHtmlBuilder().appendEscaped("item1").toSafeHtml());
+        try {
+            parent = new TreeItem(new SafeHtmlBuilder().appendEscaped("parent").toSafeHtml());
+            item0 = parent.addItem(new SafeHtmlBuilder().appendEscaped("item0").toSafeHtml());
+            item1 = parent.addItem(new SafeHtmlBuilder().appendEscaped("item1").toSafeHtml());
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
 
         // Add a CheckBox to the tree
         item2 = new TreeItem(new CheckBox("item2"));
