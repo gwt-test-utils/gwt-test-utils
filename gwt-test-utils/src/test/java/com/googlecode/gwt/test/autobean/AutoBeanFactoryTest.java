@@ -44,11 +44,13 @@ public class AutoBeanFactoryTest extends GwtTestTest {
 
     @Before
     public void before() {
+        System.out.println("before AutoBeanFactoryTest");
         setIsClient(false);
     }
 
     @Test
     public void createComplex() {
+        System.out.println("run AutoBeanFactoryTest#createComplex");
         // When
         Person person = myFactory.person().as();
         Address address = myFactory.create(Address.class).as();
@@ -61,6 +63,7 @@ public class AutoBeanFactoryTest extends GwtTestTest {
 
     @Test
     public void createFromExisting() {
+        System.out.println("run AutoBeanFactoryTest#createFromExisting");
         // Given
         Person person = new PersonImpl();
         person.setName("Benjamin Linus");
@@ -80,6 +83,7 @@ public class AutoBeanFactoryTest extends GwtTestTest {
 
     @Test
     public void createSimple() {
+        System.out.println("run AutoBeanFactoryTest#createSimple");
         // When
         Person person = myFactory.person().as();
         person.setName("John Locke");
