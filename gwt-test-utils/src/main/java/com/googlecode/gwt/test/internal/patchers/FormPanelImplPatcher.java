@@ -37,4 +37,9 @@ class FormPanelImplPatcher {
 
     }
 
+    @PatchMethod
+    static void submit(FormPanelImpl panelImpl, Element form, Element iframe) {
+        // do nothing here
+    }
+
 }
