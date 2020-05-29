@@ -256,7 +256,7 @@ class UiTagBuilder<T> {
     }
 
     private void treatAddStyleNamesAttr(String attrValue, Map<String, Object> attributesMap) {
-        String[] styles = attrValue.trim().split(" ");
+        String[] styles = attrValue.trim().split("\\s+");
         String[] effectiveStyles = new String[styles.length];
 
         for (int j = 0; j < styles.length; j++) {

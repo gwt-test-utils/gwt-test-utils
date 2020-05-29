@@ -54,7 +54,7 @@
         <g:Button ui:field='button' styleName='{res.cssResource.testStyle}'>My button</g:Button>
 
         <g:PushButton ui:field='pushButton'
-                      addStyleNames='{res.cssResource.testStyle} {otherStyle.pretty}'>Push my hot button!
+                      addStyleNames='{res.cssResource.testStyle}   {otherStyle.pretty}'>Push my hot button!
         </g:PushButton>
 
         <g:Image ui:field='image' resource='{res.cellTableLoading}' altText="Loading..."
