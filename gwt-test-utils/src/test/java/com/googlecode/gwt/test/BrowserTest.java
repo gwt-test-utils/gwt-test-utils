@@ -1,19 +1,12 @@
 package com.googlecode.gwt.test;
 
 import com.google.gwt.event.dom.client.*;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.googlecode.gwt.test.assertions.GwtAssertions;
 import com.googlecode.gwt.test.utils.events.Browser;
 import com.googlecode.gwt.test.utils.events.EventBuilder;
 import org.junit.Before;
@@ -21,6 +14,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.googlecode.gwt.test.assertions.GwtAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +30,9 @@ public class BrowserTest extends GwtTestTest {
     private int keyUpCount;
     private boolean onBlurTriggered;
     private boolean onChangeTriggered;
+    private boolean onClickTriggered;
+    private boolean onMouseDownTriggered;
+    private String onErrorMessage;
     private FocusPanel panel;
     private boolean panelTested;
     private boolean tested;
@@ -326,7 +323,19 @@ public class BrowserTest extends GwtTestTest {
         // Then
         assertThat(clicked[0]).isTrue();
         assertThat(clicked[1]).isTrue();
+    }
 
+    @Test
+    public void disabledButton_blur() {
+        Button b = new Button();
+        b.setEnabled(false);
+        setBrowserErrorHandler(errorMessage -> onErrorMessage = errorMessage);
+        b.addClickHandler(event -> onClickTriggered = true);
+        b.addMouseDownHandler(event -> onMouseDownTriggered = true);
+
+        Browser.click(b);
+        assertThat(onClickTriggered).isFalse();
+        assertThat(onMouseDownTriggered).isFalse();
     }
 
     @Test

@@ -42,7 +42,7 @@ public class Browser {
      *
      * @author Gael Lazzari
      */
-    public static interface BrowserErrorHandler {
+    public interface BrowserErrorHandler {
 
         /**
          * The callback method called when an error occurs.
