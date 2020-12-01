@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.googlecode.gwt-test-utils</groupId>
         <artifactId>gwt-test-utils-parent</artifactId>
-        <version>0.64-SNAPSHOT</version>
+        <version>0.65-SNAPSHOT</version>
     </parent>
     <dependencies>
         <dependency>
