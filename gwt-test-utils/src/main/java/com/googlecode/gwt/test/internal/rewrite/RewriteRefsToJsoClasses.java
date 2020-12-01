@@ -50,7 +50,7 @@ class RewriteRefsToJsoClasses extends ClassVisitor {
         };
 
         public MyMethodAdapter(MethodVisitor mv) {
-            super(Opcodes.ASM5, mv);
+            super(Opcodes.ASM7, mv);
         }
 
         @Override
@@ -125,7 +125,7 @@ class RewriteRefsToJsoClasses extends ClassVisitor {
      */
     public RewriteRefsToJsoClasses(ClassVisitor cv, Set<String> jsoDescriptors,
                                    InstanceMethodOracle mapper) {
-        super(Opcodes.ASM5, cv);
+        super(Opcodes.ASM7, cv);
         this.jsoDescriptors = jsoDescriptors;
         this.mapper = mapper;
     }
