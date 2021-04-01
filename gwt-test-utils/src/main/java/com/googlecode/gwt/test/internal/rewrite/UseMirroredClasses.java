@@ -63,7 +63,7 @@ public class UseMirroredClasses extends ClassVisitor {
         private String className;
 
         protected MethodInterceptor(MethodVisitor mv, String className) {
-            super(Opcodes.ASM5, mv);
+            super(Opcodes.ASM7, mv);
             this.className = className;
         }
 
@@ -132,7 +132,7 @@ public class UseMirroredClasses extends ClassVisitor {
     private String className;
 
     public UseMirroredClasses(ClassVisitor cv, String className) {
-        super(Opcodes.ASM5, cv);
+        super(Opcodes.ASM7, cv);
         this.className = className;
     }
 
