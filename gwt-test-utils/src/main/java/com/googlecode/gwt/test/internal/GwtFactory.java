@@ -1,5 +1,7 @@
 package com.googlecode.gwt.test.internal;
 
+import static com.google.gwt.thirdparty.guava.common.base.StandardSystemProperty.JAVA_CLASS_PATH;
+
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
@@ -26,8 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static com.google.gwt.thirdparty.guava.common.base.StandardSystemProperty.JAVA_CLASS_PATH;
 
 
 /**

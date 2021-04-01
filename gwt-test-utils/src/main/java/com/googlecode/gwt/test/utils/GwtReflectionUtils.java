@@ -8,7 +8,12 @@ import com.googlecode.gwt.test.internal.utils.DoubleMap;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Class which provides reflection utilities.
@@ -485,13 +490,13 @@ public class GwtReflectionUtils {
             throw new IllegalArgumentException("Class must not be null");
         }
         if (clazz.isInterface()) {
-            throw new ReflectionException("Error during instanciation of '" + clazz.getName()
+            throw new ReflectionException("Error during instantiation of '" + clazz.getName()
                     + "'. Specified class is an interface");
         }
         try {
             return instantiateClass(clazz.getDeclaredConstructor());
         } catch (NoSuchMethodException ex) {
-            throw new ReflectionException("Error during instanciation of '" + clazz.getName()
+            throw new ReflectionException("Error during instantiation of '" + clazz.getName()
                     + "'. No default constructor found", ex);
         }
     }
@@ -526,14 +531,14 @@ public class GwtReflectionUtils {
             makeAccessible(ctor);
             return ctor.newInstance(args);
         } catch (InstantiationException ex) {
-            throw new ReflectionException("Error during instanciation of '"
+            throw new ReflectionException("Error during instantiation of '"
                     + ctor.getDeclaringClass().getName() + "'. Is it an abstract class?", ex);
         } catch (IllegalAccessException ex) {
-            throw new ReflectionException("Error during instanciation of '"
+            throw new ReflectionException("Error during instantiation of '"
                     + ctor.getDeclaringClass().getName()
                     + "'. Has the class definition changed? Is the constructor accessible?", ex);
         } catch (IllegalArgumentException ex) {
-            throw new ReflectionException("Error during instanciation of '"
+            throw new ReflectionException("Error during instantiation of '"
                     + ctor.getDeclaringClass().getName() + "'. Illegal arguments for constructor", ex);
         } catch (InvocationTargetException ex) {
             if (ex.getTargetException() instanceof GwtTestException) {
@@ -559,8 +564,19 @@ public class GwtReflectionUtils {
      */
     public static void makeAccessible(Constructor<?> ctor) {
         if (!Modifier.isPublic(ctor.getModifiers())
-                || !Modifier.isPublic(ctor.getDeclaringClass().getModifiers())) {
-            ctor.setAccessible(true);
+                || !Modifier.isPublic(ctor.getDeclaringClass().getModifiers()) && !ctor.isAccessible()) {
+            innerMakeAccessible(() -> ctor.setAccessible(true));
+        }
+    }
+
+    private static void innerMakeAccessible(Runnable fun) {
+        if (System.getSecurityManager() == null) {
+            fun.run();
+        } else {
+            AccessController.doPrivileged((PrivilegedAction) () -> {
+                fun.run();
+                return null;
+            });
         }
     }
 
@@ -573,9 +589,10 @@ public class GwtReflectionUtils {
      * @see java.lang.reflect.Field#setAccessible
      */
     public static void makeAccessible(Field field) {
-        if (!Modifier.isPublic(field.getModifiers())
-                || !Modifier.isPublic(field.getDeclaringClass().getModifiers())) {
-            field.setAccessible(true);
+        if ((!Modifier.isPublic(field.getModifiers()) ||
+                !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
+                Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
+            innerMakeAccessible(() -> field.setAccessible(true));
         }
     }
 
@@ -588,9 +605,9 @@ public class GwtReflectionUtils {
      * @see java.lang.reflect.Method#setAccessible
      */
     public static void makeAccessible(Method method) {
-        if (!Modifier.isPublic(method.getModifiers())
-                || !Modifier.isPublic(method.getDeclaringClass().getModifiers())) {
-            method.setAccessible(true);
+        if ((!Modifier.isPublic(method.getModifiers()) ||
+                !Modifier.isPublic(method.getDeclaringClass().getModifiers())) && !method.isAccessible()) {
+            innerMakeAccessible(() -> method.setAccessible(true));
         }
     }
 
